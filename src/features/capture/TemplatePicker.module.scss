@@ -1,0 +1,71 @@
+/* Two shapes, so the booth rail reads as one stack: a labelled scroll row on a
+ * phone, a card once it sits in the desktop rail. */
+.picker {
+  @apply flex w-full flex-col gap-2.5;
+  @apply lg:gap-4 lg:rounded-[2rem] lg:border lg:bg-background lg:p-6;
+}
+
+.header {
+  @apply flex items-baseline justify-between gap-3;
+}
+
+.label {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground;
+}
+
+.selected {
+  @apply hidden text-xs text-muted-foreground lg:block;
+}
+
+/* Step one: which grid. Borrows the segmented control from StripSelector so the booth
+ * has one shape for "pick a mode", but shown at every size — the grid is the choice
+ * that decides the paper, not a narrow-screen accommodation. */
+.tabs {
+  @apply grid grid-cols-2 gap-1 rounded-xl bg-muted p-1;
+}
+
+.tab {
+  @apply flex h-[2.125rem] items-center justify-center rounded-[0.5625rem] font-mono text-[0.8125rem] font-medium tracking-tight text-muted-foreground transition;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background;
+  @apply disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.tabActive {
+  @apply bg-background text-foreground shadow-sm;
+}
+
+/* Step two: which design, within the chosen grid. A scroll row at every size — a 4x1
+ * thumbnail is 1:3, so a wrapped grid of six would make this card twice as tall as it
+ * needs to be. The row keeps the thumbnails legible and the rail balanced, and the
+ * card header names the current pick for anything scrolled out of view. Thumbnails
+ * are sized by height, so the row keeps its height when the grid tab switches between
+ * a 1:3 ribbon and a 2:3 card. */
+.list {
+  @apply -mx-1 flex w-full snap-x gap-2.5 overflow-x-auto px-1 pb-1;
+}
+
+.option {
+  @apply flex shrink-0 snap-start flex-col items-center gap-1.5 rounded-md transition;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  @apply disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+/* The ring hugs the strip thumbnail, not its label. */
+.thumbWrap {
+  @apply inline-flex overflow-hidden rounded-md;
+}
+
+.optionActive .thumbWrap {
+  @apply ring-2 ring-primary ring-offset-2;
+}
+
+/* Capped to its own thumbnail's width (inline), so a 2x2 card's label gets the wider
+ * box it earns instead of truncating at a 4x1 ribbon's 44px. */
+.name {
+  @apply truncate text-[0.6875rem] text-muted-foreground;
+}
+
+.optionActive .name {
+  @apply text-foreground;
+}
+

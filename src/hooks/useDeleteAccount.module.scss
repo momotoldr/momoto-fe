@@ -1,0 +1,11 @@
+.field {
+  @apply mb-3 flex flex-col gap-1.5 text-left;
+}
+
+.label {
+  @apply text-sm font-medium;
+}
+
+.error {
+  @apply mb-2 text-sm text-destructive;
+}

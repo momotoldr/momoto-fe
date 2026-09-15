@@ -1,0 +1,59 @@
+/* Overlay covering the whole strip, so sticker coordinates are full-strip
+ * fractions — the same box the compose step draws into. */
+.overlay {
+  @apply pointer-events-none absolute z-30;
+  inset: 0;
+  container-type: size;
+}
+
+/* A placed sticker: a 1em box (em = its own font-size) centered on (x, y).
+ * The transform (translate + rotate) is set inline per sticker. */
+.sticker {
+  @apply pointer-events-auto absolute flex h-[1em] w-[1em] select-none items-center justify-center leading-none;
+  touch-action: none;
+}
+
+.stickerEditable {
+  @apply cursor-grab rounded-sm outline-dashed outline-1 outline-primary/50 active:cursor-grabbing;
+}
+
+.image {
+  @apply pointer-events-none block h-full w-full object-contain;
+}
+
+/* ✕ remove button — fixed size, anchored to the sticker's top-right corner. */
+.remove {
+  @apply absolute flex h-5 w-5 items-center justify-center rounded-full bg-background text-foreground shadow ring-1 ring-black/10 transition hover:bg-muted;
+  top: -0.5rem;
+  right: -0.5rem;
+
+  svg {
+    @apply h-3 w-3;
+  }
+}
+
+/* Rotate handle — drag from the top-left corner to spin the sticker. */
+.rotate {
+  @apply absolute flex h-5 w-5 items-center justify-center rounded-full bg-background text-foreground shadow ring-1 ring-black/10 transition hover:bg-muted;
+  top: -0.5rem;
+  left: -0.5rem;
+  cursor: grab;
+  touch-action: none;
+
+  &:active {
+    @apply cursor-grabbing;
+  }
+
+  svg {
+    @apply h-3 w-3;
+  }
+}
+
+/* Resize handle — drag from the bottom-right corner to scale the sticker. */
+.resize {
+  @apply absolute block h-3 w-3 rounded-full bg-primary shadow ring-2 ring-background;
+  bottom: -0.375rem;
+  right: -0.375rem;
+  cursor: nwse-resize;
+  touch-action: none;
+}

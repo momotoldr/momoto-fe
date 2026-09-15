@@ -1,0 +1,19 @@
+# Momoto — https://momotoldr.com
+# Absence of this file already means "crawl everything"; it exists to (a) point
+# crawlers at the sitemap and (b) keep authenticated / no-SEO-value routes out
+# of the index. Served from the site root because Vite copies public/ verbatim.
+
+User-agent: *
+Allow: /
+
+# Private / authenticated areas — these redirect to login or hold per-user or
+# ephemeral state, so there's nothing worth indexing.
+Disallow: /photobooth
+Disallow: /cart
+Disallow: /gallery
+Disallow: /profile
+Disallow: /room/
+Disallow: /login
+Disallow: /server-unavailable
+
+Sitemap: https://momotoldr.com/sitemap.xml

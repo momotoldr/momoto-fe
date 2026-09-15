@@ -1,0 +1,52 @@
+/* Amber, not red: this is a "do this before you need it" prompt, not an error. The
+   account works fine — only recovery is missing. */
+.banner {
+  @apply flex w-full flex-wrap items-center gap-3 border-b border-amber-200 bg-amber-50 px-4 py-2.5;
+  @apply sm:flex-nowrap sm:px-6;
+  @apply dark:border-amber-900/50 dark:bg-amber-950/40;
+}
+
+.icon {
+  @apply flex size-7 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700;
+  @apply dark:bg-amber-900/50 dark:text-amber-300;
+}
+
+.glyph {
+  @apply size-4;
+}
+
+/* Takes the slack so the buttons stay hard right on a wide screen and wrap
+   underneath on a narrow one. */
+.text {
+  @apply min-w-0 flex-1 text-[0.8125rem] leading-snug text-amber-900 dark:text-amber-100;
+}
+
+.title {
+  @apply font-semibold;
+}
+
+.body {
+  @apply text-amber-800/90 dark:text-amber-200/80;
+}
+
+.actions {
+  @apply flex shrink-0 items-center gap-1.5;
+}
+
+.action {
+  @apply h-8 px-3 text-[0.8125rem];
+}
+
+.spinner {
+  @apply size-3.5 animate-spin;
+}
+
+.close {
+  @apply flex size-8 shrink-0 items-center justify-center rounded-md text-amber-700/70;
+  @apply transition-colors hover:bg-amber-100 hover:text-amber-900;
+  @apply dark:text-amber-300/70 dark:hover:bg-amber-900/50 dark:hover:text-amber-100;
+}
+
+.closeGlyph {
+  @apply size-4;
+}

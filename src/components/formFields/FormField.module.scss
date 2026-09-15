@@ -1,0 +1,15 @@
+.wrapper {
+  @apply flex flex-col gap-1.5;
+}
+
+.label {
+  @apply text-sm font-medium;
+}
+
+.required {
+  @apply text-destructive;
+}
+
+.error {
+  @apply text-xs text-destructive;
+}

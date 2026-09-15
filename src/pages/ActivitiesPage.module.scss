@@ -1,0 +1,397 @@
+/* Activities — the menu as a pinboard.
+ *
+ * Same language as the landing redesign: taped paper, tape doing the labelling, slate
+ * ink and the landing gradient on the header band. The live activity is a taped card
+ * with its own strip preview; the upcoming ones are dashed notes pinned below.
+ * Headlines are Chivo (`font-display`); body copy stays on the app's sans. */
+
+$tape-grey: rgb(226 232 240 / 95%);
+$tape-pink: rgb(254 205 211 / 92%);
+$tape-shadow: 0 1px 3px rgb(15 23 42 / 14%);
+$hero-gradient: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 46%, #d9ffea 100%);
+
+/* Every piece of tape is the same object: a small block pinned across an edge, turned
+ * a few degrees. Position and rotation are set per use. */
+@mixin tape($w, $h) {
+  @apply absolute block;
+  width: $w;
+  height: $h;
+  box-shadow: $tape-shadow;
+}
+
+.page {
+  @apply flex w-full flex-col;
+}
+
+/* ---- Header band ---- */
+
+.hero {
+  @apply px-5 pb-6 pt-[1.875rem] sm:px-8 lg:pb-6 lg:pt-[3.25rem];
+  background: $hero-gradient;
+}
+
+.heroInner {
+  @apply mx-auto flex w-full max-w-[70rem] flex-col gap-3.5;
+  @apply lg:flex-row lg:items-end lg:justify-between lg:gap-10;
+}
+
+.heroText {
+  @apply flex flex-col gap-2.5 lg:gap-[0.625rem] lg:pb-[1.875rem];
+}
+
+.title {
+  @apply m-0 font-display text-[2.125rem] font-black leading-[1.03] text-slate-900 lg:text-[2.875rem] lg:leading-[1.02];
+  letter-spacing: -0.035em;
+}
+
+.subtitle {
+  @apply m-0 text-[0.90625rem] leading-[1.6] text-slate-600 lg:max-w-[32.5rem] lg:text-base;
+  text-wrap: pretty;
+}
+
+/* Two tallies of the menu: what you can open today, and what is still on the way. */
+.counts {
+  @apply flex items-center gap-[1.125rem] pt-0.5 lg:items-end lg:gap-[1.375rem] lg:pb-[1.375rem] lg:pt-0;
+}
+
+.count {
+  @apply inline-flex items-baseline gap-[0.4375rem] lg:flex-col lg:items-center lg:gap-2;
+}
+
+.countNumber {
+  @apply font-display text-2xl font-black leading-none text-slate-900 lg:text-[2.375rem];
+  letter-spacing: -0.04em;
+}
+
+.countLabel {
+  @apply font-mono text-[10px] uppercase text-slate-600 lg:text-[0.65625rem];
+  letter-spacing: 0.16em;
+}
+
+.countRule {
+  @apply block w-px bg-slate-900/15;
+
+  height: 20px;
+
+  @screen lg {
+    height: 44px;
+    margin-bottom: 12px;
+  }
+}
+
+/* ---- Page body ---- */
+
+.body {
+  @apply mx-auto flex w-full max-w-[70rem] flex-col gap-10 px-5 pb-10 pt-[2.125rem] sm:px-8;
+  @apply lg:gap-14 lg:pb-[4.25rem] lg:pt-[2.75rem];
+}
+
+/* ---- The live activity ---- */
+
+.liveCard {
+  @apply relative flex flex-col gap-3.5 bg-white px-5 pb-6 pt-[1.625rem] transition-shadow;
+  @apply lg:flex-row lg:items-center lg:gap-11 lg:px-9 lg:py-8;
+
+  box-shadow: 0 12px 30px rgb(15 23 42 / 13%);
+  transform: rotate(-0.8deg);
+
+  &:hover {
+    box-shadow: 0 16px 38px rgb(15 23 42 / 17%);
+  }
+
+  @screen lg {
+    transform: rotate(-0.5deg);
+    box-shadow: 0 14px 34px rgb(15 23 42 / 14%);
+  }
+}
+
+.tapeGrey {
+  @include tape(84px, 26px);
+
+  top: -13px;
+  left: 18px;
+  background: $tape-grey;
+  transform: rotate(-4deg);
+
+  @screen lg {
+    left: 38px;
+    width: 100px;
+  }
+}
+
+.tapeLive {
+  @include tape(92px, 26px);
+
+  @apply flex items-center justify-center font-mono text-[9px] font-bold uppercase;
+
+  top: -13px;
+  right: 16px;
+  background: $tape-pink;
+  transform: rotate(3deg);
+  letter-spacing: 0.16em;
+  color: #9f1239;
+
+  @screen lg {
+    right: 34px;
+    width: 104px;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+  }
+}
+
+.liveText {
+  @apply flex flex-1 flex-col gap-3.5;
+}
+
+.liveHead {
+  @apply flex items-center gap-2.5 text-slate-900 lg:gap-3;
+}
+
+.liveIcon {
+  @apply flex flex-shrink-0 items-center justify-center;
+
+  svg {
+    @apply h-[1.3125rem] w-[1.3125rem] lg:h-6 lg:w-6;
+    stroke-width: 1.8;
+  }
+}
+
+.liveTitle {
+  @apply m-0 font-display text-[1.375rem] font-black text-slate-900 lg:text-[1.75rem];
+
+  letter-spacing: -0.025em;
+
+  @screen lg {
+    letter-spacing: -0.03em;
+  }
+}
+
+.liveDesc {
+  @apply m-0 text-sm leading-[1.55] text-slate-600 lg:max-w-[35rem] lg:text-[0.96875rem] lg:leading-[1.6];
+  text-wrap: pretty;
+}
+
+/* How the booth can be played — the same three words the landing strips are taped
+ * with, here as chips under the description. */
+.modes {
+  @apply flex items-center gap-2 lg:gap-2.5 lg:pt-0.5;
+}
+
+.mode {
+  @apply inline-flex h-7 items-center rounded-full border border-slate-200 px-3 font-mono text-[9.5px] uppercase text-slate-600 lg:text-[10px];
+  letter-spacing: 0.14em;
+}
+
+.pillDark {
+  @apply inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full bg-slate-900 text-[0.9375rem] font-semibold text-white transition-colors;
+  @apply lg:mt-2 lg:w-auto lg:self-start lg:px-6;
+
+  .liveCard:hover & {
+    @apply bg-slate-800;
+  }
+}
+
+.pillIcon {
+  @apply h-[0.9375rem] w-[0.9375rem];
+}
+
+/* ---- Strip preview ----
+ *
+ * Fixed-size stage: the two strips are positioned against each other by hand, so they
+ * only appear once the card is wide enough to hold them beside the copy. */
+
+.preview {
+  @apply relative hidden flex-shrink-0 lg:block;
+
+  width: 300px;
+  height: 300px;
+}
+
+@mixin strip($w, $shadow) {
+  @apply absolute box-border flex flex-col bg-white;
+
+  width: $w;
+  gap: 5px;
+  padding: 6px;
+  box-shadow: $shadow;
+}
+
+.stripSolo {
+  @include strip(88px, 0 10px 24px rgb(15 23 42 / 16%));
+
+  top: 6px;
+  left: 2px;
+  transform: rotate(-6deg);
+}
+
+.stripDate {
+  @include strip(100px, 0 16px 34px rgb(15 23 42 / 20%));
+
+  top: 2px;
+  right: 4px;
+  transform: rotate(5deg);
+}
+
+/* Placeholder photo cells. These stand in for real strip screenshots. */
+.cell {
+  @apply block;
+  aspect-ratio: 4 / 3;
+}
+
+/* Single-frame cells: one photo each. */
+.tonePink {
+  background: radial-gradient(circle at 50% 36%, #ffe1ea, #f7b6cd 62%, #e58fb0);
+}
+
+.toneBlue {
+  background: radial-gradient(circle at 46% 40%, #e9f0f8, #bcd0e6 64%, #93b1cf);
+}
+
+.toneAmber {
+  background: radial-gradient(circle at 54% 34%, #fff2de, #f8d3a4 62%, #eab97e);
+}
+
+.toneMint {
+  background: radial-gradient(circle at 50% 38%, #e2f7ec, #a9dfc4 62%, #7cc4a3);
+}
+
+/* Two-up cells: split down the middle, one half per person. */
+.splitPinkMint {
+  background:
+    radial-gradient(circle at 26% 40%, rgb(255 255 255 / 50%), transparent 56%),
+    linear-gradient(100deg, #f7b6cd 0 50%, #a9dfc4 50% 100%);
+}
+
+.splitAmberBlue {
+  background:
+    radial-gradient(circle at 74% 42%, rgb(255 255 255 / 50%), transparent 56%),
+    linear-gradient(100deg, #f3c9a0 0 50%, #bcd0e6 50% 100%);
+}
+
+.splitMintPink {
+  background:
+    radial-gradient(circle at 30% 38%, rgb(255 255 255 / 50%), transparent 56%),
+    linear-gradient(100deg, #a9dfc4 0 50%, #f7b6cd 50% 100%);
+}
+
+.splitBluePeach {
+  background:
+    radial-gradient(circle at 70% 44%, rgb(255 255 255 / 50%), transparent 56%),
+    linear-gradient(100deg, #bcd0e6 0 50%, #f3c9a0 50% 100%);
+}
+
+.stickerSparkle {
+  background: url('../assets/stickers/sparkle.svg') center / contain no-repeat;
+  @apply absolute h-10 w-10;
+
+  bottom: 2px;
+  left: 96px;
+  transform: rotate(-12deg);
+  filter: drop-shadow(0 3px 6px rgb(15 23 42 / 16%));
+}
+
+/* ---- Coming soon ---- */
+
+.soon {
+  @apply flex flex-col gap-4 lg:gap-[1.125rem];
+}
+
+.soonLabel {
+  @apply m-0 font-mono text-[10px] font-normal uppercase text-slate-500 lg:text-[0.65625rem];
+  letter-spacing: 0.18em;
+}
+
+.soonGrid {
+  @apply m-0 grid list-none grid-cols-1 gap-4 p-0 lg:grid-cols-3 lg:gap-6;
+}
+
+/* Dashed paper, taped but blank: clearly not yet a thing you can open. */
+.soonCard {
+  @apply relative flex flex-col gap-2.5 border border-dashed border-slate-300 bg-slate-50 px-[1.125rem] py-5;
+  @apply lg:gap-3 lg:px-6 lg:py-[1.625rem];
+
+  &:nth-child(1) {
+    transform: rotate(-1deg);
+
+    @screen lg {
+      transform: rotate(-1.1deg);
+    }
+  }
+
+  &:nth-child(2) {
+    transform: rotate(0.7deg);
+  }
+
+  &:nth-child(3) {
+    transform: rotate(-0.5deg);
+  }
+}
+
+.soonTape {
+  @include tape(64px, 22px);
+
+  top: -11px;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 10%);
+
+  @screen lg {
+    width: 72px;
+  }
+
+  /* Each note is taped with a different colour, in the order the landing footer band
+   * runs: paper white, pink, mint. */
+  .soonCard:nth-child(1) & {
+    left: 16px;
+    background: rgb(255 255 255 / 90%);
+    transform: rotate(-6deg);
+
+    @screen lg {
+      left: 22px;
+    }
+  }
+
+  .soonCard:nth-child(2) & {
+    right: 18px;
+    background: rgb(254 205 211 / 90%);
+    transform: rotate(5deg);
+
+    @screen lg {
+      right: 24px;
+    }
+  }
+
+  .soonCard:nth-child(3) & {
+    left: 28px;
+    background: rgb(217 255 234 / 92%);
+    transform: rotate(-3deg);
+
+    @screen lg {
+      left: 34px;
+    }
+  }
+}
+
+.soonIcon {
+  @apply flex text-slate-600;
+
+  svg {
+    @apply h-[1.375rem] w-[1.375rem] lg:h-6 lg:w-6;
+    stroke-width: 1.8;
+  }
+}
+
+.soonTitle {
+  @apply m-0 font-display text-[1.0625rem] font-black text-slate-900 lg:text-[1.1875rem];
+  letter-spacing: -0.02em;
+}
+
+.soonText {
+  @apply m-0 text-[0.84375rem] leading-[1.55] text-slate-600 lg:text-sm;
+  text-wrap: pretty;
+}
+
+/* Only earns its place on desktop, where the three notes sit side by side and the
+ * section heading is a long way from the last of them. */
+.soonNote {
+  @apply mt-1 hidden font-mono text-[10px] uppercase text-slate-500 lg:block;
+  letter-spacing: 0.16em;
+}

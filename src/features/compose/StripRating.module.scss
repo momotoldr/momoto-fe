@@ -1,0 +1,83 @@
+/* The rating sits where the old feedback nudge did: a rule above it rather than a
+ * tinted card, so it stays the quietest thing beside the artwork even though it's now
+ * the one thing here that asks something of the person. */
+.card {
+  @apply flex w-full items-start gap-3 border-t pt-[1.125rem] text-left lg:gap-3.5 lg:pt-[1.625rem];
+}
+
+.icon {
+  @apply flex h-[1.875rem] w-[1.875rem] shrink-0 items-center justify-center rounded-[0.5625rem] bg-muted text-muted-foreground lg:h-[2.125rem] lg:w-[2.125rem] lg:rounded-[0.625rem];
+
+  svg {
+    @apply h-[0.9375rem] w-[0.9375rem] lg:h-4 lg:w-4;
+  }
+}
+
+/* Answered state — the badge goes green so the thank-you reads as done at a glance. */
+.iconDone {
+  @apply bg-emerald-500/10 text-emerald-600 dark:text-emerald-400;
+}
+
+.body {
+  @apply flex min-w-0 flex-col gap-0.5;
+}
+
+.title {
+  @apply text-[0.84375rem] font-semibold text-foreground lg:text-[0.90625rem];
+}
+
+.text {
+  @apply text-[0.78125rem] leading-[1.5] text-muted-foreground lg:text-[0.84375rem] lg:leading-[1.55];
+  text-wrap: pretty;
+}
+
+.stars {
+  @apply -ml-1.5 mt-1.5 flex items-center;
+}
+
+.star {
+  @apply flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-amber-400 disabled:pointer-events-none;
+
+  svg {
+    @apply h-[1.375rem] w-[1.375rem];
+  }
+}
+
+.starActive {
+  @apply text-amber-400;
+
+  svg {
+    @apply fill-current;
+  }
+}
+
+/* Comment + Send, revealed by the first star tap. */
+.form {
+  @apply mt-1.5 flex flex-col items-start gap-2.5;
+
+  animation: ratingFormIn 0.16s ease-out;
+}
+
+@keyframes ratingFormIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.note {
+  @apply w-full resize-none rounded-[0.625rem] border bg-background px-3 py-2 text-[0.8125rem] leading-[1.5] text-foreground placeholder:text-muted-foreground/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:opacity-60 lg:text-sm;
+}
+
+/* Doubled to outrank the button's own size utilities. */
+.send.send {
+  @apply h-9 rounded-[0.5rem] px-4 text-[0.8125rem] font-semibold;
+}
+
+.spinner {
+  @apply h-4 w-4 animate-spin;
+}

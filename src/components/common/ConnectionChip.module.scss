@@ -1,0 +1,47 @@
+/* Bottom-*left*: the feedback FAB owns the right corner, and a status that can sit
+   there for a whole session must never land on top of an action. On a phone the chip
+   spans the width, so it clears the FAB by sitting above it instead of beside it. */
+.chip {
+  @apply fixed bottom-20 left-4 right-4 z-40 flex items-start gap-3;
+  @apply sm:bottom-4 sm:right-auto sm:max-w-sm;
+  @apply rounded-xl border border-border bg-background/95 p-3 shadow-lg backdrop-blur;
+  @apply animate-in fade-in slide-in-from-bottom-2;
+}
+
+/* Slate, not red: losing a connection is a state of the world, not a mistake the user
+   made or an error in their work. Everything they've shot is still here. */
+.icon {
+  @apply flex size-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-700;
+  @apply dark:bg-slate-800 dark:text-slate-300;
+}
+
+.glyph {
+  @apply size-4;
+}
+
+.text {
+  @apply min-w-0 flex-1 space-y-0.5;
+}
+
+.title {
+  @apply text-[0.8125rem] font-semibold leading-snug text-foreground;
+}
+
+.body {
+  @apply text-xs leading-snug text-muted-foreground;
+}
+
+.action {
+  @apply flex h-8 shrink-0 items-center gap-1.5 rounded-md px-2.5 text-[0.8125rem] font-medium;
+  @apply text-foreground transition-colors hover:bg-muted;
+  @apply disabled:pointer-events-none disabled:opacity-60;
+}
+
+.close {
+  @apply flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground;
+  @apply transition-colors hover:bg-muted hover:text-foreground;
+}
+
+.spinner {
+  @apply size-3.5 animate-spin;
+}

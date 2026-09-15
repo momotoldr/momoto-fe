@@ -1,0 +1,92 @@
+/* The room runs wider than the marketing pages: the booth is a three-column
+ * workspace (stage / strip / rail) and needs the room to breathe. */
+.page {
+  @apply mx-auto w-full max-w-[80rem] pb-10;
+}
+
+/* Room bar — a rule across the top of the workspace, not a page heading block. */
+.header {
+  @apply mb-7 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b px-4 py-4 sm:px-6 lg:px-10;
+}
+
+.identity {
+  @apply flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2;
+}
+
+.headerActions {
+  @apply flex items-center gap-4 sm:gap-6;
+}
+
+/* "Booth" is context, not the headline — the stage below carries that. */
+.title {
+  @apply text-sm font-semibold;
+}
+
+.roomCode {
+  @apply flex items-baseline gap-2.5;
+}
+
+.roomCodeLabel {
+  @apply text-sm text-muted-foreground;
+}
+
+.code {
+  @apply font-mono text-[0.95rem] font-medium tracking-[0.16em];
+}
+
+/* Clock: a small mono label with the remaining time set large and tabular so the
+ * digits don't jitter as they tick. */
+.timer {
+  @apply flex items-baseline gap-2;
+}
+
+.timerLabel {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground;
+}
+
+.timerValue {
+  @apply text-2xl font-bold leading-none tracking-tight tabular-nums sm:text-3xl;
+}
+
+.timerLow {
+  @apply text-destructive;
+}
+
+.body {
+  @apply flex flex-col items-center gap-4 px-4 sm:px-6 lg:px-10;
+}
+
+.roomFull {
+  @apply flex min-h-[300px] w-full max-w-2xl flex-col items-center justify-center gap-3 rounded-3xl border bg-muted/40 p-8 text-center;
+}
+
+.roomFullTitle {
+  @apply text-lg font-semibold;
+}
+
+.roomFullMessage {
+  @apply max-w-sm text-sm text-muted-foreground;
+}
+
+.notice {
+  @apply flex min-h-[300px] w-full max-w-2xl flex-col items-center justify-center gap-3 rounded-3xl border bg-muted/40 p-8 text-center text-sm text-muted-foreground;
+}
+
+.noticeSpinner {
+  @apply h-6 w-6 animate-spin;
+}
+
+/* Tips button: quiet chrome next to the clock. On a phone it collapses to the icon
+ * alone — the room bar there is already carrying the code, the clock and Finish —
+ * but keeps a full-height tap target rather than shrinking to the glyph. */
+.tipsButton {
+  @apply h-10 gap-1.5 px-3 text-muted-foreground hover:text-foreground;
+}
+
+.tipsIcon {
+  @apply h-4 w-4;
+}
+
+.tipsLabel {
+  @apply hidden sm:inline;
+}

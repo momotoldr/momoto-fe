@@ -1,0 +1,247 @@
+/* Testimonials — a marquee of published rating comments taped to the pinboard.
+ *
+ * Same paper as the "How it works" card: white, a soft shadow and a slight tilt, with
+ * a labelled strip of tape naming the feature the quote is about. The cards glide left
+ * in an endless loop; the component renders them twice so the second copy can take
+ * the first one's place without a seam. */
+
+$tape-shadow: 0 1px 3px rgb(15 23 42 / 14%);
+
+/* Seconds each card takes to cross, so the speed holds whatever the count. */
+$seconds-per-card: 6s;
+
+.testimonials {
+  @apply flex flex-col gap-3 lg:gap-2;
+}
+
+.head {
+  @apply flex flex-col gap-1 lg:gap-[0.3125rem];
+}
+
+.title {
+  @apply m-0 font-display text-[1.625rem] font-black text-slate-900 lg:text-[2rem];
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  @apply m-0 text-[0.84375rem] text-slate-500 lg:text-[0.90625rem];
+}
+
+/* The window the marquee moves through. It bleeds into the page gutter and fades out
+ * at both edges, so cards drift in and out instead of being cut off by a hard line.
+ * The vertical padding makes room for the tape above and the shadow below, which the
+ * clipping would otherwise shave off. */
+.viewport {
+  @apply -mx-5 overflow-hidden pb-9 pt-6 sm:-mx-8;
+
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 2rem,
+    #000 calc(100% - 2rem),
+    transparent
+  );
+
+  &:focus-visible {
+    @apply rounded-lg outline-none ring-2 ring-slate-300;
+  }
+}
+
+.marquee {
+  @apply flex w-max;
+
+  animation: marquee calc(var(--testimonial-count, 10) * #{$seconds-per-card}) linear infinite;
+
+  /* Hold still while the reader is looking at a card, by mouse or keyboard. */
+  .viewport:hover &,
+  .viewport:focus-within & {
+    animation-play-state: paused;
+  }
+}
+
+/* One copy of the cards. The trailing padding equals the gap, so two copies laid end
+ * to end are exactly twice one copy — which is what makes -50% a seamless loop. */
+.track {
+  @apply m-0 flex list-none gap-5 p-0 pr-5 lg:gap-6 lg:pr-6;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* No motion: a still row the reader swipes or scrolls themselves, and no second copy
+ * to scroll past. */
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    @apply overflow-x-auto;
+
+    mask-image: none;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .marquee {
+    animation: none;
+  }
+
+  .track {
+    @apply px-5 sm:px-8;
+  }
+
+  .card {
+    scroll-snap-align: center;
+  }
+
+  .clone {
+    display: none;
+  }
+}
+
+.card {
+  @apply relative flex w-[17.5rem] flex-none bg-white px-5 pb-5 pt-7 sm:w-[19rem] lg:w-[21rem] lg:px-6 lg:pb-6 lg:pt-8;
+
+  box-shadow: 0 10px 26px rgb(15 23 42 / 10%);
+
+  &:nth-child(3n + 1) {
+    transform: rotate(-1deg);
+  }
+
+  &:nth-child(3n + 2) {
+    transform: rotate(0.8deg);
+  }
+
+  &:nth-child(3n) {
+    transform: rotate(-0.5deg);
+  }
+}
+
+/* The feature label, taped across the card's top edge. */
+.tape {
+  @apply absolute flex h-[1.625rem] items-center justify-center whitespace-nowrap px-3.5 font-mono text-[9px] font-bold uppercase;
+
+  top: -13px;
+  left: 20px;
+  letter-spacing: 0.18em;
+  box-shadow: $tape-shadow;
+
+  .card:nth-child(3n + 1) & {
+    transform: rotate(-4deg);
+  }
+
+  .card:nth-child(3n + 2) & {
+    left: auto;
+    right: 20px;
+    transform: rotate(3deg);
+  }
+
+  .card:nth-child(3n) & {
+    left: 28px;
+    transform: rotate(-2deg);
+  }
+}
+
+.tapePink {
+  background: rgb(254 205 211 / 92%);
+  color: #9f1239;
+}
+
+.tapeMint {
+  background: rgb(217 255 234 / 95%);
+  color: #15803d;
+}
+
+.tapeBlue {
+  background: rgb(226 232 240 / 95%);
+  color: #475569;
+}
+
+.figure {
+  @apply m-0 flex flex-1 flex-col gap-3;
+}
+
+/* The author's stars: the rating filled amber, the rest outlined, so a 4★ card reads as
+ * four of five rather than as four. */
+.stars {
+  @apply flex items-center gap-0.5;
+}
+
+.starOn {
+  @apply h-4 w-4;
+  color: #f59e0b;
+  fill: #f59e0b;
+}
+
+.starOff {
+  @apply h-4 w-4 text-slate-200;
+}
+
+.quote {
+  @apply m-0 flex-1;
+
+  p {
+    @apply m-0 text-[0.90625rem] leading-[1.6] text-slate-700 lg:text-[0.9375rem];
+    text-wrap: pretty;
+  }
+}
+
+.author {
+  @apply mt-2 flex items-center gap-3 border-t border-dashed border-slate-200 pt-4;
+}
+
+/* One avatar, or a couple's two overlapping by about a third, the partner's on top with a
+ * white ring so the pair reads as one unit. */
+.avatars {
+  @apply flex flex-shrink-0 items-center;
+
+  > * + * {
+    @apply -ml-3 ring-2 ring-white;
+  }
+}
+
+.avatar {
+  @apply flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full font-display text-sm font-black text-slate-900;
+}
+
+.avatarImage {
+  @apply h-9 w-9 flex-shrink-0 rounded-full bg-slate-100 object-cover;
+}
+
+.avatarPink {
+  background: radial-gradient(circle at 50% 40%, #ffe1ea, #f7b6cd 70%);
+}
+
+.avatarMint {
+  background: radial-gradient(circle at 50% 40%, #e2f7ec, #a9dfc4 70%);
+}
+
+.avatarBlue {
+  background: radial-gradient(circle at 50% 40%, #e9f0f8, #bcd0e6 70%);
+}
+
+.authorText {
+  @apply flex min-w-0 flex-col gap-0.5;
+}
+
+/* Two lines at most, so long display names can't make one card taller than the rest. */
+.name {
+  @apply overflow-hidden font-display text-sm font-bold text-slate-900;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.meta {
+  @apply font-mono text-[10px] uppercase text-slate-500;
+  letter-spacing: 0.14em;
+}

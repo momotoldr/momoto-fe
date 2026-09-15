@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1800" viewBox="0 0 600 1800">
+  <rect width="600" height="1800" fill="#ffe3ee"/>
+  <!-- White frames sit 10px proud of each photo slot. -->
+  <g fill="#ffffff">
+    <rect x="30" y="30" width="540" height="392" rx="16"/>
+    <rect x="30" y="426" width="540" height="392" rx="16"/>
+    <rect x="30" y="822" width="540" height="392" rx="16"/>
+    <rect x="30" y="1218" width="540" height="392" rx="16"/>
+  </g>
+  <!-- Hearts scattered in the footer band; the date is drawn here by composeStrip. -->
+  <g fill="#ff9ec2">
+    <path transform="translate(250 1636) scale(2)" d="M12 21 C 3 14, 5 5, 12 9 C 19 5, 21 14, 12 21 Z"/>
+    <path transform="translate(120 1656) scale(1.2)" d="M12 21 C 3 14, 5 5, 12 9 C 19 5, 21 14, 12 21 Z"/>
+    <path transform="translate(440 1656) scale(1.2)" d="M12 21 C 3 14, 5 5, 12 9 C 19 5, 21 14, 12 21 Z"/>
+  </g>
+</svg>

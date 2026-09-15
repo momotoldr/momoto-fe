@@ -1,0 +1,219 @@
+/* Photobooth entry — the mode-select door.
+ *
+ * Two picture-forward panels (Solo / Date) carry the choice, and joining by code
+ * sits underneath as a quiet line so it never competes with the primary pick.
+ * Below `md` the panels collapse from stacked art-over-label cards into single
+ * rows, and the sample strip drops out entirely. */
+.page {
+  @apply mx-auto flex w-full max-w-[80rem] flex-col gap-8 px-5 pb-16 pt-8 md:gap-11 md:px-10 md:pt-14 lg:px-20;
+}
+
+/* Masthead: the headline on the left, a sample of what you walk away with on the right. */
+.masthead {
+  @apply flex items-end justify-between gap-12;
+}
+
+.intro {
+  @apply flex max-w-[40rem] flex-col gap-2.5 md:gap-3.5;
+}
+
+.eyebrow {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70 md:text-[0.6875rem];
+}
+
+.title {
+  @apply text-pretty text-[2.125rem] font-extrabold leading-[1.05] tracking-[-0.03em] md:text-[3.625rem] md:leading-[1.02];
+}
+
+.subtitle {
+  @apply max-w-[29rem] text-pretty text-sm leading-relaxed text-muted-foreground md:text-base;
+}
+
+/* "You'll get" — a thumbnail of the four-cut strip, so the choice below is made with
+ * the output already in view. It's too small to read on a phone, so it only appears
+ * once there's room for it beside the headline. */
+.sample {
+  @apply hidden shrink-0 flex-col gap-2 pb-2 lg:flex;
+}
+
+.sampleLabel {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70;
+}
+
+.sampleBody {
+  @apply flex items-start gap-1.5;
+}
+
+.sampleStrip {
+  @apply flex w-16 flex-col gap-1 rounded-md border bg-card p-[5px];
+}
+
+/* Hatching stands in for a photo — the strip is a shape cue, not a real preview. */
+.sampleCut {
+  @apply aspect-[4/3] rounded-[3px];
+
+  background: repeating-linear-gradient(135deg, #e2e8f0 0 7px, #f8fafc 7px 14px);
+}
+
+.sampleCutWarm {
+  background: repeating-linear-gradient(135deg, #ffe4ec 0 7px, #fff5f8 7px 14px);
+}
+
+.sampleCutCool {
+  background: repeating-linear-gradient(135deg, #d9ffea 0 7px, #f2fff8 7px 14px);
+}
+
+/* The foot of a real strip is blank stock, and the thumbnail reads wrong without it. */
+.sampleFooter {
+  @apply h-3;
+}
+
+.sampleHint {
+  @apply max-w-[7.5rem] text-pretty text-xs leading-normal text-muted-foreground/70;
+}
+
+.modes {
+  // Two cards side by side; a third (Group, behind its flag) starts a second row and
+  // spans it, so the grid never leaves a lone card floating beside a gap.
+  @apply grid gap-3.5 md:grid-cols-2 md:gap-6;
+
+  > :nth-child(3):last-child {
+    @apply md:col-span-2 md:flex-row md:items-center md:gap-6 md:pb-7;
+  }
+}
+
+/* One control per card: the whole panel is the button, and the "Start" pill is the
+ * affordance rather than a nested button. */
+.mode {
+  @apply flex items-center gap-4 rounded-3xl border bg-card p-4 text-left transition-colors md:flex-col md:items-stretch md:gap-6 md:rounded-[2rem] md:p-7 md:pb-6;
+
+  &:hover:not(:disabled) {
+    @apply border-foreground;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  &:disabled {
+    @apply opacity-60;
+  }
+}
+
+.modeArt {
+  @apply flex h-24 w-[82px] shrink-0 items-center justify-center gap-1.5 rounded-2xl bg-[#f7fffb] md:h-[180px] md:w-auto md:gap-3 md:rounded-[20px];
+}
+
+/* Date runs warm so the two-person option is distinguishable before you read a word. */
+.modeArtDate {
+  @apply bg-[#fff8fa];
+}
+
+/* Group runs cool, and holds four frames instead of one or two. On its full-width row
+ * the art keeps the height of the cards above rather than stretching with them. */
+.modeArtGroup {
+  @apply gap-1 bg-[#f6f8ff] md:h-[180px] md:w-[260px] md:gap-2;
+}
+
+.frame {
+  @apply flex aspect-[3/4] items-end rounded-lg md:rounded-2xl md:p-2.5;
+
+  background: repeating-linear-gradient(135deg, #b1f0cd 0 9px, #f8fafc 9px 18px);
+}
+
+.frameSolo {
+  @apply w-[52px] md:w-[120px];
+}
+
+.frameDate {
+  @apply w-[38px] md:w-[104px];
+}
+
+.frameFriend {
+  background: repeating-linear-gradient(135deg, #ffdbe6 0 9px, #fff5f8 9px 18px);
+}
+
+.frameGroup {
+  @apply w-[22px] md:w-[52px];
+
+  background: repeating-linear-gradient(135deg, #cdd9ff 0 9px, #f5f7ff 9px 18px);
+
+  // Four pills won't fit across the art, so only the outer two are labelled.
+  .framePill {
+    @apply px-1.5 text-[0.625rem];
+  }
+}
+
+/* Who stands in which frame — only worth spelling out at the size the panel has room for. */
+.framePill {
+  @apply hidden rounded-full bg-background/90 px-2.5 py-1 text-[0.6875rem] font-medium md:inline-flex;
+}
+
+.modeBody {
+  @apply flex min-w-0 flex-1 items-center gap-4 md:flex-none md:items-end md:justify-between md:gap-5;
+}
+
+.modeText {
+  @apply flex min-w-0 flex-1 flex-col gap-0.5 md:flex-none md:gap-1.5;
+}
+
+.modeTitle {
+  @apply text-xl font-bold tracking-[-0.02em] md:text-[1.625rem];
+}
+
+.modeHint {
+  @apply text-[0.8125rem] leading-snug text-muted-foreground md:text-sm;
+}
+
+/* Wide enough to name the action; the phone row uses the chevron below instead. */
+.modeCta {
+  @apply hidden h-12 shrink-0 items-center gap-2.5 whitespace-nowrap rounded-[10px] bg-primary px-5 text-[0.9375rem] font-semibold text-primary-foreground md:inline-flex;
+
+  svg {
+    @apply h-4 w-4;
+  }
+}
+
+.modeChevron {
+  @apply h-[18px] w-[18px] shrink-0 md:hidden;
+}
+
+/* Joining is the third door, kept deliberately quiet: a rule, a line of copy, one field. */
+.join {
+  @apply flex flex-col gap-3 border-t pt-5 md:flex-row md:items-center md:gap-5 md:pt-6;
+}
+
+.joinIntro {
+  @apply flex flex-col gap-0.5 md:min-w-[11.875rem];
+}
+
+.joinTitle {
+  @apply text-sm font-semibold md:text-[0.9375rem];
+}
+
+/* One line of reassurance for people arriving from someone else's invite — it costs
+ * a phone row more than it's worth, so it stays desktop-only. */
+.joinHint {
+  @apply hidden text-[0.8125rem] text-muted-foreground/70 md:block;
+}
+
+.joinForm {
+  @apply flex w-full max-w-[26.25rem] items-start gap-2.5;
+}
+
+.joinField {
+  @apply flex-1;
+}
+
+/* These two override the shadcn base classes baked into Input/Button. Those are plain
+ * utilities of equal specificity that win on source order, and tailwind-merge can't
+ * dedupe them against a hashed module class — so the selector is doubled to outrank them.
+ *
+ * Codes are stored uppercase, so the field shows them that way as you type. */
+.joinInput.joinInput {
+  @apply h-12 px-4 font-mono text-[0.9375rem] uppercase tracking-[0.18em] placeholder:text-muted-foreground/70;
+}
+
+.joinButton.joinButton {
+  @apply h-12 shrink-0 rounded-[10px] px-5 text-[0.9375rem] font-semibold;
+}

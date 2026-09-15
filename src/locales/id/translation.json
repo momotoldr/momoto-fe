@@ -1,0 +1,1290 @@
+{
+  "brand": {
+    "name": "Momoto"
+  },
+  "language": {
+    "label": "Bahasa",
+    "en": "EN",
+    "id": "ID"
+  },
+  "common": {
+    "loading": "Memuat…",
+    "tryAgain": "Coba lagi",
+    "backHome": "Kembali ke beranda",
+    "close": "Tutup",
+    "copyright": "Hak Cipta Dilindungi",
+    "cancel": "Batal",
+    "pressAndHoldToSave": "Browser ini tidak bisa mengunduh berkas. Tekan dan tahan gambar untuk menyimpannya."
+  },
+  "footer": {
+    "instagram": "Ikuti kami di Instagram",
+    "legal": "Bantuan, syarat, dan privasi"
+  },
+  "support": {
+    "open": "Hubungi bantuan",
+    "title": "Butuh bantuan?",
+    "subtitle": "Ceritakan masalahnya dan akan kami tindak lanjuti. Kami akan membalas lewat email.",
+    "messageLabel": "Pesan kamu",
+    "messagePlaceholder": "Jelaskan masalahnya dan akan kami tindak lanjuti…",
+    "emailLabel": "Email",
+    "emailPlaceholder": "kamu@contoh.com",
+    "emailHint": "Kami akan memakai ini untuk membalasmu.",
+    "submit": "Kirim",
+    "sending": "Mengirim…",
+    "cancel": "Batal",
+    "success": "Terima kasih! Permintaanmu sudah terkirim.",
+    "error": "Gagal mengirim permintaanmu. Silakan coba lagi.",
+    "errors": {
+      "messageRequired": "Silakan tulis pesan terlebih dahulu.",
+      "messageTooLong": "Pesannya terlalu panjang.",
+      "emailInvalid": "Masukkan alamat email yang valid.",
+      "emailTooLong": "Alamat email terlalu panjang.",
+      "emailRequired": "Masukkan emailmu agar kami bisa membalas."
+    }
+  },
+  "nav": {
+    "home": "Beranda",
+    "activities": "Aktivitas",
+    "help": "Pusat Bantuan",
+    "menu": "Menu",
+    "tnc": "Syarat dan Ketentuan",
+    "policy": "Kebijakan Privasi",
+    "cart": "Keranjang",
+    "gallery": "Galeri"
+  },
+  "activities": {
+    "title": "Aktivitas",
+    "subtitle": "Pilih sesuatu untuk dilakukan bersama — lebih banyak menyusul.",
+    "live": "Aktif",
+    "comingSoon": "Segera hadir",
+    "open": "Buka booth",
+    "modes": {
+      "solo": "Solo",
+      "date": "Kencan",
+      "group": "Grup"
+    },
+    "items": {
+      "photobooth": {
+        "title": "Photobooth Virtual",
+        "desc": "Ambil foto 4-strip sendiri atau bareng teman, hias dengan filter dan stiker, lalu simpan atau bagikan."
+      },
+      "draw": {
+        "title": "Menggambar Bareng",
+        "desc": "Gambar sesuatu yang menghubungkan kalian berdua."
+      },
+      "lovematch": {
+        "title": "Love Match",
+        "desc": "Baca pertanyaan yang diberikan dan tebak satu sama lain."
+      },
+      "spot": {
+        "title": "Spot It!",
+        "desc": "Lihat kedua ilustrasi dan temukan perbedaannya."
+      }
+    }
+  },
+  "landing": {
+    "badge": "Bilang cheese",
+    "heroTitle": "Kencan Seru untuk Pasangan LDR",
+    "heroSubtitle": "Momoto adalah studio kecil berisi pengalaman kencan yang menyenangkan untuk hubungan jarak jauh, yang menjaga kami tetap bersama melewati jarak tersebut.",
+    "ctaPrimary": "Pilih aktivitas",
+    "ctaSecondary": "Buka Photobooth",
+    "menuTitle": "Yang bisa kamu lakukan",
+    "menuSubtitle": "Satu booth hari ini, lebih banyak momen menyusul.",
+    "browseActivities": "Lihat semua aktivitas",
+    "howTitle": "Cara kerjanya",
+    "ctaBannerTitle": "Siap tampil di depan kamera?",
+    "footerTag": "Jepret, susun, bagikan.",
+    "strips": {
+      "solo": "Solo",
+      "date": "Kencan",
+      "group": "Grup"
+    },
+    "steps": {
+      "photobooth": {
+        "pick": {
+          "title": "Pilih mode",
+          "desc": "Sendiri, atau undang teman dengan kode ruangan."
+        },
+        "pose": {
+          "title": "Bergaya",
+          "desc": "Hitungan mundur 3-2-1 tersinkron mengambil strip empat potonganmu."
+        },
+        "share": {
+          "title": "Sesuaikan gayamu",
+          "desc": "Tambahkan filter dan stiker, lalu unduh atau bagikan."
+        }
+      },
+      "draw": {
+        "prompt": {
+          "title": "Pilih ide",
+          "desc": "Pilih sesuatu yang menghubungkan kalian berdua."
+        },
+        "draw": {
+          "title": "Menggambar bareng",
+          "desc": "Corat-coret berdampingan di kanvas bersama secara langsung."
+        },
+        "save": {
+          "title": "Simpan",
+          "desc": "Simpan karyamu atau bagikan sesukamu."
+        }
+      },
+      "lovematch": {
+        "room": {
+          "title": "Mulai ruangan",
+          "desc": "Undang pasanganmu dengan kode ruangan."
+        },
+        "answer": {
+          "title": "Jawab pertanyaan",
+          "desc": "Baca tiap pertanyaan dan tebak jawaban satu sama lain."
+        },
+        "score": {
+          "title": "Lihat kecocokan",
+          "desc": "Cari tahu seberapa kenal kalian satu sama lain."
+        }
+      },
+      "spot": {
+        "scenes": {
+          "title": "Buka dua gambar",
+          "desc": "Kalian berdua melihat sepasang ilustrasi seru."
+        },
+        "find": {
+          "title": "Cari perbedaan",
+          "desc": "Berlomba menemukan semua yang berbeda."
+        },
+        "celebrate": {
+          "title": "Hitung skor",
+          "desc": "Lihat siapa yang menemukan paling banyak."
+        }
+      }
+    },
+    "stats": {
+      "title": "Momoto dalam angka",
+      "users": "Pengguna Momoto",
+      "usersShort": "Pengguna",
+      "sessions": "Sesi aktif",
+      "sessionsShort": "Sesi aktif",
+      "strips": "Strip dibuat",
+      "stripsShort": "Strip"
+    },
+    "testimonials": {
+      "title": "Kata mereka",
+      "subtitle": "Momen kecil dari pasangan dan teman yang sudah mampir ke booth.",
+      "features": {
+        "date": "Mode kencan",
+        "group": "Grup",
+        "solo": "Solo",
+        "templates": "Template",
+        "stickers": "Stiker",
+        "print": "Cetak",
+        "invite": "Kode room"
+      },
+      "rated": "Rating {{count}} dari 5"
+    }
+  },
+  "help": {
+    "badge": "Pusat Bantuan",
+    "title": "Ada yang bisa kami bantu?",
+    "intro": "Jawaban untuk pertanyaan yang paling sering masuk. Masih bingung? Kirim pesan dan kami balas lewat email.",
+    "contactTitle": "Masih butuh bantuan?",
+    "contactHint": "Ceritakan kendalanya dan kami akan periksa.",
+    "items": {
+      "install": {
+        "q": "Apakah saya perlu mengunduh aplikasi?",
+        "a": "Tanpa instal — Momoto berjalan langsung di browser kamu. Kamu cukup membuat akun gratis untuk memilih aktivitas, lalu izinkan kamera."
+      },
+      "free": {
+        "q": "Apakah gratis?",
+        "a": "Ya — membuat strip di photobooth itu gratis, dan membagikannya tidak dipungut biaya. Setiap strip tersimpan di keranjangmu, di mana kamu bisa membuka salinan bersih tanpa watermark untuk diunduh dan dicetak dengan biaya kecil."
+      },
+      "print": {
+        "q": "Bagaimana cara mendapatkan strip bersih siap cetak?",
+        "a": "Setiap strip yang kamu buat tersimpan di keranjang dengan watermark tipis. Dari keranjang, centang strip yang kamu mau lalu checkout untuk membuka salinan resolusi tinggi tanpa watermark yang bisa diunduh dan dicetak."
+      },
+      "friend": {
+        "q": "Bisakah dipakai bareng teman?",
+        "a": "Tentu. Pilih mode Berdua dan bagikan kode ruanganmu — kalian akan saling melihat kamera langsung dan mengambil strip bersama."
+      },
+      "privacy": {
+        "q": "Ke mana foto saya disimpan?",
+        "a": "Foto kamu diambil dan disusun langsung di browser. Saat kamu membuat strip, strip itu tersimpan di akunmu sehingga muncul di keranjang di semua perangkatmu; dalam mode Berdua, video langsung dialirkan peer-to-peer dan tidak pernah direkam."
+      },
+      "need": {
+        "q": "Apa yang saya butuhkan untuk mulai?",
+        "a": "Perangkat berkamera dan browser modern (Chrome, Safari, Edge, atau Firefox). Izinkan akses kamera saat diminta dan kamu siap."
+      }
+    }
+  },
+  "terms": {
+    "title": "Syarat & Ketentuan",
+    "lastUpdated": "Terakhir diperbarui: 10 Agustus 2026",
+    "intro": "Selamat datang di Momoto. Syarat & Ketentuan ini mengatur penggunaan pengalaman kencan seru kami — termasuk Photobooth Virtual dan aktivitas lainnya — yang tersedia di peramban web di momoto serta aplikasi terkait. Dengan menggunakan Momoto, kamu menyetujui ketentuan ini. Jika kamu tidak setuju, mohon jangan gunakan layanan ini.",
+    "sections": {
+      "service": {
+        "title": "Tentang Layanan",
+        "body": [
+          "Momoto adalah studio kecil berisi pengalaman kencan seru yang dibuat untuk hubungan jarak jauh. Layanan ini memungkinkan dua orang di tempat berbeda berbagi momen bersama secara real-time — mengambil strip foto yang tersinkron, atau memainkan aktivitas lain seiring kami menambahkannya.",
+          "Layanan ini disediakan untuk hiburan pribadi dan non-komersial. Fitur dapat berubah, diluncurkan, atau dihentikan dari waktu ke waktu seiring kami terus menyempurnakan Momoto."
+        ]
+      },
+      "eligibility": {
+        "title": "Kelayakan & Akses",
+        "body": [
+          "Kamu harus berusia minimal 13 tahun untuk menggunakan Momoto. Jika kamu di bawah usia dewasa di tempat tinggalmu, kamu hanya boleh menggunakan layanan ini dengan keterlibatan orang tua atau wali.",
+          "Momoto memerlukan akun gratis untuk mengakses aktivitas — daftar dengan email dan kata sandi, atau dengan Google. Kamu bertanggung jawab menjaga keamanan detail masukmu serta perangkat, kamera, dan koneksi yang kamu gunakan."
+        ]
+      },
+      "content": {
+        "title": "Konten & Foto Kamu",
+        "body": [
+          "Foto kamu adalah milik kamu. Strip foto diambil dan disusun di dalam peramban kamu sendiri. Saat kamu menyimpan strip ke keranjang, gambar yang sudah disusun diunggah ke server kami dan disimpan bersama akunmu sehingga bisa kamu akses di semua perangkatmu; kamu bisa menghapusnya kapan saja. Kami hanya memakai strip kamu untuk menyediakan layanan ini kepadamu.",
+          "Dalam sesi \"Date\" bersama, kamera langsung kamu dialirkan secara peer-to-peer ke teman yang kamu undang, sehingga kalian bisa berpose bersama. Momoto hanya meneruskan koneksi — kami tidak merekam atau menyimpan video tersebut. Apa yang masing-masing pilih untuk diunduh atau dibagikan setelahnya sepenuhnya terserah kamu.",
+          "Kamu bertanggung jawab atas konten yang kamu ambil dan bagikan, serta menghormati privasi dan persetujuan siapa pun yang muncul di dalamnya."
+        ]
+      },
+      "payments": {
+        "title": "Pembelian & Pembayaran",
+        "body": [
+          "Membuat strip, menyimpannya ke keranjang, dan membagikannya itu gratis. Salinan strip yang bersih dan beresolusi tinggi tanpa watermark adalah unduhan berbayar yang bersifat opsional. Harga ditampilkan di halaman checkout sebelum kamu mengonfirmasi, dan kamu bisa membeli beberapa strip dalam satu pesanan.",
+          "Pembayaran ditangani oleh penyedia pembayaran pihak ketiga kami, Midtrans. Dengan membayar, kamu juga menyetujui ketentuan penyedia tersebut. Kami menerima konfirmasi bahwa pembayaran berhasil beserta nomor referensi pesanan, tetapi kami tidak mengumpulkan atau menyimpan detail lengkap kartu atau rekening bankmu.",
+          "Karena pembelian langsung membuka file digital untuk diunduh, strip berbayar umumnya tidak dapat dikembalikan setelah dibuka — kecuali bila pengembalian dana diwajibkan oleh hukum, atau bila ada gangguan teknis dari pihak kami yang membuat kamu tidak bisa mengunduh strip yang sudah kamu bayar. Jika itu terjadi, hubungi kami dan akan kami perbaiki."
+        ]
+      },
+      "acceptableUse": {
+        "title": "Penggunaan yang Wajar",
+        "body": [
+          "Mohon gunakan Momoto dengan baik dan sesuai hukum. Kamu setuju untuk tidak: menggunakan layanan untuk melecehkan, mengancam, atau menyakiti siapa pun; mengambil atau membagikan konten yang melanggar hukum, penuh kebencian, atau tanpa persetujuan; berupaya mengganggu, membebani, merekayasa balik, atau memperoleh akses tanpa izin ke layanan; atau menggunakannya untuk melanggar hak siapa pun.",
+          "Kami dapat menangguhkan atau membatasi akses bagi siapa pun yang menyalahgunakan layanan atau ketentuan ini."
+        ]
+      },
+      "availability": {
+        "title": "Ketersediaan & Perubahan",
+        "body": [
+          "Momoto disediakan \"sebagaimana adanya\" dan \"sebagaimana tersedia\", tanpa jaminan apa pun. Kami tidak menjamin layanan akan selalu tersedia, tanpa gangguan, atau bebas dari kesalahan — sesi bersama bergantung pada perangkat dan koneksi jaringan kedua belah pihak.",
+          "Kami dapat menambah, mengubah, atau menghentikan fitur kapan saja, dan kami dapat memperbarui ketentuan ini. Bila kami melakukannya, kami akan memperbarui tanggal \"terakhir diperbarui\" di atas; melanjutkan penggunaan Momoto setelah perubahan berarti kamu menerima ketentuan yang diperbarui."
+        ]
+      },
+      "liability": {
+        "title": "Batasan Tanggung Jawab",
+        "body": [
+          "Sejauh diizinkan oleh hukum, Momoto dan orang-orang di baliknya tidak bertanggung jawab atas kerugian tidak langsung, insidental, atau konsekuensial yang timbul dari penggunaan layanan, termasuk foto yang hilang, momen yang terlewat, atau sesi yang terputus.",
+          "Momoto adalah pengalaman menyenangkan yang gratis digunakan, dengan cetakan berbayar berbiaya rendah yang bersifat opsional — bila tanggung jawab tidak dapat dikecualikan oleh hukum, maka dibatasi hingga jumlah yang kamu bayarkan kepada kami (jika ada) untuk fitur terkait, atau seminimum yang diizinkan."
+        ]
+      },
+      "governingLaw": {
+        "title": "Hukum yang Berlaku",
+        "body": [
+          "Ketentuan ini diatur oleh hukum Republik Indonesia, tanpa memperhatikan aturan pertentangan hukumnya. Jika timbul perselisihan, kami meminta kamu menghubungi kami terlebih dahulu agar dapat kami selesaikan secara kekeluargaan."
+        ]
+      },
+      "contact": {
+        "title": "Kontak",
+        "body": [
+          "Ada pertanyaan tentang ketentuan ini? Hubungi kami dan dengan senang hati kami bantu. Terima kasih telah meluangkan waktu bersama Momoto — semoga ia membuatmu sedikit lebih dekat, sejauh apa pun jaraknya."
+        ]
+      },
+      "accounts": {
+        "title": "Akunmu",
+        "body": [
+          "Kamu bertanggung jawab atas aktivitas di akunmu dan menjaga kerahasiaan kata sandimu. Berikan informasi yang akurat, dan jangan meniru orang lain atau membuat akun untuk seseorang tanpa izinnya.",
+          "Kamu bisa menghapus akunmu kapan saja dengan menghubungi kami. Kami dapat menangguhkan atau menutup akun yang melanggar ketentuan ini."
+        ]
+      }
+    }
+  },
+  "privacy": {
+    "title": "Kebijakan Privasi",
+    "lastUpdated": "Terakhir diperbarui: 14 September 2026",
+    "intro": "Privasi kamu penting bagi kami. Kebijakan Privasi ini menjelaskan sedikit informasi yang ditangani Momoto saat kamu menggunakan pengalaman kencan seru kami di momoto, dan bagaimana kami menjaga foto serta momenmu tetap menjadi milikmu. Momoto dirancang dengan mengutamakan privasi: fotomu dibuat langsung di peramban kamu, dan kami menyimpan seminimum mungkin — hanya yang dibutuhkan untuk menjalankan akunmu, menyimpan strip yang kamu pilih untuk disimpan, dan menangani cetakan yang kamu beli.",
+    "sections": {
+      "collect": {
+        "title": "Informasi yang Kami Kumpulkan",
+        "body": [
+          "Untuk menggunakan aktivitas Momoto kamu membuat akun, jadi kami mengumpulkan detail yang kamu berikan: alamat email, kata sandi yang di-hash secara aman (tidak pernah kami simpan dalam bentuk teks biasa), nama tampilan, avatar opsional, serta — jika kamu mengisinya — kota atau kabupaten tempat tinggalmu (atau negara dan kota jika kamu tinggal di luar Indonesia). Jika kamu masuk dengan Google, kami menerima profil dasar Google-mu (email, nama, dan foto).",
+          "Saat kamu menyimpan strip, kami menyimpan gambar jadinya bersama akunmu: pratinjau ber-watermark dan, jika kamu membeli cetakan, salinan bersih tanpa watermark. Jika kamu membeli cetakan, penyedia pembayaran kami (Midtrans) memproses pembayaran; kami menerima konfirmasi dan nomor referensi pesanan yang terkait dengan akunmu, tetapi bukan detail lengkap kartu atau rekening bankmu.",
+          "Untuk menjalankan sesi \"Date\" bersama, server kami sebentar menangani kode ruang sementara dan detail koneksi yang diperlukan untuk menghubungkan peramban kamu dan pasanganmu — video dan audionya sendiri direlai peer-to-peer dan tidak pernah direkam.",
+          "Seperti kebanyakan situs web, hosting kami mungkin memproses data teknis dasar (seperti alamat IP dan jenis peramban) dalam log server untuk keamanan dan keandalan."
+        ]
+      },
+      "media": {
+        "title": "Foto, Video & Audio",
+        "body": [
+          "Fotomu diambil dan disusun sepenuhnya di dalam peramban kamu sendiri. Bingkai kamera mentah tidak pernah diunggah — hanya strip jadi yang kamu pilih untuk disimpan. Saat kamu menyimpan strip ke keranjang, gambar yang sudah disusun itu diunggah dan disimpan bersama akunmu sehingga bisa kamu temukan di semua perangkatmu (versi gratis membawa watermark; salinan yang dibeli bersih tanpa watermark). Kamu bisa menghapus strip yang tersimpan dari keranjang kapan saja, yang menghapusnya dari server kami.",
+          "Dalam sesi Date, kamera langsung dan mikrofonmu dialirkan langsung ke teman yang kamu undang, secara peer-to-peer. Server kami hanya membantu kedua peramban saling menemukan (dan mungkin meneruskan aliran jika koneksi langsung tidak memungkinkan); kami tidak merekam, melihat, atau menyimpan video maupun audio tersebut."
+        ]
+      },
+      "storage": {
+        "title": "Cookie & Penyimpanan Lokal",
+        "body": [
+          "Momoto menggunakan penyimpanan lokal peramban kamu untuk mengingat hal-hal kecil yang membuat aplikasi berjalan — seperti preferensi bahasa dan status sesi yang sedang berlangsung agar tetap ada setelah halaman dimuat ulang. Data ini tetap berada di perangkatmu.",
+          "Kami tidak menggunakan cookie iklan atau piksel pelacak pihak ketiga."
+        ]
+      },
+      "usage": {
+        "title": "Bagaimana Kami Menggunakan Informasi",
+        "body": [
+          "Kami menggunakan informasi terbatas yang dijelaskan di atas hanya untuk menyediakan layanan: menghubungkan kamu dengan temanmu dalam sesi Date, menyimpan strip yang kamu pilih untuk disimpan dan membuatnya tersedia di semua perangkatmu, memenuhi dan mengonfirmasi cetakan yang kamu beli, menjaga sesi berjalan lancar, dan melindungi layanan dari penyalahgunaan.",
+          "Kami tidak menjual datamu, dan kami tidak menggunakannya untuk iklan atau pembuatan profil."
+        ]
+      },
+      "sharing": {
+        "title": "Dengan Siapa Kami Membagikan Data",
+        "body": [
+          "Dalam sesi, satu-satunya \"pembagian\" adalah kamera langsung dan audio yang kamu kirim langsung ke teman yang kamu undang selama sesi Date — kamu yang memilih siapa itu.",
+          "Jika kamu masuk dan meninggalkan komentar dengan rating 4 atau 5 bintang di samping strip, kami dapat menampilkannya di situs kami sebagai testimoni, bersama nama tampilan, kota atau negaramu, foto profil yang kamu unggah, dan ratingmu. Jika saat itu akunmu tertaut dengan pasangan, nama tampilan, kota atau negara, dan foto profil yang diunggah pasanganmu dapat tampil di sampingmu. Untuk menghapus testimoni, hubungi kami melalui detail di bawah — melepas tautan juga menghapus pasanganmu dari testimoni tersebut.",
+          "Di balik layar, kami mengandalkan penyedia infrastruktur standar (untuk hosting dan server relai koneksi yang dibutuhkan WebRTC), dan — saat kamu membeli cetakan — penyedia pembayaran (Midtrans) untuk memproses transaksi, semata-mata untuk menyampaikan layanan. Kami tidak menjual atau menyewakan informasimu kepada siapa pun."
+        ]
+      },
+      "retention": {
+        "title": "Penyimpanan & Penghapusan Data",
+        "body": [
+          "Strip yang kamu simpan disimpan bersama akunmu sampai kamu menghapusnya dari keranjang atau menghapus akunmu, dan saat itu strip tersebut dihapus dari server kami. Foto yang tidak kamu simpan tetap hanya berada di perangkatmu — menutup tab atau membersihkan penyimpanan peramban akan menghapus data sesi lokal. Kode ruang bersifat sementara dan berakhir saat sesi selesai.",
+          "Data log teknis dasar yang disimpan hosting kami hanya dipertahankan untuk waktu singkat demi keamanan lalu dihapus."
+        ]
+      },
+      "children": {
+        "title": "Anak-anak",
+        "body": [
+          "Momoto ditujukan untuk orang berusia 13 tahun ke atas. Kami tidak dengan sengaja mengumpulkan informasi dari anak di bawah 13 tahun. Jika kamu yakin seorang anak telah menggunakan layanan ini dengan cara yang mengkhawatirkanmu, silakan hubungi kami."
+        ]
+      },
+      "changes": {
+        "title": "Perubahan pada Kebijakan Ini",
+        "body": [
+          "Kami dapat memperbarui Kebijakan Privasi ini dari waktu ke waktu. Bila kami melakukannya, kami akan memperbarui tanggal \"terakhir diperbarui\" di atas. Melanjutkan penggunaan Momoto setelah perubahan berarti kamu menerima kebijakan yang diperbarui."
+        ]
+      },
+      "contact": {
+        "title": "Kontak",
+        "body": [
+          "Ada pertanyaan tentang privasimu atau kebijakan ini? Hubungi kami dan dengan senang hati kami bantu."
+        ]
+      },
+      "accounts": {
+        "title": "Akunmu",
+        "body": [
+          "Akunmu menyimpan email, kata sandi yang di-hash (atau identitas Google yang tertaut), nama tampilan, avatar opsional, dan kota opsional (atau negara, jika kamu tinggal di luar Indonesia). Kamu bisa memperbarui ini kapan saja di halaman profil.",
+          "Kamu dapat menautkan akunmu dengan pasangan menggunakan kode undangan sekali pakai; salah satu dari kalian bisa melepas tautan kapan saja. Untuk menghapus akun dan datanya, hubungi kami melalui detail di bawah."
+        ]
+      }
+    }
+  },
+  "photobooth": {
+    "title": "Photobooth Virtual",
+    "heading": "Mau foto bagaimana hari ini?",
+    "subtitle": "Ambil strip foto empat potongan — sendiri, atau foto bareng teman secara langsung.",
+    "sampleLabel": "Kamu akan dapat",
+    "sampleHint": "Empat potongan, bisa dicetak, watermark opsional.",
+    "frameYou": "Kamu",
+    "frameFriend": "Teman",
+    "solo": "Sendiri",
+    "soloHint": "Hanya kamu — tanpa kode",
+    "soloCta": "Mulai",
+    "date": "Berdua",
+    "dateHint": "Undang teman dengan kode",
+    "dateCta": "Buat ruangan",
+    "joinTitle": "Sudah punya kode?",
+    "joinHint": "Seseorang mengundangmu ke booth.",
+    "roomCodePlaceholder": "Masukkan kode ruangan",
+    "roomCodeLabel": "Kode ruangan",
+    "join": "Gabung",
+    "codeInvalid": "Masukkan kode ruangan yang valid (huruf dan angka).",
+    "codeRequired": "Silakan masukkan kode ruangan.",
+    "createFailed": "Tidak bisa memulai ruangan berdua — server tidak dapat dijangkau. Silakan coba lagi.",
+    "joining": "Bergabung…",
+    "join_not_found": "Tidak ada ruangan dengan kode itu — periksa lagi dan coba ulang.",
+    "join_full": "Ruangan itu sudah penuh. Coba kode lain.",
+    "join_ended": "Sesi ruangan itu sudah berakhir.",
+    "joinCheckFailed": "Tidak dapat menjangkau server. Periksa koneksimu dan coba lagi.",
+    "cameraDisabled": "Tolong nyalakan kamera Anda terlebih dahulu.",
+    "frameFriends": "Teman",
+    "group": "Grup",
+    "groupHint": "Sampai {{count}} orang dalam satu bilik",
+    "groupCta": "Buat ruangan",
+    "createGroupFailed": "Tidak bisa memulai ruangan grup. Server ini mungkin belum mengaktifkan mode grup.",
+    "joinGroupUnavailable": "Itu ruangan grup, dan mode grup belum tersedia di aplikasi ini.",
+    "boothBusy": "Booth-nya sedang penuh. Tunggu sebentar, lalu coba lagi."
+  },
+  "room": {
+    "connecting": "Menghubungkan…",
+    "connectingSlow": "Koneksi lambat — masih menghubungkan ke ruangan…",
+    "booth": "Booth",
+    "soloSession": "Sesi sendiri",
+    "roomCodeLabel": "Kode ruangan",
+    "finish": "Selesai",
+    "timesUp": "Waktu habis",
+    "sessionEnded": "Sesi fotomu telah berakhir.",
+    "roomFullTitle": "Ruangan penuh",
+    "roomFullMessage": "Ruangan ini sudah tidak punya tempat kosong. Coba kode lain.",
+    "roomClosedTitle": "Ruangan ini sudah ditutup",
+    "roomClosedMessage": "Sesi fotonya sudah berakhir, jadi kodenya tidak berlaku lagi. Mulai booth baru dari photobooth.",
+    "connectFailedTitle": "Tidak dapat menjangkau server",
+    "connectFailedMessage": "Ruangan berdua butuh koneksi agar temanmu bisa bergabung. Periksa jaringanmu dan coba lagi.",
+    "notFoundTitle": "Ruangan tidak ditemukan",
+    "notFoundMessage": "Tidak ada ruangan dengan kode itu. Periksa kodenya, atau mulai booth baru dari photobooth.",
+    "leaveDialog": {
+      "title": "Keluar dari booth?",
+      "description": "Sesi tetap berjalan tanpamu. Kembali dengan kode yang sama sebelum waktunya habis, fotomu akan menunggu.",
+      "confirm": "Keluar",
+      "cancel": "Tetap di sini"
+    },
+    "finishDialog": {
+      "title": "Selesaikan sesi?",
+      "description": "Ini menutup booth untuk kalian berdua, dan strip foto yang belum disimpan akan hilang.",
+      "descriptionSolo": "Ini menutup booth, dan strip foto yang belum disimpan akan hilang.",
+      "confirm": "Selesaikan sesi",
+      "cancel": "Lanjut dulu",
+      "descriptionGroup": "Ini menutup bilik untuk semua orang, dan strip foto yang belum tersimpan akan hilang."
+    },
+    "timerLabel": "Sisa",
+    "connectFailedMessageGroup": "Ruangan grup butuh koneksi supaya yang lain bisa bergabung. Periksa jaringanmu dan coba lagi."
+  },
+  "lobby": {
+    "share": "Bagikan kode ini ke temanmu",
+    "copyTitle": "Klik untuk menyalin",
+    "waiting": "Menunggu temanmu bergabung…",
+    "codeCopied": "Kode ruangan disalin",
+    "shareGroup": "Bagikan kode ini ke teman-temanmu",
+    "seats": "{{present}} dari {{capacity}} hadir",
+    "start": "Mulai sesi",
+    "startNote": "Menjalankan waktu untuk semua orang. Yang masih di jalan tetap bisa gabung — sisa waktunya yang mereka dapat.",
+    "startNeedsMore_other": "Menunggu {{count}} orang lagi — sesi grup butuh minimal {{required}} orang."
+  },
+  "status": {
+    "connecting": "Menghubungkan…",
+    "offline": "Luring — mode sendiri",
+    "friendConnected": "Teman terhubung",
+    "friendJoining": "Menghubungkan teman…",
+    "membersConnecting": "{{present}} dari {{capacity}} hadir · menghubungkan…",
+    "waitingFriend": "Menunggu teman…",
+    "friendJoined": "Temanmu bergabung",
+    "friendLeft": "Temanmu terputus — lanjut saja, fotomu aman. Dia bisa gabung lagi dengan kode yang sama.",
+    "friendLeftCapturing": "Temanmu terputus, jadi pengambilan foto dihentikan. Mulai lagi setelah dia kembali.",
+    "reconnecting": "Menghubungkan ulang…",
+    "reconnectingToast": "Koneksi terputus — mencoba menghubungkan lagi. Foto yang sudah diambil aman.",
+    "membersHere": "{{present}} dari {{capacity}} hadir",
+    "friendJoinedGroup": "Ada yang bergabung",
+    "friendLeftGroup": "Ada yang terputus — lanjut saja, fotomu aman. Dia bisa gabung lagi dengan kode yang sama.",
+    "friendLeftCapturingGroup": "Ada yang terputus, jadi pengambilan foto dihentikan. Mulai lagi setelah semuanya kembali.",
+    "friendJoinedCapturing": "Temanmu bergabung, jadi pengambilan foto dihentikan. Mulai lagi supaya dia juga masuk strip.",
+    "friendJoinedCapturingGroup": "Ada yang bergabung, jadi pengambilan foto dihentikan. Mulai lagi supaya dia juga masuk strip."
+  },
+  "templates": {
+    "label": "Template",
+    "classic": "Klasik",
+    "film": "Film",
+    "hearts": "Hati",
+    "newspaper": "Koran",
+    "orangeColorful": "Orange Berwarna",
+    "blueWhiteRetro": "Retro",
+    "greenRed": "Mozaik Hijau",
+    "terrazzo": "Terazo",
+    "midnightGold": "Emas Tengah Malam",
+    "sageBotanical": "Botani",
+    "holo": "Holo",
+    "nordic": "Nordik",
+    "birthday": "Ulang Tahun",
+    "bestFriends": "Sahabat",
+    "sunset": "Senja",
+    "kraft": "Kraft",
+    "layoutLabel": "Kisi",
+    "layout4x1": "4×1",
+    "layout2x2": "2×2"
+  },
+  "capture": {
+    "takingPhotos": "Mengambil foto… {{taken}}/{{total}}",
+    "startSession": "Mulai Sesi",
+    "starting": "Memulai…",
+    "waitingForHost": "Menunggu host memulai…",
+    "waitingForFriend": "Kamu bisa mulai setelah temanmu kembali ke ruangan.",
+    "waitingReconnect": "Kamu sedang luring — bisa mulai setelah terhubung lagi.",
+    "waitingReconnectGuest": "Kamu sedang luring — tunggu sebentar, kami sedang menghubungkan lagi.",
+    "waitingCameras": "Kamu bisa mulai setelah kamera temanmu terhubung — masih menghubungkan.",
+    "waitingCamerasGuest": "Kameramu sudah aktif — kamera temanmu masih menghubungkan.",
+    "waitingCamerasGroup": "Kamu bisa mulai setelah semua kamera terhubung — satu masih menghubungkan.",
+    "waitingCamerasGroupGuest": "Kameramu sudah aktif — kamera orang lain masih menghubungkan.",
+    "waitingCamOffSelf": "Kameramu mati — nyalakan supaya kamu ada di strip.",
+    "waitingCamOff": "Kamu bisa mulai setelah temanmu menyalakan kameranya.",
+    "waitingCamOffGuest": "Menunggu temanmu menyalakan kameranya.",
+    "waitingCamOffGroup": "Kamu bisa mulai setelah semua kamera menyala — ada yang masih mati.",
+    "waitingCamOffGroupGuest": "Menunggu kamera terakhir menyala — ada yang masih mati.",
+    "stoppedOffline": "Kamu terputus, jadi pengambilan foto dihentikan. Mulai lagi setelah terhubung.",
+    "stoppedOfflineGuest": "Kamu terputus, jadi pengambilan foto dihentikan. Host bisa mulai lagi setelah kalian terhubung.",
+    "friendAlreadyShot": "Menunggu temanmu mengambil ulang — dia sudah punya foto ronde ini, jadi ronde baru yang bisa memasukkanmu ke strip.",
+    "leftBooth": "Kamu meninggalkan booth — beberapa foto mungkin diambil tanpa kamu.",
+    "draftRestored_one": "Dilanjutkan dari sebelumnya — {{count}} foto dipulihkan.",
+    "draftRestored_other": "Dilanjutkan dari sebelumnya — {{count}} foto dipulihkan.",
+    "retakingPhoto": "Mengambil ulang foto {{index}}…",
+    "shotAlt": "Foto {{index}}",
+    "headlineTop": "Empat foto,",
+    "headlineBottom": "satu strip.",
+    "headlineNote": "Kedua kamera dipotret pada hitungan yang sama, jadi kalian ada di foto yang sama.",
+    "liveNote": "Kedua kamera sudah menyala — kamu baru masuk strip setelah sesi dimulai.",
+    "startNote": "3-2-1 di kedua layar sekaligus.",
+    "stripLabel": "Strip kamu",
+    "stripProgress": "{{taken}} dari {{total}}",
+    "capturing": "Mengambil foto…",
+    "waitingForGroup": "Kamu bisa mulai setelah minimal tiga orang ada di ruangan.",
+    "headlineNoteGroup": "Semua kamera dipotret pada hitungan yang sama, jadi kalian ada di foto yang sama.",
+    "liveNoteGroup": "Kamera semua orang sudah menyala — kamu baru masuk strip setelah sesi dimulai.",
+    "startNoteGroup": "3-2-1 di layar semua orang sekaligus.",
+    "friendAlreadyShotGroup": "Menunggu host mengambil ulang — yang lain sudah punya foto ronde ini, jadi ronde baru yang bisa memasukkanmu ke strip.",
+    "stoppedOfflineGuestGroup": "Kamu sempat luring, jadi pengambilan foto dihentikan. Host bisa mulai lagi setelah semuanya kembali.",
+    "waitingForGroupGuest": "Menunggu orang lain — sesi grup butuh minimal tiga orang di ruangan.",
+    "waitingForFriendGuest": "Menunggu temanmu kembali ke ruangan."
+  },
+  "select": {
+    "title": "Susun stripmu",
+    "subtitle": "Susun ulang atau ambil ulang fotomu sebelum membuat strip.",
+    "subtitleGuest": "Host sedang mendesain strip — beginilah tampilan stripmu.",
+    "dragHint": "Seret foto untuk menyusun ulang, atau ketuk ikon ambil ulang untuk mengambilnya lagi.",
+    "dragHintGuest": "Seret foto untuk menyusun ulang stripmu sendiri.",
+    "slotAlt": "Slot strip {{index}}",
+    "stripAria": "Strip foto kamu",
+    "retakeShot": "Ambil ulang foto {{index}}",
+    "retakeWaiting": "Ambil ulang ditunda sampai temanmu kembali ke ruangan.",
+    "retakeOffline": "Ambil ulang ditunda selama kamu luring.",
+    "retakeCreated": "Ambil ulang ditutup — temanmu sudah membuat stripnya.",
+    "filterLabel": "Pilih filter",
+    "create": "Buat strip",
+    "retake": "Ambil ulang semua",
+    "confirmTitle": "Buat stripmu?",
+    "confirmDescription": "Setelah strip dibuat, kamu tidak bisa mengubah susunan, filter, atau mengambil ulang — ini final. Lanjutkan dengan pengaturan saat ini?",
+    "confirmCreate": "Ya, buat",
+    "confirmCancel": "Lanjut edit",
+    "stillLive": "Masih menyala",
+    "stillLiveNote": "Tetap mengobrol sambil mendesain. Fotonya sudah selesai diambil.",
+    "stripLabel": "Strip kamu",
+    "createNote": "Sekali dibuat, susunan, filter, dan stiker terkunci.",
+    "tabFilter": "Filter",
+    "tabStickers": "Stiker",
+    "camerasLive": "Kamera masih menyala — lanjut mengobrol.",
+    "retakeWaitingGroup": "Ambil ulang ditunda sampai cukup banyak dari kalian kembali ke ruangan.",
+    "retakeShortHanded": "Ambil ulang ditunda — strip ini diambil dengan lebih banyak orang daripada yang ada di ruangan sekarang. Mereka bisa gabung lagi dengan kode yang sama.",
+    "retakeCreatedGroup": "Ambil ulang ditutup — seseorang sudah membuat stripnya.",
+    "retakeCastGrew": "Ambil ulang satu foto ditunda — ada yang bergabung setelah strip ini diambil. Ambil ulang semua untuk mulai lagi bersama semuanya."
+  },
+  "tips": {
+    "button": "Tips",
+    "open": "Tampilkan tips untuk layar ini",
+    "eyebrow": "Tips singkat",
+    "gotIt": "Mengerti",
+    "mute": "Saya sudah pernah coba, jangan tampilkan tips",
+    "lobby": {
+      "title": "Menunggu temanmu",
+      "lead": "Belum ada yang dimulai sampai dia masuk — pakai waktunya untuk bersiap.",
+      "items": {
+        "share": {
+          "title": "Kirim kodenya",
+          "text": "Ketuk kode ruangan untuk menyalinnya, lalu kirim ke temanmu supaya dia bisa bergabung.",
+          "text_group": "Ketuk kode ruangan untuk menyalinnya, lalu kirim ke semua orang yang kamu ajak."
+        },
+        "clock": {
+          "title": "Waktu berjalan bersama",
+          "text": "Sesi baru dimulai setelah kalian berdua ada di ruangan, jadi santai dulu.",
+          "title_group": "Kamu yang menjalankan waktu",
+          "text_group": "Sesi dimulai saat kamu menekan Mulai, bukan saat orang berdatangan — jadi santai saja, dan yang terlambat tetap bisa gabung setelahnya."
+        },
+        "camera": {
+          "title": "Siapkan kameramu",
+          "text": "Izinkan akses kamera dan mikrofon sekarang, dan cek pencahayaanmu, supaya siap begitu dia datang.",
+          "text_group": "Izinkan akses kamera dan mikrofon sekarang, dan cek pencahayaanmu, supaya kamu siap begitu semuanya masuk."
+        }
+      },
+      "title_group": "Menunggu semuanya",
+      "lead_group": "Tidak ada yang dimulai sebelum kamu memulainya — manfaatkan waktu ini untuk bersiap."
+    },
+    "booth": {
+      "title": "Kamu di dalam booth",
+      "lead": "Atur stripmu dulu, baru mulai sesi — empat foto diambil berurutan.",
+      "items": {
+        "template": {
+          "title": "Pilih template dulu",
+          "text": "Template menentukan bentuk keempat potonganmu, dan pratinjau langsung ikut menyesuaikan."
+        },
+        "preview": {
+          "title": "Perhatikan pratinjau strip",
+          "text": "Kameramu muncul di slot berikutnya, jadi kamu bisa melihat hasil potongannya selagi masih sempat bergeser."
+        },
+        "start": {
+          "title": "Host yang memulai sesi",
+          "title_solo": "Mulai kapan pun kamu siap",
+          "text": "Kedua kamera dipotret pada hitungan 3-2-1 yang sama — empat foto, satu per satu.",
+          "text_solo": "Tekan Mulai Sesi dan hitungan mundur berjalan — empat foto, satu per satu.",
+          "text_group": "Semua kamera dipotret pada hitungan 3-2-1 yang sama — empat foto, satu per satu."
+        },
+        "pose": {
+          "title": "Tahan pose kamu",
+          "text": "Ada hitungan mundur singkat sebelum tiap foto. Ganti pose di antaranya, bukan saat dipotret."
+        }
+      }
+    },
+    "arrange": {
+      "title": "Menyusun stripmu",
+      "lead": "Ini langkah terakhir sebelum strip dibuat — santai saja di sini.",
+      "items": {
+        "reorder": {
+          "title": "Susun ulang potonganmu",
+          "text": "Seret foto ke slot yang kamu mau."
+        },
+        "retake": {
+          "title": "Ambil ulang yang kurang pas",
+          "text": "Ketuk ikon ambil ulang di satu foto, atau ambil ulang keempatnya dan jalankan sesi lagi."
+        },
+        "style": {
+          "title": "Filter dan stiker",
+          "text": "Filter menentukan nuansa seluruh strip; stiker ditempel di atasnya, sesukamu."
+        },
+        "final": {
+          "title": "Sekali dibuat, final",
+          "text": "Setelah strip dibuat, susunan, filter, dan stiker terkunci — periksa dulu sebelum lanjut."
+        }
+      }
+    },
+    "result": {
+      "title": "Stripmu sudah jadi",
+      "lead": "Simpan, bagikan, dan lanjut mengobrol — ruangan masih terbuka sampai waktunya habis.",
+      "lead_solo": "Simpan, bagikan, dan santai saja — stripnya jadi milikmu.",
+      "items": {
+        "download": {
+          "title": "Simpan atau bagikan",
+          "text": "Unduh PNG-nya, atau kirim langsung ke aplikasi lain lewat tombol bagikan."
+        },
+        "watermark": {
+          "title": "Mau tanpa watermark?",
+          "text": "Salinan gratis memuat watermark kecil. Salinan bersih siap cetak bisa dibuka dari keranjangmu."
+        },
+        "guest": {
+          "title": "Belum masuk? Tersimpan di sini",
+          "text": "Untuk sekarang stripmu tersimpan di browser ini. Masuk dan strip pindah ke keranjangmu."
+        },
+        "live": {
+          "title": "Ruangan masih terbuka",
+          "title_solo": "Waktu habis tidak menghapusnya",
+          "text": "Kamera tetap menyala sampai sesi berakhir, jadi kamu bisa lanjut mengobrol sambil membagikan strip.",
+          "text_solo": "Di sesi solo, stripmu yang sudah jadi tetap tampil — dan bisa diunduh — meski waktunya sudah habis."
+        }
+      }
+    }
+  },
+  "filters": {
+    "none": "Asli",
+    "bw": "Hitam Putih",
+    "sepia": "Sepia",
+    "vintage": "Vintage",
+    "warm": "Hangat",
+    "cool": "Sejuk",
+    "vivid": "Cerah",
+    "fade": "Pudar",
+    "noir": "Noir"
+  },
+  "stickers": {
+    "label": "Tambah stiker",
+    "tip": "Ketuk stiker untuk menambahkan, lalu seret untuk memindahkan, ubah ukuran atau putar dari pegangan sudut, atau ✕ untuk menghapus.",
+    "remove": "Hapus stiker",
+    "rotate": "Putar stiker",
+    "heart": "Hati",
+    "star": "Bintang",
+    "sparkle": "Kilau",
+    "crown": "Mahkota",
+    "flower": "Bunga",
+    "rainbow": "Pelangi",
+    "bolt": "Petir",
+    "speech": "Balon percakapan",
+    "smiley": "Wajah senyum",
+    "cloud": "Awan",
+    "bunny": "Kelinci",
+    "clip": "Kelip",
+    "cuteRainbow": "Pelangi Pink",
+    "faceBear": "Muka Beruang",
+    "faceHeart": "Muka Hati",
+    "flowers": "Seikat Bunga",
+    "smileFlower": "Bunga Senyum",
+    "heartColorful": "Hati Berwarna",
+    "smiling": "Senyum",
+    "sun": "Matahari",
+    "stars": "Bintang",
+    "frog": "Katak",
+    "bunnyYellow": "Kelinci Kuning",
+    "cat": "Kucing",
+    "snail": "Siput",
+    "tipShort": "Ketuk untuk menaruh, seret untuk memindah, sudutnya untuk mengubah ukuran."
+  },
+  "result": {
+    "composing": "Menyusun strip kamu…",
+    "saving": "Menyimpan strip kamu…",
+    "composeError": "Tidak dapat menyusun strip.",
+    "retake": "Ambil ulang",
+    "download": "Unduh PNG",
+    "choosePhotos": "Pilih foto",
+    "stripAlt": "Strip foto kamu",
+    "savedToCart": "Tersimpan di keranjang",
+    "savedOnDevice": "Tersimpan di perangkat ini",
+    "headline": "Ini strip kamu.",
+    "leadSignedIn": "Bagikan ke mana saja — salinan gratisnya memuat watermark {{brand}} kecil. Salinan bersih siap cetak menunggu di keranjang kamu.",
+    "leadGuest": "Untuk sekarang tersimpan di browser ini. Masuk dan strip pindah ke keranjang kamu, tempat salinan bersih siap cetak bisa dibuka.",
+    "stripMeta": "{{template}} · {{cuts}} potongan · berwatermark",
+    "stillLiveNote": "Masih di ruangan sampai waktunya habis — lanjut mengobrol sambil membagikan strip.",
+    "printTitle": "Mau tanpa watermark?",
+    "printText": "Buka salinan bersih dari keranjang kamu untuk diunduh dan dicetak.",
+    "saved": "Strip tersimpan ke unduhan kamu",
+    "share": "Aplikasi lain",
+    "shareSave": "Simpan gambar",
+    "shareTitle": "Bagikan strip kamu",
+    "shareAlt": "Kartu strip foto untuk dibagikan",
+    "shareTagline": "Jepret, susun, bagikan.",
+    "shareText": "Lihat strip fotoku! 📸",
+    "shareError": "Gagal membagikan strip. Silakan coba lagi.",
+    "shareInstagram": "Bagikan ke Instagram",
+    "instagramSaved": "Strip tersimpan — sekarang unggah ke Instagram.",
+    "instagramHint": "Kami akan menyimpan gambar dan membuka Instagram — unggah di sana untuk memposting.",
+    "viewInCart": "Lihat di keranjang",
+    "signInToSave": "Masuk untuk menyimpan",
+    "ratingTitle": "Bagaimana sesimu?",
+    "ratingText": "Satu ketukan memberi tahu kami performa booth-nya — ini menentukan apa yang kami perbaiki selanjutnya.",
+    "ratingStar": "Beri nilai {{count}} dari 5",
+    "ratingNotePlaceholder": "Ada yang ingin kamu tambahkan? (opsional)",
+    "ratingSubmit": "Kirim nilai",
+    "ratingSending": "Mengirim…",
+    "ratingThanksTitle": "Terima kasih atas nilainya!",
+    "ratingThanksText": "Ada yang tidak berfungsi? Tombol bantuan ada di pojok kanan bawah setiap halaman.",
+    "ratingError": "Gagal mengirim nilaimu. Silakan coba lagi.",
+    "notSaved": "Belum tersimpan",
+    "retrySave": "Coba lagi",
+    "downloadStrip": "Unduh"
+  },
+  "cart": {
+    "title": "Keranjang kamu",
+    "subtitle_one": "{{count}} strip tersimpan.",
+    "subtitle_other": "{{count}} strip tersimpan.",
+    "subtitleEmpty": "Strip tersimpan kamu ada di sini.",
+    "loading": "Memuat strip kamu…",
+    "loadError": "Gagal memuat strip kamu.",
+    "retry": "Coba lagi",
+    "empty": "Belum ada strip. Buat satu di photobooth dan akan muncul di sini.",
+    "emptyCta": "Buka photobooth",
+    "clearAll": "Hapus semua",
+    "soloGroup": "Sesi solo",
+    "dateGroup": "Sesi date",
+    "unknownSession": "Strip tersimpan",
+    "stripCount_one": "{{count}} strip",
+    "stripCount_other": "{{count}} strip",
+    "stripAlt": "Strip foto tersimpan",
+    "remove": "Hapus dari keranjang",
+    "added": "Strip ditambahkan ke keranjang",
+    "savedLocally": "Strip disimpan di perangkat ini — masuk untuk menyimpannya di keranjang.",
+    "fullGuest_one": "Perangkat ini hanya bisa menyimpan {{count}} strip sekaligus. Masuk untuk memindahkannya ke keranjang dan mengosongkan ruang.",
+    "fullGuest_other": "Perangkat ini hanya bisa menyimpan {{count}} strip sekaligus. Masuk untuk memindahkannya ke keranjang dan mengosongkan ruang.",
+    "full_one": "Keranjang kamu penuh ({{count}} strip). Strip ini belum ditambahkan — unduh sekarang, atau kosongkan ruang di keranjang.",
+    "full_other": "Keranjang kamu penuh ({{count}} strip). Strip ini belum ditambahkan — unduh sekarang, atau kosongkan ruang di keranjang.",
+    "remaining_one": "Sisa {{count}} slot dari {{max}}",
+    "remaining_other": "Sisa {{count}} slot dari {{max}}",
+    "remainingNone": "Tidak ada slot tersisa — hapus satu strip untuk memberi ruang.",
+    "slotsNone": "Tidak ada slot tersisa",
+    "pendingBanner_one": "{{count}} strip dari sebelum kamu masuk sedang menunggu ruang. Hapus satu strip dan strip itu akan otomatis ditambahkan.",
+    "pendingBanner_other": "{{count}} strip dari sebelum kamu masuk sedang menunggu ruang. Hapus satu strip dan strip itu akan otomatis ditambahkan.",
+    "fullBanner": "Keranjang kamu penuh — {{max}} dari {{max}} strip. Strip terbarumu belum tersimpan. Hapus satu di bawah untuk memberi ruang.",
+    "newStrip": "Strip baru",
+    "saveError": "Gagal menyimpan strip ke keranjang.",
+    "removeError": "Gagal menghapus strip.",
+    "select": "Pilih strip ini",
+    "selectAll": "Pilih semua",
+    "clearSelection": "Batal pilih",
+    "selectedCount_one": "{{count}} strip dipilih",
+    "selectedCount_other": "{{count}} strip dipilih",
+    "checkout": "Bayar",
+    "checkoutNote": "Strip berbayar diunduh bersih, tanpa watermark.",
+    "deleteTitle": "Hapus strip?",
+    "deleteDescription": "Strip ini akan dihapus dari keranjang. Tindakan ini tidak bisa dibatalkan.",
+    "deleteConfirm": "Hapus",
+    "deleteCancel": "Batal",
+    "clearTitle": "Kosongkan seluruh keranjang?",
+    "clearDescription": "Semua strip akan dihapus dari keranjang. Tindakan ini tidak bisa dibatalkan.",
+    "clearConfirm": "Hapus semua",
+    "tipTitle_one": "1 strip di keranjang",
+    "tipTitle_other": "{{count}} strip di keranjang",
+    "tipText": "Buka keranjang untuk mengunduh strip kamu.",
+    "tipCta": "Ke keranjang",
+    "tipDismiss": "Tutup",
+    "galleryFull": "Galeri kamu penuh. Hapus satu di sana untuk memberi ruang.",
+    "viewGallery": "Lihat galeri",
+    "unlock": "Buka",
+    "unlockBusy": "Membuka…",
+    "unlocked": "Terbuka — sudah ada di galeri kamu.",
+    "unlockError": "Gagal membuka strip itu.",
+    "newStripSolo": "Strip solo baru",
+    "newStripDate": "Strip date baru",
+    "slotsLeft_one": "sisa {{count}} slot",
+    "slotsLeft_other": "sisa {{count}} slot",
+    "groupGroup": "Sesi grup",
+    "newStripGroup": "Strip grup baru",
+    "printPending": "Menyiapkan salinan siap cetak…",
+    "printRefresh": "Muat ulang",
+    "printUnavailable": "Salinan siap cetak tidak tersimpan, jadi strip ini tidak bisa dibuka.",
+    "printUnavailableToast": "Strip itu tidak punya salinan siap cetak, jadi tidak bisa dibuka.",
+    "alreadyUnlocked": "Strip itu sudah ada di galeri kamu.",
+    "stripGone": "Strip itu sudah tidak ada di keranjang kamu.",
+    "cleanError": "Gagal menyiapkan salinan siap cetak, jadi strip belum tersimpan. Coba lagi, atau unduh di sini supaya tidak hilang.",
+    "paymentPending": "Pembayaran sedang berjalan · {{total}}",
+    "resumePayment": "Lanjutkan",
+    "awaitingPayment": "Menunggu pembayaran",
+    "clearDescriptionPaying_one": "Ini menghapus semua strip di keranjang kecuali satu yang sedang dibayar. Tidak bisa dibatalkan.",
+    "clearDescriptionPaying_other": "Ini menghapus semua strip di keranjang kecuali {{count}} yang sedang dibayar. Tidak bisa dibatalkan.",
+    "clearKeptPaying_one": "Strip yang sedang dibayar tetap disimpan.",
+    "clearKeptPaying_other": "{{count}} strip yang sedang dibayar tetap disimpan."
+  },
+  "gallery": {
+    "title": "Galeri kamu",
+    "subtitle_one": "{{count}} strip berbayar",
+    "subtitle_other": "{{count}} strip berbayar",
+    "subtitleEmpty": "Belum ada yang dibeli",
+    "loading": "Memuat galeri kamu…",
+    "loadError": "Gagal memuat galeri kamu.",
+    "retry": "Coba lagi",
+    "filterMonth": "{{month}}",
+    "filterLabel": "Saring strip",
+    "jumpTo": "Lompat ke",
+    "jumpToMonth": "Lompat ke {{month}}",
+    "meter": "{{used}} dari {{limit}} tersimpan",
+    "meterFull": "Galeri penuh · {{used}} dari {{limit}}",
+    "monthCount_one": "{{count}} strip",
+    "monthCount_other": "{{count}} strip",
+    "monthShown": "{{total}} · {{shown}} tampil",
+    "showMore_one": "Tampilkan {{count}} lagi di {{month}}",
+    "showMore_other": "Tampilkan {{count}} lagi di {{month}}",
+    "download": "Unduh",
+    "downloadStrip": "Unduh strip ini",
+    "badgeToday": "HARI INI",
+    "stripAlt": "Strip foto dari {{date}}",
+    "fullBanner": "Galeri kamu penuh — {{used}} dari {{limit}} strip berbayar. Strip yang menunggu di keranjang belum bisa masuk.",
+    "notAdded": "Belum masuk",
+    "notAddedReason": "Galeri penuh",
+    "emptyTitle": "Belum ada strip di galeri kamu",
+    "emptyText": "Strip masuk ke sini setelah kamu membayarnya, dikelompokkan per bulan pengambilan. Unduh salah satunya untuk mendapatkan berkas bersih tanpa watermark. Kamu bisa menyimpan hingga {{limit}} sekaligus.",
+    "emptyCta": "Buka photobooth",
+    "emptyCtaAlt": "Lihat aktivitas",
+    "downloadError": "Gagal mengunduh strip itu.",
+    "tileActions": "Tampilkan aksi untuk strip ini",
+    "filterEmptyTitle": "Belum ada strip {{mode}}",
+    "filterEmptyText": "Belum ada isi galeri kamu yang berasal dari sesi {{mode}}.",
+    "filterEmptyCta": "Tampilkan semua {{count}}",
+    "filter_all": "Semua {{count}}",
+    "filter_solo": "Solo {{count}}",
+    "filter_date": "Date {{count}}",
+    "badge_solo": "SOLO",
+    "badge_date": "DATE",
+    "mode_solo": "Solo",
+    "mode_date": "Date",
+    "filter_group": "Grup {{count}}",
+    "badge_group": "GRUP",
+    "mode_group": "Grup"
+  },
+  "payment": {
+    "success": "Pembayaran berhasil — strip kamu terbuka!",
+    "failed": "Pembayaran gagal. Silakan coba lagi.",
+    "pending": "Strip akan terbuka setelah pembayaran terkonfirmasi.",
+    "unavailable": "Pembayaran belum tersedia saat ini.",
+    "status": {
+      "pending": "Menunggu",
+      "paid": "Lunas",
+      "failed": "Gagal",
+      "expired": "Kedaluwarsa",
+      "cancelled": "Dibatalkan"
+    }
+  },
+  "mediaControls": {
+    "cameraOn": "Kamera nyala",
+    "cameraOff": "Kamera mati",
+    "turnCameraOff": "Matikan kamera",
+    "turnCameraOn": "Nyalakan kamera",
+    "micOn": "Mic nyala",
+    "micOff": "Mic mati",
+    "muteMic": "Bisukan mikrofon",
+    "unmuteMic": "Nyalakan mikrofon"
+  },
+  "video": {
+    "cameraOff": "Kamera mati",
+    "you": "Kamu",
+    "friend": "Teman",
+    "friendNumbered": "Teman {{index}}"
+  },
+  "camera": {
+    "requesting": "Meminta akses kamera dan mikrofon…",
+    "unavailable": "Kamera tidak tersedia"
+  },
+  "errors": {
+    "somethingWrong": "Terjadi kesalahan",
+    "unexpected": "Terjadi kesalahan tak terduga.",
+    "refresh": "Muat ulang halaman",
+    "backHome": "Kembali ke beranda",
+    "api": {
+      "generic": "Terjadi kesalahan. Silakan coba lagi.",
+      "register": "Tidak dapat membuat akunmu saat ini. Silakan coba lagi.",
+      "login": "Tidak dapat masuk saat ini. Silakan coba lagi.",
+      "google": "Tidak dapat masuk dengan Google saat ini. Silakan coba lagi.",
+      "loadAccount": "Tidak dapat memuat akunmu saat ini. Silakan coba lagi.",
+      "saveProfile": "Tidak dapat menyimpan profilmu saat ini. Silakan coba lagi.",
+      "createRoom": "Tidak dapat membuat ruangan saat ini. Silakan coba lagi.",
+      "checkRoom": "Tidak dapat memeriksa ruangan itu saat ini. Silakan coba lagi.",
+      "videoSetup": "Tidak dapat menyiapkan koneksi video. Silakan coba lagi.",
+      "setEmail": "Alamat email itu belum bisa disimpan. Coba lagi sebentar.",
+      "verifyEmail": "Tautan itu belum bisa dikonfirmasi. Coba lagi sebentar.",
+      "changePassword": "Kata sandi belum bisa diubah. Coba lagi sebentar.",
+      "forgotPassword": "Tautan atur ulang belum bisa dikirim. Coba lagi sebentar.",
+      "resetPassword": "Kata sandi belum bisa diatur ulang. Coba lagi sebentar."
+    },
+    "offline": "Kamu sedang offline. Periksa koneksimu lalu coba lagi."
+  },
+  "mediaError": {
+    "denied": {
+      "title": "Akses kamera diblokir",
+      "message": "Izinkan akses kamera dan mikrofon di pengaturan situs browser kamu, lalu coba lagi."
+    },
+    "not-found": {
+      "title": "Kamera tidak ditemukan",
+      "message": "Sambungkan webcam (dan mikrofon) lalu coba lagi."
+    },
+    "in-use": {
+      "title": "Kamera tidak tersedia",
+      "message": "Kamera kamu mungkin sedang digunakan aplikasi lain. Tutup aplikasi itu lalu coba lagi."
+    },
+    "insecure": {
+      "title": "Konteks tidak aman",
+      "message": "Akses kamera memerlukan HTTPS atau localhost."
+    },
+    "unknown": {
+      "title": "Terjadi kesalahan",
+      "message": "Kami tidak dapat mengakses kamera kamu. Silakan coba lagi."
+    }
+  },
+  "auth": {
+    "logout": "Keluar",
+    "logoutServerError": "Kamu telah keluar dari perangkat ini, tetapi kami tidak dapat menghubungi server untuk mengakhiri sesi di semua perangkat.",
+    "or": "atau",
+    "showPassword": "Tampilkan kata sandi",
+    "hidePassword": "Sembunyikan kata sandi",
+    "fields": {
+      "username": "Nama pengguna",
+      "email": "Email",
+      "password": "Kata sandi",
+      "displayName": "Nama tampilan",
+      "avatar": "Foto profil",
+      "identifier": "Username atau email",
+      "currentPassword": "Kata sandi saat ini",
+      "newPassword": "Kata sandi baru",
+      "confirmPassword": "Konfirmasi kata sandi baru",
+      "location": "Kota",
+      "country": "Negara",
+      "cityAbroad": "Kota (opsional)",
+      "province": "Provinsi",
+      "regency": "Kota atau kabupaten"
+    },
+    "login": {
+      "title": "Selamat datang kembali",
+      "subtitle": "Masuk untuk memilih aktivitas.",
+      "panelTagline": "Pengalaman kencan yang menyenangkan untuk hubungan jarak jauh.",
+      "submit": "Masuk",
+      "submitting": "Sedang masuk…",
+      "noAccount": "Baru di sini?",
+      "registerLink": "Buat akun",
+      "forgotPassword": "Lupa kata sandi?"
+    },
+    "register": {
+      "title": "Buat akunmu",
+      "subtitle": "Daftar untuk mulai menciptakan momen bersama.",
+      "submit": "Daftar",
+      "submitting": "Membuat…",
+      "consent": "Dengan mendaftar, kamu menyetujui <terms>Syarat & Ketentuan</terms> dan <privacy>Kebijakan Privasi</privacy> kami.",
+      "haveAccount": "Sudah punya akun?",
+      "loginLink": "Masuk"
+    },
+    "profile": {
+      "title": "Profil",
+      "menuLabel": "Menu akun",
+      "detailsTitle": "Detailmu",
+      "save": "Simpan perubahan",
+      "saving": "Menyimpan…",
+      "saved": "Profil diperbarui.",
+      "signedInAs": "Masuk sebagai @{{username}}",
+      "avatarChoose": "Unggah foto",
+      "avatarUploading": "Mengunggah…",
+      "avatarRemove": "Hapus",
+      "avatarHint": "Maksimal 15 MB. PNG, JPEG, WebP, GIF, atau AVIF — kamu pilih potongannya nanti.",
+      "avatarUpdated": "Foto profil diperbarui.",
+      "avatarRemoved": "Foto profil dihapus.",
+      "deleteHint": "Hapus akunmu dan seluruh datanya secara permanen — strip, cetakan, dan tautan pasangan.",
+      "deleteAccount": "Hapus akun",
+      "detailsHint": "Nama, foto, dan kotamu.",
+      "tabsLabel": "Bagian profil",
+      "tabs": {
+        "account": "Akun",
+        "partner": "Pasangan",
+        "purchases": "Pembelian"
+      },
+      "hero": {
+        "noPartner": "Belum ada pasangan",
+        "haveCode": "Punya kode?"
+      },
+      "stats": {
+        "strips": "Strip di galeri",
+        "stripsShort": "Strip",
+        "date": "Strip kencan",
+        "dateShort": "Kencan",
+        "months_other": "{{count}} bulan",
+        "thisMonth": "Bulan ini",
+        "since": "Sejak {{date}}",
+        "activeShort": "Aktif"
+      },
+      "securityTitle": "Masuk & keamanan",
+      "security": {
+        "emailNone": "Belum diatur",
+        "signInLabel": "Metode masuk",
+        "signInPassword": "Nama pengguna dan kata sandi",
+        "signInGoogle": "Google",
+        "signInBoth": "Nama pengguna dan kata sandi · Google",
+        "signInNone": "Belum ada metode masuk",
+        "deviceLabel": "Perangkat ini"
+      },
+      "purchases": {
+        "title": "Pembelian",
+        "subtitle": "Lima pesanan terakhirmu.",
+        "spent": "Total belanja",
+        "unlocked": "Cetakan terbuka",
+        "stripCount_other": "{{count}} strip",
+        "perStrip": "{{price}} per strip",
+        "colStrips": "Strip",
+        "colOrder": "Pesanan",
+        "colDate": "Tanggal",
+        "colAmount": "Jumlah",
+        "orderLine_other": "{{count}} strip · cetak",
+        "emptyTitle": "Belum ada pembelian",
+        "emptyBody": "Membayar sebuah strip membuka salinan bersih tanpa watermark dan memindahkannya ke galerimu. Pesanan akan muncul di sini setelahnya.",
+        "openCart": "Buka keranjang",
+        "loadError": "Tidak dapat memuat pesananmu. Silakan coba lagi."
+      },
+      "cropTitle": "Atur posisi fotomu",
+      "cropHint": "Geser untuk memindahkan, dan pakai penggeser untuk memperbesar. Lingkaran menunjukkan tampilan akhirnya.",
+      "cropCanvasLabel": "Area potong — geser atau pakai tombol panah untuk memindahkan foto",
+      "cropZoomLabel": "Perbesar",
+      "cropSave": "Simpan foto",
+      "locationLoading": "Memuat daftar kota…",
+      "locationLoadError": "Daftar kota gagal dimuat.",
+      "locationRetry": "Coba lagi",
+      "outsideIndonesia": "Di luar Indonesia",
+      "locationClear": "Hapus kota",
+      "countryPlaceholder": "Pilih negara",
+      "provincePlaceholder": "Pilih provinsi",
+      "regencyPlaceholder": "Pilih kota atau kabupaten",
+      "regencyWaiting": "Pilih provinsi dulu"
+    },
+    "partner": {
+      "title": "Pasanganmu",
+      "none": "Tautkan dengan pasanganmu untuk berbagi momen berdua.",
+      "linkedWith": "Tertaut dengan {{name}}",
+      "unlink": "Lepaskan",
+      "unlinked": "Tautan pasangan dilepas.",
+      "inviteTitle": "Undang pasanganmu",
+      "generate": "Buat kode undangan",
+      "codeHint": "Bagikan kode ini ke pasanganmu. Berlaku 24 jam.",
+      "acceptTitle": "Punya kode undangan?",
+      "codePlaceholder": "Masukkan kode pasangan",
+      "accept": "Tautkan pasangan",
+      "linked": "Kalian kini tertaut!",
+      "linkedHint": "Strip kalian dibagikan sebagai pasangan dan sesi Kencan terbuka.",
+      "unlinkHint": "Melepas tautan menghentikan berbagi strip baru. Yang sudah tersimpan tidak dihapus.",
+      "generating": "Membuat…",
+      "generateHint": "Kami membuat kode yang bisa kamu kirim ke pasanganmu. Berlaku 24 jam sejak dibuat.",
+      "acceptHint": "Menautkan akan membagikan strip kalian sebagai pasangan dan membuka sesi Kencan.",
+      "copy": "Salin",
+      "copied": "Tersalin",
+      "copyFailed": "Tidak dapat menyalin — pilih kodenya dan salin sendiri."
+    },
+    "errors": {
+      "generic": "Terjadi kesalahan. Silakan coba lagi.",
+      "invalid_credentials": "Nama pengguna atau kata sandi salah.",
+      "registration_closed": "Momoto sedang dalam beta tertutup — akun baru belum dibuka.",
+      "email_taken": "Akun dengan email itu sudah ada.",
+      "invalid_input": "Periksa kembali detailnya dan coba lagi.",
+      "google_not_configured": "Masuk dengan Google belum tersedia saat ini.",
+      "invalid_google_token": "Tidak dapat memverifikasi masuk Google-mu. Coba lagi.",
+      "too_many_requests": "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.",
+      "passwordTooShort": "Kata sandi minimal 8 karakter.",
+      "emailRequired": "Silakan masukkan emailmu.",
+      "emailInvalid": "Masukkan alamat email yang valid.",
+      "passwordRequired": "Silakan masukkan kata sandimu.",
+      "displayNameRequired": "Silakan masukkan nama tampilan.",
+      "displayNameInvalid": "Nama tampilan hanya boleh berisi huruf dan spasi.",
+      "invite_invalid": "Kode undangan tidak valid atau kedaluwarsa.",
+      "invite_self": "Kamu tidak bisa menautkan dengan dirimu sendiri.",
+      "already_linked": "Kamu sudah tertaut dengan pasangan.",
+      "partner_linked": "Orang itu sudah tertaut dengan orang lain.",
+      "usernameRequired": "Silakan masukkan nama pengguna.",
+      "usernameInvalid": "Nama pengguna hanya boleh berisi huruf dan angka.",
+      "usernameTooShort": "Nama pengguna minimal 3 karakter.",
+      "usernameTooLong": "Nama pengguna maksimal 20 karakter.",
+      "username_taken": "Nama pengguna itu sudah digunakan.",
+      "avatar": {
+        "tooLarge": "Gambar terlalu besar. Pilih yang di bawah 15 MB.",
+        "notAnImage": "File itu tidak bisa dibaca sebagai gambar.",
+        "encodeFailed": "Gambar itu tidak bisa diproses. Coba gambar lain."
+      },
+      "emailTooLong": "Alamat email itu terlalu panjang.",
+      "passwordMismatch": "Kata sandinya belum sama.",
+      "identifierRequired": "Masukkan username atau email kamu.",
+      "invalid_password": "Kata sandinya tidak cocok.",
+      "nothing_pending": "Tidak ada alamat yang menunggu dikonfirmasi.",
+      "invalid_token": "Tautan itu sudah tidak berlaku.",
+      "unsupported_image": "Format gambar itu tidak didukung. Gunakan PNG, JPEG, atau WebP.",
+      "image_not_square": "Foto profil harus berbentuk persegi. Coba gambar lain.",
+      "image_too_large": "Gambar itu terlalu besar. Sisi terpanjang maksimal 1024 piksel.",
+      "storage_unavailable": "Belum bisa menyimpan foto itu sekarang. Coba lagi sebentar lagi.",
+      "email_unverified": "Konfirmasi alamat email kamu dulu sebelum mengubah kata sandi.",
+      "cityInvalid": "Kota hanya boleh berisi huruf, spasi, titik, apostrof, dan tanda hubung.",
+      "cityTooLong": "Kota maksimal 60 karakter.",
+      "countryRequired": "Silakan pilih negara.",
+      "regionRequired": "Silakan pilih kota atau kabupaten."
+    },
+    "logoutConfirm": {
+      "title": "Keluar?",
+      "description": "Kamu perlu masuk lagi untuk menggunakan aktivitas.",
+      "descriptionRoom": "Kamu sedang dalam sesi langsung. Keluar akan meninggalkannya.",
+      "confirm": "Keluar",
+      "cancel": "Batal"
+    },
+    "deleteConfirm": {
+      "title": "Hapus akunmu?",
+      "passwordLabel": "Masukkan kata sandimu untuk mengonfirmasi",
+      "confirm": "Hapus akun",
+      "deleting": "Menghapus…",
+      "cancel": "Batal",
+      "done": "Akunmu telah dihapus.",
+      "wrongPassword": "Kata sandi salah.",
+      "error": "Tidak dapat menghapus akunmu. Silakan coba lagi.",
+      "description_other": "Ini menghapus akunmu dan {{count}} strip berbayar di galerimu. Tindakan ini tidak dapat dibatalkan.",
+      "descriptionLinked_other": "Ini menghapus {{count}} strip berbayar di galerimu dan tautan dengan {{name}}. Tindakan ini tidak dapat dibatalkan.",
+      "word": "HAPUS",
+      "wordLabel": "Ketik {{word}} untuk mengonfirmasi"
+    },
+    "forgot": {
+      "title": "Lupa kata sandi?",
+      "subtitle": "Beri tahu siapa kamu, nanti kami kirim tautan untuk membuat yang baru.",
+      "submit": "Kirim tautannya",
+      "submitting": "Mengirim…",
+      "sentTitle": "Cek email kamu",
+      "sentBody": "Kalau akun itu punya alamat email yang sudah dikonfirmasi, tautan atur ulang sedang dikirim. Berlaku 30 menit.",
+      "backToLogin": "Kembali ke halaman masuk",
+      "rememberIt": "Sudah ingat? <login>Masuk</login>",
+      "resend": "Kirim ulang",
+      "resendIn": "Kirim lagi dalam {{seconds}}d",
+      "sentAgain": "Tautan baru sedang dikirim."
+    },
+    "reset": {
+      "title": "Buat kata sandi baru",
+      "subtitle": "Pilih yang belum pernah kamu pakai di sini.",
+      "checking": "Memeriksa tautan kamu…",
+      "submit": "Simpan kata sandi baru",
+      "submitting": "Menyimpan…",
+      "done": "Kata sandi kamu sudah dibuat. Masuk dengan itu di bawah.",
+      "expiredTitle": "Tautannya sudah kedaluwarsa",
+      "expiredBody": "Tautan atur ulang berlaku 30 menit dan hanya bisa dipakai sekali. Minta yang baru, nanti langsung masuk ke email kamu.",
+      "requestAnother": "Kirimi aku tautan baru"
+    },
+    "verifyEmail": {
+      "checking": "Mengonfirmasi email kamu…",
+      "doneTitle": "Email terkonfirmasi",
+      "doneBody": "Alamat ini sekarang ada di akun kamu. Kalau nanti lupa kata sandi, lewat sinilah kamu bisa masuk lagi.",
+      "failedTitle": "Tautannya tidak berhasil",
+      "failedBody": "Tautan konfirmasi berlaku 24 jam dan hanya bisa dipakai sekali. Buka Profil dan kirim yang baru.",
+      "takenTitle": "Alamat itu sudah dipakai",
+      "takenBody": "Akun lain sudah mengonfirmasi email ini. Pakai alamat lain, atau masuk ke akun yang memilikinya.",
+      "toProfile": "Buka Profil",
+      "toLogin": "Masuk"
+    },
+    "email": {
+      "add": "Tambah email",
+      "change": "Ubah",
+      "send": "Kirim konfirmasi",
+      "resend": "Kirim ulang",
+      "sent": "Konfirmasi dikirim ke {{email}}.",
+      "pendingHint": "Menunggu kamu membuka tautan yang kami kirim. Belum ada yang berubah di akunmu sampai itu dilakukan.",
+      "noneHint": "Tanpa alamat email, tidak ada cara memulihkan akun ini kalau kamu lupa kata sandi.",
+      "banner": {
+        "noneTitle": "Tambahkan alamat email.",
+        "noneBody": "Tanpa itu, tidak ada cara masuk kembali ke akunmu kalau kamu lupa kata sandi.",
+        "addEmail": "Tambah email",
+        "pendingTitle": "Konfirmasi email kamu.",
+        "pendingBody": "{{email}} belum dikonfirmasi. Sebelum kamu membuka tautannya, kamu belum bisa mengatur ulang kata sandi sendiri.",
+        "openProfile": "Buka Profil",
+        "resend": "Kirim ulang",
+        "sent": "Tautan konfirmasi terkirim.",
+        "send": "Kirim tautan"
+      },
+      "confirm": "Kirim tautan",
+      "unconfirmedHint": "Belum dikonfirmasi. Kirim tautannya ke dirimu lalu buka — itulah yang membuat kamu bisa mengatur ulang kata sandi sendiri.",
+      "resendIn": "Kirim ulang dalam {{seconds}}d"
+    },
+    "password": {
+      "changeTitle": "Kata sandi",
+      "change": "Ubah kata sandi",
+      "set": "Buat kata sandi",
+      "changed": "Kata sandi diperbarui",
+      "rowSet": "Sudah dibuat",
+      "rowNone": "Akun ini belum punya kata sandi",
+      "otherDevicesOut": "Semua perangkat lain sudah dikeluarkan.",
+      "needsVerifiedEmail": "Konfirmasi email kamu dulu — tanpa itu, kata sandi yang lupa tidak bisa diatur ulang."
+    }
+  },
+  "network": {
+    "offlineTitle": "Kamu sedang offline",
+    "offlineBody": "Tidak ada koneksi saat ini — kami akan menyambung lagi sendiri. Foto yang sudah diambil aman.",
+    "offlinePage": "Perangkat ini tidak terhubung ke internet. Periksa wifi atau data selulermu — halaman ini akan kembali sendiri begitu kamu online.",
+    "serverTitle": "Momoto sedang bermasalah",
+    "serverBody": "Server kami tidak merespons dengan semestinya — ini dari sisi kami. Foto yang sudah diambil aman.",
+    "unknownTitle": "Gagal terhubung",
+    "unknownBody": "Kami tidak dapat menghubungi Momoto. Bisa dari server kami, bisa juga dari koneksimu — yang pasti, foto yang sudah diambil aman.",
+    "retry": "Coba lagi",
+    "checking": "Memeriksa…",
+    "restored": "Kembali online",
+    "slowTitle": "Koneksi lambat",
+    "slowBody": "Memuat dan menyimpan mungkin butuh waktu. Foto yang sudah diambil tetap aman — pesan ini hilang sendiri saat koneksi membaik."
+  },
+  "serverDown": {
+    "title": "Momoto sedang bermasalah",
+    "message": "Server kami tidak merespons saat ini. Ini dari sisi kami — tunggu sebentar lalu coba lagi.",
+    "unknownTitle": "Tidak dapat terhubung ke Momoto",
+    "unknownMessage": "Tidak ada yang tersambung saat ini. Bisa dari server kami, bisa juga dari jaringan di antara kita — ada baiknya periksa koneksimu sebelum mencoba lagi.",
+    "retry": "Coba lagi",
+    "retrying": "Memeriksa…",
+    "backHome": "Kembali ke beranda"
+  },
+  "notFound": {
+    "code": "Error 404",
+    "title": "Halaman ini tidak ada",
+    "message": "Tautannya mungkin rusak, atau halamannya sudah dipindahkan. Mari kembali ke halaman yang bisa dibuka.",
+    "backHome": "Kembali ke beranda",
+    "browseActivities": "Lihat aktivitas"
+  },
+  "beta": {
+    "badge": "Beta tertutup",
+    "message": "Momoto sedang diuji bersama sekelompok kecil pasangan yang diundang. Kalau kamu diundang, masuk dengan detail yang kami kirim — pendaftaran baru belum dibuka."
+  },
+  "checkout": {
+    "title": "Pembayaran",
+    "summary_one": "{{count}} strip · {{total}}",
+    "summary_other": "{{count}} strip · {{total}}",
+    "method": {
+      "gopay": "GoPay",
+      "shopeepay": "ShopeePay",
+      "qris": "QRIS"
+    },
+    "charging": "Membuka pembayaran…",
+    "scan": "Pindai dengan aplikasi pembayaranmu.",
+    "qrAlt": "Kode QR pembayaran",
+    "openApp": "Buka aplikasi pembayaran",
+    "waiting": "Menunggu pembayaran…",
+    "expiresIn": "Berakhir dalam {{countdown}}",
+    "expired": "Pembayaran ini kedaluwarsa. Mulai lagi kapan pun kamu siap.",
+    "resumed": "Ada pembayaran yang sedang berlangsung.",
+    "saveQr": "Simpan QR",
+    "qrSaveError": "Gagal menyimpan kode QR."
+  }
+}

@@ -1,0 +1,214 @@
+/* Arrange workspace. On a phone: strip, a segmented control, one design section
+ * at a time, and a pinned Create bar. From lg: the strip stands in its own column
+ * with the whole design rail open beside it. */
+.selector {
+  @apply flex w-full flex-col items-center gap-5 pb-36;
+
+  // Matches the `lg` breakpoint; written as a plain media query so sass needn't
+  // know about Tailwind's directives.
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: 14.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: 1.75rem;
+    padding-bottom: 0;
+  }
+}
+
+.stripColumn {
+  @apply flex w-full flex-col items-center gap-3 lg:items-stretch;
+}
+
+/* Quiet mono caption used for every section heading in the rail. */
+.railLabel {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground;
+}
+
+/* Inside the rail the segmented control already names each section, so the
+ * heading only earns its place once the sections are all open side by side. */
+.sectionLabel {
+  @apply hidden lg:block;
+}
+
+/* The strip preview — the template art (as background) with the shots positioned
+ * into its fixed slots; the sticker overlay sits on top of the whole strip.
+ * `aspect-ratio` and `background-image` are set inline per template. */
+.strip {
+  @apply relative w-[11.625rem] shrink-0 overflow-hidden rounded-xl lg:w-[13.75rem];
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 18px 40px -24px rgb(15 23 42 / 35%);
+}
+
+.stripDragging {
+  @apply ring-2 ring-primary/40;
+}
+
+.stripHint {
+  @apply text-center text-xs leading-[1.5] text-muted-foreground lg:text-left;
+  text-wrap: pretty;
+}
+
+.slot {
+  /* left/top/width/height are set inline per slot from the template. */
+  @apply absolute flex cursor-grab items-center justify-center overflow-hidden active:cursor-grabbing;
+}
+
+.slotNumber {
+  @apply absolute left-1 top-1 z-20 flex h-5 min-w-5 items-center justify-center rounded-full bg-black/35 px-1 text-xs font-semibold text-white;
+}
+
+.slotImage {
+  // Frames are already mirrored in their pixels (MIRROR_CAPTURE), so no CSS flip.
+  @apply relative z-10 h-full w-full object-cover;
+}
+
+/* Per-slot retake control (replaces deletion). */
+.retakeButton {
+  @apply absolute bottom-1.5 right-1.5 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-background/90 text-foreground shadow transition hover:bg-background;
+
+  /* Held, not hidden, while the other person is out of the room — the title says why. */
+  &:disabled {
+    @apply cursor-not-allowed opacity-40 hover:bg-background/90;
+  }
+
+  svg {
+    @apply h-3.5 w-3.5;
+  }
+}
+
+/* Replaces the retake icon while that slot's re-shoot is waiting on the server. */
+.retakeSpinner {
+  @apply animate-spin;
+}
+
+/* ── Design rail ─────────────────────────────────────────────────────────── */
+.rail {
+  @apply flex w-full min-w-0 flex-col gap-4 lg:gap-[1.375rem];
+}
+
+/* Segmented control — phones only; from lg every section is open at once. */
+.tabs {
+  @apply grid grid-cols-2 gap-1 rounded-xl bg-muted p-1 lg:hidden;
+}
+
+.tab {
+  @apply flex h-[2.125rem] items-center justify-center rounded-[0.5625rem] text-[0.8125rem] font-medium text-muted-foreground transition;
+}
+
+.tabActive {
+  @apply bg-background text-foreground shadow-sm;
+}
+
+.section {
+  @apply flex flex-col gap-2.5;
+}
+
+/* Behind a tab on a phone; always open from lg. */
+.sectionInactive {
+  @apply hidden lg:flex;
+}
+
+.sectionHead {
+  @apply flex flex-wrap items-baseline gap-x-3 gap-y-1;
+}
+
+.sectionTip {
+  @apply text-xs text-muted-foreground;
+}
+
+/* Dividers only make sense when the sections are stacked open. */
+.divider {
+  @apply hidden h-px bg-border lg:block;
+}
+
+/* Shared label under a template / filter thumbnail. */
+.optionName {
+  @apply max-w-full truncate text-[0.71875rem] text-muted-foreground;
+}
+
+/* ── Filter picker ───────────────────────────────────────────────────────── */
+.filterList {
+  @apply -mx-1 flex gap-2.5 overflow-x-auto px-1 pb-1;
+  @apply lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0 lg:pb-0;
+}
+
+.filter {
+  @apply flex shrink-0 flex-col items-center gap-1.5 rounded-md transition;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  @apply disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+/* Fixed height, width from the cut's aspect (set inline) — so the swatch shows the
+ * whole frame rather than a centre crop of it. */
+.filterThumb {
+  @apply block h-14 w-auto shrink-0 overflow-hidden rounded-lg bg-muted;
+}
+
+.filterActive .filterThumb {
+  @apply ring-2 ring-primary ring-offset-2;
+}
+
+.filterImage {
+  // Frames are already mirrored in their pixels (MIRROR_CAPTURE), so no CSS flip.
+  @apply h-full w-full object-cover;
+}
+
+.filterSwatch {
+  @apply block h-full w-full bg-muted;
+}
+
+.filterActive .optionName {
+  @apply font-medium text-foreground;
+}
+
+/* ── Sticker picker ──────────────────────────────────────────────────────── */
+.stickerList {
+  @apply flex flex-wrap gap-2;
+}
+
+.stickerButton {
+  @apply flex h-[2.625rem] w-[2.625rem] items-center justify-center rounded-xl bg-muted transition;
+  @apply hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+  @apply disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-muted;
+}
+
+.stickerThumb {
+  @apply h-[1.625rem] w-[1.625rem] object-contain;
+}
+
+/* Out of the layout until its art arrives — `display: none` still fetches the image,
+ * so hiding it is what starts the load rather than deferring it. */
+.stickerThumbLoading {
+  @apply hidden;
+}
+
+/* Stands in for the thumbnail at the same size, so the palette doesn't reflow when
+ * the stickers land one by one. */
+.stickerSkeleton {
+  @apply block h-[1.625rem] w-[1.625rem] animate-pulse rounded-md bg-foreground/10;
+}
+
+/* ── Actions ─────────────────────────────────────────────────────────────────
+ * Pinned to the bottom of the viewport on a phone; the tail of the rail from lg. */
+.actions {
+  @apply fixed inset-x-0 bottom-0 z-40 flex flex-col items-stretch gap-3 border-t bg-background/95 px-5 pb-[max(1.125rem,env(safe-area-inset-bottom))] pt-3.5 backdrop-blur;
+  @apply lg:static lg:flex-row lg:items-center lg:gap-3 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none;
+}
+
+/* Doubled selectors: beat the size/variant utilities <Button> sets on itself. */
+.createButton.createButton {
+  @apply h-[3.25rem] w-full gap-2.5 text-base lg:w-auto lg:px-[1.875rem];
+}
+
+/* A plain text row on a phone (the design's quiet secondary), a real outline
+ * button once it sits beside Create in the rail. */
+.retakeAllButton.retakeAllButton {
+  @apply h-auto gap-2 border-0 bg-transparent py-0 text-[0.78125rem] text-muted-foreground hover:bg-transparent hover:text-foreground;
+  @apply lg:h-[3.25rem] lg:border lg:border-input lg:bg-background lg:px-[1.375rem] lg:text-[0.9375rem] lg:text-foreground lg:hover:bg-accent;
+}
+
+.actionsNote {
+  @apply hidden max-w-[13.125rem] text-xs text-muted-foreground lg:block;
+  text-wrap: pretty;
+}

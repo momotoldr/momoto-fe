@@ -1,0 +1,11 @@
+.container {
+  @apply flex min-h-[100svh] flex-col items-center justify-center gap-3 px-5 py-8;
+}
+
+.spinner {
+  @apply h-8 w-8 animate-spin text-muted-foreground motion-reduce:animate-none;
+}
+
+.text {
+  @apply text-sm text-muted-foreground;
+}

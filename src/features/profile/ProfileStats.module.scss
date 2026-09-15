@@ -1,0 +1,35 @@
+/* Three counters, side by side at every width — they only work as a row, and stacking
+ * them would turn a glance into a list. The phone drops the icon and the long caption
+ * to buy the numbers enough room. */
+
+.row {
+  @apply grid grid-cols-3 gap-2 sm:gap-3.5;
+}
+
+.cell {
+  @apply flex items-center gap-3.5 rounded-[0.875rem] border bg-card p-3 sm:rounded-2xl sm:px-5 sm:py-[1.125rem];
+}
+
+.icon {
+  @apply hidden h-[2.625rem] w-[2.625rem] shrink-0 items-center justify-center rounded-xl bg-rose-50 text-rose-600 sm:flex;
+}
+
+.iconGlyph {
+  @apply h-5 w-5;
+}
+
+.text {
+  @apply flex min-w-0 flex-col gap-0.5;
+}
+
+.value {
+  @apply truncate text-lg font-bold tracking-[-0.02em] sm:text-[1.375rem];
+}
+
+.label {
+  @apply hidden font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground sm:block;
+}
+
+.labelShort {
+  @apply font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-muted-foreground sm:hidden;
+}

@@ -1,0 +1,449 @@
+/* Cart — "a shelf of strips, not a grid of cards" (redesign import).
+ *
+ * Two structural moves carry the redesign: strips hang at their real 1:3
+ * proportion inside a tinted well, and the slot cap is a visible pip meter in
+ * the header instead of a sentence under the title. Selection state lives on
+ * the strip itself (ring + filled tick), so the checkout bar only has to carry
+ * the totals.
+ *
+ * Mobile inverts the card: the strip sits in a narrow well on the left and the
+ * meta + actions run beside it, so a phone shows a scannable list rather than
+ * two cramped columns. Every card rule below is written mobile-row first and
+ * flipped to the desktop column at `sm:`. */
+
+/* The page is a bare column so the checkout bar can run the full width of the
+ * window; everything else is centred by `.content` inside it. */
+.page {
+  @apply flex w-full flex-col;
+}
+
+.content {
+  @apply mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 pb-10 pt-8 sm:gap-10 sm:px-6 sm:pt-12;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.head {
+  @apply flex flex-col items-start gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-12;
+}
+
+.headMain {
+  @apply flex flex-col gap-2;
+}
+
+.title {
+  @apply text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-5xl sm:leading-[1.02];
+}
+
+.subtitle {
+  @apply text-sm text-muted-foreground sm:text-base;
+}
+
+.headAside {
+  @apply flex w-full flex-col gap-3.5 sm:w-auto sm:flex-row sm:items-end sm:gap-7;
+}
+
+/* Slot meter — the cap made visible. One pip per allowed strip, filled left to
+ * right by what the cart already holds. */
+.slots {
+  @apply flex w-full flex-col gap-2 sm:w-auto sm:items-end;
+}
+
+.slotsLabel {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground;
+}
+
+.slotsLabelFull {
+  @apply text-destructive;
+}
+
+.slotMeter {
+  @apply flex w-full gap-1 sm:w-[13rem];
+}
+
+.slot {
+  @apply h-1.5 flex-1 rounded-full bg-border;
+}
+
+.slotUsed {
+  @apply bg-primary;
+}
+
+.slotUsedFull {
+  @apply bg-destructive;
+}
+
+.headActions {
+  @apply flex items-center gap-2;
+}
+
+.headButton {
+  @apply h-10 flex-1 sm:flex-none;
+}
+
+/* ── Banners ─────────────────────────────────────────────────────────────── */
+
+.banner {
+  @apply flex items-start gap-3 rounded-2xl border bg-muted/40 p-4 sm:px-[1.125rem];
+}
+
+/* The cart is full: the same shell in the destructive key, with the icon set in
+ * a raised tile so it reads as a stop, not a note. */
+.bannerFull {
+  @apply items-start gap-3.5 border-destructive/25 bg-destructive/[0.045];
+}
+
+.bannerIcon {
+  @apply mt-px h-[1.125rem] w-[1.125rem] shrink-0 text-muted-foreground;
+}
+
+.bannerIconTile {
+  @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-[0.625rem] bg-background text-destructive sm:h-[2.125rem] sm:w-[2.125rem];
+
+  svg {
+    @apply h-[1.0625rem] w-[1.0625rem];
+  }
+}
+
+.bannerText {
+  @apply text-[0.84375rem] leading-[1.55] text-muted-foreground;
+}
+
+.bannerTextFull {
+  @apply text-sm text-foreground;
+}
+
+/* ── Groups ──────────────────────────────────────────────────────────────── */
+
+.sessions {
+  @apply flex flex-col gap-9 sm:gap-10;
+}
+
+.session {
+  @apply flex flex-col gap-3.5 sm:gap-5;
+}
+
+.sessionHead {
+  @apply flex items-baseline gap-3 border-b pb-2.5 sm:pb-3.5;
+}
+
+.sessionTitle {
+  @apply text-base font-bold tracking-[-0.02em] sm:text-lg;
+}
+
+.sessionCount {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted-foreground/80 sm:text-[0.6875rem];
+}
+
+/* A single column of rows on a phone, the four-up shelf from `sm:` upward. */
+.cards {
+  @apply grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4;
+}
+
+/* ── Strip card ──────────────────────────────────────────────────────────── */
+
+.card {
+  @apply relative m-0 flex items-center gap-3.5 rounded-[1.25rem] border bg-card p-3 transition-colors sm:flex-col sm:items-stretch sm:gap-3.5 sm:rounded-3xl sm:p-3.5;
+}
+
+/* Selected for checkout — a heavier border rather than a ring, so the card edge
+ * itself carries the state at the shelf's small scale. */
+.cardSelected {
+  @apply border-[1.5px] border-primary;
+}
+
+/* The tinted well the strip hangs in. Date sessions get a warmer ground so the
+ * two groups stay distinguishable when scrolled apart. */
+.well {
+  @apply flex w-16 shrink-0 justify-center rounded-xl bg-muted/40 p-2 sm:w-full sm:rounded-2xl sm:p-4;
+}
+
+.wellShared {
+  @apply bg-destructive/[0.035];
+}
+
+/* Checkbox: a leading control in the phone row, lifted onto the well's top-left
+ * corner once the card becomes a column. */
+.selectArea {
+  @apply flex shrink-0 cursor-pointer items-center sm:absolute sm:left-3 sm:top-3 sm:z-10;
+}
+
+.checkbox {
+  @apply sr-only;
+}
+
+.checkboxBox {
+  @apply flex h-[1.375rem] w-[1.375rem] items-center justify-center rounded-md border-[1.5px] border-input bg-background text-transparent transition-colors;
+
+  svg {
+    @apply h-3.5 w-3.5;
+    stroke-width: 3;
+  }
+}
+
+.checkbox:checked + .checkboxBox {
+  @apply border-primary bg-primary text-primary-foreground;
+}
+
+.checkbox:focus-visible + .checkboxBox {
+  @apply ring-2 ring-ring ring-offset-2 ring-offset-background;
+}
+
+/* 1:3 is the classic strip's proportion and the fallback here; a strip that reports its
+ * own size overrides `aspect-ratio` inline. `object-contain` letterboxes anything
+ * unmeasured rather than stretching someone's photos.
+ *
+ * On a phone each card is its own row in a single column, so sizing by width is fine —
+ * a card that isn't 1:3 just makes its row shorter, and nothing has to line up beside
+ * it.
+ *
+ * From `sm:` the cards become a grid whose row heights align, and width-driven sizing
+ * breaks: a landscape 2x2 card at 4.75rem wide is only ~4.5rem tall, so it sat as a
+ * stamp at the top of a card stretched to the height of the 1:3 ribbon next to it,
+ * stranding the rest. Size to a common HEIGHT there instead and let each strip's own
+ * aspect set its width. 14.25rem is exactly what a 1:3 strip measured at the old
+ * 4.75rem width, so the 4x1 templates don't move at all. */
+.preview {
+  @apply aspect-[1/3] w-11 rounded-[0.3125rem] object-contain shadow-[0_12px_26px_-18px_rgba(15,23,42,0.5)] sm:rounded-lg;
+
+  // Plain media query (not @screen) so the sass compiler doesn't need Tailwind's
+  // directives. Matches the `sm` breakpoint.
+  @media (min-width: 640px) {
+    width: auto;
+    // Guards a future template wider than the well; the 4x1 and 2x2 both clear it.
+    max-width: 100%;
+    height: 14.25rem;
+  }
+}
+
+.cardBody {
+  @apply flex min-w-0 flex-1 flex-col gap-2.5 sm:gap-3;
+}
+
+.meta {
+  @apply font-mono text-[0.65625rem] uppercase tracking-[0.08em] text-muted-foreground/80;
+}
+
+/* Why a card's primary action is disabled, stated on the card rather than left to a
+ * toast the user only sees if they click a button that cannot work. Amber while the
+ * clean copy may still be uploading; destructive once it is certain it never will. */
+.printNote {
+  @apply flex items-start gap-1.5 text-[0.6875rem] leading-snug text-amber-600 dark:text-amber-500;
+}
+
+.printNoteBad {
+  @apply text-destructive;
+}
+
+.printNoteIcon {
+  @apply mt-px size-3.5 shrink-0;
+}
+
+.printNoteAction {
+  @apply ml-1 cursor-pointer font-semibold underline underline-offset-2;
+}
+
+.cardActions {
+  @apply flex items-center gap-2;
+}
+
+/* The card's primary action. It takes the full width beside the delete icon because it
+ * is the only thing to do with a strip in the cart. */
+.unlockBtn {
+  @apply h-[2.375rem] flex-1 text-[0.8125rem] font-semibold sm:h-10 sm:text-[0.84375rem];
+}
+
+.iconBtn {
+  @apply h-[2.375rem] w-[2.375rem] shrink-0 p-0 text-muted-foreground sm:h-10 sm:w-10;
+}
+
+.btnSpinner {
+  @apply animate-spin;
+}
+
+/* ── Trailing tile (last cell of the first group) ────────────────────────── */
+
+.tile {
+  @apply flex items-center gap-3.5 rounded-[1.25rem] border border-dashed bg-muted/20 p-4 text-left sm:flex-col sm:items-center sm:justify-center sm:gap-2.5 sm:rounded-3xl sm:p-6 sm:text-center;
+}
+
+.tileIcon {
+  @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground sm:h-[2.375rem] sm:w-[2.375rem];
+
+  svg {
+    @apply h-[1.0625rem] w-[1.0625rem];
+  }
+}
+
+.tileBody {
+  @apply flex min-w-0 flex-col gap-0.5 sm:items-center sm:gap-2.5;
+}
+
+.tileTitle {
+  @apply text-[0.84375rem] font-semibold;
+}
+
+.tileText {
+  @apply text-[0.78125rem] leading-[1.45] text-muted-foreground sm:max-w-[9rem];
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+
+.empty {
+  @apply flex flex-col items-center gap-5 rounded-[1.75rem] border border-dashed bg-muted/20 px-8 py-11 text-center sm:gap-[1.375rem];
+}
+
+/* Three blank strips fanned out — the shelf, waiting. */
+.emptyStrips {
+  @apply flex items-end gap-2;
+}
+
+.emptyStrip {
+  @apply aspect-[1/3] w-11 rounded-md bg-muted;
+}
+
+.emptyStripLeft {
+  @apply -rotate-[5deg];
+}
+
+.emptyStripRight {
+  @apply rotate-[5deg];
+}
+
+.emptyMessage {
+  @apply max-w-[18rem] text-sm leading-relaxed text-muted-foreground sm:text-[0.90625rem];
+}
+
+.emptyCta {
+  @apply h-[3.125rem] px-[1.625rem] text-[0.96875rem] font-semibold;
+}
+
+/* ── Loading skeleton ────────────────────────────────────────────────────── */
+
+.skeletonHead {
+  @apply flex items-center justify-between gap-3 border-b pb-2.5 sm:pb-3.5;
+}
+
+.skeletonTitle {
+  @apply h-5 w-32 animate-pulse rounded bg-muted;
+}
+
+.skeletonCount {
+  @apply h-4 w-16 animate-pulse rounded bg-muted;
+}
+
+.skeletonCard {
+  @apply flex items-center gap-3.5 rounded-[1.25rem] border bg-card p-3 sm:flex-col sm:items-stretch sm:gap-3.5 sm:rounded-3xl sm:p-3.5;
+}
+
+.skeletonWell {
+  @apply flex w-16 shrink-0 justify-center rounded-xl bg-muted/40 p-2 sm:w-full sm:rounded-2xl sm:p-4;
+}
+
+.skeletonPreview {
+  @apply aspect-[1/3] w-11 animate-pulse rounded-[0.3125rem] bg-muted sm:w-[4.75rem] sm:rounded-lg;
+}
+
+.skeletonBody {
+  @apply flex flex-1 flex-col gap-2.5 sm:gap-3;
+}
+
+.skeletonMeta {
+  @apply h-3 w-20 animate-pulse rounded bg-muted;
+}
+
+.skeletonActions {
+  @apply flex items-center gap-2;
+}
+
+.skeletonButton {
+  @apply h-[2.375rem] flex-1 animate-pulse rounded-md bg-muted sm:h-10;
+}
+
+.skeletonButtonSm {
+  @apply h-[2.375rem] w-[2.375rem] shrink-0 animate-pulse rounded-md bg-muted sm:h-10 sm:w-10;
+}
+
+/* ── Checkout bar (payments flag only) ───────────────────────────────────── */
+
+.checkoutBar {
+  @apply sticky bottom-0 z-20 border-t bg-background/95 backdrop-blur;
+
+  box-shadow: 0 -18px 32px -28px rgb(15 23 42 / 0.35);
+}
+
+/* Bar chrome spans the window; its contents stay on the page's own column. */
+.checkoutBarInner {
+  @apply mx-auto flex w-full max-w-6xl flex-col gap-2.5 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-10 sm:px-6 sm:py-5;
+}
+
+.checkoutInfo {
+  @apply flex items-baseline justify-between gap-4 sm:items-center sm:gap-7;
+}
+
+.checkoutFigures {
+  @apply flex items-baseline justify-between gap-4 sm:flex-col sm:items-start sm:gap-1;
+}
+
+.checkoutCount {
+  @apply text-sm font-semibold sm:font-mono sm:text-[0.625rem] sm:font-normal sm:uppercase sm:tracking-[0.14em] sm:text-muted-foreground;
+}
+
+.checkoutTotal {
+  @apply font-mono text-sm text-muted-foreground sm:font-sans sm:text-2xl sm:font-bold sm:tracking-[-0.02em] sm:text-foreground;
+}
+
+.checkoutDivider {
+  @apply hidden h-8 w-px bg-border sm:block;
+}
+
+.clearSelection {
+  @apply hidden text-[0.84375rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline;
+}
+
+.checkoutAction {
+  @apply flex items-center justify-end gap-4 sm:gap-[1.125rem];
+}
+
+.checkoutNote {
+  @apply hidden max-w-[14.375rem] text-[0.78125rem] leading-[1.5] text-muted-foreground/80 lg:block;
+}
+
+.checkoutBtn {
+  @apply h-[3.125rem] w-full text-[0.96875rem] font-semibold sm:h-[3.25rem] sm:w-auto sm:px-7 sm:text-base;
+}
+
+/* The payment banner carries an action, so it centres its row rather than top-aligning
+ * like the informational ones, and leans on the primary tint to read as live. */
+.bannerPayment {
+  @apply items-center gap-3 border-primary/25 bg-primary/[0.05];
+}
+
+.bannerTextPayment {
+  @apply flex-1 text-sm text-foreground;
+}
+
+.bannerAction {
+  @apply shrink-0;
+}
+
+/* A strip already covered by the running payment: the well gets a ring so the card
+ * reads as spoken-for at a glance across the grid, not only via its badge. */
+.cardAwaiting {
+  @apply ring-1 ring-amber-300/70 dark:ring-amber-500/30;
+}
+
+/* Mirrors `.selectArea` on the opposite corner: in the body's flow on mobile, where the
+ * card is a horizontal row and a 4rem well has no space to host it, and pinned top-right
+ * from `sm` up once the card stacks. Floating over the thumbnail there means it needs an
+ * opaque plate of its own rather than the flat tint the inline version uses. */
+.payBadge {
+  @apply inline-flex w-fit items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 text-[0.6875rem] font-semibold text-amber-700 sm:absolute sm:right-3 sm:top-3 sm:z-10 sm:shadow-sm;
+  @apply dark:bg-amber-900/60 dark:text-amber-200;
+}
+
+/* Inherits the badge's amber rather than setting its own colour, so the two can never
+ * drift apart. */
+.payBadgeIcon {
+  @apply h-3 w-3;
+}

@@ -1,0 +1,62 @@
+/* The jump-to rail. Desktop only — a phone gets the sticky month heading and the month
+ * chip in the filter rail instead, which cost no horizontal room.
+ *
+ * `top` clears the app bar so the rail pins just below it rather than sliding under. */
+
+.spine {
+  @apply sticky top-20 hidden max-h-[calc(100vh-6rem)] flex-col gap-[1.375rem] self-start overflow-y-auto border-r py-[2.125rem] pr-6 lg:flex;
+}
+
+.label {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/80;
+}
+
+.years {
+  @apply flex flex-col gap-3.5;
+}
+
+.year {
+  @apply flex flex-col gap-2;
+}
+
+.yearLabel {
+  @apply text-xs font-bold tracking-[0.04em];
+}
+
+.months {
+  @apply flex flex-col gap-0.5;
+}
+
+/* Rows are pulled left by their own padding so the text aligns with the year heading
+ * above, while the active row's tint still reads as a full-width pill. */
+.month {
+  @apply -ml-2.5 flex items-center justify-between gap-2.5 rounded-[0.4375rem] px-2.5 py-1.5 text-left transition-colors;
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+.monthActive {
+  @apply bg-muted;
+}
+
+.monthName {
+  @apply truncate text-[0.84375rem] text-muted-foreground;
+
+  .monthActive & {
+    @apply font-semibold text-foreground;
+  }
+}
+
+.monthCount {
+  @apply shrink-0 font-mono text-[0.6875rem] text-muted-foreground/80;
+
+  .monthActive & {
+    @apply text-muted-foreground;
+  }
+}

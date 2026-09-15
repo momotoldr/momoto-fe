@@ -1,0 +1,73 @@
+/* A reading column, like the terms and privacy pages — the questions are prose, and
+ * the accordion is the only interactive thing here. */
+
+.page {
+  @apply mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-10 sm:py-14;
+}
+
+.head {
+  @apply flex flex-col items-start gap-3;
+}
+
+.badge {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-rose-600;
+}
+
+.badgeIcon {
+  @apply h-3.5 w-3.5;
+}
+
+.title {
+  @apply text-3xl font-bold tracking-tight sm:text-4xl;
+}
+
+.intro {
+  @apply text-base leading-relaxed text-muted-foreground;
+}
+
+/* ---- Questions ---- */
+.faqList {
+  @apply flex w-full flex-col gap-3;
+}
+
+.faqItem {
+  @apply overflow-hidden rounded-2xl border bg-card;
+}
+
+.faqQuestion {
+  @apply flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-left text-base font-semibold;
+
+  /* Hide the default disclosure triangle (Safari/Chrome). */
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+.faqIcon {
+  @apply h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200;
+}
+
+.faqItem[open] .faqIcon {
+  @apply rotate-180;
+}
+
+.faqAnswer {
+  @apply px-5 pb-4 text-sm leading-relaxed text-muted-foreground;
+}
+
+/* ---- Still stuck ---- */
+.contact {
+  @apply flex flex-col items-start gap-4 rounded-2xl border bg-muted/40 px-5 py-6 sm:flex-row sm:items-center sm:justify-between;
+}
+
+.contactText {
+  @apply flex flex-col gap-1;
+}
+
+.contactTitle {
+  @apply text-lg font-semibold tracking-tight;
+}
+
+.contactHint {
+  @apply text-sm text-muted-foreground;
+}

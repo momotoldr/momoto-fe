@@ -1,0 +1,54 @@
+/* Floating button pinned to the bottom-right corner. */
+.fab {
+  @apply fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+
+  svg {
+    @apply h-6 w-6;
+  }
+}
+
+.overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in-0;
+}
+
+.dialog {
+  @apply relative w-full max-w-md rounded-lg border bg-card p-6 shadow-lg animate-in fade-in-0 zoom-in-95;
+}
+
+.close {
+  @apply absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground;
+
+  svg {
+    @apply h-4 w-4;
+  }
+}
+
+.title {
+  @apply pr-8 text-lg font-semibold text-foreground;
+}
+
+.subtitle {
+  @apply mt-1 text-sm text-muted-foreground;
+}
+
+.form {
+  @apply mt-4 flex flex-col gap-4;
+}
+
+/* Email field + its hint, kept close together (the field's own wrapper handles
+   label/input/error; the hint sits just under it). */
+.emailGroup {
+  @apply flex flex-col gap-1.5;
+}
+
+.hint {
+  @apply text-xs text-muted-foreground;
+}
+
+.actions {
+  @apply mt-2 flex justify-end gap-3;
+}
+
+.btnSpinner {
+  @apply h-4 w-4 animate-spin;
+}

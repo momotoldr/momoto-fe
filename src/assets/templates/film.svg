@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1800" viewBox="0 0 600 1800">
+  <rect width="600" height="1800" fill="#0f0f10"/>
+  <!-- Sprocket holes down both side margins (the photos sit between them). -->
+  <g fill="#f4f4f5">
+    <rect x="9" y="30" width="22" height="34" rx="6"/><rect x="569" y="30" width="22" height="34" rx="6"/>
+    <rect x="9" y="150" width="22" height="34" rx="6"/><rect x="569" y="150" width="22" height="34" rx="6"/>
+    <rect x="9" y="270" width="22" height="34" rx="6"/><rect x="569" y="270" width="22" height="34" rx="6"/>
+    <rect x="9" y="390" width="22" height="34" rx="6"/><rect x="569" y="390" width="22" height="34" rx="6"/>
+    <rect x="9" y="510" width="22" height="34" rx="6"/><rect x="569" y="510" width="22" height="34" rx="6"/>
+    <rect x="9" y="630" width="22" height="34" rx="6"/><rect x="569" y="630" width="22" height="34" rx="6"/>
+    <rect x="9" y="750" width="22" height="34" rx="6"/><rect x="569" y="750" width="22" height="34" rx="6"/>
+    <rect x="9" y="870" width="22" height="34" rx="6"/><rect x="569" y="870" width="22" height="34" rx="6"/>
+    <rect x="9" y="990" width="22" height="34" rx="6"/><rect x="569" y="990" width="22" height="34" rx="6"/>
+    <rect x="9" y="1110" width="22" height="34" rx="6"/><rect x="569" y="1110" width="22" height="34" rx="6"/>
+    <rect x="9" y="1230" width="22" height="34" rx="6"/><rect x="569" y="1230" width="22" height="34" rx="6"/>
+    <rect x="9" y="1350" width="22" height="34" rx="6"/><rect x="569" y="1350" width="22" height="34" rx="6"/>
+    <rect x="9" y="1470" width="22" height="34" rx="6"/><rect x="569" y="1470" width="22" height="34" rx="6"/>
+    <rect x="9" y="1590" width="22" height="34" rx="6"/><rect x="569" y="1590" width="22" height="34" rx="6"/>
+    <rect x="9" y="1710" width="22" height="34" rx="6"/><rect x="569" y="1710" width="22" height="34" rx="6"/>
+  </g>
+  <!-- Thin light frame just outside each photo slot for definition. -->
+  <g fill="none" stroke="#3a3a3d" stroke-width="3">
+    <rect x="34" y="34" width="532" height="384" rx="8"/>
+    <rect x="34" y="430" width="532" height="384" rx="8"/>
+    <rect x="34" y="826" width="532" height="384" rx="8"/>
+    <rect x="34" y="1222" width="532" height="384" rx="8"/>
+  </g>
+</svg>

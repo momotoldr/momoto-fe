@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1800" viewBox="0 0 600 1800">
+  <rect width="600" height="1800" fill="#ececed"/>
+  <!-- No ornament at all: the whole design is the hairline and the paper. Frames are
+       9 units proud, square-cornered, so each photo reads as a mounted print. -->
+  <g fill="#ffffff" stroke="#d8d8dc" stroke-width="1.25">
+    <rect x="31" y="31" width="538" height="390" rx="3"/>
+    <rect x="31" y="427" width="538" height="390" rx="3"/>
+    <rect x="31" y="823" width="538" height="390" rx="3"/>
+    <rect x="31" y="1219" width="538" height="390" rx="3"/>
+  </g>
+  <rect x="255" y="1642" width="90" height="1.25" fill="#a8a8ae"/>
+  <circle cx="300" cy="1618" r="3" fill="#a8a8ae"/>
+</svg>

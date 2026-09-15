@@ -1,0 +1,10 @@
+.preview {
+  @apply relative overflow-hidden rounded-md shadow-sm;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.slot {
+  // Placeholder where a photo will sit — reads on any template art.
+  @apply absolute rounded-[2px] bg-zinc-400/70;
+}

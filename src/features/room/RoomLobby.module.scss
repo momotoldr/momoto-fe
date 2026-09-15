@@ -1,0 +1,47 @@
+.lobby {
+  @apply flex min-h-[300px] w-full max-w-md flex-col items-center justify-center gap-4 rounded-lg border bg-muted/40 p-8 text-center;
+}
+
+.label {
+  @apply text-sm text-muted-foreground;
+}
+
+.code {
+  @apply rounded-lg border bg-background px-6 py-3 font-mono text-3xl font-bold tracking-[0.3em] transition-colors hover:bg-accent;
+}
+
+.waiting {
+  @apply inline-flex items-center gap-2 text-sm text-muted-foreground;
+}
+
+.spinner {
+  @apply h-4 w-4 animate-spin;
+}
+
+/* One dot per seat — the room's own progress bar while people arrive. The dots run in
+ * a row and the count reads underneath, so `flex-wrap` puts the label (ordered last) on
+ * its own line. */
+.seats {
+  @apply flex w-full flex-wrap items-center justify-center gap-2;
+}
+
+.seat {
+  @apply inline-block h-2.5 w-2.5 rounded-full border border-muted-foreground/40;
+}
+
+.seatTaken {
+  @apply border-foreground bg-foreground;
+}
+
+.seatsLabel {
+  @apply order-last w-full text-sm text-muted-foreground;
+}
+
+.start {
+  @apply w-full max-w-[15rem];
+}
+
+.startNote {
+  @apply text-xs leading-[1.5] text-muted-foreground;
+  text-wrap: pretty;
+}

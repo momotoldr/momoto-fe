@@ -1,0 +1,87 @@
+/* Mint a code / redeem a code sit side by side on desktop: they are the two halves of
+ * one job, and stacking them makes the second read as a fallback for the first. */
+
+.split {
+  @apply flex flex-col gap-3.5 sm:flex-row sm:gap-5;
+}
+
+.box {
+  @apply flex flex-1 flex-col gap-3 rounded-2xl border p-4 sm:p-5;
+}
+
+/* Tinted, because minting a code is the path most people take. */
+.boxAccent {
+  @apply flex flex-1 flex-col gap-3 rounded-2xl border bg-muted/25 p-4 sm:p-5;
+}
+
+.boxLabel {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground;
+}
+
+.hint {
+  @apply text-[0.8125rem] text-muted-foreground;
+}
+
+.spinner {
+  @apply animate-spin;
+}
+
+.generateButton {
+  @apply h-[3.25rem] self-stretch rounded-xl px-5 text-[0.90625rem] sm:self-start;
+}
+
+/* ── The minted code ─────────────────────────────────────────────────────── */
+
+.codeRow {
+  @apply flex items-center gap-2.5;
+}
+
+/* `select-all` so a tap selects the whole code — the copy button can be refused, and
+ * this is the fallback people reach for when it is. */
+.code {
+  @apply flex h-[3.25rem] flex-1 select-all items-center justify-center rounded-xl border border-dashed border-rose-200 bg-rose-50 font-mono text-lg font-bold tracking-[0.18em] text-rose-600 sm:text-[1.375rem];
+}
+
+.codeButton {
+  @apply h-[3.25rem] shrink-0 rounded-xl px-4;
+}
+
+/* ── Redeeming one ───────────────────────────────────────────────────────── */
+
+.acceptRow {
+  @apply flex items-center gap-2.5;
+}
+
+.codeInput {
+  @apply h-[3.25rem] min-w-0 flex-1 rounded-xl font-mono text-[0.9375rem] uppercase tracking-[0.14em];
+}
+
+.acceptButton {
+  @apply h-[3.25rem] shrink-0 rounded-xl px-4;
+}
+
+/* ── Linked ──────────────────────────────────────────────────────────────── */
+
+.linked {
+  @apply flex flex-col items-start gap-3.5 sm:flex-row sm:items-center sm:gap-4;
+}
+
+.partnerAvatar {
+  @apply h-14 w-14 shrink-0 rounded-full border-[3px] border-white object-cover shadow-sm;
+}
+
+.partnerAvatarFallback {
+  @apply flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-[3px] border-white bg-emerald-100 text-xl font-bold text-emerald-700 shadow-sm;
+}
+
+.linkedText {
+  @apply flex flex-1 flex-col gap-1;
+}
+
+.linkedLabel {
+  @apply inline-flex items-center gap-2 text-[0.9375rem] font-semibold;
+}
+
+.linkedIcon {
+  @apply h-4 w-4 shrink-0 text-rose-600;
+}

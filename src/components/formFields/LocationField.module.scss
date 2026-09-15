@@ -1,0 +1,42 @@
+/* The profile's location field: province, then city or regency — or country and a typed
+ * city outside Indonesia. Selects are sized and coloured like the app's `Input`. */
+
+.fieldset {
+  @apply m-0 flex min-w-0 flex-col gap-2 border-0 p-0;
+}
+
+/* Announced, not shown: the Province / City labels already say what the group is, and a
+ * visible heading would push the selects below a neighbouring field's input on one row. */
+.legend {
+  @apply sr-only;
+}
+
+/* Province and city side by side from `sm`; abroad adds the typed city on a second row,
+ * then all three share the row from `lg`. */
+.fields {
+  @apply grid gap-3 sm:grid-cols-2;
+}
+
+.fieldsAbroad {
+  @apply lg:grid-cols-3;
+}
+
+.field {
+  @apply flex min-w-0 flex-col gap-1.5;
+}
+
+.select {
+  @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 aria-[invalid=true]:border-destructive;
+}
+
+.notice {
+  @apply text-xs text-muted-foreground;
+}
+
+.retry {
+  @apply font-semibold text-foreground underline underline-offset-4;
+}
+
+.linkButton {
+  @apply self-start text-xs font-medium text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground;
+}

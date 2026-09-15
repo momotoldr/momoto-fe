@@ -1,0 +1,45 @@
+.preview {
+  @apply flex w-full flex-col items-center gap-2.5;
+}
+
+/* The paper itself. Narrow in the desktop rail column; a little wider on a phone,
+ * where it sits centred under the cameras. `aspect-ratio` and `background-image`
+ * come from the template, inline. */
+.strip {
+  @apply relative w-[7.5rem] shrink-0 overflow-hidden rounded-xl lg:w-full;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 12px 30px -20px rgb(15 23 42 / 35%);
+}
+
+.slot {
+  /* left/top/width/height come from the template's slot, inline. */
+  @apply absolute flex items-center justify-center overflow-hidden bg-white/70;
+}
+
+.slotImage {
+  // Cuts are already mirrored in their pixels (MIRROR_CAPTURE), so no CSS flip.
+  // `cover` matches how composeStrip crops a cut into the slot.
+  @apply h-full w-full object-cover;
+}
+
+.placeholder {
+  @apply text-xs font-bold tracking-tight text-muted-foreground/70;
+}
+
+/* The slot the next cut lands in — the capture-progress cue. */
+.slotNext {
+  @apply ring-2 ring-inset ring-primary;
+}
+
+.caption {
+  @apply flex flex-col items-center gap-px text-center;
+}
+
+.captionLabel {
+  @apply font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-muted-foreground;
+}
+
+.captionCount {
+  @apply text-xs text-muted-foreground;
+}

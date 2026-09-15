@@ -1,0 +1,31 @@
+.wrap {
+  @apply relative;
+}
+
+.trigger {
+  @apply flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border transition-colors hover:bg-accent;
+}
+
+.avatar {
+  @apply h-full w-full object-cover;
+}
+
+.avatarFallback {
+  @apply flex h-full w-full items-center justify-center bg-rose-100 text-sm font-bold text-rose-600;
+}
+
+.menu {
+  @apply absolute right-0 top-11 z-50 flex min-w-44 flex-col rounded-lg border bg-popover p-1 shadow-md;
+}
+
+.menuName {
+  @apply truncate px-3 py-1.5 text-xs font-medium text-muted-foreground;
+}
+
+.item {
+  @apply flex items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-medium text-foreground no-underline transition-colors hover:bg-accent;
+}
+
+.itemIcon {
+  @apply h-4 w-4 shrink-0;
+}

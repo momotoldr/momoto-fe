@@ -1,0 +1,19 @@
+.overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in-0;
+}
+
+.dialog {
+  @apply w-full max-w-md rounded-lg border bg-card p-6 shadow-lg animate-in fade-in-0 zoom-in-95;
+}
+
+.title {
+  @apply text-lg font-semibold text-foreground;
+}
+
+.description {
+  @apply mt-2 text-sm leading-relaxed text-muted-foreground;
+}
+
+.actions {
+  @apply mt-6 flex justify-end gap-3;
+}

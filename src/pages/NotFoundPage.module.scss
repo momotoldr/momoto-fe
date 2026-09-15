@@ -1,0 +1,31 @@
+.page {
+  @apply mx-auto flex min-h-[70vh] max-w-md flex-col items-center justify-center gap-6 px-4 text-center;
+}
+
+.icon {
+  @apply flex h-16 w-16 items-center justify-center rounded-full bg-muted text-muted-foreground;
+}
+
+.text {
+  @apply space-y-2;
+}
+
+.code {
+  @apply text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground;
+}
+
+.title {
+  @apply text-2xl font-bold tracking-tight;
+}
+
+.message {
+  @apply text-sm text-muted-foreground;
+}
+
+.actions {
+  @apply flex flex-col items-center gap-3;
+}
+
+.hint {
+  @apply text-xs text-muted-foreground;
+}

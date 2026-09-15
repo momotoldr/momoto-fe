@@ -1,0 +1,26 @@
+# Security headers for Cloudflare Pages. Static hosts serve no headers of their own,
+# so without this file the app ships with none.
+#
+# Update `connect-src` if the API or broker hostnames change — a wrong value here
+# doesn't warn, it just blocks the socket at runtime.
+#
+# Cloudflare Web Analytics: Pages auto-injects beacon.min.js from
+# static.cloudflareinsights.com, so `script-src` names that HOST with no path. A path
+# is tempting (Cloudflare's own docs suggest `/beacon.min.js`) but would break: CSP
+# only prefix-matches a path ending in `/`, otherwise it must match exactly — and the
+# injected URL carries a version segment, `/beacon.min.js/v4513226c...`, which changes.
+# The beacon posts same-origin to /cdn-cgi/rum, already covered by `connect-src 'self'`.
+#
+# Midtrans needs no allowlist entry of its own any more. Checkout is our own UI talking
+# to our own API (Core API is server-to-server), and the only Midtrans-hosted asset the
+# browser loads is the QR image — already covered by `img-src https:`. The former
+# script/frame/connect entries for app.*.midtrans.com were for the Snap popup and were
+# removed with it; restoring Snap would mean restoring them.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' https://api.momotoldr.com wss://api.momotoldr.com https://peer.momotoldr.com wss://peer.momotoldr.com https://accounts.google.com; frame-src https://accounts.google.com; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(self), microphone=(self), geolocation=(), payment=(self "https://app.midtrans.com" "https://app.sandbox.midtrans.com"), usb=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Strict-Transport-Security: max-age=31536000; includeSubDomains

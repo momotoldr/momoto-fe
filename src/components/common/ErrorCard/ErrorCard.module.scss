@@ -1,0 +1,23 @@
+.wrapper {
+  @apply flex min-h-[60vh] items-center justify-center px-5 py-8;
+}
+
+.card {
+  @apply flex w-full max-w-md flex-col items-center rounded-lg border bg-card px-8 py-10 text-center shadow-[0_12px_32px_rgb(0_0_0/6%)];
+}
+
+.icon {
+  @apply inline-flex h-[3.25rem] w-[3.25rem] items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--destructive)_12%,var(--card))] text-destructive;
+}
+
+.title {
+  @apply mt-5 text-[1.4rem] font-bold tracking-[-0.02em] text-foreground;
+}
+
+.message {
+  @apply mt-[0.6rem] max-w-[36ch] text-[0.95rem] leading-[1.6] text-muted-foreground;
+}
+
+.actions {
+  @apply mt-7 flex flex-wrap items-center justify-center gap-4;
+}

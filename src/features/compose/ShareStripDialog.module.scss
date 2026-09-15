@@ -1,0 +1,66 @@
+.overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in-0;
+}
+
+/* A sheet, not a card: the share card stands on its own pedestal inside, the way
+ * the strip does on the result page behind it. */
+.dialog {
+  @apply relative flex w-full max-w-[25rem] flex-col gap-5 rounded-[1.75rem] border bg-card p-[1.625rem] animate-in fade-in-0 zoom-in-95;
+  box-shadow: 0 40px 80px -50px rgb(15 23 42 / 50%);
+}
+
+.head {
+  @apply flex items-center justify-between gap-4;
+}
+
+.title {
+  @apply text-[1.1875rem] font-bold tracking-[-0.02em] text-foreground;
+}
+
+.close {
+  @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-foreground transition-colors hover:bg-accent;
+
+  svg {
+    @apply h-[0.9375rem] w-[0.9375rem];
+  }
+}
+
+.preview {
+  @apply flex min-h-[240px] w-full items-center justify-center rounded-[1.25rem] bg-muted/40 p-5;
+}
+
+.image {
+  @apply h-auto w-auto max-h-[60vh] max-w-full rounded-[0.875rem];
+  box-shadow: 0 18px 40px -26px rgb(15 23 42 / 40%);
+}
+
+.spinner {
+  @apply h-8 w-8 animate-spin text-muted-foreground;
+}
+
+.message {
+  @apply text-sm text-muted-foreground;
+}
+
+.actions {
+  @apply flex w-full flex-col items-stretch gap-2.5;
+}
+
+/* The two fallbacks share one row; either can be alone in it. */
+.actionRow {
+  @apply flex items-stretch gap-2.5;
+}
+
+/* Both doubled to outrank the button's own size utilities. */
+.action.action {
+  @apply h-12 flex-1 rounded-[0.625rem] text-[0.90625rem] font-semibold;
+}
+
+.instagram.instagram {
+  @apply h-12 rounded-[0.625rem] border-none bg-gradient-to-r from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-[0.9375rem] font-semibold text-white hover:opacity-90;
+}
+
+.hint {
+  @apply text-[0.78125rem] leading-[1.5] text-muted-foreground;
+  text-wrap: pretty;
+}

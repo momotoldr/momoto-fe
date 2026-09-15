@@ -1,0 +1,139 @@
+/* Result screen. The finished strip is the subject: it stands on a light pedestal
+ * in its own column, with the copy and actions set beside it. On a phone the same
+ * blocks stack in reading order (title → strip → what happens to it → actions),
+ * which is why the intro is split from the rest of the copy. */
+.result {
+  @apply w-full pb-6 pt-1 lg:pb-10 lg:pt-4;
+}
+
+.layout {
+  @apply mx-auto flex w-full max-w-[26rem] flex-col items-center gap-[1.375rem];
+
+  // Matches the `lg` breakpoint; written as a plain media query so sass needn't
+  // know about Tailwind's directives.
+  @media (min-width: 1024px) {
+    display: grid;
+    max-width: 62.5rem;
+    grid-template-columns: auto minmax(0, 32.5rem);
+    grid-template-areas:
+      'strip intro'
+      'strip body';
+    // The strip spans both rows and is far taller than the copy. Without this the
+    // leftover height is split between the two rows and a gap opens under the
+    // headline; sending it all to the second row keeps the copy packed at the top.
+    grid-template-rows: min-content 1fr;
+    align-items: start;
+    justify-content: center;
+    gap: 2.125rem 4.5rem;
+  }
+}
+
+/* ── Strip pedestal ──────────────────────────────────────────────────────── */
+.stripBlock {
+  @apply m-0 flex flex-col items-center gap-4;
+  grid-area: strip;
+}
+
+.pedestal {
+  @apply rounded-[1.75rem] bg-muted/40 p-4 lg:p-[1.625rem];
+}
+
+/* Bounded by width alone, with both dimensions left `auto` so the browser keeps
+ * the strip's own 1:3 ratio. Capping the height as well is what squashed it: with
+ * a used width already fixed, a max-height violation cuts the height and leaves
+ * the width where it was. The strip is simply printed at its designed width and
+ * the page scrolls, which is what a strip three times taller than it is wide asks
+ * for. */
+.strip {
+  @apply block h-auto w-auto max-w-[10.875rem] rounded-xl lg:max-w-[16.75rem];
+  box-shadow: 0 26px 60px -30px rgb(15 23 42 / 45%);
+}
+
+/* Quiet mono caption — the same voice the rest of the booth uses for metadata. */
+.stripMeta {
+  @apply hidden font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground lg:block;
+}
+
+/* ── Copy column ─────────────────────────────────────────────────────────── */
+.intro {
+  @apply flex w-full flex-col items-center gap-2 text-center lg:items-start lg:gap-3.5 lg:pt-3.5 lg:text-left;
+  grid-area: intro;
+}
+
+.eyebrow {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground lg:text-[0.6875rem];
+}
+
+/* Same eyebrow, carrying the one thing the screen exists to say: this was not saved. */
+.eyebrowError {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-destructive lg:text-[0.6875rem];
+}
+
+/* Set large, and narrow enough on desktop that it breaks itself into the two-line
+ * headline from the design — without hard-coding where any one locale wraps. */
+.headline {
+  @apply text-[2rem] font-extrabold leading-[1.05] tracking-[-0.03em] lg:max-w-[20rem] lg:text-[3.375rem] lg:leading-[1.02];
+}
+
+.body {
+  @apply flex w-full flex-col items-center gap-[1.375rem] lg:items-stretch lg:gap-[2.125rem];
+  grid-area: body;
+}
+
+.lead {
+  @apply text-center text-[0.84375rem] leading-[1.55] text-muted-foreground lg:text-left lg:text-base lg:leading-[1.6];
+  text-wrap: pretty;
+}
+
+/* Phones stack the two actions full width; from lg they sit side by side. */
+.actions {
+  @apply flex w-full flex-col gap-2.5 lg:flex-row lg:items-center lg:gap-3;
+}
+
+/* Doubled to outrank the button's own size utilities (same pattern as the booth's
+ * start button). */
+.action.action {
+  @apply h-[3.125rem] w-full rounded-[0.625rem] text-[0.96875rem] font-semibold lg:h-[3.25rem] lg:w-auto lg:px-6 lg:text-base;
+}
+
+/* ── Notes beside the artwork ────────────────────────────────────────────── */
+/* Print unlock: stated next to the watermarked strip rather than discovered in
+ * the cart. Tinted rather than plain so it reads as the one thing here that costs
+ * something. */
+.printCard {
+  @apply flex w-full items-start gap-3.5 rounded-[1.25rem] border bg-destructive/[0.035] p-4 text-left lg:px-5 lg:py-[1.125rem];
+}
+
+.printIcon {
+  @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.625rem] bg-background text-destructive;
+
+  svg {
+    @apply h-[1.0625rem] w-[1.0625rem];
+  }
+}
+
+.noteBody {
+  @apply flex min-w-0 flex-col gap-0.5;
+}
+
+.noteTitle {
+  @apply text-[0.84375rem] font-semibold text-foreground lg:text-[0.90625rem];
+}
+
+.noteText {
+  @apply text-[0.78125rem] leading-[1.5] text-muted-foreground lg:text-[0.84375rem] lg:leading-[1.55];
+  text-wrap: pretty;
+}
+
+/* ── Composing / error ───────────────────────────────────────────────────── */
+.composing {
+  @apply mx-auto flex min-h-[300px] w-full max-w-2xl flex-col items-center justify-center gap-3 rounded-3xl border bg-muted/40 p-8 text-center;
+}
+
+.spinner {
+  @apply h-8 w-8 animate-spin text-muted-foreground;
+}
+
+.message {
+  @apply text-sm text-muted-foreground;
+}

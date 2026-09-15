@@ -1,0 +1,1296 @@
+{
+  "brand": {
+    "name": "Momoto"
+  },
+  "language": {
+    "label": "Language",
+    "en": "EN",
+    "id": "ID"
+  },
+  "common": {
+    "loading": "Loading…",
+    "tryAgain": "Try again",
+    "backHome": "Back home",
+    "close": "Close",
+    "copyright": "All Rights Reserved",
+    "cancel": "Cancel",
+    "pressAndHoldToSave": "This browser can't download files. Press and hold the image to save it."
+  },
+  "footer": {
+    "instagram": "Follow us on Instagram",
+    "legal": "Help, terms and privacy"
+  },
+  "support": {
+    "open": "Contact support",
+    "title": "Need a hand?",
+    "subtitle": "Tell us what's going wrong and we'll look into it. We'll reply by email.",
+    "messageLabel": "Your message",
+    "messagePlaceholder": "Describe the issue and we'll look into it…",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "emailHint": "We'll use this to reply to you.",
+    "submit": "Send",
+    "sending": "Sending…",
+    "cancel": "Cancel",
+    "success": "Thanks! Your request has been sent.",
+    "error": "Couldn't send your request. Please try again.",
+    "errors": {
+      "messageRequired": "Please enter a message first.",
+      "messageTooLong": "That message is a bit too long.",
+      "emailInvalid": "Please enter a valid email address.",
+      "emailTooLong": "That email address is too long.",
+      "emailRequired": "Please enter your email so we can reply."
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "activities": "Activities",
+    "help": "Help Center",
+    "menu": "Menu",
+    "tnc": "Terms and Condition",
+    "policy": "Privacy Policy",
+    "cart": "Cart",
+    "gallery": "Gallery"
+  },
+  "activities": {
+    "title": "Activities",
+    "subtitle": "Pick something to do together — with more on the way.",
+    "live": "Live",
+    "comingSoon": "Coming soon",
+    "open": "Open the booth",
+    "modes": {
+      "solo": "Solo",
+      "date": "Date",
+      "group": "Group"
+    },
+    "items": {
+      "photobooth": {
+        "title": "Virtual Photobooth",
+        "desc": "Snap a synced four-cut strip solo or with a friend, add filters and stickers, then download or share."
+      },
+      "draw": {
+        "title": "Draw Together",
+        "desc": "Draw something connected to the two of you."
+      },
+      "lovematch": {
+        "title": "Love Match",
+        "desc": "Read the given questions and guess each other."
+      },
+      "spot": {
+        "title": "Spot It!",
+        "desc": "Look at both illustrations and find what's different."
+      }
+    }
+  },
+  "landing": {
+    "badge": "Say cheese",
+    "heroTitle": "Fun Dates for Long Distance Relationships",
+    "heroSubtitle": "Momoto is a little studio of playful date experiences for long-distance relationships that kept us together through the distance. We hope you'll enjoy them too!",
+    "ctaPrimary": "Pick an activity",
+    "ctaSecondary": "Open the Photobooth",
+    "menuTitle": "What you can do",
+    "menuSubtitle": "One booth today, more moments on the way.",
+    "browseActivities": "Browse all activities",
+    "howTitle": "How it works",
+    "ctaBannerTitle": "Ready for your close-up?",
+    "footerTag": "Snap, strip, share.",
+    "strips": {
+      "solo": "Solo",
+      "date": "Date",
+      "group": "Group"
+    },
+    "steps": {
+      "photobooth": {
+        "pick": {
+          "title": "Pick a mode",
+          "desc": "Go solo, or invite a friend with a room code."
+        },
+        "pose": {
+          "title": "Strike a pose",
+          "desc": "A synced 3-2-1 countdown snaps your four-cut strip."
+        },
+        "share": {
+          "title": "Make it yours",
+          "desc": "Add filters and stickers, then download or share."
+        }
+      },
+      "draw": {
+        "prompt": {
+          "title": "Pick a prompt",
+          "desc": "Choose something that connects the two of you."
+        },
+        "draw": {
+          "title": "Draw together",
+          "desc": "Sketch side by side on a shared canvas in real time."
+        },
+        "save": {
+          "title": "Keep it",
+          "desc": "Save your artwork or share it however you like."
+        }
+      },
+      "lovematch": {
+        "room": {
+          "title": "Start a room",
+          "desc": "Invite your partner with a room code."
+        },
+        "answer": {
+          "title": "Answer the questions",
+          "desc": "Read each prompt and guess each other's answers."
+        },
+        "score": {
+          "title": "See your match",
+          "desc": "Find out how well you really know each other."
+        }
+      },
+      "spot": {
+        "scenes": {
+          "title": "Open two scenes",
+          "desc": "You both see a pair of playful illustrations."
+        },
+        "find": {
+          "title": "Find the differences",
+          "desc": "Race to spot everything that's changed."
+        },
+        "celebrate": {
+          "title": "Tally the score",
+          "desc": "See who spotted the most."
+        }
+      }
+    },
+    "stats": {
+      "title": "Momoto by the numbers",
+      "users": "Momoto users",
+      "usersShort": "Users",
+      "sessions": "Active sessions",
+      "sessionsShort": "Live now",
+      "strips": "Strips created",
+      "stripsShort": "Strips"
+    },
+    "testimonials": {
+      "title": "What people say",
+      "subtitle": "Little moments from couples and friends who've stepped into the booth.",
+      "features": {
+        "date": "Date mode",
+        "group": "Group",
+        "solo": "Solo",
+        "templates": "Templates",
+        "stickers": "Stickers",
+        "print": "Print",
+        "invite": "Room code"
+      },
+      "rated": "Rated {{count}} out of 5"
+    }
+  },
+  "help": {
+    "badge": "Help Center",
+    "title": "How can we help?",
+    "intro": "Answers to the questions we get asked most. Still stuck? Send us a message and we'll reply by email.",
+    "contactTitle": "Still need a hand?",
+    "contactHint": "Tell us what's going wrong and we'll look into it.",
+    "items": {
+      "install": {
+        "q": "Do I need to download an app?",
+        "a": "No install needed — Momoto runs right in your browser. You'll create a quick, free account to pick an activity, then just allow your camera."
+      },
+      "free": {
+        "q": "Is it free?",
+        "a": "Yes — making strips in the photobooth is free, and sharing them costs nothing. Every strip is saved to your cart, where you can optionally unlock a clean, watermark-free copy to download and print for a small fee."
+      },
+      "print": {
+        "q": "How do I get a clean, printable strip?",
+        "a": "Each strip you create is saved to your cart with a light watermark. From the cart, tick the strips you want and check out to unlock high-resolution, watermark-free copies you can download and print."
+      },
+      "friend": {
+        "q": "Can I use it with a friend?",
+        "a": "Absolutely. Pick Date mode and share your room code — you'll each see the other's live camera and take the strip together."
+      },
+      "privacy": {
+        "q": "Where do my photos go?",
+        "a": "Your photos are captured and composed right in your browser. When you create a strip it's saved to your account so it appears in your cart across your devices; in Date mode the live video is streamed peer-to-peer and never recorded."
+      },
+      "need": {
+        "q": "What do I need to get started?",
+        "a": "A device with a camera and a modern browser (Chrome, Safari, Edge, or Firefox). Allow camera access when prompted and you're set."
+      }
+    }
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "lastUpdated": "Last updated: August 10, 2026",
+    "intro": "Welcome to Momoto. These Terms & Conditions govern your use of our playful date experiences — including the Virtual Photobooth and other activities — available in your web browser at momoto and any related apps. By using Momoto, you agree to these terms. If you don't agree, please don't use the service.",
+    "sections": {
+      "service": {
+        "title": "The Service",
+        "body": [
+          "Momoto is a little studio of playful date experiences built for long-distance relationships. It lets two people in different places share a moment together in real time — snapping a synced photo strip, or playing other activities as we add them.",
+          "The service is provided for personal, non-commercial entertainment. Features may change, launch, or be retired over time as we keep improving Momoto."
+        ]
+      },
+      "eligibility": {
+        "title": "Eligibility & Access",
+        "body": [
+          "You must be at least 13 years old to use Momoto. If you're under the age of majority where you live, you may only use the service with the involvement of a parent or guardian.",
+          "Momoto requires a free account to access activities — sign up with your email and a password, or with Google. You're responsible for keeping your login details secure and for the device, camera, and connection you use."
+        ]
+      },
+      "content": {
+        "title": "Your Content & Photos",
+        "body": [
+          "Your photos are yours. Photo strips are captured and composed within your own browser. When you save a strip to your cart, the composed image is uploaded to our servers and stored with your account so you can reach it across your devices; you can remove it at any time. We use your strips only to provide the service to you.",
+          "In a shared \"Date\" session, your live camera is streamed peer-to-peer to the friend you invited, so you can pose together. Momoto only relays the connection — it doesn't record or keep that video. What each of you chooses to download or share afterward is up to you.",
+          "You are responsible for the content you capture and share, and for respecting the privacy and consent of anyone who appears in it."
+        ]
+      },
+      "payments": {
+        "title": "Purchases & Payments",
+        "body": [
+          "Creating strips, saving them to your cart, and sharing them are free. A clean, high-resolution copy of a strip without the watermark is an optional paid download. Prices are shown at checkout before you confirm, and you can buy several strips in a single order.",
+          "Payments are handled by our third-party payment provider, Midtrans. By paying, you also agree to the provider's terms. We receive confirmation that a payment succeeded and an order reference, but we don't collect or store your full card or bank details.",
+          "Because a purchase immediately unlocks a digital file for download, paid strips are generally non-refundable once unlocked — except where a refund is required by law, or where a technical fault on our side stops you from downloading a strip you paid for. If that happens, contact us and we'll put it right."
+        ]
+      },
+      "acceptableUse": {
+        "title": "Acceptable Use",
+        "body": [
+          "Please use Momoto kindly and lawfully. You agree not to: use the service to harass, threaten, or harm anyone; capture or share unlawful, hateful, or non-consensual content; attempt to disrupt, overload, reverse-engineer, or gain unauthorized access to the service; or use it to infringe anyone's rights.",
+          "We may suspend or limit access for anyone who misuses the service or these terms."
+        ]
+      },
+      "availability": {
+        "title": "Availability & Changes",
+        "body": [
+          "Momoto is provided \"as is\" and \"as available,\" without warranties of any kind. We don't guarantee that the service will always be available, uninterrupted, or error-free — a shared session depends on both people's devices and network connections.",
+          "We may add, change, or discontinue features at any time, and we may update these terms. When we do, we'll revise the \"last updated\" date above; continuing to use Momoto after a change means you accept the updated terms."
+        ]
+      },
+      "liability": {
+        "title": "Limitation of Liability",
+        "body": [
+          "To the fullest extent permitted by law, Momoto and the people behind it are not liable for any indirect, incidental, or consequential damages arising from your use of the service, including lost photos, missed moments, or interrupted sessions.",
+          "Momoto is a playful experience that's free to use, with optional low-cost paid prints — where liability cannot be excluded by law, it is limited to the amount you paid us (if any) for the feature involved, or the minimum permitted."
+        ]
+      },
+      "governingLaw": {
+        "title": "Governing Law",
+        "body": [
+          "These terms are governed by the laws of the Republic of Indonesia, without regard to its conflict-of-law rules. If a dispute arises, we ask that you reach out to us first so we can try to resolve it amicably."
+        ]
+      },
+      "contact": {
+        "title": "Contact",
+        "body": [
+          "Questions about these terms? Reach out and we'll be happy to help. Thanks for spending a moment with Momoto — we hope it keeps you a little closer, however far apart."
+        ]
+      },
+      "accounts": {
+        "title": "Your Account",
+        "body": [
+          "You're responsible for activity under your account and for keeping your password confidential. Provide accurate information, and don't impersonate others or create an account for someone without their permission.",
+          "You may delete your account at any time by contacting us. We may suspend or terminate accounts that violate these terms."
+        ]
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: September 14, 2026",
+    "intro": "Your privacy matters to us. This Privacy Policy explains what little information Momoto handles when you use our playful date experiences at momoto, and how we keep your photos and moments yours. Momoto is designed to be privacy-conscious: your photos are made right in your browser, and we keep what we store to the minimum needed to run your account, save the strips you choose to keep, and handle any prints you buy.",
+    "sections": {
+      "collect": {
+        "title": "Information We Collect",
+        "body": [
+          "To use Momoto's activities you create an account, so we collect the details you provide: your email address, a securely hashed password (we never store it in plain text), your display name, an optional avatar, and — if you add it — the city or regency you live in (or your country and city if you live outside Indonesia). If you sign in with Google, we receive your basic Google profile (email, name, and picture).",
+          "When you save a strip, we store the finished image with your account: a watermarked preview and, if you purchase a print, a clean unwatermarked copy. If you buy a print, our payment provider (Midtrans) processes the payment; we receive a confirmation and an order reference tied to your account, but not your full card or bank details.",
+          "To run a shared \"Date\" session, our server briefly handles a temporary room code and the connection details needed to link you and your partner's browsers — the video and audio themselves are relayed peer-to-peer and never recorded.",
+          "Like most websites, our hosting may process basic technical data (such as IP address and browser type) in server logs for security and reliability."
+        ]
+      },
+      "media": {
+        "title": "Photos, Video & Audio",
+        "body": [
+          "Your photos are captured and composed entirely inside your own browser. The raw camera frames are never uploaded — only the finished strip you choose to save is. When you save a strip to your cart, that composed image is uploaded and stored with your account so you can find it across your devices (a free version carries a watermark; a purchased copy is clean). You can remove a saved strip from your cart at any time, which deletes it from our servers.",
+          "In a Date session, your live camera and microphone are streamed directly to the friend you invited, peer-to-peer. Our server only helps the two browsers find each other (and may relay the stream if a direct connection isn't possible); we do not record, view, or store that video or audio."
+        ]
+      },
+      "storage": {
+        "title": "Cookies & Local Storage",
+        "body": [
+          "Momoto uses your browser's local storage to remember small things that make the app work — such as your language preference and the state of an in-progress session so it survives a refresh. This data stays on your device.",
+          "We don't use advertising cookies or third-party tracking pixels."
+        ]
+      },
+      "usage": {
+        "title": "How We Use Information",
+        "body": [
+          "We use the limited information described above only to provide the service: to connect you with your friend in a Date session, to save the strips you choose to keep and make them available across your devices, to fulfill and confirm any prints you buy, to keep sessions running smoothly, and to protect the service against abuse.",
+          "We do not sell your data, and we don't use it for advertising or profiling."
+        ]
+      },
+      "sharing": {
+        "title": "Who We Share Data With",
+        "body": [
+          "In a session, the only \"sharing\" is the live camera and audio you send directly to the friend you invited during a Date session — you choose who that is.",
+          "If you're signed in and leave a comment with a 4 or 5-star rating beside a strip, we may feature it on our website as a testimonial, together with your display name, your city or country, your uploaded profile picture and your rating. If your account is linked to a partner at the time, their display name, city or country and uploaded profile picture may appear alongside yours. To have a testimonial removed, contact us using the details below — unlinking also removes your partner from it.",
+          "Behind the scenes we rely on standard infrastructure providers (for hosting and for the connection-relay servers that WebRTC needs), and — when you buy a print — a payment provider (Midtrans) to process the transaction, purely to deliver the service. We don't sell or rent your information to anyone."
+        ]
+      },
+      "retention": {
+        "title": "Data Retention & Deletion",
+        "body": [
+          "The strips you save are stored with your account until you remove them from your cart or delete your account, at which point they're deleted from our servers. Photos you don't save stay only on your device — closing the tab or clearing your browser storage removes any local session data. Room codes are temporary and expire when a session ends.",
+          "Any basic technical log data our hosting keeps is retained only for a short period for security and then discarded."
+        ]
+      },
+      "children": {
+        "title": "Children",
+        "body": [
+          "Momoto is intended for people aged 13 and over. We don't knowingly collect information from children under 13. If you believe a child has used the service in a way that concerns you, please get in touch."
+        ]
+      },
+      "changes": {
+        "title": "Changes to This Policy",
+        "body": [
+          "We may update this Privacy Policy from time to time. When we do, we'll revise the \"last updated\" date above. Continuing to use Momoto after a change means you accept the updated policy."
+        ]
+      },
+      "contact": {
+        "title": "Contact",
+        "body": [
+          "Questions about your privacy or this policy? Reach out and we'll be happy to help."
+        ]
+      },
+      "accounts": {
+        "title": "Your Account",
+        "body": [
+          "Your account holds your email, a hashed password (or a linked Google identity), your display name, an optional avatar, and an optional city (or country, if you live outside Indonesia). You can update these any time on your profile page.",
+          "You may link your account with a partner using a one-time invite code; either of you can unlink at any time. To delete your account and its data, contact us using the details below."
+        ]
+      }
+    }
+  },
+  "photobooth": {
+    "title": "Virtual Photobooth",
+    "heading": "How are you shooting today?",
+    "subtitle": "Take a four-cut photo strip — on your own, or synced live with a friend.",
+    "sampleLabel": "You'll get",
+    "sampleHint": "Four cuts, printable, watermark optional.",
+    "frameYou": "You",
+    "frameFriend": "Friend",
+    "solo": "Solo",
+    "soloHint": "Just you — no code needed",
+    "soloCta": "Start",
+    "date": "Date",
+    "dateHint": "Invite a friend with a code",
+    "dateCta": "Create room",
+    "joinTitle": "Already have a code?",
+    "joinHint": "Someone invited you to their booth.",
+    "roomCodePlaceholder": "Enter room code",
+    "roomCodeLabel": "Room code",
+    "join": "Join",
+    "codeInvalid": "Enter a valid room code (letters and numbers).",
+    "codeRequired": "Please enter a room code.",
+    "createFailed": "Couldn't start a date room — the server is unreachable. Please try again.",
+    "joining": "Joining…",
+    "join_not_found": "No room with that code — double-check it and try again.",
+    "join_full": "That room is already full. Try a different code.",
+    "join_ended": "That room's session has already ended.",
+    "joinCheckFailed": "Couldn't reach the server. Check your connection and try again.",
+    "cameraDisabled": "Please turn on your camera first",
+    "frameFriends": "Friends",
+    "group": "Group",
+    "groupHint": "Up to {{count}} of you in one booth",
+    "groupCta": "Create room",
+    "createGroupFailed": "Couldn't start a group room. This server may not have group mode switched on yet.",
+    "joinGroupUnavailable": "That's a group room, and group mode isn't available in this app yet.",
+    "boothBusy": "The booth is full right now. Give it a minute and try again."
+  },
+  "room": {
+    "connecting": "Connecting…",
+    "connectingSlow": "Slow connection — still joining the room…",
+    "booth": "Booth",
+    "soloSession": "Solo session",
+    "roomCodeLabel": "Room code",
+    "finish": "Finish",
+    "timesUp": "Time's up",
+    "sessionEnded": "Your photo session has ended.",
+    "roomFullTitle": "Room is full",
+    "roomFullMessage": "This room has no free seats left. Try a different code.",
+    "roomClosedTitle": "This room has closed",
+    "roomClosedMessage": "Its photo session already ended, so the code no longer works. Start a fresh booth from the photobooth.",
+    "connectFailedTitle": "Can't reach the server",
+    "connectFailedMessage": "A date room needs a connection so your friend can join. Check your network and try again.",
+    "notFoundTitle": "Room not found",
+    "notFoundMessage": "No room has that code. Check the code, or start a fresh booth from the photobooth.",
+    "leaveDialog": {
+      "title": "Leave the booth?",
+      "description": "The session keeps running without you. Come back with the same code before time's up and your shots will be waiting.",
+      "confirm": "Leave",
+      "cancel": "Stay"
+    },
+    "finishDialog": {
+      "title": "Finish the session?",
+      "description": "This closes the booth for both of you, and any unsaved photo strip will be lost.",
+      "descriptionSolo": "This closes the booth, and any unsaved photo strip will be lost.",
+      "confirm": "Finish session",
+      "cancel": "Keep going",
+      "descriptionGroup": "This closes the booth for everyone, and any unsaved photo strip will be lost."
+    },
+    "timerLabel": "Left",
+    "connectFailedMessageGroup": "A group room needs a connection so the others can join. Check your network and try again."
+  },
+  "lobby": {
+    "share": "Share this code with your friend",
+    "copyTitle": "Click to copy",
+    "waiting": "Waiting for your friend to join…",
+    "codeCopied": "Room code copied",
+    "shareGroup": "Share this code with your friends",
+    "seats": "{{present}} of {{capacity}} here",
+    "start": "Start session",
+    "startNote": "Starts the clock for everyone. Anyone still on their way can join after — they'll get whatever time is left.",
+    "startNeedsMore_one": "Waiting for {{count}} more person — a group session needs at least {{required}}.",
+    "startNeedsMore_other": "Waiting for {{count}} more people — a group session needs at least {{required}}."
+  },
+  "status": {
+    "connecting": "Connecting…",
+    "offline": "Offline — solo mode",
+    "friendConnected": "Friend connected",
+    "friendJoining": "Friend connecting…",
+    "membersConnecting": "{{present}} of {{capacity}} here · connecting…",
+    "waitingFriend": "Waiting for a friend…",
+    "friendJoined": "Your friend joined",
+    "friendLeft": "Your friend dropped out — keep going, your photos are safe. They can rejoin with the same code.",
+    "friendLeftCapturing": "Your friend dropped out, so the capture stopped. Start again once they're back.",
+    "reconnecting": "Reconnecting…",
+    "reconnectingToast": "Connection lost — trying to reconnect. Anything you've already shot is safe.",
+    "membersHere": "{{present}} of {{capacity}} here",
+    "friendJoinedGroup": "Someone joined",
+    "friendLeftGroup": "Someone dropped out — keep going, your photos are safe. They can rejoin with the same code.",
+    "friendLeftCapturingGroup": "Someone dropped out, so the capture stopped. Start again once everyone is back.",
+    "friendJoinedCapturing": "Your friend joined, so the capture stopped. Start again so they’re in the strip too.",
+    "friendJoinedCapturingGroup": "Someone joined, so the capture stopped. Start again so they’re in the strip too."
+  },
+  "templates": {
+    "label": "Template",
+    "classic": "Classic",
+    "film": "Film",
+    "hearts": "Hearts",
+    "newspaper": "Newspaper",
+    "orangeColorful": "Orange Colorful",
+    "blueWhiteRetro": "Retro",
+    "greenRed": "Green Mosaic",
+    "terrazzo": "Terrazzo",
+    "midnightGold": "Midnight Gold",
+    "sageBotanical": "Botanical",
+    "holo": "Holo",
+    "nordic": "Nordic",
+    "birthday": "Birthday",
+    "bestFriends": "Best Friends",
+    "sunset": "Sunset",
+    "kraft": "Kraft",
+    "layoutLabel": "Grid",
+    "layout4x1": "4×1",
+    "layout2x2": "2×2"
+  },
+  "capture": {
+    "takingPhotos": "Taking photos… {{taken}}/{{total}}",
+    "startSession": "Start Session",
+    "starting": "Starting…",
+    "waitingForHost": "Waiting for your host to start…",
+    "waitingForFriend": "You can start once your friend is back in the room.",
+    "waitingReconnect": "You're offline — you can start once you're back on.",
+    "waitingReconnectGuest": "You're offline — sit tight while we reconnect you.",
+    "waitingCameras": "You can start once your friend's camera is through — it's still connecting.",
+    "waitingCamerasGuest": "Your camera is on — your friend's is still connecting.",
+    "waitingCamerasGroup": "You can start once every camera is through — one is still connecting.",
+    "waitingCamerasGroupGuest": "Your camera is on — someone else's is still connecting.",
+    "waitingCamOffSelf": "Your camera is off — turn it on to be in the strip.",
+    "waitingCamOff": "You can start once your friend turns their camera on.",
+    "waitingCamOffGuest": "Waiting for your friend to turn their camera on.",
+    "waitingCamOffGroup": "You can start once every camera is on — someone has theirs off.",
+    "waitingCamOffGroupGuest": "Waiting for the last camera to come on — someone has theirs off.",
+    "stoppedOffline": "You went offline, so the capture stopped. Start again once you're back on.",
+    "stoppedOfflineGuest": "You went offline, so the capture stopped. Your host can start again once you're both back.",
+    "friendAlreadyShot": "Waiting for your friend to retake — they already have this round’s shots, so a new round is what puts you in the strip.",
+    "leftBooth": "You left the booth — some shots may have run without you.",
+    "draftRestored_one": "Picked up where you left off — {{count}} shot recovered.",
+    "draftRestored_other": "Picked up where you left off — {{count}} shots recovered.",
+    "retakingPhoto": "Retaking photo {{index}}…",
+    "shotAlt": "Shot {{index}}",
+    "headlineTop": "Four shots,",
+    "headlineBottom": "one strip.",
+    "headlineNote": "Both cameras fire on the same count, so you land on the same shot.",
+    "liveNote": "Both cameras are live — you're only on the strip once it starts.",
+    "startNote": "3-2-1 on both screens at once.",
+    "stripLabel": "Your strip",
+    "stripProgress": "{{taken}} of {{total}}",
+    "capturing": "Capturing…",
+    "waitingForGroup": "You can start once at least three of you are in the room.",
+    "headlineNoteGroup": "Every camera fires on the same count, so you all land on the same shot.",
+    "liveNoteGroup": "Everyone's camera is live — you're only on the strip once it starts.",
+    "startNoteGroup": "3-2-1 on everyone’s screen at once.",
+    "friendAlreadyShotGroup": "Waiting for your host to retake — the others already have this round’s shots, so a new round is what puts you in the strip.",
+    "stoppedOfflineGuestGroup": "You went offline, so the capture stopped. Your host can start again once everyone is back.",
+    "waitingForGroupGuest": "Waiting for more people — a group session needs at least three in the room.",
+    "waitingForFriendGuest": "Waiting for your friend to come back to the room."
+  },
+  "select": {
+    "title": "Arrange your strip",
+    "subtitle": "Reorder or retake your shots before building your strip.",
+    "subtitleGuest": "Your host is designing the strip — here's how yours will look.",
+    "dragHint": "Drag a photo to reorder it, or tap the retake icon to re-shoot it.",
+    "dragHintGuest": "Drag a photo to reorder it on your own strip.",
+    "slotAlt": "Strip slot {{index}}",
+    "stripAria": "Your photo strip",
+    "retakeShot": "Retake photo {{index}}",
+    "retakeWaiting": "Retakes are paused until your friend is back in the room.",
+    "retakeOffline": "Retakes are paused while you're offline.",
+    "retakeCreated": "Retakes are closed — your friend has already created their strip.",
+    "filterLabel": "Choose a filter",
+    "create": "Create strip",
+    "retake": "Retake all",
+    "confirmTitle": "Create your strip?",
+    "confirmDescription": "Once you create the strip you can't change the arrangement, filter, or retake — this is final. Continue with your current setup?",
+    "confirmCreate": "Yes, create it",
+    "confirmCancel": "Keep editing",
+    "stillLive": "Still live",
+    "stillLiveNote": "Keep talking while you design. Your shots are already taken.",
+    "stripLabel": "Your strip",
+    "createNote": "Creating is final — arrangement, filter and stickers lock.",
+    "tabFilter": "Filter",
+    "tabStickers": "Stickers",
+    "camerasLive": "Cameras still live — keep talking.",
+    "retakeWaitingGroup": "Retakes are paused until enough of you are back in the room.",
+    "retakeShortHanded": "Retakes are paused — this strip was shot with more people than are in the room now. They can rejoin with the same code.",
+    "retakeCreatedGroup": "Retakes are closed — someone has already created their strip.",
+    "retakeCastGrew": "Single retakes are paused — someone joined after this strip was shot. Retake all to start over with everyone."
+  },
+  "tips": {
+    "button": "Tips",
+    "open": "Show tips for this screen",
+    "eyebrow": "Quick tips",
+    "gotIt": "Got it",
+    "mute": "I've done this before, don't show the tips",
+    "lobby": {
+      "title": "Waiting for your friend",
+      "lead": "Nothing starts until they're here — use the wait to get set up.",
+      "items": {
+        "share": {
+          "title": "Send the code",
+          "text": "Tap the room code to copy it, then send it to your friend so they can join.",
+          "text_group": "Tap the room code to copy it, then send it to everyone you want in the booth."
+        },
+        "clock": {
+          "title": "The clock starts together",
+          "text": "Your session only begins once you're both in the room, so there's no rush right now.",
+          "title_group": "You start the clock",
+          "text_group": "The session begins when you press Start, not when people arrive — so there's no rush, and latecomers can still join after."
+        },
+        "camera": {
+          "title": "Get camera-ready",
+          "text": "Allow camera and microphone access now, and check your light, so you're set the moment they arrive.",
+          "text_group": "Allow camera and microphone access now, and check your light, so you're set the moment everyone's in."
+        }
+      },
+      "title_group": "Waiting for everyone",
+      "lead_group": "Nothing starts until you say so — use the wait to get set up."
+    },
+    "booth": {
+      "title": "You're in the booth",
+      "lead": "Set the strip up first, then start the session — four shots run back to back.",
+      "items": {
+        "template": {
+          "title": "Pick a template first",
+          "text": "It decides how your four cuts are framed, and the live preview reshapes to match it."
+        },
+        "preview": {
+          "title": "Watch the strip preview",
+          "text": "Your camera sits in the slot that's up next, so you can see the crop while there's still time to move."
+        },
+        "start": {
+          "title": "The host starts the session",
+          "title_solo": "Start when you're ready",
+          "text": "Both cameras fire on the same 3-2-1 count — four shots, one after another.",
+          "text_solo": "Press Start Session and the countdown takes over — four shots, one after another.",
+          "text_group": "Every camera fires on the same 3-2-1 count — four shots, one after another."
+        },
+        "pose": {
+          "title": "Hold your pose",
+          "text": "A short countdown runs before every shot. Change your pose between them, not during."
+        }
+      }
+    },
+    "arrange": {
+      "title": "Arranging your strip",
+      "lead": "This is the last stop before the strip is built — take your time here.",
+      "items": {
+        "reorder": {
+          "title": "Reorder your cuts",
+          "text": "Drag a photo into the slot you want it in."
+        },
+        "retake": {
+          "title": "Retake what you don't like",
+          "text": "Tap the retake icon on a single shot, or retake all four and run the session again."
+        },
+        "style": {
+          "title": "Filter and stickers",
+          "text": "A filter sets the look of the whole strip; stickers go on top, wherever you drop them."
+        },
+        "final": {
+          "title": "Creating is final",
+          "text": "Once you create the strip, the arrangement, filter and stickers lock — check it over first."
+        }
+      }
+    },
+    "result": {
+      "title": "Your strip is ready",
+      "lead": "Save it, share it, and keep talking — the room is open until time's up.",
+      "lead_solo": "Save it, share it, and take your time — the strip is yours to keep.",
+      "items": {
+        "download": {
+          "title": "Save or share it",
+          "text": "Download the PNG, or send it straight to another app from the share button."
+        },
+        "watermark": {
+          "title": "Want it without the watermark?",
+          "text": "The free copy carries a small watermark. A clean, print-ready one can be unlocked from your cart."
+        },
+        "guest": {
+          "title": "Signed out? It's kept here",
+          "text": "Your strip stays in this browser for now. Sign in and it moves to your cart."
+        },
+        "live": {
+          "title": "The room is still open",
+          "title_solo": "Time's up won't take it away",
+          "text": "Cameras stay live until the session ends, so you can keep talking while you share.",
+          "text_solo": "In a solo session your finished strip stays on screen — and downloadable — even after the clock runs out."
+        }
+      }
+    }
+  },
+  "filters": {
+    "none": "Original",
+    "bw": "B&W",
+    "sepia": "Sepia",
+    "vintage": "Vintage",
+    "warm": "Warm",
+    "cool": "Cool",
+    "vivid": "Vivid",
+    "fade": "Fade",
+    "noir": "Noir"
+  },
+  "stickers": {
+    "label": "Add stickers",
+    "tip": "Tap a sticker to add it, then drag to move, resize or rotate from the corner handles, or ✕ to remove.",
+    "remove": "Remove sticker",
+    "rotate": "Rotate sticker",
+    "heart": "Heart",
+    "star": "Star",
+    "sparkle": "Sparkle",
+    "crown": "Crown",
+    "flower": "Flower",
+    "rainbow": "Rainbow",
+    "bolt": "Lightning",
+    "speech": "Speech bubble",
+    "smiley": "Smiley",
+    "cloud": "Cloud",
+    "bunny": "Bunny",
+    "clip": "Clips",
+    "cuteRainbow": "Pink Rainbow",
+    "faceBear": "Bear Face",
+    "faceHeart": "Heart Face",
+    "flowers": "Flower",
+    "smileFlower": "Smiley Flower",
+    "heartColorful": "Heart Colorful",
+    "smiling": "Smiling",
+    "sun": "Sun",
+    "stars": "Stars",
+    "frog": "Frog",
+    "bunnyYellow": "Yellow Bunny",
+    "cat": "Cat",
+    "snail": "Snail",
+    "tipShort": "Tap to drop, drag to place, corner to resize."
+  },
+  "result": {
+    "composing": "Composing your strip…",
+    "saving": "Saving your strip…",
+    "composeError": "Could not compose the strip.",
+    "retake": "Retake",
+    "download": "Download PNG",
+    "choosePhotos": "Choose photos",
+    "stripAlt": "Your photo strip",
+    "savedToCart": "Saved to your cart",
+    "savedOnDevice": "Saved on this device",
+    "headline": "That's your strip.",
+    "leadSignedIn": "Share it anywhere — the free copy carries a small {{brand}} watermark. A clean, print-ready copy waits in your cart.",
+    "leadGuest": "Kept in this browser for now. Sign in and it moves to your cart, where a clean, print-ready copy can be unlocked.",
+    "stripMeta": "{{template}} · {{cuts}} cuts · watermarked",
+    "stillLiveNote": "Still in the room until time's up — keep talking while you share.",
+    "printTitle": "Want it without the watermark?",
+    "printText": "Unlock a clean copy from your cart to download and print.",
+    "saved": "Strip saved to your downloads",
+    "share": "More apps",
+    "shareSave": "Save image",
+    "shareTitle": "Share your strip",
+    "shareAlt": "Shareable photo strip card",
+    "shareTagline": "Snap, strip, share.",
+    "shareText": "Check out my photo strip! 📸",
+    "shareError": "Couldn't share the strip. Please try again.",
+    "shareInstagram": "Share to Instagram",
+    "instagramSaved": "Strip saved — now upload it to Instagram.",
+    "instagramHint": "We'll save the image and open Instagram — upload it there to post.",
+    "viewInCart": "View in cart",
+    "signInToSave": "Sign in to save",
+    "ratingTitle": "How was your session?",
+    "ratingText": "One tap tells us how the booth is doing — it shapes what we fix next.",
+    "ratingStar": "Rate {{count}} of 5",
+    "ratingNotePlaceholder": "Anything you’d like to add? (optional)",
+    "ratingSubmit": "Send rating",
+    "ratingSending": "Sending…",
+    "ratingThanksTitle": "Thanks for the rating!",
+    "ratingThanksText": "Something not working? The support button is in the bottom-right corner of every page.",
+    "ratingError": "Couldn’t send your rating. Please try again.",
+    "notSaved": "Not saved",
+    "retrySave": "Try again",
+    "downloadStrip": "Download"
+  },
+  "cart": {
+    "title": "Your cart",
+    "subtitle_one": "{{count}} strip saved.",
+    "subtitle_other": "{{count}} strips saved.",
+    "subtitleEmpty": "Your saved strips live here.",
+    "loading": "Loading your strips…",
+    "loadError": "Couldn't load your strips.",
+    "retry": "Try again",
+    "empty": "No strips yet. Create one in the photobooth and it'll show up here.",
+    "emptyCta": "Open the photobooth",
+    "clearAll": "Clear all",
+    "soloGroup": "Solo sessions",
+    "dateGroup": "Date sessions",
+    "unknownSession": "Saved strips",
+    "stripCount_one": "{{count}} strip",
+    "stripCount_other": "{{count}} strips",
+    "stripAlt": "Saved photo strip",
+    "remove": "Remove from cart",
+    "added": "Strip added to your cart",
+    "savedLocally": "Strip saved on this device — sign in to keep it in your cart.",
+    "fullGuest_one": "This device can hold {{count}} strip at a time. Sign in to move it to your cart and free up space.",
+    "fullGuest_other": "This device can hold {{count}} strips at a time. Sign in to move them to your cart and free up space.",
+    "full_one": "Your cart is full ({{count}} strip). This one wasn't added — download it now, or free up space in your cart.",
+    "full_other": "Your cart is full ({{count}} strips). This one wasn't added — download it now, or free up space in your cart.",
+    "remaining_one": "{{count}} slot left of {{max}}",
+    "remaining_other": "{{count}} slots left of {{max}}",
+    "remainingNone": "No slots left — delete a strip to make room for new ones.",
+    "slotsNone": "No slots left",
+    "pendingBanner_one": "{{count}} strip from before you signed in is waiting for space. Delete a strip and it'll be added automatically.",
+    "pendingBanner_other": "{{count}} strips from before you signed in are waiting for space. Delete a strip and they'll be added automatically.",
+    "fullBanner": "Your cart is full — {{max}} of {{max}} strips. Your newest strip wasn't saved. Remove one below to make room for it.",
+    "newStrip": "New strip",
+    "saveError": "Couldn't save the strip to your cart.",
+    "removeError": "Couldn't remove the strip.",
+    "select": "Select this strip",
+    "selectAll": "Select all",
+    "clearSelection": "Clear selection",
+    "selectedCount_one": "{{count}} strip selected",
+    "selectedCount_other": "{{count}} strips selected",
+    "checkout": "Checkout",
+    "checkoutNote": "Paid strips download clean, without the watermark.",
+    "deleteTitle": "Remove strip?",
+    "deleteDescription": "This removes the strip from your cart. This cannot be undone.",
+    "deleteConfirm": "Remove",
+    "deleteCancel": "Cancel",
+    "clearTitle": "Clear the whole cart?",
+    "clearDescription": "This removes every strip from your cart. This cannot be undone.",
+    "clearConfirm": "Clear all",
+    "tipTitle_one": "1 strip in your cart",
+    "tipTitle_other": "{{count}} strips in your cart",
+    "tipText": "Open your cart to download your strips.",
+    "tipCta": "Go to cart",
+    "tipDismiss": "Dismiss",
+    "galleryFull": "Your gallery is full. Remove one there to make room.",
+    "viewGallery": "View gallery",
+    "unlock": "Unlock",
+    "unlockBusy": "Unlocking…",
+    "unlocked": "Unlocked — it’s in your gallery.",
+    "unlockError": "Couldn’t unlock that strip.",
+    "newStripSolo": "New solo strip",
+    "newStripDate": "New date strip",
+    "slotsLeft_one": "{{count}} slot left",
+    "slotsLeft_other": "{{count}} slots left",
+    "groupGroup": "Group sessions",
+    "newStripGroup": "New group strip",
+    "printPending": "Preparing the printable copy…",
+    "printRefresh": "Refresh",
+    "printUnavailable": "No printable copy was saved, so this strip can't be unlocked.",
+    "printUnavailableToast": "That strip has no printable copy, so it can't be unlocked.",
+    "alreadyUnlocked": "That strip is already in your gallery.",
+    "stripGone": "That strip is no longer in your cart.",
+    "cleanError": "Couldn't prepare the printable copy, so the strip wasn't saved. Try again, or download it here to keep it.",
+    "paymentPending": "Payment in progress · {{total}}",
+    "resumePayment": "Resume",
+    "awaitingPayment": "Awaiting payment",
+    "clearDescriptionPaying_one": "This removes every strip from your cart except the one in your payment. This cannot be undone.",
+    "clearDescriptionPaying_other": "This removes every strip from your cart except the {{count}} in your payment. This cannot be undone.",
+    "clearKeptPaying_one": "Kept the strip your payment covers.",
+    "clearKeptPaying_other": "Kept the {{count}} strips your payment covers."
+  },
+  "gallery": {
+    "title": "Your gallery",
+    "subtitle_one": "{{count}} paid strip",
+    "subtitle_other": "{{count}} paid strips",
+    "subtitleEmpty": "Nothing purchased yet",
+    "loading": "Loading your gallery…",
+    "loadError": "Couldn't load your gallery.",
+    "retry": "Try again",
+    "filterMonth": "{{month}}",
+    "filterLabel": "Filter strips",
+    "jumpTo": "Jump to",
+    "jumpToMonth": "Jump to {{month}}",
+    "meter": "{{used}} of {{limit}} saved",
+    "meterFull": "Gallery full · {{used}} of {{limit}}",
+    "monthCount_one": "{{count}} strip",
+    "monthCount_other": "{{count}} strips",
+    "monthShown": "{{total}} · {{shown}} shown",
+    "showMore_one": "Show {{count}} more in {{month}}",
+    "showMore_other": "Show {{count}} more in {{month}}",
+    "download": "Download",
+    "downloadStrip": "Download this strip",
+    "badgeToday": "TODAY",
+    "stripAlt": "Photo strip from {{date}}",
+    "fullBanner": "Your gallery is full — {{used}} of {{limit}} paid strips. The strip waiting in your cart couldn’t be added.",
+    "notAdded": "Not added",
+    "notAddedReason": "Gallery full",
+    "emptyTitle": "No strips in your gallery",
+    "emptyText": "Strips land here once you've paid for them, grouped by the month you took them. Download one for the clean, watermark-free file. You can keep up to {{limit}} at a time.",
+    "emptyCta": "Open the photobooth",
+    "emptyCtaAlt": "Browse activities",
+    "downloadError": "Couldn't download that strip.",
+    "tileActions": "Show actions for this strip",
+    "filterEmptyTitle": "No {{mode}} strips yet",
+    "filterEmptyText": "Nothing in your gallery came from a {{mode}} session.",
+    "filterEmptyCta": "Show all {{count}}",
+    "filter_all": "All {{count}}",
+    "filter_solo": "Solo {{count}}",
+    "filter_date": "Date {{count}}",
+    "badge_solo": "SOLO",
+    "badge_date": "DATE",
+    "mode_solo": "Solo",
+    "mode_date": "Date",
+    "filter_group": "Group {{count}}",
+    "badge_group": "GROUP",
+    "mode_group": "Group"
+  },
+  "payment": {
+    "success": "Payment complete — your strip is unlocked!",
+    "failed": "Payment didn't go through. Please try again.",
+    "pending": "We'll unlock your strip once the payment confirms.",
+    "unavailable": "Payments are not available right now.",
+    "status": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "failed": "Failed",
+      "expired": "Expired",
+      "cancelled": "Cancelled"
+    }
+  },
+  "mediaControls": {
+    "cameraOn": "Camera on",
+    "cameraOff": "Camera off",
+    "turnCameraOff": "Turn camera off",
+    "turnCameraOn": "Turn camera on",
+    "micOn": "Mic on",
+    "micOff": "Mic off",
+    "muteMic": "Mute microphone",
+    "unmuteMic": "Unmute microphone"
+  },
+  "video": {
+    "cameraOff": "Camera off",
+    "you": "You",
+    "friend": "Friend",
+    "friendNumbered": "Friend {{index}}"
+  },
+  "camera": {
+    "requesting": "Requesting camera and microphone…",
+    "unavailable": "Camera unavailable"
+  },
+  "errors": {
+    "somethingWrong": "Something went wrong",
+    "unexpected": "An unexpected error occurred.",
+    "refresh": "Refresh page",
+    "backHome": "Back to home",
+    "api": {
+      "generic": "Something went wrong. Please try again.",
+      "register": "Could not create your account right now. Please try again.",
+      "login": "Could not sign you in right now. Please try again.",
+      "google": "Could not sign you in with Google right now. Please try again.",
+      "loadAccount": "Could not load your account right now. Please try again.",
+      "saveProfile": "Could not save your profile right now. Please try again.",
+      "createRoom": "Could not create a room right now. Please try again.",
+      "checkRoom": "Could not check that room right now. Please try again.",
+      "videoSetup": "Could not set up the video connection. Please try again.",
+      "setEmail": "We couldn't save that email address. Try again in a moment.",
+      "verifyEmail": "We couldn't confirm that link. Try again in a moment.",
+      "changePassword": "We couldn't change your password. Try again in a moment.",
+      "forgotPassword": "We couldn't send the reset link. Try again in a moment.",
+      "resetPassword": "We couldn't reset your password. Try again in a moment."
+    },
+    "offline": "You’re offline. Check your connection and try again."
+  },
+  "mediaError": {
+    "denied": {
+      "title": "Camera access blocked",
+      "message": "Allow camera and microphone access in your browser's site settings, then try again."
+    },
+    "not-found": {
+      "title": "No camera found",
+      "message": "Connect a webcam (and microphone) and try again."
+    },
+    "in-use": {
+      "title": "Camera unavailable",
+      "message": "Your camera may be in use by another app. Close it and try again."
+    },
+    "insecure": {
+      "title": "Insecure context",
+      "message": "Camera access requires HTTPS or localhost."
+    },
+    "unknown": {
+      "title": "Something went wrong",
+      "message": "We could not access your camera. Please try again."
+    }
+  },
+  "auth": {
+    "logout": "Log out",
+    "logoutServerError": "You've been signed out on this device, but we couldn't reach the server to end your session everywhere.",
+    "or": "or",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "fields": {
+      "username": "Username",
+      "email": "Email",
+      "password": "Password",
+      "displayName": "Display name",
+      "avatar": "Profile picture",
+      "identifier": "Username or email",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "location": "City",
+      "country": "Country",
+      "cityAbroad": "City (optional)",
+      "province": "Province",
+      "regency": "City or regency"
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to pick an activity.",
+      "panelTagline": "Playful date experiences for long-distance relationships.",
+      "submit": "Log in",
+      "submitting": "Logging in…",
+      "noAccount": "New here?",
+      "registerLink": "Create an account",
+      "forgotPassword": "Forgot password?"
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Sign up to start making moments together.",
+      "submit": "Sign up",
+      "submitting": "Creating…",
+      "consent": "By signing up, you agree to our <terms>Terms & Conditions</terms> and <privacy>Privacy Policy</privacy>.",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Log in"
+    },
+    "profile": {
+      "title": "Profile",
+      "menuLabel": "Account menu",
+      "detailsTitle": "Your details",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "saved": "Profile updated.",
+      "signedInAs": "Signed in as @{{username}}",
+      "avatarChoose": "Upload picture",
+      "avatarUploading": "Uploading…",
+      "avatarRemove": "Remove",
+      "avatarHint": "Up to 15 MB. PNG, JPEG, WebP, GIF or AVIF — you choose the crop next.",
+      "avatarUpdated": "Profile picture updated.",
+      "avatarRemoved": "Profile picture removed.",
+      "deleteHint": "Permanently delete your account and all its data — strips, prints and the partner link.",
+      "deleteAccount": "Delete account",
+      "detailsHint": "Your name, picture and city.",
+      "tabsLabel": "Profile sections",
+      "tabs": {
+        "account": "Account",
+        "partner": "Partner",
+        "purchases": "Purchases"
+      },
+      "hero": {
+        "noPartner": "No partner yet",
+        "haveCode": "Have a code?"
+      },
+      "stats": {
+        "strips": "Strips in gallery",
+        "stripsShort": "Strips",
+        "date": "Date strips",
+        "dateShort": "Date",
+        "months_one": "{{count}} month",
+        "months_other": "{{count}} months",
+        "thisMonth": "This month",
+        "since": "Since {{date}}",
+        "activeShort": "Active"
+      },
+      "securityTitle": "Sign-in & security",
+      "security": {
+        "emailNone": "Not set",
+        "signInLabel": "Sign-in method",
+        "signInPassword": "Username and password",
+        "signInGoogle": "Google",
+        "signInBoth": "Username and password · Google",
+        "signInNone": "No sign-in method set",
+        "deviceLabel": "This device"
+      },
+      "purchases": {
+        "title": "Purchases",
+        "subtitle": "Your five most recent orders.",
+        "spent": "Total spent",
+        "unlocked": "Prints unlocked",
+        "stripCount_one": "{{count}} strip",
+        "stripCount_other": "{{count}} strips",
+        "perStrip": "{{price}} per strip",
+        "colStrips": "Strips",
+        "colOrder": "Order",
+        "colDate": "Date",
+        "colAmount": "Amount",
+        "orderLine_one": "{{count}} strip · print",
+        "orderLine_other": "{{count}} strips · print",
+        "emptyTitle": "No purchases yet",
+        "emptyBody": "Paying for a strip unlocks the clean, watermark-free copy and moves it into your gallery. Orders show up here once you do.",
+        "openCart": "Open your cart",
+        "loadError": "Couldn't load your orders. Please try again."
+      },
+      "cropTitle": "Position your picture",
+      "cropHint": "Drag to move, and use the slider to zoom. The circle shows how it will appear.",
+      "cropCanvasLabel": "Crop area — drag or use the arrow keys to move the picture",
+      "cropZoomLabel": "Zoom",
+      "cropSave": "Save picture",
+      "locationLoading": "Loading cities…",
+      "locationLoadError": "Couldn't load the city list.",
+      "locationRetry": "Try again",
+      "outsideIndonesia": "Outside Indonesia",
+      "locationClear": "Clear city",
+      "countryPlaceholder": "Choose a country",
+      "provincePlaceholder": "Choose a province",
+      "regencyPlaceholder": "Choose a city or regency",
+      "regencyWaiting": "Choose a province first"
+    },
+    "partner": {
+      "title": "Your partner",
+      "none": "Link with your partner to share moments as a couple.",
+      "linkedWith": "Linked with {{name}}",
+      "unlink": "Unlink",
+      "unlinked": "Partner unlinked.",
+      "inviteTitle": "Invite your partner",
+      "generate": "Generate invite code",
+      "codeHint": "Share this code with your partner. It expires in 24 hours.",
+      "acceptTitle": "Have an invite code?",
+      "codePlaceholder": "Enter partner code",
+      "accept": "Link partner",
+      "linked": "You're now linked!",
+      "linkedHint": "Your strips are shared as a couple and Date sessions are unlocked.",
+      "unlinkHint": "Unlinking stops sharing new strips. Nothing already saved is deleted.",
+      "generating": "Generating…",
+      "generateHint": "We make a code you can send to your partner. It expires 24 hours after you generate it.",
+      "acceptHint": "Linking shares your strips as a couple and unlocks Date sessions.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Couldn't copy — select the code and copy it yourself."
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "invalid_credentials": "That username or password is incorrect.",
+      "registration_closed": "Momoto is in closed beta — new accounts are not open yet.",
+      "email_taken": "An account with that email already exists.",
+      "invalid_input": "Please check the details and try again.",
+      "google_not_configured": "Google sign-in isn't available right now.",
+      "invalid_google_token": "Could not verify your Google sign-in. Please try again.",
+      "too_many_requests": "Too many attempts. Please wait a moment and try again.",
+      "passwordTooShort": "Password must be at least 8 characters.",
+      "emailRequired": "Please enter your email.",
+      "emailInvalid": "Please enter a valid email address.",
+      "passwordRequired": "Please enter your password.",
+      "displayNameRequired": "Please enter a display name.",
+      "displayNameInvalid": "Display name can only contain letters and spaces.",
+      "invite_invalid": "That invite code is invalid or has expired.",
+      "invite_self": "You can't link with yourself.",
+      "already_linked": "You're already linked with a partner.",
+      "partner_linked": "That person is already linked with someone else.",
+      "usernameRequired": "Please enter a username.",
+      "usernameInvalid": "Username can only contain letters and numbers.",
+      "usernameTooShort": "Username must be at least 3 characters.",
+      "usernameTooLong": "Username must be at most 20 characters.",
+      "username_taken": "That username is already taken.",
+      "avatar": {
+        "tooLarge": "That image is too large. Pick one under 15 MB.",
+        "notAnImage": "That file couldn't be read as an image.",
+        "encodeFailed": "That image couldn't be processed. Try a different one."
+      },
+      "emailTooLong": "That email address is too long.",
+      "passwordMismatch": "Those passwords don't match.",
+      "identifierRequired": "Enter your username or email.",
+      "invalid_password": "That password isn't right.",
+      "nothing_pending": "There is no address waiting to be confirmed.",
+      "invalid_token": "That link is no longer valid.",
+      "unsupported_image": "That image format isn't supported. Use PNG, JPEG or WebP.",
+      "image_not_square": "A profile picture has to be square. Try another image.",
+      "image_too_large": "That image is too big. The longest side must be 1024 pixels or less.",
+      "storage_unavailable": "Couldn't save that picture right now. Please try again in a moment.",
+      "email_unverified": "Confirm your email address before changing your password.",
+      "cityInvalid": "City can only contain letters, spaces, dots, apostrophes and hyphens.",
+      "cityTooLong": "City must be 60 characters or fewer.",
+      "countryRequired": "Please choose a country.",
+      "regionRequired": "Please choose a city or regency."
+    },
+    "logoutConfirm": {
+      "title": "Log out?",
+      "description": "You'll need to log in again to use activities.",
+      "descriptionRoom": "You're in a live session. Logging out will leave it.",
+      "confirm": "Log out",
+      "cancel": "Cancel"
+    },
+    "deleteConfirm": {
+      "title": "Delete your account?",
+      "passwordLabel": "Enter your password to confirm",
+      "confirm": "Delete account",
+      "deleting": "Deleting…",
+      "cancel": "Cancel",
+      "done": "Your account has been deleted.",
+      "wrongPassword": "That password is incorrect.",
+      "error": "Couldn't delete your account. Please try again.",
+      "description_one": "This removes your account and the {{count}} paid strip in your gallery. It cannot be undone.",
+      "description_other": "This removes your account and all {{count}} paid strips in your gallery. It cannot be undone.",
+      "descriptionLinked_one": "This removes the {{count}} paid strip in your gallery and the link with {{name}}. It cannot be undone.",
+      "descriptionLinked_other": "This removes all {{count}} paid strips in your gallery and the link with {{name}}. It cannot be undone.",
+      "word": "DELETE",
+      "wordLabel": "Type {{word}} to confirm"
+    },
+    "forgot": {
+      "title": "Forgot your password?",
+      "subtitle": "Tell us who you are and we'll email you a link to set a new one.",
+      "submit": "Send the link",
+      "submitting": "Sending…",
+      "sentTitle": "Check your inbox",
+      "sentBody": "If that account has a confirmed email address, a reset link is on its way. It's good for 30 minutes.",
+      "backToLogin": "Back to sign in",
+      "rememberIt": "Remembered it? <login>Sign in</login>",
+      "resend": "Send it again",
+      "resendIn": "Send again in {{seconds}}s",
+      "sentAgain": "Another link is on its way."
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "subtitle": "Pick something you haven’t used here before.",
+      "checking": "Checking your link…",
+      "submit": "Save new password",
+      "submitting": "Saving…",
+      "done": "Your password is set. Sign in with it below.",
+      "expiredTitle": "That link has expired",
+      "expiredBody": "Reset links last 30 minutes and can only be used once. Ask for a fresh one and it will be waiting in your inbox.",
+      "requestAnother": "Send me a new link"
+    },
+    "verifyEmail": {
+      "checking": "Confirming your email…",
+      "doneTitle": "Email confirmed",
+      "doneBody": "This address is now on your account. If you ever forget your password, this is how you get back in.",
+      "failedTitle": "That link didn’t work",
+      "failedBody": "Confirmation links last 24 hours and can only be used once. Open Profile and send yourself a fresh one.",
+      "takenTitle": "That address is already taken",
+      "takenBody": "Another account has already confirmed this email. Use a different address, or sign in to the account that owns it.",
+      "toProfile": "Go to Profile",
+      "toLogin": "Sign in"
+    },
+    "email": {
+      "add": "Add email",
+      "change": "Change",
+      "send": "Send confirmation",
+      "resend": "Resend",
+      "sent": "Confirmation sent to {{email}}.",
+      "pendingHint": "Waiting for you to open the link we sent. Nothing changes on your account until you do.",
+      "noneHint": "Without an email address there is no way to recover this account if you forget your password.",
+      "banner": {
+        "noneTitle": "Add an email address.",
+        "noneBody": "Without one there's no way to get back into your account if you forget your password.",
+        "addEmail": "Add email",
+        "pendingTitle": "Confirm your email.",
+        "pendingBody": "{{email}} isn't confirmed yet. Until you open the link, you can't reset your own password.",
+        "openProfile": "Open Profile",
+        "resend": "Resend",
+        "sent": "Confirmation link sent.",
+        "send": "Send link"
+      },
+      "confirm": "Send link",
+      "unconfirmedHint": "Not confirmed yet. Send yourself the link and open it — that's what lets you reset your own password.",
+      "resendIn": "Resend in {{seconds}}s"
+    },
+    "password": {
+      "changeTitle": "Password",
+      "change": "Change password",
+      "set": "Set password",
+      "changed": "Password updated",
+      "rowSet": "Set",
+      "rowNone": "No password on this account",
+      "otherDevicesOut": "Every other device was signed out.",
+      "needsVerifiedEmail": "Confirm your email first — without one, a forgotten password can’t be reset."
+    }
+  },
+  "network": {
+    "offlineTitle": "You’re offline",
+    "offlineBody": "No connection right now — we’ll reconnect on our own. Anything you’ve already shot is safe.",
+    "offlinePage": "This device isn’t connected to the internet. Check your wifi or mobile data — this page comes back by itself the moment you’re online.",
+    "serverTitle": "Momoto is having trouble",
+    "serverBody": "Our server isn’t responding properly — this one’s on us. Anything you’ve already shot is safe.",
+    "unknownTitle": "Trouble connecting",
+    "unknownBody": "We can’t reach Momoto. It could be our server or your connection — either way, anything you’ve already shot is safe.",
+    "retry": "Retry",
+    "checking": "Checking…",
+    "restored": "Back online",
+    "slowTitle": "Slow connection",
+    "slowBody": "Things may take a while to load or save. Nothing you've shot is at risk — this clears itself when the connection picks up."
+  },
+  "serverDown": {
+    "title": "Momoto is having trouble",
+    "message": "Our server isn’t responding right now. This one’s on us — hang tight and try again in a moment.",
+    "unknownTitle": "Can’t reach Momoto",
+    "unknownMessage": "Nothing is getting through at the moment. It could be our server, or something between you and it — worth checking your connection before you try again.",
+    "retry": "Try again",
+    "retrying": "Checking…",
+    "backHome": "Back to home"
+  },
+  "notFound": {
+    "code": "Error 404",
+    "title": "This page doesn’t exist",
+    "message": "The link may be broken, or the page may have moved. Let’s get you back to something that works.",
+    "backHome": "Back to home",
+    "browseActivities": "Browse activities"
+  },
+  "beta": {
+    "badge": "Closed beta",
+    "message": "Momoto is testing with a small group of invited couples. If you were invited, sign in with the details we sent you — new sign-ups aren't open yet."
+  },
+  "checkout": {
+    "title": "Checkout",
+    "summary_one": "{{count}} strip · {{total}}",
+    "summary_other": "{{count}} strips · {{total}}",
+    "method": {
+      "gopay": "GoPay",
+      "shopeepay": "ShopeePay",
+      "qris": "QRIS"
+    },
+    "charging": "Opening your payment…",
+    "scan": "Scan this with your payment app.",
+    "qrAlt": "Payment QR code",
+    "openApp": "Open payment app",
+    "waiting": "Waiting for payment…",
+    "expiresIn": "Expires in {{countdown}}",
+    "expired": "This payment expired. Start a new one when you’re ready.",
+    "resumed": "You have a payment in progress.",
+    "saveQr": "Save QR",
+    "qrSaveError": "Couldn't save that QR code."
+  }
+}

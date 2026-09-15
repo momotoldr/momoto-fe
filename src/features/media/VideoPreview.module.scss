@@ -1,0 +1,30 @@
+.video {
+  @apply h-full w-full -scale-x-100 object-cover;
+}
+
+.offOverlay {
+  @apply absolute inset-0 flex flex-col items-center justify-center gap-2 bg-muted text-muted-foreground;
+}
+
+.offIcon {
+  @apply h-8 w-8;
+}
+
+/* Whose face this is — a soft pill in the corner, readable over any frame. */
+.name {
+  @apply absolute bottom-3 left-3 z-10 rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium;
+}
+
+/* Mic state as a quiet dot in the opposite corner, so it never competes with the
+ * name pill or the countdown. */
+.micBadge {
+  @apply absolute right-3 top-3 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-background/90;
+
+  svg {
+    @apply h-3.5 w-3.5;
+  }
+}
+
+.micBadgeOff {
+  @apply text-destructive;
+}

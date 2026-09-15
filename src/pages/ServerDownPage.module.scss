@@ -1,0 +1,27 @@
+.page {
+  @apply mx-auto flex min-h-[70vh] max-w-md flex-col items-center justify-center gap-6 px-4 text-center;
+}
+
+.icon {
+  @apply flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10 text-destructive;
+}
+
+.text {
+  @apply space-y-2;
+}
+
+.title {
+  @apply text-2xl font-bold tracking-tight;
+}
+
+.message {
+  @apply text-sm text-muted-foreground;
+}
+
+.actions {
+  @apply flex flex-col items-center gap-3;
+}
+
+.hint {
+  @apply text-xs text-muted-foreground;
+}

@@ -1,0 +1,186 @@
+.stage {
+  @apply flex w-full flex-col items-center gap-4;
+}
+
+/* ── Booth body ──────────────────────────────────────────────────────────────
+ * Phones get a plain stack, in markup order: headline, cameras, pickers, strip.
+ * From lg the room becomes the three-column workspace from the design: the faces
+ * take the width, the strip stands beside them, and the settings retreat to a rail.
+ * Because those three are placed by grid area, the markup order that suits the phone
+ * doesn't disturb them. Strip and rail start on the video row rather than the
+ * headline row, so their tops line up with the tiles. */
+.booth {
+  @apply flex w-full flex-col gap-5 pb-28 lg:pb-0;
+
+  // Plain media query (not @screen) so the sass compiler doesn't have to know
+  // about Tailwind's directives. Matches the `lg` breakpoint.
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 7.5rem 18.75rem;
+    grid-template-areas:
+      'head  .     .'
+      'stage strip rail';
+    align-items: start;
+    gap: 1.25rem 1.75rem;
+  }
+}
+
+.stageHead {
+  @apply flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between lg:gap-6;
+  grid-area: head;
+}
+
+.headline {
+  @apply text-[2.125rem] font-extrabold leading-[1.08] tracking-[-0.015em] lg:text-[2.875rem] lg:leading-[1.05];
+}
+
+/* A margin note, not a subtitle — desktop only, where there's room beside the
+ * headline for it. */
+.headlineNote {
+  @apply hidden max-w-[14.375rem] pb-1.5 text-[0.8125rem] leading-[1.55] text-muted-foreground lg:block;
+  text-wrap: pretty;
+}
+
+/* Tiles and their toggles share one grid row. Splitting them across two rows let a
+ * tall rail (which spans both) stretch the gap between them. */
+.stageBody {
+  @apply flex w-full flex-col gap-5;
+  grid-area: stage;
+}
+
+.videos {
+  // Columns come from the cut's own grid (inline `grid-template-columns`, see
+  // CameraStage) so the stage mirrors the frame being taken. No solo width cap for a
+  // landscape cut: a lone tile owns the whole slot, so letting it fill the stage column
+  // keeps it about as tall as a paired pair. A portrait cut caps its height instead
+  // (inline `max-width`), and `mx-auto` centres what's left of the column — a no-op
+  // while nothing caps it.
+  @apply mx-auto grid w-full gap-4;
+}
+
+.videosMulti {
+  // Sharing the stage between two or more cameras narrows each tile enough to sit
+  // side-by-side even on phones, and together they earn its full width.
+  @apply max-w-none gap-2.5 lg:gap-4;
+}
+
+.tile {
+  // `aspect-ratio` is set inline from the chosen template's slot (see CameraStage),
+  // so the tile shows exactly the crop that lands in the strip.
+  @apply relative w-full overflow-hidden rounded-3xl bg-muted lg:rounded-[2rem];
+}
+
+.stageControls {
+  @apply hidden items-center gap-3 lg:flex;
+}
+
+.liveNote {
+  @apply ml-1 text-[0.78125rem] text-muted-foreground;
+}
+
+/* The strip preview stands beside the stage on desktop and sits centred at the foot
+ * of the stack on a phone, under the pickers that decide what it shows — vertical
+ * either way, since it is a preview of the paper. */
+.stripColumn {
+  @apply flex w-full justify-center lg:block;
+  grid-area: strip;
+}
+
+.rail {
+  @apply flex w-full flex-col gap-5;
+  grid-area: rail;
+}
+
+.startBlock {
+  @apply hidden flex-col gap-2.5 lg:flex;
+}
+
+/* Doubled selector: beats the size utilities <Button> sets from its variants. */
+.startButton.startButton {
+  @apply h-[3.25rem] w-full text-base lg:h-14;
+}
+
+/* Sits inside the Start button while a press is waiting on the server's count. */
+.startSpinner {
+  @apply h-4 w-4 animate-spin;
+}
+
+.startNote {
+  @apply text-center text-xs text-muted-foreground;
+}
+
+/* Phone action bar — pinned to the bottom of the viewport, over the page. */
+.actionBar {
+  @apply fixed inset-x-0 bottom-0 z-40 flex flex-col gap-2.5 border-t bg-background/95 px-5 pb-[max(1.125rem,env(safe-area-inset-bottom))] pt-3.5 backdrop-blur lg:hidden;
+}
+
+/* ── Arrange body ────────────────────────────────────────────────────────────
+ * The cameras shrink to a rail so the strip can become the workspace. On a phone
+ * that rail flattens into a single line of chrome above the strip. */
+.arrange {
+  @apply flex w-full flex-col gap-5 lg:flex-row lg:items-start lg:gap-7;
+}
+
+.arrangeCamera {
+  @apply flex w-full flex-row items-center gap-2.5;
+  @apply lg:sticky lg:top-4 lg:w-[13.25rem] lg:shrink-0 lg:flex-col lg:items-stretch lg:gap-3;
+}
+
+.railLabel {
+  @apply hidden font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground lg:block;
+}
+
+.arrangeVideos {
+  @apply flex flex-row gap-1.5 lg:w-full lg:flex-col lg:gap-3;
+}
+
+/* Three or four cameras won't stack down a 13.25rem rail without pushing the strip off
+ * the screen, so from three they wrap into a two-up grid. The phone layout is already a
+ * scrolling row and is left alone. */
+.arrangeVideosWrap {
+  @apply lg:grid lg:grid-cols-2 lg:gap-2;
+}
+
+.tileSmall {
+  // Aspect set inline, same as .tile.
+  @apply relative w-8 shrink-0 overflow-hidden rounded-lg bg-muted;
+  @apply lg:w-full lg:rounded-3xl;
+}
+
+/* Phone-only: explains the two thumbnails still sitting there. */
+.arrangeInlineNote {
+  @apply flex-1 text-xs text-muted-foreground lg:hidden;
+}
+
+.arrangeNote {
+  @apply hidden text-xs leading-[1.5] text-muted-foreground lg:block;
+  text-wrap: pretty;
+}
+
+.arrangePanel {
+  @apply flex w-full min-w-0 flex-1;
+}
+
+.status {
+  @apply flex min-h-[300px] w-full max-w-2xl flex-col items-center justify-center gap-3 rounded-3xl border bg-muted/40 p-8 text-center;
+}
+
+.spinner {
+  @apply h-8 w-8 animate-spin text-muted-foreground;
+}
+
+.statusIcon {
+  @apply h-10 w-10 text-muted-foreground;
+}
+
+.statusTitle {
+  @apply text-lg font-semibold;
+}
+
+.statusMessage {
+  @apply max-w-sm text-sm text-muted-foreground;
+}
+
+.hiddenCanvas {
+  @apply hidden;
+}

@@ -1,0 +1,177 @@
+/* One strip in the contact sheet.
+ *
+ * The tile is the image and nothing else — its Download sits on top, revealed on hover,
+ * and the caption underneath is two small tokens rather than a card body. That is what
+ * lets a month section hold two dozen strips at their real 1:3 shape instead of four
+ * padded cards.
+ *
+ * Download is the only action: a gallery strip has been paid for, and nothing on this
+ * page destroys something the user bought. So the tile's only states are "resting" and
+ * "showing its action". */
+
+.tile {
+  @apply flex flex-col gap-1.5 sm:gap-[0.4375rem];
+}
+
+/* 1:3 is the classic strip's proportion and the fallback here; a strip that reports its
+ * own size overrides `aspect-ratio` inline (a grid template is 2:3). `overflow-hidden`
+ * keeps the overlay's gradient inside the rounded corner. */
+.frame {
+  @apply relative aspect-[1/3] overflow-hidden rounded-[0.4375rem] border bg-muted/40 sm:rounded-lg;
+}
+
+.image {
+  @apply h-full w-full object-cover;
+}
+
+/* Touch's stand-in for hover: a full-bleed target that reveals this tile's actions, so a
+ * finger never has to find a small control. Removed entirely where the pointer can hover
+ * — there, hovering already does it, and a click that pinned the overlay would just have
+ * to be un-pinned. */
+.revealSurface {
+  @apply absolute inset-0 z-10 cursor-pointer;
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-1 ring-offset-background;
+  }
+}
+
+@media (hover: hover) {
+  .revealSurface {
+    @apply hidden;
+  }
+}
+
+/* The tile's action, over a gradient that keeps it legible against any strip. Revealed on
+ * hover, when focus lands inside — a keyboard user gets the button without a pointer — or,
+ * on touch, when the tile has been tapped.
+ *
+ * The container stays `pointer-events-none` and only the buttons take pointer events
+ * back: it covers the whole tile, so a clickable container would swallow the taps meant
+ * for the reveal surface underneath. */
+.actions {
+  @apply pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-end gap-1.5 p-2 opacity-0 transition-opacity;
+
+  background: linear-gradient(to top, rgb(15 23 42 / 0.72) 0 40%, rgb(15 23 42 / 0));
+}
+
+.frame:hover .actions,
+.actions:focus-within {
+  @apply opacity-100;
+}
+
+/* Touch reveals one tile at a time. Showing every overlay permanently instead would put
+ * a dark gradient over every image in a four-up grid — burying the very thing the page
+ * exists to show. */
+@media (hover: none) {
+  .frame[data-active] .actions {
+    @apply opacity-100;
+  }
+}
+
+.actionPrimary {
+  @apply pointer-events-auto flex h-7 w-7 items-center justify-center rounded-full bg-background text-foreground transition-transform;
+
+  svg {
+    @apply h-[0.8125rem] w-[0.8125rem];
+  }
+
+  &:hover:not(:disabled) {
+    @apply scale-105;
+  }
+
+  &:disabled {
+    @apply cursor-not-allowed opacity-60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-background ring-offset-1 ring-offset-transparent;
+  }
+}
+
+.actionSpinner {
+  @apply animate-spin;
+}
+
+/* On touch the button grows to a real finger target.
+ *
+ * At 28px it is comfortable under a cursor and far too small under a thumb, and on touch
+ * it is the only way to act on a strip. A 44px circle still fits the ~78px tile of a
+ * four-up grid at 375px.
+ *
+ * This block has to sit *below* the base rules it overrides: a media query adds no
+ * specificity, so `.actionPrimary` here and `.actionPrimary` above tie, and source order
+ * is what decides. */
+@media (hover: none) {
+  .actionPrimary {
+    @apply h-11 w-11;
+
+    svg {
+      @apply h-[1.0625rem] w-[1.0625rem];
+    }
+  }
+}
+
+/* ── Caption ─────────────────────────────────────────────────────────────── */
+
+.meta {
+  @apply flex items-center gap-[0.3125rem] sm:gap-1.5;
+}
+
+.badge {
+  @apply shrink-0 rounded-full px-[0.3125rem] py-px font-mono text-[0.53125rem] font-bold tracking-[0.1em] sm:px-1.5 sm:py-[0.09375rem] sm:text-[0.5625rem];
+}
+
+.badgeSolo {
+  @apply bg-muted text-muted-foreground;
+}
+
+/* Date sessions carry the destructive hue as an accent, the same way the cart tints a
+ * date well — it is the app's "two people were here" colour, not a warning. */
+.badgeDate {
+  @apply bg-destructive/10 text-destructive;
+}
+
+/* Group gets its own cool accent so a shelf of mixed strips is readable at a glance —
+ * the same blue the Group card on the photobooth entry uses. */
+.badgeGroup {
+  @apply bg-[#eef2ff] text-[#4457b4];
+}
+
+.date {
+  @apply min-w-0 font-mono text-[0.65625rem] tracking-[0.04em] text-muted-foreground sm:text-[0.6875rem] sm:tracking-[0.06em];
+}
+
+/* The phone grid is four columns wide, where "26 AUG" no longer fits beside the badge —
+ * the month is already the section heading above, so the day alone carries it. */
+.dateFull {
+  @apply hidden whitespace-nowrap sm:inline;
+}
+
+.dateDay {
+  @apply inline sm:hidden;
+}
+
+/* ── Locked placeholder ──────────────────────────────────────────────────── */
+
+/* A strip-shaped hole where the one that didn't fit would be: same footprint, dashed and
+ * empty, so the grid reads as "there is a gap here" rather than "one is missing". */
+.lockedFrame {
+  @apply flex aspect-[1/3] flex-col items-center justify-center gap-2 rounded-[0.4375rem] border-[1.5px] border-dashed border-destructive/35 bg-destructive/[0.025] p-2.5 sm:rounded-lg;
+}
+
+.lockedIcon {
+  @apply flex h-[1.875rem] w-[1.875rem] items-center justify-center rounded-full bg-background text-destructive;
+
+  svg {
+    @apply h-[0.9375rem] w-[0.9375rem];
+  }
+}
+
+.lockedTitle {
+  @apply text-center text-[0.71875rem] font-semibold leading-tight;
+}
+
+.lockedReason {
+  @apply text-center text-[0.65625rem] leading-[1.4] text-muted-foreground;
+}

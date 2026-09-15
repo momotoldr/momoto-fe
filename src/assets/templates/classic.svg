@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1800" viewBox="0 0 600 1800">
+  <rect width="600" height="1800" fill="#fffdf9"/>
+  <!-- Charcoal frames sit 8px proud of each photo slot, so an even border shows
+       around the (opaque) photos drawn on top. -->
+  <g fill="#2b2b2b">
+    <rect x="32" y="32" width="536" height="388" rx="10"/>
+    <rect x="32" y="428" width="536" height="388" rx="10"/>
+    <rect x="32" y="824" width="536" height="388" rx="10"/>
+    <rect x="32" y="1220" width="536" height="388" rx="10"/>
+  </g>
+  <!-- Footer band separator; the date is drawn here by composeStrip. -->
+  <rect x="40" y="1648" width="520" height="2" fill="#e6e0d6"/>
+</svg>

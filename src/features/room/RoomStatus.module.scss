@@ -1,0 +1,21 @@
+/* Pill sized to sit inline in the room top bar, next to the room code. */
+.pill {
+  @apply inline-flex shrink-0 items-center gap-2 rounded-full bg-muted py-1 pl-2.5 pr-3 text-xs font-semibold text-muted-foreground;
+}
+
+/* Friend is in — the one state worth colouring. */
+.pillActive {
+  @apply bg-emerald-100 text-emerald-700;
+}
+
+.dot {
+  @apply h-1.5 w-1.5 rounded-full bg-emerald-500;
+}
+
+.icon {
+  @apply h-3.5 w-3.5;
+}
+
+.spinner {
+  @apply h-3.5 w-3.5 animate-spin;
+}

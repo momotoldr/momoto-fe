@@ -1,0 +1,70 @@
+/* Three platform counters, sitting directly on the page rather than in a card — the
+ * pinboard already has enough taped paper on it, so the band is just a coloured dash,
+ * a big Chivo number and a mono caption.
+ *
+ * Desktop stacks each cell (dash, number, caption) in a centred column; the phone
+ * turns them into a ruled list, caption left and number right, which keeps the digits
+ * legible instead of shrinking three columns onto a 390px screen. */
+
+.stats {
+  @apply flex w-full flex-col items-center;
+}
+
+/* The heading is there for the section's accessible name; the numbers carry it
+ * visually. */
+.srOnly {
+  @apply sr-only;
+}
+
+.row {
+  @apply m-0 flex w-full flex-col border-t border-slate-200;
+  @apply lg:grid lg:grid-cols-3 lg:gap-11 lg:border-t-0 lg:py-1;
+}
+
+.cell {
+  @apply flex items-center justify-between gap-4 border-b border-slate-200 py-4;
+  @apply lg:flex-col lg:items-center lg:gap-2.5 lg:border-b-0 lg:py-0 lg:text-center;
+}
+
+/* Leads the row on the phone; on desktop it sits above the number, which `.value`
+ * pulls ahead of the caption the `dl` requires to come first. */
+.dash {
+  @apply h-1 w-[1.375rem] flex-shrink-0 lg:order-[-2] lg:w-11;
+}
+
+.dashPink {
+  background: #f7b6cd;
+}
+
+.dashMint {
+  background: #a9dfc4;
+}
+
+.dashBlue {
+  background: #bcd0e6;
+}
+
+/* On the phone the dash and its caption read as one label on the left, so the caption
+ * sits next to the dash and the number is pushed to the far edge. On desktop the
+ * number lifts above the caption instead. */
+.label {
+  @apply mr-auto inline-flex items-center gap-[0.4375rem] font-mono text-[0.65625rem] uppercase text-slate-500;
+  @apply lg:mr-0 lg:text-[0.6875rem];
+
+  letter-spacing: 0.16em;
+}
+
+.liveDot {
+  @apply h-1.5 w-1.5 flex-shrink-0 rounded-full lg:h-[0.4375rem] lg:w-[0.4375rem];
+  background: #fb7185;
+}
+
+.value {
+  @apply m-0 font-display text-[1.875rem] font-black leading-none text-slate-900 lg:order-[-1] lg:text-[3.25rem];
+
+  letter-spacing: -0.04em;
+
+  @screen lg {
+    letter-spacing: -0.045em;
+  }
+}

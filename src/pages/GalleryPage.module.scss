@@ -1,0 +1,171 @@
+/* Gallery — "a contact sheet by month, with a way to jump" (redesign import).
+ *
+ * The page is a bare column with the header, toolbar and sheet centred inside it. Two
+ * structural moves carry the redesign: strips sit in a dense grid at their true 1:3 shape
+ * with their actions on the tile, and the left spine turns the months into a jump list.
+ * Solo/Date stop being the grouping and become a filter plus a small marker.
+ *
+ * Each strip is downloaded or removed on its own — there is no multi-select and no
+ * selection bar, so the sheet runs to the bottom of the page.
+ *
+ * The sheet's own padding is asymmetric on desktop (`pl` from the spine's border, `pr`
+ * to the page edge) so the grid optically centres against the rail. */
+
+.page {
+  @apply flex w-full flex-col;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.head {
+  @apply mx-auto flex w-full max-w-[80rem] flex-col gap-1.5 px-4 pb-[1.125rem] pt-6 sm:gap-2.5 sm:px-14 sm:pb-5 sm:pt-11;
+}
+
+/* With nothing below it but the empty state, the header needs its own closing rule. */
+.headEmpty {
+  @apply border-b pb-6 sm:pb-7;
+}
+
+.title {
+  @apply text-[1.875rem] font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-[2.75rem] sm:leading-[1.02];
+}
+
+.subtitle {
+  @apply text-[0.84375rem] text-muted-foreground sm:text-[0.96875rem];
+}
+
+/* ── Toolbar: filters + capacity meter ───────────────────────────────────── */
+
+.toolbar {
+  @apply mx-auto flex w-full max-w-[80rem] flex-col gap-4 border-b px-4 pb-[1.125rem] sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-14 sm:pb-7;
+}
+
+/* A scroll rail on a phone — the pills would otherwise wrap to two lines at 390px. The
+ * scrollbar is hidden because the row is short enough to read as swipeable. */
+.filters {
+  @apply -mx-4 flex items-center gap-[0.4375rem] overflow-x-auto px-4 sm:mx-0 sm:gap-2 sm:overflow-visible sm:px-0;
+
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    @apply hidden h-0;
+  }
+}
+
+.pill {
+  @apply inline-flex h-8 shrink-0 items-center gap-[0.4375rem] rounded-full border px-3.5 text-[0.78125rem] font-medium transition-colors sm:h-[2.125rem] sm:gap-2 sm:px-[0.9375rem] sm:text-[0.8125rem];
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+.pillActive {
+  @apply border-primary bg-primary font-semibold text-primary-foreground;
+
+  &:hover {
+    @apply bg-primary opacity-90;
+  }
+}
+
+.dot {
+  @apply h-1.5 w-1.5 shrink-0 rounded-full bg-muted-foreground/40;
+
+  .pillActive & {
+    @apply bg-primary-foreground/60;
+  }
+}
+
+.dotDate {
+  @apply bg-destructive;
+}
+
+.meter {
+  @apply flex items-center gap-2.5;
+}
+
+.meterLabel {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/80;
+}
+
+.meterLabelFull {
+  @apply text-destructive;
+}
+
+.meterTrack {
+  @apply h-[0.3125rem] w-[7.5rem] overflow-hidden rounded-full bg-border;
+}
+
+.meterTrackFull {
+  @apply bg-destructive/25;
+}
+
+.meterFill {
+  @apply block h-full rounded-full bg-primary transition-[width];
+}
+
+.meterFillFull {
+  @apply bg-destructive;
+}
+
+/* ── Full banner ─────────────────────────────────────────────────────────── */
+
+.banner {
+  @apply mx-auto mt-[1.125rem] flex w-[calc(100%-2rem)] max-w-[76rem] flex-col items-start gap-3.5 rounded-[0.875rem] border border-destructive/25 bg-destructive/[0.035] p-4 sm:w-[calc(100%-7rem)] sm:flex-row sm:items-center sm:px-5;
+}
+
+.bannerIcon {
+  @apply flex h-[2.125rem] w-[2.125rem] shrink-0 items-center justify-center rounded-[0.625rem] bg-background text-destructive;
+
+  svg {
+    @apply h-[1.0625rem] w-[1.0625rem];
+  }
+}
+
+.bannerText {
+  @apply flex-1 text-[0.875rem] leading-[1.55] text-balance;
+}
+
+/* ── Body: spine + sheet ─────────────────────────────────────────────────── */
+
+.body {
+  @apply mx-auto grid w-full max-w-[80rem] grid-cols-1 items-start lg:grid-cols-[10.5rem_1fr] lg:gap-0 lg:px-14;
+}
+
+.sheet {
+  @apply flex min-w-0 flex-col gap-0 pb-10 sm:gap-[2.375rem] sm:px-14 sm:pb-11 sm:pt-[2.125rem] lg:px-0 lg:pl-10;
+}
+
+/* ── Loading / error states ──────────────────────────────────────────────── */
+
+.state {
+  @apply mx-auto flex w-full max-w-[80rem] flex-col items-center gap-3 px-4 py-24 text-center sm:px-14;
+}
+
+.stateSpinner {
+  @apply h-5 w-5 animate-spin text-muted-foreground;
+}
+
+.stateIcon {
+  @apply h-5 w-5 text-destructive;
+}
+
+.stateText {
+  @apply text-sm text-muted-foreground;
+}
+
+.stateRetry {
+  @apply mt-1 inline-flex h-10 items-center rounded-[0.625rem] border px-4 text-sm font-semibold transition-colors;
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}

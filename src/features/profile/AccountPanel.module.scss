@@ -1,0 +1,138 @@
+.panel {
+  @apply flex flex-col gap-3 sm:gap-4;
+}
+
+/* The picture sits above the name field, separated by a rule rather than a gap — they're
+ * one identity, edited two different ways. */
+.avatarRow {
+  @apply border-b pb-4 sm:pb-5;
+}
+
+.form {
+  @apply flex flex-col gap-4 sm:gap-5;
+}
+
+/* Display name and location share one row on desktop, spaced like the location's own
+ * selects (`gap-3`); below `lg` they stack, each at the narrow width a single field reads
+ * best at. */
+.detailsRow {
+  @apply flex flex-col gap-4 sm:gap-5 lg:flex-row lg:items-start lg:gap-3;
+}
+
+.nameField {
+  @apply max-w-[23.75rem] lg:w-56 lg:max-w-none lg:shrink-0;
+}
+
+.locationField {
+  @apply max-w-[23.75rem] lg:min-w-0 lg:max-w-none lg:flex-1;
+}
+
+.formActions {
+  @apply flex items-center gap-3.5;
+}
+
+.spinner {
+  @apply animate-spin;
+}
+
+.savedNote {
+  @apply inline-flex items-center gap-1.5 text-[0.84375rem] font-semibold text-teal-700;
+}
+
+.savedIcon {
+  @apply h-[0.9375rem] w-[0.9375rem];
+}
+
+/* ── Sign-in & security ──────────────────────────────────────────────────── */
+
+.rows {
+  @apply flex flex-col;
+}
+
+.row {
+  @apply flex items-center gap-3 border-b py-2.5 last:border-b-0 sm:gap-4 sm:py-3.5;
+}
+
+.rowIcon {
+  @apply flex h-[1.875rem] w-[1.875rem] shrink-0 items-center justify-center rounded-[0.5625rem] bg-muted text-muted-foreground sm:h-9 sm:w-9 sm:rounded-[0.625rem];
+}
+
+.rowGlyph {
+  @apply h-[0.9375rem] w-[0.9375rem] sm:h-[1.0625rem] sm:w-[1.0625rem];
+}
+
+.rowText {
+  @apply flex min-w-0 flex-1 flex-col gap-px;
+}
+
+.rowLabel {
+  @apply text-[0.8125rem] font-semibold sm:text-sm;
+}
+
+/* Truncated rather than wrapped: a long Google address must not push the row's action
+ * off a 390px screen. */
+.rowValue {
+  @apply truncate text-[0.71875rem] text-muted-foreground sm:text-[0.8125rem];
+}
+
+/* ── Email row (add / confirm / change) ──────────────────────────────────── */
+
+/* Secondary line under the value: why this state matters, in one short sentence. */
+.rowHint {
+  @apply text-[0.6875rem] leading-snug text-muted-foreground/80 sm:text-xs;
+}
+
+/* Buttons stack on a narrow screen so "Resend" and "Change" never squeeze the
+   address into an ellipsis. */
+.rowActions {
+  @apply flex shrink-0 flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-2;
+}
+
+/* The inline editor replaces the row's text + actions, keeping the leading icon. */
+.rowForm {
+  @apply flex flex-1 flex-col gap-2.5;
+}
+
+.rowField {
+  @apply flex-1;
+}
+
+.rowFormActions {
+  @apply flex items-center gap-2;
+}
+
+/* Post-change confirmation on the password row. Sits where the hint would, and
+   says the part the user can't see for themselves: the other devices are gone. */
+.rowNote {
+  @apply flex items-center gap-1 text-[0.6875rem] leading-snug text-emerald-600 sm:text-xs dark:text-emerald-400;
+}
+
+.rowNoteIcon {
+  @apply size-3 shrink-0;
+}
+
+/* ── Delete account ──────────────────────────────────────────────────────── */
+
+.danger {
+  @apply flex flex-col items-start gap-3.5 rounded-[1.125rem] border border-rose-200 bg-rose-50 p-[1.125rem] sm:flex-row sm:items-center sm:gap-[1.125rem] sm:rounded-[1.25rem] sm:px-7 sm:py-6;
+}
+
+.dangerIcon {
+  @apply flex h-[2.375rem] w-[2.375rem] shrink-0 items-center justify-center rounded-[0.6875rem] bg-white text-rose-600;
+}
+
+.dangerGlyph {
+  @apply h-[1.125rem] w-[1.125rem];
+}
+
+.dangerText {
+  @apply flex flex-1 flex-col gap-[0.1875rem];
+}
+
+.dangerTitle {
+  @apply text-[0.9375rem] font-bold;
+}
+
+.dangerHint {
+  @apply text-[0.84375rem] text-slate-600;
+}

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Chivo carries the display headings (landing hero, section titles). Body copy
+         stays on the system stack, so only the three display weights are fetched. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="/logo-momoto.svg" />
+    <link rel="apple-touch-icon" href="/logo-momoto.svg" />
+    <title>Momoto — Fun Dates for Long-Distance Relationships</title>
+    <meta
+      name="description"
+      content="Momoto is a little studio of playful date experiences for long-distance relationships — a synced virtual photobooth, draw together, love match, and spot-the-difference. Play solo or live with your partner."
+    />
+
+    <!-- Indexing directives. Absent = index,follow anyway, but stating it is explicit
+         and lets us flip a page to noindex later without hunting for the tag. -->
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://momotoldr.com/" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Open Graph / Twitter — controls the card shown when the link is shared. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Momoto" />
+    <meta property="og:title" content="Momoto — Fun Dates for Long-Distance Relationships" />
+    <meta
+      property="og:description"
+      content="A little studio of playful date experiences for long-distance relationships. Snap a synced photo strip, draw together, and more."
+    />
+    <meta property="og:url" content="https://momotoldr.com/" />
+    <meta property="og:image" content="https://momotoldr.com/logo-momoto.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Momoto — Fun Dates for Long-Distance Relationships" />
+    <meta
+      name="twitter:description"
+      content="A little studio of playful date experiences for long-distance relationships. Snap a synced photo strip, draw together, and more."
+    />
+    <meta name="twitter:image" content="https://momotoldr.com/logo-momoto.svg" />
+
+    <!-- Initial-load loader. Inlined in <head> so it paints immediately, before the
+         JS/CSS bundles arrive. React's createRoot() clears #root on mount, which
+         removes the loader automatically — no teardown code needed. -->
+    <style>
+      #app-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: hsl(0 0% 100%);
+      }
+      #app-loader .ring {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 3px solid hsl(222.2 47.4% 11.2% / 0.12);
+        border-top-color: hsl(222.2 47.4% 11.2%);
+        animation: app-loader-spin 0.8s linear infinite;
+      }
+      @keyframes app-loader-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #app-loader .ring {
+          animation-duration: 1.6s;
+        }
+      }
+      /* Off-screen but still in the DOM & accessibility tree — crawlers and screen
+         readers read it, users never see it. Mirrors the rendered landing copy. */
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- This app is a client-rendered SPA, so the shell ships no content in HTML.
+         Users see the spinner below; crawlers that don't run JS (and the first-pass
+         Googlebot fetch) read the visually-hidden copy so search results aren't blank.
+         React's createRoot() replaces all of #root on mount, so both disappear once
+         the app is ready. Keep the hidden copy in sync with the landing hero. -->
+    <div id="root">
+      <div id="app-loader" role="status" aria-live="polite">
+        <div class="ring"></div>
+        <span class="visually-hidden">Loading Momoto…</span>
+      </div>
+      <main class="visually-hidden">
+        <h1>Momoto — Fun Dates for Long-Distance Relationships</h1>
+        <p>
+          Momoto is a little studio of playful date experiences for long-distance relationships that
+          kept us together through the distance. We hope you'll enjoy them too!
+        </p>
+        <h2>What you can do</h2>
+        <ul>
+          <li>
+            <strong>Virtual Photobooth</strong> — Snap a synced four-cut strip solo or with a
+            friend, add filters and stickers, then download or share.
+          </li>
+          <li><strong>Draw Together</strong> — Draw something connected to the two of you.</li>
+          <li><strong>Love Match</strong> — Read the given questions and guess each other.</li>
+          <li><strong>Spot It!</strong> — Look at both illustrations and find what's different.</li>
+        </ul>
+        <p>
+          <a href="/activities">Browse all activities</a> ·
+          <a href="/photobooth">Open the Photobooth</a> · <a href="/privacy">Privacy</a> ·
+          <a href="/terms">Terms</a>
+        </p>
+      </main>
+      <noscript>Momoto needs JavaScript enabled to run the interactive experiences.</noscript>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

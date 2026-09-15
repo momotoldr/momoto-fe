@@ -1,0 +1,105 @@
+/* The page's bottom edge, in the landing redesign's paper vocabulary: a plain slate
+ * panel with four strips of tape laid along the top rule. No blur and no translucency
+ * — the footer sits in the flow at the end of the document, so there is nothing behind
+ * it to show through. */
+
+.footer {
+  @apply w-full border-t border-slate-200;
+  background: #f8fafc;
+}
+
+/* Holds the tape, so the strip lines up with the content edges rather than the
+ * viewport's. Runs to 87.5rem rather than the landing body's 70rem: the footer is
+ * chrome for every page, not part of the landing's measure, and it read as pinched
+ * when it stopped short of the width the old `container` gave it.
+ *
+ * The deep bottom padding on phones is clearance for the support FAB, which is fixed
+ * to the bottom-right corner and lands on top of this footer once the page is scrolled
+ * to the end. 4.5rem is the FAB's height plus its offset, so the last line always
+ * clears it — without it the links nearest the corner are unclickable. The desktop
+ * row puts the copyright well inside the FAB's corner, so it needs no such gap. */
+.inner {
+  @apply relative mx-auto flex w-full max-w-[87.5rem] flex-col items-center gap-3 px-5 pb-[4.5rem] pt-[1.625rem];
+  @apply sm:flex-row sm:items-end sm:justify-between sm:gap-8 sm:px-8 sm:pb-[1.875rem] sm:pt-[2.125rem];
+}
+
+/* Sits on the border, not below it — hence the -1px. */
+.tape {
+  @apply absolute left-5 right-5 flex h-[7px] gap-[5px] sm:left-8 sm:right-8 sm:h-2 sm:gap-1.5;
+  top: -1px;
+
+  > span {
+    @apply flex-1;
+  }
+}
+
+.tapePink {
+  background: #f7b6cd;
+}
+
+.tapeAmber {
+  background: #f3c9a0;
+}
+
+.tapeMint {
+  background: #a9dfc4;
+}
+
+.tapeBlue {
+  background: #bcd0e6;
+}
+
+.brandBlock {
+  @apply flex flex-col items-center gap-2 sm:items-start;
+}
+
+.logo {
+  @apply block h-6 w-auto sm:h-7;
+}
+
+.tag {
+  @apply font-display text-sm font-bold text-slate-600 sm:text-[0.9375rem];
+}
+
+/* The right-hand stack: the links, with the copyright line under them. */
+.end {
+  @apply flex flex-col items-center gap-2.5 sm:items-end;
+}
+
+.nav {
+  @apply flex flex-wrap items-center justify-center gap-x-[1.125rem] gap-y-1.5 sm:gap-x-[1.375rem];
+}
+
+.navLink {
+  @apply text-[0.78125rem] text-slate-500 no-underline transition-colors sm:text-[0.8125rem];
+
+  &:hover {
+    @apply text-slate-900 underline;
+  }
+
+  &:focus-visible {
+    @apply rounded-sm outline-none ring-2 ring-ring ring-offset-2;
+    --tw-ring-offset-color: #f8fafc;
+  }
+}
+
+/* Kept from the previous footer: the design's mockup has no social link, but dropping
+ * a live channel is a change to the site, not to its styling. It rides at the end of
+ * the same row as an icon so it doesn't add a third line. */
+.social {
+  @apply flex h-5 w-5 items-center justify-center text-slate-400 transition-colors hover:text-slate-900;
+
+  svg {
+    @apply h-[1.0625rem] w-[1.0625rem];
+  }
+
+  &:focus-visible {
+    @apply rounded-sm outline-none ring-2 ring-ring ring-offset-2;
+    --tw-ring-offset-color: #f8fafc;
+  }
+}
+
+.copyright {
+  @apply text-center font-mono text-[0.6875rem] text-slate-400 sm:text-left sm:text-[0.71875rem];
+  letter-spacing: 0.04em;
+}

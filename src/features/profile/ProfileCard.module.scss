@@ -1,0 +1,15 @@
+.card {
+  @apply flex flex-col gap-4 rounded-[1.125rem] border bg-card p-[1.125rem] sm:gap-5 sm:rounded-[1.25rem] sm:px-7 sm:py-[1.625rem];
+}
+
+.head {
+  @apply flex flex-col gap-1;
+}
+
+.title {
+  @apply text-[0.96875rem] font-bold tracking-[-0.01em] sm:text-[1.0625rem];
+}
+
+.subtitle {
+  @apply text-[0.84375rem] text-muted-foreground;
+}

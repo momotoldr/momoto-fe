@@ -1,0 +1,57 @@
+/* Shared bits for the three link-driven auth pages (forgot / reset / verify).
+   The card shell itself comes from `components/auth/authForms.module.scss` — this
+   file only adds what those three need and the sign-in forms don't: a status block
+   for "check your inbox" / "this link expired", and the icon that heads it. */
+
+.status {
+  @apply flex flex-col items-center gap-3 text-center;
+}
+
+.statusIcon {
+  @apply flex size-12 items-center justify-center rounded-full;
+}
+
+.statusIconOk {
+  @apply bg-emerald-500/10 text-emerald-600 dark:text-emerald-400;
+}
+
+.statusIconBad {
+  @apply bg-destructive/10 text-destructive;
+}
+
+.statusIconWait {
+  @apply bg-primary/10 text-primary;
+}
+
+.statusGlyph {
+  @apply size-6;
+}
+
+.statusTitle {
+  @apply text-lg font-semibold tracking-tight;
+}
+
+.statusBody {
+  @apply text-sm leading-relaxed text-muted-foreground;
+}
+
+/* The address the mail went to. Called out because a typo is the whole failure
+   mode here, and it is far easier to spot on screen than in an inbox that never
+   fills up. */
+.address {
+  @apply break-all font-medium text-foreground;
+}
+
+.actions {
+  @apply flex flex-col gap-2 pt-1;
+}
+
+.spinner {
+  @apply size-6 animate-spin;
+}
+
+/* Skeleton shown while a token is being checked. Deliberately plain — it is on
+   screen for one round trip. */
+.checking {
+  @apply flex flex-col items-center gap-3 py-6 text-center;
+}

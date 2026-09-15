@@ -1,0 +1,160 @@
+.page {
+  @apply mx-auto flex w-full max-w-5xl flex-col px-4 py-8 sm:py-12 lg:py-14;
+}
+
+/* ---- Split card ----
+   One column on mobile (gradient block sits above the form as its own rounded
+   panel); a 400px brand panel beside the form from `lg` up. */
+.card {
+  @apply flex flex-col gap-5 overflow-hidden rounded-[1.75rem] lg:grid lg:gap-0 lg:border lg:bg-card;
+  @apply lg:grid-cols-[400px_1fr];
+}
+
+/* ---- Brand panel ---- */
+.panel {
+  @apply relative flex flex-col gap-2.5 overflow-hidden rounded-[1.375rem] px-5 pb-7 pt-6;
+  @apply lg:gap-[1.625rem] lg:rounded-none lg:px-10 lg:py-11;
+  background: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 40%, #d9ffea 100%);
+}
+
+/* The app bar already carries the wordmark on mobile — only the desktop panel,
+   which sits inside the card, needs its own. */
+/* Height drives it — `w-auto` keeps the whole mark visible (the app bar crops
+   its own copy square instead). */
+.panelLogo {
+  @apply hidden lg:block lg:h-20 lg:w-auto lg:self-start;
+}
+
+.panelCopy {
+  @apply flex flex-col gap-2.5 lg:gap-3.5;
+}
+
+.panelTitle {
+  @apply text-[1.8125rem] font-extrabold leading-[1.04] tracking-[-0.035em] text-slate-900;
+  @apply lg:text-[2.5rem] lg:leading-[1.02] lg:tracking-[-0.04em];
+}
+
+/* One word per line — the tagline stacks the same way in every locale. */
+.panelWord {
+  @apply block;
+}
+
+.panelRule {
+  @apply h-[3px] w-[38px] rounded-full bg-rose-600 lg:w-11;
+}
+
+.panelTagline {
+  @apply max-w-[200px] text-[0.8125rem] leading-[1.55] text-slate-600 lg:max-w-[240px] lg:text-[0.84375rem] lg:leading-[1.6];
+  text-wrap: pretty;
+}
+
+/* ---- Cropped strip ----
+   Decorative: hangs off the bottom-right corner so it reads as a background
+   object rather than a product shot. */
+.strip {
+  @apply pointer-events-none absolute -bottom-[46px] -right-[10px] flex w-[104px] flex-col gap-1 rounded-[9px] bg-white p-[5px];
+  @apply lg:-bottom-[72px] lg:-right-4 lg:w-[150px] lg:gap-1.5 lg:rounded-xl lg:p-[7px];
+  box-shadow: 0 12px 26px rgb(15 23 42 / 18%);
+  transform: rotate(7deg);
+
+  // Plain media query (not @screen) so the sass compiler doesn't have to know
+  // about Tailwind's breakpoints.
+  @media (min-width: 1024px) {
+    box-shadow: 0 16px 36px rgb(15 23 42 / 18%);
+  }
+}
+
+.stripCell {
+  @apply block aspect-[4/3] rounded-[3px] lg:rounded;
+
+  &:nth-child(1) {
+    background:
+      radial-gradient(circle at 26% 40%, rgb(255 255 255 / 50%), transparent 56%),
+      linear-gradient(100deg, #f7b6cd 0 50%, #a9dfc4 50% 100%);
+  }
+
+  &:nth-child(2) {
+    background:
+      radial-gradient(circle at 74% 42%, rgb(255 255 255 / 50%), transparent 56%),
+      linear-gradient(100deg, #f3c9a0 0 50%, #bcd0e6 50% 100%);
+  }
+
+  &:nth-child(3) {
+    background:
+      radial-gradient(circle at 30% 38%, rgb(255 255 255 / 50%), transparent 56%),
+      linear-gradient(100deg, #a9dfc4 0 50%, #f7b6cd 50% 100%);
+  }
+
+  &:nth-child(4) {
+    background:
+      radial-gradient(circle at 70% 44%, rgb(255 255 255 / 50%), transparent 56%),
+      linear-gradient(100deg, #bcd0e6 0 50%, #f3c9a0 50% 100%);
+  }
+}
+
+/* ---- Form side ---- */
+.formSide {
+  @apply flex flex-col justify-center gap-5 lg:gap-6 lg:px-14 lg:py-12;
+}
+
+.head {
+  @apply flex flex-col gap-1.5;
+}
+
+.title {
+  @apply text-2xl font-extrabold tracking-tight lg:text-3xl;
+}
+
+.subtitle {
+  @apply text-sm text-muted-foreground lg:text-[0.90625rem];
+}
+
+.form {
+  @apply flex flex-col gap-3.5 lg:gap-4;
+}
+
+/* Sits directly under the password field, right-aligned — the conventional place
+   for it, and close enough to the failing input to be found in the moment. */
+.forgotLink {
+  @apply -mt-1 self-end text-sm font-medium text-primary underline-offset-4 hover:underline;
+}
+
+.submit {
+  @apply h-12 w-full rounded-[0.6875rem] text-[0.9375rem] font-semibold;
+}
+
+.divider {
+  @apply flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground;
+
+  &::before,
+  &::after {
+    @apply h-px flex-1 bg-border content-[''];
+  }
+}
+
+.google {
+  @apply flex justify-center;
+}
+
+.footer {
+  @apply text-center text-sm text-muted-foreground;
+}
+
+.footerLink {
+  @apply font-medium text-primary underline-offset-4 hover:underline;
+}
+
+/* ---- Closed-beta banner ----
+   Only rendered while VITE_BETA_MODE is on. Sits between the heading and the form
+   so it is read before anyone starts typing credentials they don't have. */
+.betaNotice {
+  @apply flex flex-col gap-1.5 rounded-xl border border-primary/15 bg-primary/5 px-4 py-3;
+}
+
+.betaBadge {
+  @apply text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-primary;
+}
+
+.betaMessage {
+  @apply text-xs leading-relaxed text-muted-foreground;
+}

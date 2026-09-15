@@ -1,0 +1,121 @@
+/* Distance from the edges of the screen. Shared with the inline `bottom` the card
+ * computes, which has to add this to the height of the phone's pinned action bar. */
+.card {
+  --booth-tips-gap: 0.75rem;
+
+  /* The `max-h` here is only the fallback for a browser that can't read the `dvh`
+   * cap the card computes for itself; that computed value is the real one. */
+  @apply fixed left-3 right-3 z-30 flex max-h-[70vh] flex-col overflow-hidden rounded-2xl border bg-card shadow-xl;
+
+  /* From the wide layout it becomes a corner panel, on the *left*: the booth's rail —
+   * template, Start — runs down the right-hand side, and a card parked over it would
+   * cover the controls these tips are pointing at. */
+  @apply sm:left-6 sm:right-auto sm:w-[23rem];
+
+  animation: cardIn 0.22s ease-out;
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    animation: none;
+  }
+}
+
+.close {
+  @apply absolute right-2.5 top-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+
+  svg {
+    @apply h-4 w-4;
+  }
+}
+
+/* The tips scroll under a footer that stays put: the booth stage runs to five of them,
+ * which is taller than the card is allowed to be on a short screen, and the way to
+ * dismiss it shouldn't be something you have to scroll to find. */
+.body {
+  @apply overflow-y-auto px-5 pb-4 pt-5;
+}
+
+.head {
+  @apply flex items-center gap-2.5 pr-8;
+}
+
+/* The lamp: one spot of colour so the card reads as help, not as another warning. */
+.badge {
+  @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary;
+
+  svg {
+    @apply h-[1.125rem] w-[1.125rem];
+  }
+}
+
+.eyebrow {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground;
+}
+
+.title {
+  @apply text-[0.9375rem] font-semibold leading-tight text-foreground;
+}
+
+.lead {
+  @apply mt-2.5 text-[0.8125rem] leading-relaxed text-muted-foreground;
+}
+
+.list {
+  @apply mt-4 flex flex-col gap-3.5;
+}
+
+.item {
+  @apply flex items-start gap-2.5;
+}
+
+.itemIcon {
+  @apply mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground;
+
+  svg {
+    @apply h-3.5 w-3.5;
+  }
+}
+
+.itemBody {
+  @apply min-w-0;
+}
+
+.itemTitle {
+  @apply flex items-center gap-2 text-[0.8125rem] font-semibold text-foreground;
+}
+
+/* Small numeral in front of the heading — the tips are a running order, not a
+ * pick-and-choose list. */
+.itemIndex {
+  @apply flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[0.625rem] font-bold text-primary;
+}
+
+.itemText {
+  @apply mt-0.5 text-[0.8125rem] leading-relaxed text-muted-foreground;
+}
+
+.actions {
+  @apply flex shrink-0 items-center justify-between gap-3 border-t bg-card px-5 py-3;
+}
+
+/* Takes the room that's left and wraps within it, so the dismiss button keeps its
+ * place on the right however long the label runs in a given language. */
+.mute {
+  @apply flex min-w-0 flex-1 cursor-pointer items-center gap-2 text-xs leading-snug text-muted-foreground transition-colors hover:text-foreground;
+}
+
+.muteBox {
+  @apply h-3.5 w-3.5 shrink-0 cursor-pointer accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1;
+}

@@ -1,0 +1,63 @@
+/* A month of the contact sheet.
+ *
+ * The month heading is the page's index, so on a phone it sticks to the top of the
+ * viewport while its own strips scroll past — you always know which month you're in.
+ * Desktop doesn't need it: the spine on the left already answers that, permanently. */
+
+/* `scroll-mt` is what makes the spine's jump land correctly: `scrollIntoView` puts the
+ * section's top edge at the viewport's top, which on this app is underneath the sticky
+ * app bar (and, on a phone, the sticky month heading itself). The margin holds the
+ * heading clear of both. */
+.section {
+  @apply flex scroll-mt-[3.5rem] flex-col sm:scroll-mt-[5rem];
+}
+
+.head {
+  @apply sticky top-14 z-10 flex items-baseline justify-between gap-3 border-b bg-background/95 px-4 pb-3 pt-4 backdrop-blur sm:static sm:gap-5 sm:border-b sm:bg-transparent sm:px-0 sm:pb-3 sm:pt-0 sm:backdrop-blur-none;
+}
+
+.title {
+  @apply text-lg font-bold tracking-[-0.02em] sm:text-[1.375rem];
+}
+
+.count {
+  @apply shrink-0 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted-foreground/80 sm:text-[0.6875rem];
+}
+
+/* Four across on a phone, seven from `sm:` — the density the redesign is built on. */
+.tiles {
+  @apply grid grid-cols-4 gap-[0.6875rem] px-4 pb-[1.375rem] pt-4 sm:grid-cols-5 sm:gap-4 sm:px-0 sm:pb-0 sm:pt-[1.125rem] lg:grid-cols-7;
+}
+
+/* Collapsed months hide everything past the first eight tiles — on a phone only. The
+ * tiles stay in the DOM so expanding is a class flip, not a remount (and so the desktop
+ * grid is never affected by a phone-side toggle). */
+.tiles[data-collapsed] > *:nth-child(n + 9) {
+  @apply hidden sm:block;
+}
+
+/* The collapsed label replaces the plain count on a phone only — see the component. */
+.countCollapsed {
+  @apply inline sm:hidden;
+}
+
+.countFull {
+  @apply hidden sm:inline;
+}
+
+.more {
+  @apply mx-auto mb-3.5 inline-flex items-center gap-1.5 px-4 text-[0.8125rem] font-semibold transition-colors sm:hidden;
+
+  svg {
+    @apply h-[0.8125rem] w-[0.8125rem];
+    stroke-width: 2.2;
+  }
+
+  &:hover {
+    @apply text-muted-foreground;
+  }
+
+  &:focus-visible {
+    @apply rounded outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}

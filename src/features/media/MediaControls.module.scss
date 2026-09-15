@@ -1,0 +1,31 @@
+.controls {
+  @apply flex items-center gap-3;
+}
+
+/* Mobile action bar: the toggles share the row edge to edge. */
+.controlsFluid {
+  @apply w-full gap-2.5;
+}
+
+/* Chip-sized toggles — taller and softer than a form button, so they read as
+ * booth hardware rather than a call to action.
+ *
+ * Doubled selectors throughout: these override size utilities that <Button> sets
+ * from its own variants, and a single class would only tie on specificity — which
+ * stylesheet happens to come last would decide the height. */
+.button.button {
+  @apply h-11 gap-2.5 px-[1.125rem];
+}
+
+/* Icon-only: a square button on a phone, sharing the rail width on desktop. */
+.controlsCompact {
+  @apply gap-2 lg:w-full;
+}
+
+.buttonCompact.buttonCompact {
+  @apply h-10 w-10 px-0 lg:w-auto lg:flex-1;
+}
+
+.buttonFluid.buttonFluid {
+  @apply h-12 flex-1;
+}
