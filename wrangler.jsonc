@@ -19,7 +19,7 @@
       "vars": {
         "ENVIRONMENT": "staging",
       },
-      "route": "staging.momotoldr.com/*",
+      "route": { "pattern": "staging.momotoldr.com", "custom_domain": true },
     },
     "development": {
       "vars": {

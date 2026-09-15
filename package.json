@@ -6,13 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "build:staging": "tsc --noEmit && CLOUDFLARE_ENV=staging vite build --mode staging",
     "preview": "npm run build && wrangler dev",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "deploy": "npm run build && npx wrangler deploy",
-    "deploy:staging": "npm run build && npx wrangler deploy --env staging"
+    "deploy:staging": "npm run build:staging && npx wrangler deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.5.3",
