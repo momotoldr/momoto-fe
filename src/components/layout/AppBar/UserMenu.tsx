@@ -57,8 +57,8 @@ export function UserMenu() {
         aria-label={t('auth.profile.menuLabel')}
         onClick={() => setOpen((o) => !o)}
       >
-        {avatarSrc(user.avatarUrl, env.socketUrl) ? (
-          <img className={styles.avatar} src={avatarSrc(user.avatarUrl, env.socketUrl)!} alt="" />
+        {avatarSrc(user.avatarUrl, env.apiUrl) ? (
+          <img className={styles.avatar} src={avatarSrc(user.avatarUrl, env.apiUrl)!} alt="" />
         ) : (
           <span className={styles.avatarFallback} aria-hidden="true">
             {user.displayName.charAt(0).toUpperCase()}

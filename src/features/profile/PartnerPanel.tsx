@@ -94,7 +94,7 @@ export function PartnerPanel({ user }: PartnerPanelProps) {
   }
 
   const partner = user.partner
-  const partnerAvatar = partner ? avatarSrc(partner.avatarUrl, env.socketUrl) : null
+  const partnerAvatar = partner ? avatarSrc(partner.avatarUrl, env.apiUrl) : null
 
   if (partner) {
     return (

@@ -69,13 +69,16 @@ Workers (static assets) via Wrangler.
     npm install --legacy-peer-deps   # plain `npm install` fails on an optional-peer conflict
     cp .env.example .env             # optional — defaults target a local backend
 
-A full local stack is three processes:
+A full local stack is four processes:
 
-    npm run dev                        # this app (Vite) on :5173
-    cd ../momoto-be   && npm run dev   # backend — rooms, sync, auth, strips, payments — on :3001
-    cd ../momoto-peer && npm run dev   # self-hosted PeerJS broker on :9000 (optional)
+    npm run dev                            # this app (Vite) on :5173
+    cd ../momoto-core     && npm run dev   # auth, strips, payments, stats — on :3001
+    cd ../momoto-realtime && npm run dev   # rooms, sync, TURN credentials — on :3003
+    cd ../momoto-peer     && npm run dev   # self-hosted PeerJS broker on :9000 (optional)
 
-The backend needs Postgres and a `JWT_SECRET`; see `../momoto-be/README.md`. If you
+`momoto-core` needs Postgres and a `JWT_SECRET`; see `../momoto-core/README.md`.
+`momoto-realtime` needs the **same** `JWT_SECRET` and no database; see
+`../momoto-realtime/README.md`. If you
 don't run `momoto-peer`, leave the `VITE_PEERJS_*` vars unset and the app uses the
 public PeerJS cloud broker, which is rate-limited.
 
@@ -100,7 +103,9 @@ Changing one means rebuilding, and none of them can hold a secret. See
 
 | Variable | Purpose | Default |
 | :-- | :-- | :-- |
-| `VITE_SOCKET_URL` | Backend origin — Socket.io and the HTTP API (auth, rooms, strips, TURN) | `http://localhost:3001` |
+| `VITE_API_URL` | `momoto-core` origin — auth, strips, payments, avatars, stats | `http://localhost:3001` |
+| `VITE_REALTIME_URL` | `momoto-realtime` origin — Socket.io, rooms, TURN credentials | `http://localhost:3003` |
+| `VITE_SOCKET_URL` | Deprecated single-backend origin; fallback for both of the above | unset |
 | `VITE_PEERJS_HOST` / `_PORT` / `_PATH` / `_SECURE` | Self-hosted PeerJS broker (`../momoto-peer`) | unset → public PeerJS cloud |
 | `VITE_GOOGLE_CLIENT_ID` | Enables "Sign in with Google"; must equal the backend's `GOOGLE_CLIENT_ID` | unset → button hidden |
 | `VITE_STUN_URLS` | Fallback STUN servers (comma-separated) | Google public STUN |
@@ -108,7 +113,7 @@ Changing one means rebuilding, and none of them can hold a secret. See
 | `VITE_PAYMENTS_ENABLED` | Pay-to-print checkout; off = free downloads | off |
 | `VITE_STRIP_PRINT_PRICE_IDR` | Display price; must equal the backend's `STRIP_PRINT_PRICE_IDR` | `8999` |
 | `VITE_STRIP_MAX_ITEMS` | Strips a user may keep; must equal the backend's `STRIP_MAX_ITEMS` | `5` |
-| `VITE_GROUP_MODE_ENABLED` | Show the Group mode; also raise the backend's `ROOM_CAPACITY_MAX` | off |
+| `VITE_GROUP_MODE_ENABLED` | Show the Group mode; also raise `momoto-realtime`'s `ROOM_CAPACITY_MAX` | off |
 | `VITE_BETA_MODE` | Closed beta: booth behind login, Google sign-in hidden | off |
 
 Per-environment files: `.env.development.local`, `.env.staging`, `.env.production`.

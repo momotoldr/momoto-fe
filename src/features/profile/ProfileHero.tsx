@@ -22,7 +22,7 @@ function Portrait({
   person: Pick<User, 'displayName' | 'avatarUrl'> | PublicPartner
   className: string
 }) {
-  const src = avatarSrc(person.avatarUrl, env.socketUrl)
+  const src = avatarSrc(person.avatarUrl, env.apiUrl)
   if (src) return <img className={className} src={src} alt="" />
   return (
     <span className={className} aria-hidden="true">

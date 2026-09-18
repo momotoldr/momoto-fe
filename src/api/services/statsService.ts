@@ -26,16 +26,21 @@ function toCount(value: unknown): number | null {
  * which would read as "nobody uses this" instead of "we couldn't ask".
  */
 export async function fetchPublicStats(signal?: AbortSignal): Promise<PublicStats> {
-  const { data } = await statsClient.getData<Partial<PublicStats>>(
+  const { data } = await statsClient.getData<Partial<PublicStats> & { activeSessions?: unknown }>(
     API_ROUTES.STATS,
     {},
     { timeout: STATS_TIMEOUT_MS, signal }
   )
   const users = toCount(data?.users)
-  const activeSessions = toCount(data?.activeSessions)
+  // `activeSessions` is the pre-split field: a live count of occupied rooms, replaced by
+  // `sessions`, a historical total, when the room layer moved to momoto-realtime. Both are
+  // read because this bundle can be live against a backend that has not been redeployed
+  // yet — that window is the cutover itself, and without the fallback the counters would
+  // vanish from the landing page for the length of it.
+  const sessions = toCount(data?.sessions) ?? toCount(data?.activeSessions)
   const strips = toCount(data?.strips)
-  if (users === null || activeSessions === null || strips === null) {
+  if (users === null || sessions === null || strips === null) {
     throw new Error('stats returned an invalid body')
   }
-  return { users, activeSessions, strips }
+  return { users, sessions, strips }
 }

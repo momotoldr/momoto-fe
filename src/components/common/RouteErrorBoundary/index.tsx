@@ -36,9 +36,14 @@ export function RouteErrorBoundary() {
   // A 404 isn't a fault — show the normal not-found page rather than a crash card.
   if (isNotFound) return <NotFoundPage />
 
-  // Only surface the raw message in dev. In production it's internal detail that means
-  // nothing to a user (and can read as alarming), so fall back to the generic copy.
-  const detail = import.meta.env.DEV ? errorMessage(error) : undefined
+  // Surface the raw message in dev *and* on staging. In production it's internal detail
+  // that means nothing to a user (and can read as alarming), so fall back to the generic
+  // copy. Staging is the exception because that is where crashes are hunted on real
+  // phones, where there is no console to open — a card that says only "something went
+  // wrong" turns a reproducible bug into a guess. `MODE` is set by `--mode staging`, so
+  // this is inlined at build time and cannot leak into a production bundle.
+  const isStaging = import.meta.env.MODE === 'staging'
+  const detail = import.meta.env.DEV || isStaging ? errorMessage(error) : undefined
 
   return (
     <ErrorCard title={t('errors.somethingWrong')} message={detail || t('errors.unexpected')}>

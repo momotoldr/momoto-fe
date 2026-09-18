@@ -38,3 +38,6 @@ dist-ssr
 .dev.vars*
 !.dev.vars.example
 
+
+# Local Claude Code permissions — per machine, not project config.
+.claude/settings.local.json

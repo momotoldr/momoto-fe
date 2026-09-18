@@ -230,7 +230,25 @@ export function usePeerConnection() {
       // Clear a written-off attempt first, so the new call isn't shadowed by the corpse
       // of the old one in the map.
       dropCall(socketId)
-      if (myId > remoteId) attach(socketId, peer.call(remoteId, localStream))
+      if (myId <= remoteId) return
+
+      // `peer.call` is *typed* as always returning a MediaConnection, but PeerJS returns
+      // `undefined` twice over: when this peer is disconnected from the broker, and when
+      // the stream has ended. Attaching that stored `{ conn: undefined }` in `calls`, and
+      // every later `conn.close()` — teardown, membership change, re-dial — then threw
+      // `Cannot read properties of undefined (reading 'close')`, which the router caught
+      // as its generic error card and took the whole booth (cameras included) with it.
+      //
+      // Storing nothing is what makes it recoverable: with no entry, `holds` is false and
+      // the next `reconcile` dials again. The `reconnect` is the other half — a peer that
+      // lost the broker never comes back on its own, which is what left a returning member
+      // stuck on "connecting…" while everyone else waited for a tile that never arrived.
+      const conn = peer.call(remoteId, localStream)
+      if (!conn) {
+        if (peer.disconnected && !peer.destroyed) peer.reconnect()
+        return
+      }
+      attach(socketId, conn)
     }
 
     /**
@@ -391,6 +409,14 @@ export function usePeerConnection() {
 
       // A peer-level failure isn't attributable to one call, so it is reported against
       // everyone we haven't reached yet rather than against a single tile.
+      // The broker dropped us (its restart, a network blip). PeerJS keeps the peer object
+      // usable but will refuse every `call` until it is reconnected, so ask for that the
+      // moment it happens rather than waiting for a dial to fail.
+      peer.on('disconnected', () => {
+        if (cancelled) return
+        if (!peer.destroyed) peer.reconnect()
+      })
+
       peer.on('error', () => {
         for (const socketId of useRoomStore.getState().peerIds) {
           if (!holds(socketId)) {

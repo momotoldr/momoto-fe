@@ -55,7 +55,7 @@ export interface ComposedStrip {
   thumbnailDataUrl: string | null
 }
 
-/** Mirrors `momoto-be/src/storage/thumbnail.ts` — keep the two in step. */
+/** Mirrors `momoto-core/src/storage/thumbnail.ts` — keep the two in step. */
 const THUMBNAIL_MAX_WIDTH = 400
 const THUMBNAIL_MAX_HEIGHT = 1200
 const THUMBNAIL_QUALITY = 0.8

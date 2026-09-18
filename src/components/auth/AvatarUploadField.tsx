@@ -120,7 +120,7 @@ export function AvatarUploadField() {
     }
   }
 
-  const src = preview ?? avatarSrc(user.avatarUrl, env.socketUrl)
+  const src = preview ?? avatarSrc(user.avatarUrl, env.apiUrl)
 
   return (
     <div className={styles.field}>

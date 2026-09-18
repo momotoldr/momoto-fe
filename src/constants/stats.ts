@@ -2,9 +2,8 @@
  * Last known platform counters, so a returning visitor sees numbers on first paint
  * instead of waiting on the network — or, offline, sees them at all.
  *
- * The value is `{ users, strips, at }`. **`activeSessions` is deliberately not in
- * there**: that cell claims "right now", and a count from an earlier visit is simply
- * false. It renders as a dash until a live answer arrives.
+ * The value is `{ users, sessions, strips, at }`. An entry written before `sessions`
+ * existed fails validation and is ignored, costing that visitor one head start.
  */
 export const STATS_CACHE_STORAGE_KEY = 'momoto.stats.counts'
 
@@ -24,18 +23,18 @@ export const STATS_CACHE_MAX_AGE_MS = 60 * 60_000
  * Floors the platform totals must clear before the landing page shows them at all.
  *
  * The counters exist as evidence that other people are in the booth — so a band
- * reading "9 users, 0 live, 10+ strips" argues the case *against* the product, and
+ * reading "9 users, 3 sessions, 10+ strips" argues the case *against* the product, and
  * the page is better off closing on its call to action instead. These are the point
  * where the numbers start reading as a crowd rather than as a list you could name;
  * they are meant to be moved as the product grows, and moving them is a one-line
  * change here.
  *
- * **Both must clear.** A band is only proof if every number in it is: plenty of
+ * **All three must clear.** A band is only proof if every number in it is: plenty of
  * strips made by a dozen accounts still tells the visitor how few people are here.
  *
- * **Live sessions deliberately has no floor.** Zero is a truthful, ordinary answer at
- * four in the morning at any size, and gating on it would make the whole section
- * flicker in and out by the hour.
+ * Sessions sit lowest because they are the rarest of the three by construction: solo
+ * booths don't count, and several strips come out of each shared session.
  */
 export const STATS_MIN_USERS = 50
+export const STATS_MIN_SESSIONS = 20
 export const STATS_MIN_STRIPS = 100

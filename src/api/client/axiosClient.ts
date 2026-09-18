@@ -15,10 +15,11 @@ import { API_ROUTES } from '../apiRoutes'
 import { getUserErrorMessage } from '../errorMessages'
 
 /**
- * The HTTP room endpoints (`/rooms`, `/rooms/:id`) are served on the same host as
- * the Socket.io signaling server, so the API base URL is the socket URL.
+ * The default host is `momoto-core`. The services for `momoto-realtime` (rooms, TURN)
+ * construct their client with `env.realtimeUrl` instead. The refresh call always goes to
+ * core, since that is the only service that holds sessions.
  */
-const BASE_URL = env.socketUrl
+const BASE_URL = env.apiUrl
 const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
@@ -259,9 +260,9 @@ type RequestConfig = Omit<AxiosRequestConfig, 'headers'> & {
 class AxiosClient {
   private readonly client: AxiosInstance
 
-  constructor() {
+  constructor(baseURL: string = BASE_URL) {
     this.client = axios.create({
-      baseURL: BASE_URL,
+      baseURL,
       timeout: DEFAULT_TIMEOUT,
       headers: DEFAULT_HEADERS,
       // Send/receive the httpOnly refresh cookie on same-site cross-origin calls.

@@ -5,7 +5,11 @@ import react from '@vitejs/plugin-react'
 import { cloudflare } from "@cloudflare/vite-plugin";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  // Staging ships source maps so a crash on a real phone points at a line of source
+  // instead of `index-8wBdRz6U.js:53`. Production does not: the maps publish readable
+  // source to anyone who opens devtools, and staging is where debugging happens.
+  build: { sourcemap: mode === 'staging' },
   plugins: [react(), cloudflare()],
   resolve: {
     alias: {
@@ -20,4 +24,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))

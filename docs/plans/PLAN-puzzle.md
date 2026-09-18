@@ -3,7 +3,7 @@
 Plan for the frontend half of the second activity: **Puzzle Together**. Two people in
 one room see the same jigsaw, scattered around a board, and finish it together while
 their cameras stay on. The backend half — typed rooms, the authoritative board, the
-wire contract — lives in `../momoto-be/PLAN-puzzle.md`; this doc consumes it.
+wire contract — lives in `../momoto-core/PLAN-puzzle.md`; this doc consumes it.
 
 **Legend:** DoD = Definition of Done.
 

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "build:staging": "tsc --noEmit && CLOUDFLARE_ENV=staging vite build --mode staging",
+    "build:staging": "tsc --noEmit && CLOUDFLARE_ENV=staging vite build --mode staging && node scripts/staging-noindex.mjs",
     "preview": "npm run build && wrangler dev",
     "lint": "eslint .",
     "format": "prettier --write .",

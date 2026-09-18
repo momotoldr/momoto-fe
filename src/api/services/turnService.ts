@@ -1,9 +1,12 @@
 import type { IceServersResponse } from '@/types/turnType'
 
+import { env } from '@/env'
+
 import { API_ROUTES } from '../apiRoutes'
 import AxiosClient from '../client/axiosClient'
 
-const turnService = new AxiosClient()
+/** TURN credentials are minted by momoto-realtime. */
+const turnService = new AxiosClient(env.realtimeUrl)
 
 /**
  * Fetch fresh ICE servers (STUN + ephemeral TURN credentials) from the backend.

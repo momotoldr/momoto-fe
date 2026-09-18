@@ -5,6 +5,7 @@ import { fetchPublicStats } from '@/api/services/statsService'
 import {
   STATS_CACHE_MAX_AGE_MS,
   STATS_CACHE_STORAGE_KEY,
+  STATS_MIN_SESSIONS,
   STATS_MIN_STRIPS,
   STATS_MIN_USERS,
 } from '@/constants/stats'
@@ -13,23 +14,13 @@ import { roundTotalDown } from '@/utils/stats'
 
 import styles from './LandingStats.module.scss'
 
-/** What survives between visits — the two totals that only ever grow. */
+/** What survives between visits — the three totals, all of which only ever grow. */
 interface CachedCounts {
   users: number
+  sessions: number
   strips: number
   /** When it was written — anything past `STATS_CACHE_MAX_AGE_MS` is ignored. */
   at: number
-}
-
-/**
- * What the row is currently able to show. `activeSessions` is `null` until a live
- * answer arrives: it is the one number the cache can't stand in for, because the cell
- * says "right now".
- */
-interface Counts {
-  users: number
-  strips: number
-  activeSessions: number | null
 }
 
 /** A count is only usable if it's a finite, non-negative number. */
@@ -38,14 +29,21 @@ function isCount(value: unknown): value is number {
 }
 
 /** The last snapshot this browser saw, if it's still recent enough to show. */
-function readCache(): Counts | null {
+function readCache(): PublicStats | null {
   try {
     const raw = localStorage.getItem(STATS_CACHE_STORAGE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw) as Partial<CachedCounts>
-    if (!isCount(parsed.users) || !isCount(parsed.strips) || !isCount(parsed.at)) return null
+    if (
+      !isCount(parsed.users) ||
+      !isCount(parsed.sessions) ||
+      !isCount(parsed.strips) ||
+      !isCount(parsed.at)
+    ) {
+      return null
+    }
     if (Date.now() - parsed.at > STATS_CACHE_MAX_AGE_MS) return null
-    return { users: parsed.users, strips: parsed.strips, activeSessions: null }
+    return { users: parsed.users, sessions: parsed.sessions, strips: parsed.strips }
   } catch {
     // Unreadable, unparseable, or a private window that throws on access. The fetch
     // is the real source; this was only ever a head start.
@@ -55,7 +53,12 @@ function readCache(): Counts | null {
 
 function writeCache(stats: PublicStats): void {
   try {
-    const entry: CachedCounts = { users: stats.users, strips: stats.strips, at: Date.now() }
+    const entry: CachedCounts = {
+      users: stats.users,
+      sessions: stats.sessions,
+      strips: stats.strips,
+      at: Date.now(),
+    }
     localStorage.setItem(STATS_CACHE_STORAGE_KEY, JSON.stringify(entry))
   } catch {
     // A full or disabled store costs a head start on the next visit, nothing more.
@@ -63,7 +66,7 @@ function writeCache(stats: PublicStats): void {
 }
 
 /**
- * The three platform counters under "How it works": accounts, live sessions, strips.
+ * The three platform counters under "How it works": accounts, shared sessions, strips.
  *
  * They took the FAQ's place on the landing page. The questions moved to the Help
  * Center; what a visitor deciding whether to try the booth actually wants at that point
@@ -84,12 +87,11 @@ export function LandingStats() {
   const { t, i18n } = useTranslation()
   // Read during the initial render, not in an effect: the point of the cache is to be
   // on screen for the first paint.
-  const [counts, setCounts] = useState<Counts | null>(readCache)
+  const [counts, setCounts] = useState<PublicStats | null>(readCache)
 
   // One request per visit, no polling. The totals are a daily snapshot on the server
   // and get rounded down here, so a minutely refresh would spend a request per visitor
-  // per minute to redraw the same digits; the session count is what it was when the
-  // reader arrived.
+  // per minute to redraw the same digits.
   useEffect(() => {
     const controller = new AbortController()
 
@@ -109,7 +111,13 @@ export function LandingStats() {
   // Below the floor the band would undersell the product rather than sell it — see
   // `STATS_MIN_USERS`. Checked against the true totals, not the rounded-down ones, so
   // the floor means what it says.
-  if (counts.users < STATS_MIN_USERS || counts.strips < STATS_MIN_STRIPS) return null
+  if (
+    counts.users < STATS_MIN_USERS ||
+    counts.sessions < STATS_MIN_SESSIONS ||
+    counts.strips < STATS_MIN_STRIPS
+  ) {
+    return null
+  }
 
   const format = new Intl.NumberFormat(i18n.language).format
 
@@ -126,18 +134,9 @@ export function LandingStats() {
   // The dash above each number is the only colour in the band, and it is what tells
   // the three cells apart at a glance.
   const cells = [
-    { key: 'users', dash: styles.dashPink, text: total(counts.users), live: false },
-    {
-      key: 'sessions',
-      dash: styles.dashMint,
-      // No rounding and no "+": this one describes a single instant rather than a
-      // total that keeps growing, and "0+ live now" would be rounding a number that
-      // isn't going anywhere. An em dash, not a zero, when there was no live answer —
-      // "nobody is in the booth" and "we couldn't ask" are opposite claims.
-      text: counts.activeSessions === null ? '—' : format(counts.activeSessions),
-      live: true,
-    },
-    { key: 'strips', dash: styles.dashBlue, text: total(counts.strips), live: false },
+    { key: 'users', dash: styles.dashPink, text: total(counts.users) },
+    { key: 'sessions', dash: styles.dashMint, text: total(counts.sessions) },
+    { key: 'strips', dash: styles.dashBlue, text: total(counts.strips) },
   ]
 
   return (
@@ -146,15 +145,12 @@ export function LandingStats() {
         {t('landing.stats.title')}
       </h2>
       <dl className={styles.row}>
-        {cells.map(({ key, dash, text, live }) => (
+        {cells.map(({ key, dash, text }) => (
           <div key={key} className={styles.cell}>
             <span className={`${styles.dash} ${dash}`} aria-hidden="true" />
             {/* Term before its definition, as a `dl` group requires — on desktop the
              * cell lifts the number back above the caption with `order`. */}
-            <dt className={styles.label}>
-              {live && <span className={styles.liveDot} aria-hidden="true" />}
-              {t(`landing.stats.${key}`)}
-            </dt>
+            <dt className={styles.label}>{t(`landing.stats.${key}`)}</dt>
             <dd className={styles.value}>{text}</dd>
           </div>
         ))}

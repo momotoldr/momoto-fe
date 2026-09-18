@@ -16,9 +16,10 @@ function route<TArgs extends unknown[]>(
 }
 
 /**
- * Every HTTP endpoint the frontend talks to. The real-time signaling/sync happens
- * over Socket.io (see `utils/socket.ts`); these are the plain-HTTP room endpoints
- * served alongside it on the same host (`env.socketUrl`).
+ * Every HTTP endpoint the frontend talks to. Two hosts serve them: `ROOMS` and `TURN`
+ * belong to momoto-realtime (`env.realtimeUrl`), alongside the Socket.io signaling in
+ * `utils/socket.ts`; everything else belongs to momoto-core (`env.apiUrl`). Which host a
+ * call reaches is decided by the service's `AxiosClient`, not by the path here.
  */
 export const API_ROUTES = {
   /** Liveness probe used to detect whether the backend is reachable. `GET /healthz`. */

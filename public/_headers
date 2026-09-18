@@ -1,7 +1,7 @@
 # Security headers for Cloudflare Pages. Static hosts serve no headers of their own,
 # so without this file the app ships with none.
 #
-# Update `connect-src` if the API or broker hostnames change — a wrong value here
+# Update `connect-src` if the API, realtime or broker hostnames change — a wrong value here
 # doesn't warn, it just blocks the socket at runtime.
 #
 # This one file ships to BOTH workers (prod and staging), so `connect-src` lists both
@@ -22,7 +22,7 @@
 # removed with it; restoring Snap would mean restoring them.
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' https://api.momotoldr.com wss://api.momotoldr.com https://peer.momotoldr.com wss://peer.momotoldr.com https://api-staging.momotoldr.com wss://api-staging.momotoldr.com https://peer-staging.momotoldr.com wss://peer-staging.momotoldr.com https://accounts.google.com; frame-src https://accounts.google.com; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' https://api.momotoldr.com wss://api.momotoldr.com https://realtime.momotoldr.com wss://realtime.momotoldr.com https://peer.momotoldr.com wss://peer.momotoldr.com https://api-staging.momotoldr.com wss://api-staging.momotoldr.com https://realtime-staging.momotoldr.com wss://realtime-staging.momotoldr.com https://peer-staging.momotoldr.com wss://peer-staging.momotoldr.com https://accounts.google.com; frame-src https://accounts.google.com; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(self), microphone=(self), geolocation=(), payment=(self "https://app.midtrans.com" "https://app.sandbox.midtrans.com"), usb=()

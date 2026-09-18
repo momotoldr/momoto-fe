@@ -8,10 +8,12 @@ export interface PublicStats {
   /** Registered accounts. */
   users: number
   /**
-   * Shared rooms with somebody in them right now. Solo booths never touch the
-   * server, so they aren't in here — this is people taking strips *together*.
+   * Shared sessions ever held — date and group rooms that produced at least one saved
+   * strip. Solo booths never share a room, so they aren't in here: this is people
+   * taking strips *together*. A lower bound (a session nobody saved from, or a guest's
+   * never-synced strips, left nothing to count), which the display's "N+" already says.
    */
-  activeSessions: number
+  sessions: number
   /** Strips created, ever — locked and unlocked alike. */
   strips: number
 }

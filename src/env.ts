@@ -14,7 +14,14 @@ interface PeerConfig {
 }
 
 interface AppEnv {
-  socketUrl: string
+  /**
+   * `momoto-core`: every REST call except rooms and TURN, and the origin relative avatar
+   * and strip URLs resolve against. Those images are core's — never build one from
+   * `realtimeUrl`, which serves no files.
+   */
+  apiUrl: string
+  /** `momoto-realtime`: the Socket.io connection, `/rooms` and `/turn-credentials`. */
+  realtimeUrl: string
   peer: PeerConfig
   iceServers: RTCIceServer[]
   /** Google OAuth client id for "Sign in with Google". Empty string disables it. */
@@ -107,8 +114,18 @@ function buildIceServers(): RTCIceServer[] {
  */
 const betaMode = import.meta.env.VITE_BETA_MODE === 'true'
 
+/**
+ * Before the split into core and realtime, one backend served everything from
+ * `VITE_SOCKET_URL`. Both URLs fall back to it, so a build configured the old way keeps
+ * sending everything to that one host — which is right until realtime is deployed, and
+ * means the two new variables can be introduced without a lockstep config change.
+ */
+const legacySingleBackendUrl = import.meta.env.VITE_SOCKET_URL || undefined
+
 export const env: AppEnv = {
-  socketUrl: import.meta.env.VITE_SOCKET_URL ?? 'http://localhost:3001',
+  apiUrl: import.meta.env.VITE_API_URL || legacySingleBackendUrl || 'http://localhost:3001',
+  realtimeUrl:
+    import.meta.env.VITE_REALTIME_URL || legacySingleBackendUrl || 'http://localhost:3003',
   peer: {
     host: import.meta.env.VITE_PEERJS_HOST || undefined,
     port: import.meta.env.VITE_PEERJS_PORT ? Number(import.meta.env.VITE_PEERJS_PORT) : undefined,

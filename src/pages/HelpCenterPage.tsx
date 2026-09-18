@@ -16,7 +16,7 @@ const FAQ_KEYS = ['install', 'free', 'print', 'friend', 'privacy', 'need']
  * booth, not troubleshooting it; the questions are what someone comes looking for
  * *after* something confused them, and a page they can be linked to answers that better
  * than a section they have to scroll past. The landing page now spends that space on
- * the live counters instead.
+ * the platform counters instead.
  *
  * Reached from the footer, and public on purpose: half these answers ("do I need an
  * app?", "is it free?") are for people who don't have an account yet, so putting the

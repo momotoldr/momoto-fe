@@ -7,14 +7,14 @@ sampling and retention rather than three half-integrations.
 
 The backend half — the ingest endpoint, the table, the retention sweep and the admin
 queries — is sketched in [Backend contract](#backend-contract) and should get its own
-`../momoto-be/PLAN-observability.md` before F1 starts.
+`../momoto-core/PLAN-observability.md` before F1 starts.
 
 **Legend:** DoD = Definition of Done.
 
 ## Concept
 
-- **First-party, not a vendor.** Events go to `POST /events` on `momoto-be` and land in
-  Postgres; the funnels are read in `momoto-admin`. The privacy page already promises
+- **First-party, not a vendor.** Events go to `POST /events` on `momoto-core` and land in
+  Postgres; the funnels are read in `momoto-portal`. The privacy page already promises
   *"We don't use advertising cookies or third-party tracking pixels"*
   (`locales/en/translation.json:293`) — a first-party pipeline keeps that literally
   true, needs no cookie banner, and adds no vendor to a product whose whole cost model
@@ -201,7 +201,7 @@ often. Full messages go to Sentry, which is the tool built to hold them.
 
 ## Backend contract
 
-`POST /events` on `momoto-be`, modelled on the existing `feedbackRouter` — anonymous
+`POST /events` on `momoto-core`, modelled on the existing `feedbackRouter` — anonymous
 friendly, rate limited, optional bearer via `optionalUserId`.
 
 ```jsonc
@@ -280,7 +280,7 @@ one thing worth a vendor — but not a blocker for any of the above.
 per page view.
 
 ### F4 — Admin surfaces *(2 days)*
-Funnel card, health card, and a Sessions drill-down in `momoto-admin`.
+Funnel card, health card, and a Sessions drill-down in `momoto-portal`.
 
 **DoD:** the overview answers, without SQL: how many opened the booth, how many got a
 camera, how many connected, how many finished a strip, how many unlocked — and what

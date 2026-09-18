@@ -48,7 +48,7 @@ export interface StripUploadMeta {
  * API base prepended — prefixing an absolute URL would mangle it.
  */
 function resolveUrl(strip: StoredStrip): StoredStrip {
-  const absolute = (url: string) => (/^https?:\/\//i.test(url) ? url : `${env.socketUrl}${url}`)
+  const absolute = (url: string) => (/^https?:\/\//i.test(url) ? url : `${env.apiUrl}${url}`)
   return { ...strip, url: absolute(strip.url), thumbnailUrl: absolute(strip.thumbnailUrl) }
 }
 

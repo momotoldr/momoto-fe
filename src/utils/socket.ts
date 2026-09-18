@@ -48,7 +48,7 @@ export function getClientId(): string {
  */
 export function getSocket(): Socket {
   if (!socket) {
-    socket = io(env.socketUrl, {
+    socket = io(env.realtimeUrl, {
       autoConnect: false,
       auth: (cb) => cb({ token: getStoredToken() ?? '', clientId: getClientId() }),
     })

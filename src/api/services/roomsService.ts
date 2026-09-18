@@ -5,10 +5,13 @@ import type {
   RoomStatusResponse,
 } from '@/types/roomsType'
 
+import { env } from '@/env'
+
 import { API_ROUTES } from '../apiRoutes'
 import AxiosClient from '../client/axiosClient'
 
-const roomsService = new AxiosClient()
+/** Rooms are minted and looked up by momoto-realtime, which holds them. */
+const roomsService = new AxiosClient(env.realtimeUrl)
 
 const VALID_STATUSES: readonly RoomStatus[] = ['open', 'full', 'ended', 'not_found']
 

@@ -54,11 +54,6 @@
   letter-spacing: 0.16em;
 }
 
-.liveDot {
-  @apply h-1.5 w-1.5 flex-shrink-0 rounded-full lg:h-[0.4375rem] lg:w-[0.4375rem];
-  background: #fb7185;
-}
-
 .value {
   @apply m-0 font-display text-[1.875rem] font-black leading-none text-slate-900 lg:order-[-1] lg:text-[3.25rem];
 

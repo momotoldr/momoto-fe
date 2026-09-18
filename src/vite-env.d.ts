@@ -1,6 +1,14 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
+  /** momoto-core: auth, strips, payments, avatars — every REST call except rooms/TURN. */
+  readonly VITE_API_URL?: string
+  /** momoto-realtime: the Socket.io server, `/rooms` and `/turn-credentials`. */
+  readonly VITE_REALTIME_URL?: string
+  /**
+   * @deprecated From when one backend served everything. Still read as the fallback for
+   * both URLs above, so a build that only sets this keeps pointing at a single host.
+   */
   readonly VITE_SOCKET_URL?: string
   readonly VITE_PEERJS_HOST?: string
   readonly VITE_PEERJS_PORT?: string
