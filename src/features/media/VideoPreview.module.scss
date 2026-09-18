@@ -10,6 +10,17 @@
   @apply h-8 w-8;
 }
 
+/* The label is hidden on phones and read out instead.
+ *
+ * A tile is at its smallest exactly where it is most likely to be camera-off — the rail
+ * beside the strip, or a four-way grid on a 390px screen — and at that size the icon and
+ * two words wrap into each other. The icon alone reads as "camera off" on its own, so the
+ * text comes back only when there is room for it. `sr-only` rather than `hidden`: a
+ * screen reader still announces the state, which an icon with no text would not. */
+.offLabel {
+  @apply sr-only lg:not-sr-only;
+}
+
 /* Whose face this is — a soft pill in the corner, readable over any frame. */
 .name {
   @apply absolute bottom-3 left-3 z-10 rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium;

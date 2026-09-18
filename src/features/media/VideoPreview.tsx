@@ -44,7 +44,7 @@ export function VideoPreview({ videoRef, compact = false, showMic = false }: Vid
       {!camEnabled && (
         <div className={styles.offOverlay}>
           <VideoOff className={styles.offIcon} />
-          <span>{t('video.cameraOff')}</span>
+          <span className={styles.offLabel}>{t('video.cameraOff')}</span>
         </div>
       )}
       {!compact && (

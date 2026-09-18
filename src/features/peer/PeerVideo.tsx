@@ -58,7 +58,7 @@ export function PeerVideo({
       {!peerCamEnabled && (
         <div className={styles.offOverlay}>
           <VideoOff className={styles.offIcon} />
-          <span>{t('video.cameraOff')}</span>
+          <span className={styles.offLabel}>{t('video.cameraOff')}</span>
         </div>
       )}
       {!compact && (
