@@ -43,7 +43,13 @@ export function RouteErrorBoundary() {
   // wrong" turns a reproducible bug into a guess. `MODE` is set by `--mode staging`, so
   // this is inlined at build time and cannot leak into a production bundle.
   const isStaging = import.meta.env.MODE === 'staging'
-  const detail = import.meta.env.DEV || isStaging ? errorMessage(error) : undefined
+  const showDetail = import.meta.env.DEV || isStaging
+  // The message alone is often not enough to place a crash — a minified React invariant
+  // ("Minified React error #185") names the fault but not where it happened. The first
+  // few frames are, with the staging source map, enough to find the line. Phones have no
+  // console to open, so what the card shows is the whole report.
+  const stack = error instanceof Error ? error.stack?.split('\n').slice(0, 4).join('\n') : undefined
+  const detail = showDetail ? [errorMessage(error), stack].filter(Boolean).join('\n') : undefined
 
   return (
     <ErrorCard title={t('errors.somethingWrong')} message={detail || t('errors.unexpected')}>

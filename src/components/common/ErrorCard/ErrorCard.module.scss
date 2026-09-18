@@ -16,6 +16,11 @@
 
 .message {
   @apply mt-[0.6rem] max-w-[36ch] text-[0.95rem] leading-[1.6] text-muted-foreground;
+
+  /* Dev and staging put the error's first stack frames in here, and a frame is one long
+   * unbreakable token. Without these the card either shows one line or overflows. */
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 .actions {

@@ -62,6 +62,8 @@ const MESH_SCALE_DOWN = 2
  * missing tile.
  */
 const DIAL_TIMEOUT_MS = 10_000
+/** Floor between broker reconnect attempts — see `requestReconnect`. */
+const RECONNECT_MIN_MS = 2_000
 
 /** How often the mesh is compared against the room and repaired. */
 const RECONCILE_MS = 5_000
@@ -155,6 +157,34 @@ export function usePeerConnection() {
     const peerJsBySocket = peerJsBySocketRef.current
     const socketByPeerJs = socketByPeerJsRef.current
 
+    /**
+     * Ask PeerJS to re-establish the broker connection, at most once every
+     * `RECONNECT_MIN_MS`.
+     *
+     * The throttle is the point. `reconnect()` re-initialises the socket, and a broker
+     * that refuses emits `disconnected` again straight away — so calling it from that
+     * event unthrottled is a tight loop, and because each failure also writes peer status
+     * into the store, React tears the tree down with "maximum update depth exceeded"
+     * rather than anything that names the real cause.
+     *
+     * It also throws when the peer is not actually disconnected (a race with PeerJS's own
+     * reconnect), so the call is guarded and wrapped: failing to reconnect must never
+     * become a render crash. `reconcile` retries on its own schedule regardless.
+     */
+    let lastReconnectAt = 0
+    const requestReconnect = () => {
+      const peer = peerRef.current
+      if (cancelled || !peer || peer.destroyed || !peer.disconnected) return
+      const now = Date.now()
+      if (now - lastReconnectAt < RECONNECT_MIN_MS) return
+      lastReconnectAt = now
+      try {
+        peer.reconnect()
+      } catch {
+        // Lost the race — PeerJS reconnected or was destroyed under us. Nothing to do.
+      }
+    }
+
     /** Tear down whatever call we hold for one person, without touching their id. */
     const dropCall = (socketId: string) => {
       calls.get(socketId)?.conn.close()
@@ -245,7 +275,7 @@ export function usePeerConnection() {
       // stuck on "connecting…" while everyone else waited for a tile that never arrived.
       const conn = peer.call(remoteId, localStream)
       if (!conn) {
-        if (peer.disconnected && !peer.destroyed) peer.reconnect()
+        requestReconnect()
         return
       }
       attach(socketId, conn)
@@ -412,10 +442,7 @@ export function usePeerConnection() {
       // The broker dropped us (its restart, a network blip). PeerJS keeps the peer object
       // usable but will refuse every `call` until it is reconnected, so ask for that the
       // moment it happens rather than waiting for a dial to fail.
-      peer.on('disconnected', () => {
-        if (cancelled) return
-        if (!peer.destroyed) peer.reconnect()
-      })
+      peer.on('disconnected', () => requestReconnect())
 
       peer.on('error', () => {
         for (const socketId of useRoomStore.getState().peerIds) {

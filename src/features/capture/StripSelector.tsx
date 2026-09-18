@@ -1,5 +1,5 @@
 import { Loader2, RotateCcw, Sparkles } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
@@ -131,8 +131,34 @@ export function StripSelector({
    * same URL is very often in cache by the time anyone places one.
    */
   const [stickerReady, setStickerReady] = useState<Record<string, boolean>>({})
-  const markStickerReady = (id: string) =>
-    setStickerReady((prev) => (prev[id] ? prev : { ...prev, [id]: true }))
+  const markStickerReady = useCallback(
+    (id: string) => setStickerReady((prev) => (prev[id] ? prev : { ...prev, [id]: true })),
+    []
+  )
+
+  /**
+   * One stable `ref` callback per sticker, built once.
+   *
+   * It has to be memoised. An inline `ref={(node) => …}` is a new function every render,
+   * so React detaches and re-attaches it every time — running the `complete` check, and
+   * with it a `setState`, on every render. React normally drops a same-value update, but
+   * only while the fiber has no pending work; once this screen re-renders steadily from
+   * outside (the session countdown ticking, peer tiles updating) each render schedules
+   * another and the tree dies with "Maximum update depth exceeded" — React error #185,
+   * seen on a phone right after capture, where those updates never stop.
+   *
+   * Keyed by sticker id, and `markStickerReady` is itself stable, so each callback runs
+   * once per mount: exactly the cached-image case it exists for.
+   */
+  const stickerRefs = useMemo(() => {
+    const refs = new Map<string, (node: HTMLImageElement | null) => void>()
+    for (const option of STICKERS) {
+      refs.set(option.id, (node) => {
+        if (node?.complete) markStickerReady(option.id)
+      })
+    }
+    return refs
+  }, [markStickerReady])
 
   const onDragStart = (slot: number) => (event: React.DragEvent) => {
     dragIndex.current = slot
@@ -343,10 +369,9 @@ export function StripSelector({
                     className={cn(styles.stickerThumb, !ready && styles.stickerThumbLoading)}
                     /* A cached image can finish before React attaches `onLoad`, which
                      * would leave the button disabled over art that is already here —
-                     * so the mount checks `complete` as well. */
-                    ref={(node) => {
-                      if (node?.complete) markStickerReady(option.id)
-                    }}
+                     * so the mount checks `complete` as well. The callback is memoised
+                     * per sticker; see `stickerRefs`. */
+                    ref={stickerRefs.get(option.id)}
                     onLoad={() => markStickerReady(option.id)}
                     onError={() => markStickerReady(option.id)}
                   />
