@@ -50,6 +50,12 @@ export function getSocket(): Socket {
   if (!socket) {
     socket = io(env.realtimeUrl, {
       autoConnect: false,
+      // WebSocket only, matching the server. The polling fallback needs every request in
+      // the handshake to reach the same backend process, which stops being true the
+      // moment a realtime deploy runs two of them behind one hostname (no sticky
+      // sessions) — it would fail there rather than help. A network that blocks
+      // WebSockets can't carry the WebRTC call either, so nothing is really lost.
+      transports: ['websocket'],
       auth: (cb) => cb({ token: getStoredToken() ?? '', clientId: getClientId() }),
     })
   }
