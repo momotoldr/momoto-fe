@@ -77,6 +77,15 @@
   }
 }
 
+/* Over a cut still being cut out for the chosen backdrop. */
+.slotBusy {
+  @apply absolute inset-0 z-10 flex items-center justify-center bg-black/25 text-white;
+
+  svg {
+    @apply h-5 w-5 animate-spin;
+  }
+}
+
 /* Replaces the retake icon while that slot's re-shoot is waiting on the server. */
 .retakeSpinner {
   @apply animate-spin;
@@ -89,7 +98,7 @@
 
 /* Segmented control — phones only; from lg every section is open at once. */
 .tabs {
-  @apply grid grid-cols-2 gap-1 rounded-xl bg-muted p-1 lg:hidden;
+  @apply grid grid-cols-3 gap-1 rounded-xl bg-muted p-1 lg:hidden;
 }
 
 .tab {
@@ -160,6 +169,32 @@
 
 .filterActive .optionName {
   @apply font-medium text-foreground;
+}
+
+/* ── Backdrop picker (shares the filter swatches above) ─────────────────── */
+.backdropStatus {
+  @apply flex flex-col gap-1.5;
+}
+
+.backdropStatusText {
+  @apply flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground;
+}
+
+.backdropSpinner {
+  @apply h-3.5 w-3.5 shrink-0 animate-spin;
+}
+
+.backdropRetry {
+  @apply font-medium text-foreground underline underline-offset-2 hover:text-primary;
+}
+
+.backdropProgress {
+  @apply block h-1 w-full max-w-[16rem] overflow-hidden rounded-full bg-muted;
+}
+
+.backdropProgressBar {
+  /* width is set inline from the download progress. */
+  @apply block h-full rounded-full bg-primary transition-[width] duration-300;
 }
 
 /* ── Sticker picker ──────────────────────────────────────────────────────── */

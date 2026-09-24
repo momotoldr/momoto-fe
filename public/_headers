@@ -20,9 +20,15 @@
 # browser loads is the QR image — already covered by `img-src https:`. The former
 # script/frame/connect entries for app.*.midtrans.com were for the Snap popup and were
 # removed with it; restoring Snap would mean restoring them.
+#
+# `'wasm-unsafe-eval'` is for strip backdrops: the background remover runs onnxruntime's
+# WebAssembly in a worker, and compiling WASM is refused under `script-src` without it.
+# It allows WebAssembly compilation only — not `eval` or inline script. The runtime and
+# model are served from our own origin (`/segmentation/`, staged by
+# scripts/stage-segmentation.mjs), so no CDN host is needed.
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' https://api.momotoldr.com wss://api.momotoldr.com https://realtime.momotoldr.com wss://realtime.momotoldr.com https://peer.momotoldr.com wss://peer.momotoldr.com https://api-staging.momotoldr.com wss://api-staging.momotoldr.com https://realtime-staging.momotoldr.com wss://realtime-staging.momotoldr.com https://peer-staging.momotoldr.com wss://peer-staging.momotoldr.com https://accounts.google.com; frame-src https://accounts.google.com; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' https://api.momotoldr.com wss://api.momotoldr.com https://realtime.momotoldr.com wss://realtime.momotoldr.com https://peer.momotoldr.com wss://peer.momotoldr.com https://api-staging.momotoldr.com wss://api-staging.momotoldr.com https://realtime-staging.momotoldr.com wss://realtime-staging.momotoldr.com https://peer-staging.momotoldr.com wss://peer-staging.momotoldr.com https://accounts.google.com; frame-src https://accounts.google.com; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(self), microphone=(self), geolocation=(), payment=(self "https://app.midtrans.com" "https://app.sandbox.midtrans.com"), usb=()

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 
+import type { BackdropId } from '@/constants/backdrops'
 import type { PhotoFilter } from '@/constants/filters'
 import { DEFAULT_TEMPLATE_ID } from '@/constants/stripTemplates'
 import {
@@ -18,10 +19,16 @@ interface StripState {
   templateId: string
   /** Photo filter applied to the whole strip. Chosen (host) live in the review step. */
   filter: PhotoFilter
+  /**
+   * Scene behind the people in every cut, or `none` for the camera's own background.
+   * Picked after capture; the cutting-out happens on this device (see `utils/backdrop`).
+   */
+  backdrop: BackdropId
   /** Stickers placed on the strip in the review step (drag/resize/remove). */
   stickers: PlacedSticker[]
   setTemplate: (templateId: string) => void
   setFilter: (filter: PhotoFilter) => void
+  setBackdrop: (backdrop: BackdropId) => void
   /** Replace all placed stickers (guest applies the host's synced set). */
   setStickers: (stickers: PlacedSticker[]) => void
   /** Place a new sticker image (centered). */
@@ -46,9 +53,11 @@ function newStickerId(): string {
 export const useStripStore = create<StripState>((set) => ({
   templateId: DEFAULT_TEMPLATE_ID,
   filter: 'none',
+  backdrop: 'none',
   stickers: [],
   setTemplate: (templateId) => set({ templateId }),
   setFilter: (filter) => set({ filter }),
+  setBackdrop: (backdrop) => set({ backdrop }),
   setStickers: (stickers) => set({ stickers }),
   addSticker: (src) =>
     set((state) => ({
@@ -75,5 +84,6 @@ export const useStripStore = create<StripState>((set) => ({
     })),
   removeSticker: (id) =>
     set((state) => ({ stickers: state.stickers.filter((sticker) => sticker.id !== id) })),
-  reset: () => set({ templateId: DEFAULT_TEMPLATE_ID, filter: 'none', stickers: [] }),
+  reset: () =>
+    set({ templateId: DEFAULT_TEMPLATE_ID, filter: 'none', backdrop: 'none', stickers: [] }),
 }))

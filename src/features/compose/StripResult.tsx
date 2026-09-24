@@ -6,6 +6,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
+import { resolveBackdrop } from '@/constants/backdrops'
 import { SHOT_COUNT } from '@/constants/capture'
 import { ROUTES } from '@/constants/routes'
 import { env } from '@/env'
@@ -14,6 +15,7 @@ import { useCartStore } from '@/store/useCartStore'
 import { usePhotosStore } from '@/store/usePhotosStore'
 import { useRoomStore } from '@/store/useRoomStore'
 import { resolveSessionMode } from '@/utils/rooms'
+import { framesWithBackdrop } from '@/utils/backdrop'
 import { dataUrlToBlob } from '@/utils/dataUrl'
 import { extensionForBlob, saveImageBlob, toPngBlob } from '@/utils/download'
 import {
@@ -80,6 +82,7 @@ export function StripResult({ onRetake }: StripResultProps) {
   const templateId = resultConfig?.templateId
   const template = (templateId && STRIP_TEMPLATE_MAP[templateId]) || STRIP_TEMPLATES[0]
   const filter = resultConfig?.filter ?? 'none'
+  const backdrop = resolveBackdrop(resultConfig?.backdrop)
   // Stable ref from the frozen snapshot (avoid `?? []` here — a fresh array each
   // render would churn the compose effect's deps).
   const stickers = resultConfig?.stickers
@@ -144,7 +147,9 @@ export function StripResult({ onRetake }: StripResultProps) {
         const thumbnailBlob = composed.thumbnailDataUrl
           ? await dataUrlToBlob(composed.thumbnailDataUrl)
           : null
-        const clean = await composeStrip(frames, {
+        // Cached from the watermarked compose, so this is the same cuts, not a second
+        // round of cutting out.
+        const clean = await composeStrip(await framesWithBackdrop(frames, backdrop), {
           template,
           title: brand,
           filter: PHOTO_FILTER_MAP[filter].value,
@@ -242,23 +247,40 @@ export function StripResult({ onRetake }: StripResultProps) {
         setStatus('saveFailed')
       }
     },
-    [frames, template, brand, filter, stickers, resultId, roomId, sessionMode, isAuthenticated, t]
+    [
+      frames,
+      template,
+      brand,
+      filter,
+      backdrop,
+      stickers,
+      resultId,
+      roomId,
+      sessionMode,
+      isAuthenticated,
+      t,
+    ]
   )
 
   useEffect(() => {
     let cancelled = false
     setStatus('composing')
-    composeStrip(frames, {
-      template,
-      // Footer shows the app name + the session date.
-      title: brand,
-      filter: PHOTO_FILTER_MAP[filter].value,
-      stickers: stickers ?? [],
-      // Free strips are watermarked; the clean copy saved alongside is composed with
-      // `watermark: false` in `saveStrip`.
-      watermark: true,
-      watermarkText: brand,
-    })
+    // Instant when the arrange screen already cut these out; a draft restored straight
+    // onto the result screen has to redo it here.
+    framesWithBackdrop(frames, backdrop)
+      .then((sources) =>
+        composeStrip(sources, {
+          template,
+          // Footer shows the app name + the session date.
+          title: brand,
+          filter: PHOTO_FILTER_MAP[filter].value,
+          stickers: stickers ?? [],
+          // Free strips are watermarked; the clean copy saved alongside is composed with
+          // `watermark: false` in `saveStrip`.
+          watermark: true,
+          watermarkText: brand,
+        })
+      )
       .then((result) => {
         if (cancelled) return
         if (!result) {
@@ -284,7 +306,7 @@ export function StripResult({ onRetake }: StripResultProps) {
     return () => {
       cancelled = true
     }
-  }, [frames, template, filter, stickers, brand, resultId, saveStrip])
+  }, [frames, template, filter, backdrop, stickers, brand, resultId, saveStrip])
 
   /** Try the whole save again with the strip already on screen — nothing is re-captured. */
   const retrySave = () => {
