@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Chivo carries the display headings (landing hero, section titles). Self-hosted rather
+ * than pulled from Google Fonts: the CSP (public/_headers) only allows 'self' for
+ * style-src and font-src. Body copy stays on the system stack, so only the three
+ * display weights ship, Latin subset only. */
+@font-face {
+  font-family: 'Chivo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@/assets/fonts/chivo-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Chivo';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('@/assets/fonts/chivo-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Chivo';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('@/assets/fonts/chivo-900.woff2') format('woff2');
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
