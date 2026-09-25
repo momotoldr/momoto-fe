@@ -40,7 +40,9 @@ interface EmailRowProps {
 export function EmailRow({ user }: EmailRowProps) {
   const { t } = useTranslation()
   const [editing, setEditing] = useState(false)
-  const [pending, setPending] = useState<string | null>(user.pendingEmail ?? (user.emailVerified ? null : user.email))
+  const [pending, setPending] = useState<string | null>(
+    user.pendingEmail ?? (user.emailVerified ? null : user.email)
+  )
   const [resending, setResending] = useState(false)
   const cooldown = useSendCooldown(EMAIL_COOLDOWN_KEY)
 

@@ -148,7 +148,12 @@ export function UnverifiedEmailBanner() {
             {address ? t('auth.email.banner.openProfile') : t('auth.email.banner.addEmail')}
           </Link>
         </Button>
-        <button type="button" className={styles.close} onClick={dismiss} aria-label={t('common.close')}>
+        <button
+          type="button"
+          className={styles.close}
+          onClick={dismiss}
+          aria-label={t('common.close')}
+        >
           <X className={styles.closeGlyph} />
         </button>
       </div>
