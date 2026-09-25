@@ -107,7 +107,11 @@ export function PasswordRow({ user }: PasswordRowProps) {
           <KeyRound className={styles.rowGlyph} />
         </span>
         <FormProvider {...methods}>
-          <form className={styles.rowForm} noValidate onSubmit={(e) => void handleSubmit(onSubmit)(e)}>
+          <form
+            className={styles.rowForm}
+            noValidate
+            onSubmit={(e) => void handleSubmit(onSubmit)(e)}
+          >
             {user.hasPassword && (
               <RhfPasswordField
                 name="currentPassword"
@@ -130,7 +134,13 @@ export function PasswordRow({ user }: PasswordRowProps) {
                 {isSubmitting && <Loader2 className={styles.spinner} />}
                 {t(user.hasPassword ? 'auth.password.change' : 'auth.password.set')}
               </Button>
-              <Button type="button" size="sm" variant="ghost" disabled={isSubmitting} onClick={close}>
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                disabled={isSubmitting}
+                onClick={close}
+              >
                 {t('common.cancel')}
               </Button>
             </div>

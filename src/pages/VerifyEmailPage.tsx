@@ -78,9 +78,7 @@ export function VerifyEmailPage() {
             <p className={flow.statusBody}>{t('auth.verifyEmail.doneBody')}</p>
             <Button asChild>
               <Link to={onward}>
-                {isAuthenticated
-                  ? t('auth.verifyEmail.toProfile')
-                  : t('auth.verifyEmail.toLogin')}
+                {isAuthenticated ? t('auth.verifyEmail.toProfile') : t('auth.verifyEmail.toLogin')}
               </Link>
             </Button>
           </div>
@@ -92,16 +90,16 @@ export function VerifyEmailPage() {
               <TriangleAlert className={flow.statusGlyph} />
             </span>
             <h1 className={flow.statusTitle}>
-              {t(state === 'taken' ? 'auth.verifyEmail.takenTitle' : 'auth.verifyEmail.failedTitle')}
+              {t(
+                state === 'taken' ? 'auth.verifyEmail.takenTitle' : 'auth.verifyEmail.failedTitle'
+              )}
             </h1>
             <p className={flow.statusBody}>
               {t(state === 'taken' ? 'auth.verifyEmail.takenBody' : 'auth.verifyEmail.failedBody')}
             </p>
             <Button asChild variant="outline">
               <Link to={onward}>
-                {isAuthenticated
-                  ? t('auth.verifyEmail.toProfile')
-                  : t('auth.verifyEmail.toLogin')}
+                {isAuthenticated ? t('auth.verifyEmail.toProfile') : t('auth.verifyEmail.toLogin')}
               </Link>
             </Button>
           </div>

@@ -57,10 +57,13 @@ export function RoomStatus() {
       if (capacity !== null && capacity > 2) {
         return {
           Icon: peerIds.length > 0 && !anyLive ? Loader2 : Users,
-          label: t(anyLive || peerIds.length === 0 ? 'status.membersHere' : 'status.membersConnecting', {
-            present,
-            capacity,
-          }),
+          label: t(
+            anyLive || peerIds.length === 0 ? 'status.membersHere' : 'status.membersConnecting',
+            {
+              present,
+              capacity,
+            }
+          ),
           active: anyLive,
         }
       }

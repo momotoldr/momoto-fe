@@ -122,7 +122,7 @@ function u32(value: number): ArrayBuffer {
 async function packStripBody(
   watermarked: Blob,
   clean: Blob,
-  thumbnail: Blob | null,
+  thumbnail: Blob | null
 ): Promise<Blob> {
   const type = uploadType(watermarked)
   if (!thumbnail) {
@@ -137,7 +137,7 @@ async function packStripBody(
       clean,
       thumbnail,
     ],
-    { type },
+    { type }
   )
 }
 

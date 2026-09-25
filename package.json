@@ -6,16 +6,16 @@
   "scripts": {
     "predev": "node scripts/stage-segmentation.mjs development",
     "dev": "vite",
-    "prebuild": "node scripts/stage-segmentation.mjs production",
+    "prebuild": "node scripts/check-env.mjs production && node scripts/stage-segmentation.mjs production",
     "build": "tsc --noEmit && vite build",
-    "build:staging": "node scripts/stage-segmentation.mjs staging && tsc --noEmit && CLOUDFLARE_ENV=staging vite build --mode staging && node scripts/staging-noindex.mjs",
+    "build:staging": "node scripts/check-env.mjs staging && node scripts/stage-segmentation.mjs staging && tsc --noEmit && CLOUDFLARE_ENV=staging vite build --mode staging && node scripts/staging-noindex.mjs",
     "preview": "npm run build && wrangler dev",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
-    "deploy": "npm run build && npx wrangler deploy",
-    "deploy:staging": "npm run build:staging && npx wrangler deploy"
+    "deploy": "npm run build && node scripts/check-deploy-target.mjs production && npx wrangler deploy",
+    "deploy:staging": "npm run build:staging && node scripts/check-deploy-target.mjs staging && npx wrangler deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.5.3",

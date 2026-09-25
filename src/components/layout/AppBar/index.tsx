@@ -8,7 +8,7 @@ import { Menu, ShoppingBag, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import styles from './Appbar.module.scss'
+import styles from './AppBar.module.scss'
 import { UserMenu } from './UserMenu'
 
 /** How long the cart tip stays up before auto-dismissing (ms). */
