@@ -556,6 +556,7 @@
     "stillLiveNote": "Keep talking while you design. Your shots are already taken.",
     "stripLabel": "Your strip",
     "createNote": "Creating is final — arrangement, filter and stickers lock.",
+    "createNoteBackdrop": "Creating is final — arrangement, background, filter and stickers lock.",
     "tabFilter": "Filter",
     "tabStickers": "Stickers",
     "camerasLive": "Cameras still live — keep talking.",
@@ -633,7 +634,9 @@
         },
         "style": {
           "title": "Filter and stickers",
-          "text": "A filter sets the look of the whole strip; stickers go on top, wherever you drop them."
+          "text": "A filter sets the look of the whole strip; stickers go on top, wherever you drop them.",
+          "title_backdrop": "Background, filter and stickers",
+          "text_backdrop": "Swap the background behind everyone, set the look of the whole strip with a filter, then drop stickers on top."
         },
         "final": {
           "title": "Creating is final",
@@ -666,6 +669,24 @@
         }
       }
     }
+  },
+  "backdrops": {
+    "tab": "Background",
+    "label": "Choose a background",
+    "none": "Original",
+    "studio": "Studio",
+    "blush": "Blush",
+    "sunset": "Sunset",
+    "bokeh": "Bokeh",
+    "confetti": "Confetti",
+    "checker": "Checker",
+    "sky": "Sky",
+    "downloading": "Getting the background remover ready… {{percent}}%",
+    "working": "Removing backgrounds… {{done}} of {{total}}",
+    "failed": "Couldn't remove the background on this device.",
+    "retry": "Try again",
+    "waitCreate": "Wait for the background to finish, or pick Original.",
+    "unsupported": "Background swap isn't available on this device — it needs a newer browser or more memory."
   },
   "filters": {
     "none": "Original",

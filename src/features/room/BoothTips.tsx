@@ -20,6 +20,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 
+import { env } from '@/env'
 import { Button } from '@/components/ui/button'
 import type { BoothStage } from '@/constants/boothTips'
 import { useTipsStore } from '@/store/useTipsStore'
@@ -133,8 +134,12 @@ export function BoothTips({ mode }: { mode: SessionMode }) {
   const cardRef = useRef<HTMLElement>(null)
 
   // Prefer a line worded for this mode where one exists, and fall back to the shared
-  // copy (i18next takes the first key that resolves) everywhere else.
-  const line = (key: string) => (mode === 'date' ? t(key) : t([`${key}_${mode}`, key]))
+  // copy (i18next takes the first key that resolves) everywhere else. With backdrops on,
+  // a `_backdrop` wording (one that mentions the Background tab) beats both.
+  const line = (key: string) => {
+    const keys = mode === 'date' ? [key] : [`${key}_${mode}`, key]
+    return t(env.backdropsEnabled ? [`${key}_backdrop`, ...keys] : keys)
+  }
 
   // Escape closes it, as it would any dismissible panel — and so does reaching for
   // anything else on the page. The booth is a dense workspace and the card has to park

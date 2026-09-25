@@ -2,6 +2,7 @@ import { create } from 'zustand'
 
 import { newId } from '@/utils/id'
 import type { CapturedFrame } from '@/utils/captureFrame'
+import type { BackdropId } from '@/constants/backdrops'
 import type { PhotoFilter } from '@/constants/filters'
 import type { PlacedSticker } from '@/constants/stickers'
 import { COUNTDOWN_SECONDS } from '@/constants/capture'
@@ -14,6 +15,11 @@ import { COUNTDOWN_SECONDS } from '@/constants/capture'
 export interface ResultConfig {
   templateId: string
   filter: PhotoFilter
+  /**
+   * Backdrop behind the people in each cut. Optional because results restored from a
+   * draft saved before backdrops existed don't carry one — read it as `none`.
+   */
+  backdrop?: BackdropId
   /** Stickers placed on the strip, frozen at create time. */
   stickers: PlacedSticker[]
 }

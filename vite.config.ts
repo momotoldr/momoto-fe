@@ -14,8 +14,18 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      // The package's default `webgpu` entry is a bundle that points at its 25.5 MiB WASM
+      // with `new URL(…, import.meta.url)`, which Vite would copy into `dist/assets` —
+      // over Cloudflare's 25 MiB per-asset limit. This build loads nothing on its own; the
+      // segmentation worker hands it the WASM staged in parts by
+      // `scripts/stage-segmentation.mjs`.
+      'onnxruntime-web/webgpu': fileURLToPath(
+        new URL('./node_modules/onnxruntime-web/dist/ort.webgpu.min.mjs', import.meta.url)
+      ),
     },
   },
+  // Module workers, so the segmentation worker can code-split onnxruntime's dynamic import.
+  worker: { format: 'es' },
   css: {
     preprocessorOptions: {
       // Use Dart Sass's modern API (silences the legacy-js-api deprecation).

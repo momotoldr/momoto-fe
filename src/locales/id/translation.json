@@ -555,6 +555,7 @@
     "stillLiveNote": "Tetap mengobrol sambil mendesain. Fotonya sudah selesai diambil.",
     "stripLabel": "Strip kamu",
     "createNote": "Sekali dibuat, susunan, filter, dan stiker terkunci.",
+    "createNoteBackdrop": "Sekali dibuat, susunan, latar, filter, dan stiker terkunci.",
     "tabFilter": "Filter",
     "tabStickers": "Stiker",
     "camerasLive": "Kamera masih menyala — lanjut mengobrol.",
@@ -632,7 +633,9 @@
         },
         "style": {
           "title": "Filter dan stiker",
-          "text": "Filter menentukan nuansa seluruh strip; stiker ditempel di atasnya, sesukamu."
+          "text": "Filter menentukan nuansa seluruh strip; stiker ditempel di atasnya, sesukamu.",
+          "title_backdrop": "Latar, filter, dan stiker",
+          "text_backdrop": "Ganti latar di belakang kalian, atur nuansa seluruh strip dengan filter, lalu tempel stiker di atasnya."
         },
         "final": {
           "title": "Sekali dibuat, final",
@@ -665,6 +668,24 @@
         }
       }
     }
+  },
+  "backdrops": {
+    "tab": "Latar",
+    "label": "Pilih latar",
+    "none": "Asli",
+    "studio": "Studio",
+    "blush": "Blush",
+    "sunset": "Senja",
+    "bokeh": "Bokeh",
+    "confetti": "Konfeti",
+    "checker": "Kotak-kotak",
+    "sky": "Langit",
+    "downloading": "Menyiapkan penghapus latar… {{percent}}%",
+    "working": "Menghapus latar… {{done}} dari {{total}}",
+    "failed": "Latar tidak bisa dihapus di perangkat ini.",
+    "retry": "Coba lagi",
+    "waitCreate": "Tunggu latar selesai, atau pilih Asli.",
+    "unsupported": "Ganti latar tidak tersedia di perangkat ini — perlu browser yang lebih baru atau memori lebih besar."
   },
   "filters": {
     "none": "Asli",

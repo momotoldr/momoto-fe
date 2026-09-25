@@ -17,6 +17,7 @@
  * people in a date room are on different devices.
  */
 
+import type { BackdropId } from '@/constants/backdrops'
 import type { PhotoFilter } from '@/constants/filters'
 import type { PlacedSticker } from '@/constants/stickers'
 import type { ResultConfig } from '@/store/usePhotosStore'
@@ -66,6 +67,8 @@ export interface BoothDraft {
   resultConfig: ResultConfig | null
   templateId: string
   filter: PhotoFilter
+  /** Absent on drafts saved before backdrops existed. */
+  backdrop?: BackdropId
   stickers: PlacedSticker[]
   /**
    * End of the session window this was taken in, as a **local** timestamp, or null if
