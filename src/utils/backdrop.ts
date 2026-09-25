@@ -14,9 +14,9 @@
  * original frames are never touched: they're what gets stored, and the backdrop is
  * re-applied from them wherever a strip is composed.
  */
-import { BACKDROP_MAP, type BackdropId } from '@/constants/backdrops'
+import { BACKDROP_MAP, resolveBackdrop, type BackdropId } from '@/constants/backdrops'
 import type { CapturedFrame } from '@/utils/captureFrame'
-import { segmentImage } from '@/utils/segmentation/segmenter'
+import { checkBackdropSupport, segmentImage } from '@/utils/segmentation/segmenter'
 
 /** Two strips' worth — a retake or a fresh run replaces cuts, and the old ones age out. */
 const CUTOUT_LIMIT = 8
@@ -144,14 +144,22 @@ function drawCover(ctx: CanvasRenderingContext2D, image: HTMLImageElement, w: nu
 const compositeKey = (frame: CapturedFrame, backdrop: BackdropId) => `${frame.id}|${backdrop}`
 
 /**
- * `frame` in front of `backdrop`. Resolves to the frame itself for `none`.
+ * `frame` in front of `backdrop`. Resolves to the frame itself for `none` — and on a
+ * device that fails `checkBackdropSupport`, whatever was asked for: nothing starts (no
+ * worker, no download) until the device check has said yes.
  *
  * Encoded as PNG, like the cut it replaces: the clean strip is lossless end to end, and
  * a lossy generation here would be baked into it.
  */
 export function withBackdrop(frame: CapturedFrame, backdrop: BackdropId): Promise<CapturedFrame> {
-  const src = BACKDROP_MAP[backdrop]?.src
+  const src = BACKDROP_MAP[resolveBackdrop(backdrop)]?.src
   if (!src) return Promise.resolve(frame)
+  return checkBackdropSupport().then((supported) =>
+    supported ? composite(frame, backdrop, src) : frame
+  )
+}
+
+function composite(frame: CapturedFrame, backdrop: BackdropId, src: string) {
   return composites.get(compositeKey(frame, backdrop), async () => {
     const [art, subject] = await Promise.all([loadBackdrop(src), cutout(frame)])
     const { canvas, ctx } = canvasOf(frame.width, frame.height)
@@ -168,7 +176,7 @@ export function peekBackdrop(
   frame: CapturedFrame,
   backdrop: BackdropId
 ): CapturedFrame | undefined {
-  if (!BACKDROP_MAP[backdrop]?.src) return frame
+  if (!BACKDROP_MAP[resolveBackdrop(backdrop)]?.src) return frame
   return composites.peek(compositeKey(frame, backdrop))
 }
 

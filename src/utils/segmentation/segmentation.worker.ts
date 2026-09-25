@@ -2,8 +2,8 @@
  * Background-removal worker: runs ISNet (via onnxruntime-web) on a captured cut and
  * returns its foreground mask.
  *
- * Off the main thread because one inference is seconds of solid compute on the CPU
- * path — long enough to freeze the arrange screen and the live camera tiles beside it.
+ * Off the main thread so the pre- and post-processing (and onnxruntime's own
+ * bookkeeping) never stall the arrange screen or the live camera tiles beside it.
  * Talks to `segmenter.ts` only; see `SegmenterRequest` / `SegmenterResponse` there.
  *
  * The runtime and model are fetched in parts (see `scripts/stage-segmentation.mjs`)
@@ -36,6 +36,9 @@ interface Manifest {
 }
 
 type GpuNavigator = Navigator & { gpu?: { requestAdapter(): Promise<unknown> } }
+
+/** This device can't run the model at all — reported as final, not as a retryable error. */
+class UnsupportedError extends Error {}
 
 const post = (message: SegmenterResponse, transfer: Transferable[] = []) =>
   self.postMessage(message, { transfer })
@@ -145,6 +148,12 @@ async function pruneCache(cache: Cache | null, manifest: Manifest) {
 }
 
 async function createSession(): Promise<ort.InferenceSession> {
+  // Before anything is downloaded: WebGPU is the only path offered (see
+  // `checkBackdropSupport`), and a worker can lack it even when the page has it.
+  const gpu = (navigator as GpuNavigator).gpu
+  const adapter = gpu ? await gpu.requestAdapter().catch(() => null) : null
+  if (!adapter) throw new UnsupportedError('WebGPU is not available in the worker')
+
   const response = await fetch(MANIFEST_URL, { cache: 'no-cache' })
   if (!response.ok) throw new Error(`fetch ${MANIFEST_URL}: ${response.status}`)
   const manifest = (await response.json()) as Manifest
@@ -173,29 +182,20 @@ async function createSession(): Promise<ort.InferenceSession> {
   ort.env.wasm.wasmBinary = wasm.buffer
   ort.env.wasm.wasmPaths = { mjs: ownUrl(manifest.mjs) }
 
-  const gpu = (navigator as GpuNavigator).gpu
-  const adapter = gpu ? await gpu.requestAdapter().catch(() => null) : null
-  if (adapter) {
-    try {
-      const gpuSession = await ort.InferenceSession.create(model, {
-        executionProviders: ['webgpu'],
-        graphOptimizationLevel: 'all',
-      })
-      post({ type: 'ready', backend: 'webgpu' })
-      return gpuSession
-    } catch {
-      // An adapter that can't take this graph (limits, a blocklisted driver) — the CPU
-      // path below still works, just slower.
-    }
+  // GPU only. There is deliberately no CPU fallback: it took ~6 s a cut on a fast laptop
+  // and peaked around 700 MB — slow everywhere, and enough to get a phone's tab killed.
+  let gpuSession: ort.InferenceSession
+  try {
+    gpuSession = await ort.InferenceSession.create(model, {
+      executionProviders: ['webgpu'],
+      graphOptimizationLevel: 'all',
+    })
+  } catch (error) {
+    // An adapter that can't take this graph (limits, a blocklisted driver).
+    throw new UnsupportedError(error instanceof Error ? error.message : String(error))
   }
-  const cpuSession = await ort.InferenceSession.create(model, {
-    executionProviders: ['wasm'],
-    // Unoptimized on the CPU: the optimizer's constant folding turns every uint8 weight
-    // back into float32 up front, which measured +60 MB at peak for no speed gained.
-    graphOptimizationLevel: 'disabled',
-  })
-  post({ type: 'ready', backend: 'wasm' })
-  return cpuSession
+  post({ type: 'ready' })
+  return gpuSession
 }
 
 /**
@@ -253,7 +253,11 @@ async function ensureSession(): Promise<ort.InferenceSession> {
     return await (session ??= createSession())
   } catch (error) {
     session = null
-    post({ type: 'error', message: error instanceof Error ? error.message : String(error) })
+    post({
+      type: 'error',
+      message: error instanceof Error ? error.message : String(error),
+      unsupported: error instanceof UnsupportedError,
+    })
     throw error
   }
 }

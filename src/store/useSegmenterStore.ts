@@ -9,19 +9,17 @@ interface SegmenterState {
   /**
    * `idle` — nothing asked for yet (nothing downloaded either: the cost is only paid
    * by someone who picks a backdrop). `loading` — fetching and compiling. `ready` —
-   * cutting out. `error` — couldn't start on this device; a retry starts over.
+   * cutting out. `error` — something went wrong; a retry starts over. `unsupported` —
+   * the GPU session couldn't start on this device at all; final for the page.
    */
-  phase: 'idle' | 'loading' | 'ready' | 'error'
+  phase: 'idle' | 'loading' | 'ready' | 'error' | 'unsupported'
   /** Download progress in bytes, while `loading`. Cached parts count as instant. */
   loaded: number
   total: number
-  /** Which path is running, once `ready`. `wasm` is the several-seconds-a-cut one. */
-  backend: 'webgpu' | 'wasm' | null
 }
 
 export const useSegmenterStore = create<SegmenterState>(() => ({
   phase: 'idle',
   loaded: 0,
   total: 0,
-  backend: null,
 }))

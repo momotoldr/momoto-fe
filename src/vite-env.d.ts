@@ -28,6 +28,8 @@ interface ImportMetaEnv {
    * `ROOM_CAPACITY_MAX` above 2 — that is what actually admits the third person.
    */
   readonly VITE_GROUP_MODE_ENABLED?: string
+  /** Set to "true" to offer strip backdrops (background removal after capture). */
+  readonly VITE_BACKDROPS_ENABLED?: string
 }
 
 interface ImportMeta {

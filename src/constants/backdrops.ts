@@ -5,6 +5,7 @@ import confetti from '@/assets/backdrops/confetti.svg'
 import sky from '@/assets/backdrops/sky.svg'
 import studio from '@/assets/backdrops/studio.svg'
 import sunset from '@/assets/backdrops/sunset.svg'
+import { env } from '@/env'
 
 /**
  * Backdrops that can replace the background behind the people in a cut, chosen on the
@@ -43,7 +44,13 @@ export const BACKDROP_MAP = Object.fromEntries(
   BACKDROPS.map((backdrop) => [backdrop.id, backdrop])
 ) as Record<BackdropId, BackdropOption>
 
-/** A stored id from an older build (or a tampered draft) falls back to no backdrop. */
+/**
+ * The backdrop to actually use for a stored id. An id from an older build (or a tampered
+ * draft) falls back to no backdrop, and so does *every* id while `VITE_BACKDROPS_ENABLED`
+ * is off — the one gate every reader goes through, so a draft or created strip that
+ * carries a backdrop can't wake the model up on a build that doesn't offer the feature.
+ */
 export function resolveBackdrop(id: string | undefined | null): BackdropId {
+  if (!env.backdropsEnabled) return 'none'
   return id && id in BACKDROP_MAP ? (id as BackdropId) : 'none'
 }

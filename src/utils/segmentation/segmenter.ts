@@ -12,8 +12,9 @@ export type SegmenterRequest =
 
 export type SegmenterResponse =
   | { type: 'progress'; loaded: number; total: number }
-  | { type: 'ready'; backend: 'webgpu' | 'wasm' }
-  | { type: 'error'; message: string }
+  | { type: 'ready' }
+  /** `unsupported`: this device can't run it at all (no usable WebGPU) — don't retry. */
+  | { type: 'error'; message: string; unsupported?: boolean }
   | { type: 'mask'; id: string; mask: ImageBitmap }
   | { type: 'failed'; id: string; message: string }
 
@@ -26,64 +27,59 @@ interface Pending {
  * The smallest module using a SIMD instruction (a `v128.const`), per wasm-feature-detect.
  * onnxruntime-web ships SIMD builds only, so without this nothing can run.
  */
+// prettier-ignore
 const SIMD_PROBE = Uint8Array.of(
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  5,
-  1,
-  96,
-  0,
-  1,
-  123,
-  3,
-  2,
-  1,
-  0,
-  10,
-  10,
-  1,
-  8,
-  0,
-  65,
-  0,
-  253,
-  15,
-  253,
-  98,
-  11
+  0, 97, 115, 109, 1, 0, 0, 0, 1, 5, 1, 96, 0, 1, 123, 3, 2, 1, 0, 10, 10, 1, 8, 0, 65, 0, 253,
+  15, 253, 98, 11
 )
 
+/** Below this, a device that reports its memory is left out. */
+const MIN_DEVICE_MEMORY_GB = 4
+
+interface GpuAdapterLike {
+  isFallbackAdapter?: boolean
+  info?: { isFallbackAdapter?: boolean }
+}
+type CapableNavigator = Navigator & {
+  deviceMemory?: number
+  gpu?: { requestAdapter(): Promise<GpuAdapterLike | null> }
+}
+
+let supportCheck: Promise<boolean> | null = null
+
 /**
- * Whether this device can run the background remover — checked before anything is
- * downloaded, so an unsupported phone isn't sent ~50 MB only to fail.
+ * Whether this device can run backdrops — decided before anything is downloaded, and
+ * strictly: a device that would only manage it slowly, or might run out of memory
+ * doing it, is left out rather than tried.
  *
- * Hard requirements: WebAssembly SIMD (Chrome/Edge 91, Firefox 89, Safari 16.4) and a 2D
- * `OffscreenCanvas` in a worker (Firefox 105, Safari 16.4). Memory is a soft one: the CPU
- * path peaks around 700 MB, so a device that reports under 4 GB and has no WebGPU to take
- * the load off is left out, as is anything under 2 GB. Only Chromium reports
- * `deviceMemory`; elsewhere this can't be judged ahead of time, and a failure lands on
- * the retry screen instead.
+ * - **WebGPU with a hardware adapter.** The only path offered. On the GPU a cut takes
+ *   ~0.2 s; the CPU fallback took ~6 s on a fast laptop (a minute or more for a strip on
+ *   a phone) and peaked around 700 MB, enough for the OS to kill the tab. A software
+ *   ("fallback") adapter is the CPU path in disguise, so it doesn't count.
+ * - **At least 4 GB of RAM** where the browser says (Chromium only). iPhones don't
+ *   report it, but WebGPU only arrived with iOS 26, whose oldest devices have 4 GB.
+ * - **WebAssembly SIMD and a 2D `OffscreenCanvas` in a worker**, which the runtime and
+ *   the pre-processing need.
+ *
+ * Cached for the page: none of it changes without a new browser.
  */
-export function canRunBackdrops(): boolean {
-  try {
-    if (typeof Worker === 'undefined' || typeof createImageBitmap !== 'function') return false
-    if (typeof OffscreenCanvas === 'undefined') return false
-    if (typeof OffscreenCanvasRenderingContext2D === 'undefined') return false
-    if (typeof WebAssembly !== 'object' || !WebAssembly.validate(SIMD_PROBE)) return false
-  } catch {
-    return false
-  }
-  const nav = navigator as Navigator & { deviceMemory?: number; gpu?: unknown }
-  const memory = nav.deviceMemory
-  if (memory !== undefined && (memory < 2 || (memory < 4 && !nav.gpu))) return false
-  return true
+export function checkBackdropSupport(): Promise<boolean> {
+  supportCheck ??= (async () => {
+    try {
+      if (typeof Worker === 'undefined' || typeof createImageBitmap !== 'function') return false
+      if (typeof OffscreenCanvas === 'undefined') return false
+      if (typeof OffscreenCanvasRenderingContext2D === 'undefined') return false
+      if (typeof WebAssembly !== 'object' || !WebAssembly.validate(SIMD_PROBE)) return false
+      const nav = navigator as CapableNavigator
+      if (nav.deviceMemory !== undefined && nav.deviceMemory < MIN_DEVICE_MEMORY_GB) return false
+      const adapter = await nav.gpu?.requestAdapter()
+      if (!adapter) return false
+      return !(adapter.info?.isFallbackAdapter ?? adapter.isFallbackAdapter ?? false)
+    } catch {
+      return false
+    }
+  })()
+  return supportCheck
 }
 
 let worker: Worker | null = null
@@ -93,8 +89,8 @@ let nextId = 0
 /**
  * How long an idle worker is kept before it's shut down.
  *
- * WebAssembly memory only ever grows: after one run the worker holds its whole peak —
- * ~700 MB on the CPU path — for as long as it lives, even with nothing left to do.
+ * WebAssembly memory only ever grows, and the GPU buffers go with the session: after one
+ * run the worker holds its whole peak for as long as it lives, even with nothing to do.
  * Terminating it is the only way to hand that back, and bringing it up again costs
  * under a second once the model is in Cache Storage. Long enough to cover flicking
  * between backdrops and a single-slot retake; short enough that the booth doesn't sit
@@ -117,7 +113,7 @@ function scheduleIdle() {
     worker.terminate()
     worker = null
     // Back to the start: the next request loads it again (from cache, no download).
-    useSegmenterStore.setState({ phase: 'idle', loaded: 0, total: 0, backend: null })
+    useSegmenterStore.setState({ phase: 'idle', loaded: 0, total: 0 })
   }, IDLE_MS)
 }
 
@@ -133,11 +129,19 @@ function onMessage(event: MessageEvent<SegmenterResponse>) {
       useSegmenterStore.setState({ loaded: message.loaded, total: message.total })
       break
     case 'ready':
-      useSegmenterStore.setState({ phase: 'ready', backend: message.backend })
+      useSegmenterStore.setState({ phase: 'ready' })
       scheduleIdle()
       break
     case 'error':
-      useSegmenterStore.setState({ phase: 'error' })
+      // A device that passed the up-front check but still can't start the GPU session
+      // (a blocklisted driver, a worker without WebGPU) is out for the rest of the page —
+      // retrying would fail the same way.
+      useSegmenterStore.setState({ phase: message.unsupported ? 'unsupported' : 'error' })
+      if (message.unsupported) {
+        failAll(new Error(message.message))
+        worker?.terminate()
+        worker = null
+      }
       break
     case 'mask':
       pending.get(message.id)?.resolve(message.mask)
@@ -174,7 +178,7 @@ function getWorker(): Worker {
  */
 export function loadSegmenter() {
   const { phase } = useSegmenterStore.getState()
-  if (phase === 'loading' || phase === 'ready') return
+  if (phase === 'loading' || phase === 'ready' || phase === 'unsupported') return
   cancelIdle()
   useSegmenterStore.setState({ phase: 'loading', loaded: 0, total: 0 })
   getWorker().postMessage({ type: 'load' } satisfies SegmenterRequest)
@@ -187,6 +191,10 @@ export function loadSegmenter() {
  * `image` is transferred, so it's unusable here afterwards.
  */
 export function segmentImage(image: ImageBitmap): Promise<ImageBitmap> {
+  if (useSegmenterStore.getState().phase === 'unsupported') {
+    image.close()
+    return Promise.reject(new Error('background removal is not supported on this device'))
+  }
   loadSegmenter()
   const id = String((nextId += 1))
   cancelIdle()

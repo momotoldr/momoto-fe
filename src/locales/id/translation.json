@@ -554,7 +554,8 @@
     "stillLive": "Masih menyala",
     "stillLiveNote": "Tetap mengobrol sambil mendesain. Fotonya sudah selesai diambil.",
     "stripLabel": "Strip kamu",
-    "createNote": "Sekali dibuat, susunan, latar, filter, dan stiker terkunci.",
+    "createNote": "Sekali dibuat, susunan, filter, dan stiker terkunci.",
+    "createNoteBackdrop": "Sekali dibuat, susunan, latar, filter, dan stiker terkunci.",
     "tabFilter": "Filter",
     "tabStickers": "Stiker",
     "camerasLive": "Kamera masih menyala — lanjut mengobrol.",
@@ -631,8 +632,10 @@
           "text": "Ketuk ikon ambil ulang di satu foto, atau ambil ulang keempatnya dan jalankan sesi lagi."
         },
         "style": {
-          "title": "Latar, filter, dan stiker",
-          "text": "Ganti latar di belakang kalian, atur nuansa seluruh strip dengan filter, lalu tempel stiker di atasnya."
+          "title": "Filter dan stiker",
+          "text": "Filter menentukan nuansa seluruh strip; stiker ditempel di atasnya, sesukamu.",
+          "title_backdrop": "Latar, filter, dan stiker",
+          "text_backdrop": "Ganti latar di belakang kalian, atur nuansa seluruh strip dengan filter, lalu tempel stiker di atasnya."
         },
         "final": {
           "title": "Sekali dibuat, final",
@@ -669,7 +672,6 @@
   "backdrops": {
     "tab": "Latar",
     "label": "Pilih latar",
-    "tip": "Pemakaian pertama mengunduh sekitar 75 MB.",
     "none": "Asli",
     "studio": "Studio",
     "blush": "Blush",
@@ -680,7 +682,6 @@
     "sky": "Langit",
     "downloading": "Menyiapkan penghapus latar… {{percent}}%",
     "working": "Menghapus latar… {{done}} dari {{total}}",
-    "slow": "Perangkat ini memprosesnya tanpa akselerasi grafis, jadi bisa agak lama.",
     "failed": "Latar tidak bisa dihapus di perangkat ini.",
     "retry": "Coba lagi",
     "waitCreate": "Tunggu latar selesai, atau pilih Asli.",

@@ -63,6 +63,13 @@ interface AppEnv {
    * SESSION_SECONDS / SESSION_DURATION_MS.
    */
   groupModeEnabled: boolean
+  /**
+   * Strip backdrops — replacing the background behind the people in each cut after
+   * capture (`utils/backdrop`). Off hides the Background tab and reads every stored
+   * backdrop as `none`, so the ~73 MB model and runtime are never fetched; the build
+   * doesn't even stage them (`scripts/stage-segmentation.mjs` reads the same flag).
+   */
+  backdropsEnabled: boolean
 }
 
 const DEFAULT_STUN_URL = 'stun:stun.l.google.com:19302'
@@ -144,4 +151,5 @@ export const env: AppEnv = {
   paymentsEnabled: import.meta.env.VITE_PAYMENTS_ENABLED === 'true',
   betaMode,
   groupModeEnabled: import.meta.env.VITE_GROUP_MODE_ENABLED === 'true',
+  backdropsEnabled: import.meta.env.VITE_BACKDROPS_ENABLED === 'true',
 }

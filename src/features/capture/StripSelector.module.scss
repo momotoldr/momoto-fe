@@ -98,7 +98,12 @@
 
 /* Segmented control — phones only; from lg every section is open at once. */
 .tabs {
-  @apply grid grid-cols-3 gap-1 rounded-xl bg-muted p-1 lg:hidden;
+  @apply grid grid-cols-2 gap-1 rounded-xl bg-muted p-1 lg:hidden;
+}
+
+/* With the backdrop section on (VITE_BACKDROPS_ENABLED). */
+.tabsThree {
+  @apply grid-cols-3;
 }
 
 .tab {

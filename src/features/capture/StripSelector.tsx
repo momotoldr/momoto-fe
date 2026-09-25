@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next'
 
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Button } from '@/components/ui/button'
-import { BACKDROPS } from '@/constants/backdrops'
+import { BACKDROPS, resolveBackdrop } from '@/constants/backdrops'
 import { PHOTO_FILTERS, PHOTO_FILTER_MAP } from '@/constants/filters'
 import { STICKERS } from '@/constants/stickers'
+import { env } from '@/env'
 import {
   STRIP_TEMPLATES,
   STRIP_TEMPLATE_MAP,
@@ -14,11 +15,11 @@ import {
   slotRadius,
 } from '@/constants/stripTemplates'
 import { useBackdropFrames } from '@/hooks/useBackdropFrames'
+import { useBackdropSupport } from '@/hooks/useBackdropSupport'
 import { cn } from '@/lib/utils'
 import { usePhotosStore } from '@/store/usePhotosStore'
 import { useRoomStore } from '@/store/useRoomStore'
 import { useSegmenterStore } from '@/store/useSegmenterStore'
-import { canRunBackdrops } from '@/utils/segmentation/segmenter'
 import { useStripStore } from '@/store/useStripStore'
 
 import { StickerOverlay } from './StickerOverlay'
@@ -52,8 +53,12 @@ interface StripSelectorProps {
 /** The design sections left after capture. Desktop stacks both down the rail; a
  * phone shows one at a time behind a segmented control. The template is not among
  * them — it is chosen in the booth, so the shots can be framed against it. */
-const TABS = ['backdrop', 'filter', 'stickers'] as const
-type Tab = (typeof TABS)[number]
+const ALL_TABS = ['backdrop', 'filter', 'stickers'] as const
+type Tab = (typeof ALL_TABS)[number]
+/** The backdrop section exists only while `VITE_BACKDROPS_ENABLED` is on. */
+const TABS: readonly Tab[] = env.backdropsEnabled
+  ? ALL_TABS
+  : ALL_TABS.filter((tab) => tab !== 'backdrop')
 
 const TAB_LABELS: Record<Tab, string> = {
   backdrop: 'backdrops.tab',
@@ -85,10 +90,12 @@ export function StripSelector({
   const order = usePhotosStore((state) => state.order)
   const templateId = useStripStore((state) => state.templateId)
   const filter = useStripStore((state) => state.filter)
-  const backdrop = useStripStore((state) => state.backdrop)
+  // Always `none` with the flag off, whatever the store (or a restored draft) holds.
+  const backdrop = resolveBackdrop(useStripStore((state) => state.backdrop))
   const segmenter = useSegmenterStore()
-  // Checked once: the answer can't change without a new browser.
-  const [backdropsSupported] = useState(canRunBackdrops)
+  // Strict: no WebGPU, too little memory or too old a browser and the backdrops stay
+  // off rather than running slowly or risking the tab (see `checkBackdropSupport`).
+  const backdropSupport = useBackdropSupport()
   const isHost = useRoomStore((state) => state.isHost)
   const peerCreated = useRoomStore((state) => state.createdPeers.length > 0)
   // Arranging, filtering and stickering are done on your own copy, so everyone may —
@@ -146,7 +153,7 @@ export function StripSelector({
   const [confirmOpen, setConfirmOpen] = useState(false)
   // Narrow-screen only: which design section is on show. Ignored from lg up, where
   // every section is visible at once.
-  const [tab, setTab] = useState<Tab>('backdrop')
+  const [tab, setTab] = useState<Tab>(TABS[0])
   /**
    * Which sticker's art has arrived, by id. The palette is 25 bundled SVGs fetched over
    * HTTP, and on a slow connection they land well after the buttons they belong to —
@@ -323,7 +330,11 @@ export function StripSelector({
       {/* Design rail — template, filter, stickers, then the way out. */}
       <div className={styles.rail}>
         {/* Phone-only switch between the three sections; from lg they all show. */}
-        <div className={styles.tabs} role="tablist" aria-label={t('select.title')}>
+        <div
+          className={cn(styles.tabs, TABS.length === 3 && styles.tabsThree)}
+          role="tablist"
+          aria-label={t('select.title')}
+        >
           {TABS.map((name) => (
             <button
               key={name}
@@ -338,75 +349,84 @@ export function StripSelector({
           ))}
         </div>
 
-        <div
-          className={sectionClass('backdrop')}
-          role="radiogroup"
-          aria-label={t('backdrops.label')}
-        >
-          <div className={styles.sectionHead}>
-            <p className={cn(styles.railLabel, styles.sectionLabel)}>{t('backdrops.tab')}</p>
-            <p className={styles.sectionTip}>
-              {backdropsSupported ? t('backdrops.tip') : t('backdrops.unsupported')}
-            </p>
-          </div>
-          <div className={styles.filterList}>
-            {BACKDROPS.map((option) => (
-              <button
-                key={option.id}
-                type="button"
-                role="radio"
-                aria-checked={backdrop === option.id}
-                className={cn(styles.filter, backdrop === option.id && styles.filterActive)}
-                onClick={() => useStripStore.getState().setBackdrop(option.id)}
-                // Original stays pickable, so a backdrop restored onto a device that
-                // can't render it can still be taken off.
-                disabled={!backdropsSupported && option.src !== null}
-              >
-                <span className={styles.filterThumb} style={{ aspectRatio: String(thumbAspect) }}>
-                  {option.src ? (
-                    <img src={option.src} alt="" className={styles.filterImage} draggable={false} />
-                  ) : frames[0] ? (
-                    <img
-                      src={frames[0].dataUrl}
-                      alt=""
-                      className={styles.filterImage}
-                      draggable={false}
-                    />
-                  ) : (
-                    <span className={styles.filterSwatch} />
-                  )}
-                </span>
-                <span className={styles.optionName}>{t(`backdrops.${option.label}`)}</span>
-              </button>
-            ))}
-          </div>
-          {backdropStatus && (
-            <div className={styles.backdropStatus} role="status" aria-live="polite">
-              <p className={styles.backdropStatusText}>
-                {!shown.failed && <Loader2 className={styles.backdropSpinner} />}
-                {backdropStatus}
-                {shown.failed && (
-                  <button type="button" className={styles.backdropRetry} onClick={shown.retry}>
-                    {t('backdrops.retry')}
-                  </button>
+        {env.backdropsEnabled && (
+          <>
+            <div
+              className={sectionClass('backdrop')}
+              role="radiogroup"
+              aria-label={t('backdrops.label')}
+            >
+              <div className={styles.sectionHead}>
+                <p className={cn(styles.railLabel, styles.sectionLabel)}>{t('backdrops.tab')}</p>
+                {backdropSupport === 'unsupported' && (
+                  <p className={styles.sectionTip}>{t('backdrops.unsupported')}</p>
                 )}
-              </p>
-              {segmenter.phase === 'loading' && segmenter.total > 0 && (
-                <span className={styles.backdropProgress}>
-                  <span
-                    className={styles.backdropProgressBar}
-                    style={{ width: `${(segmenter.loaded / segmenter.total) * 100}%` }}
-                  />
-                </span>
-              )}
-              {!shown.failed && segmenter.phase === 'ready' && segmenter.backend === 'wasm' && (
-                <p className={styles.sectionTip}>{t('backdrops.slow')}</p>
+              </div>
+              <div className={styles.filterList}>
+                {BACKDROPS.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={backdrop === option.id}
+                    className={cn(styles.filter, backdrop === option.id && styles.filterActive)}
+                    onClick={() => useStripStore.getState().setBackdrop(option.id)}
+                    // Original is always pickable; the rest wait for the device check
+                    // (a few ms) and stay off if it fails.
+                    disabled={backdropSupport !== 'supported' && option.src !== null}
+                  >
+                    <span
+                      className={styles.filterThumb}
+                      style={{ aspectRatio: String(thumbAspect) }}
+                    >
+                      {option.src ? (
+                        <img
+                          src={option.src}
+                          alt=""
+                          className={styles.filterImage}
+                          draggable={false}
+                        />
+                      ) : frames[0] ? (
+                        <img
+                          src={frames[0].dataUrl}
+                          alt=""
+                          className={styles.filterImage}
+                          draggable={false}
+                        />
+                      ) : (
+                        <span className={styles.filterSwatch} />
+                      )}
+                    </span>
+                    <span className={styles.optionName}>{t(`backdrops.${option.label}`)}</span>
+                  </button>
+                ))}
+              </div>
+              {backdropStatus && (
+                <div className={styles.backdropStatus} role="status" aria-live="polite">
+                  <p className={styles.backdropStatusText}>
+                    {!shown.failed && <Loader2 className={styles.backdropSpinner} />}
+                    {backdropStatus}
+                    {shown.failed && (
+                      <button type="button" className={styles.backdropRetry} onClick={shown.retry}>
+                        {t('backdrops.retry')}
+                      </button>
+                    )}
+                  </p>
+                  {segmenter.phase === 'loading' && segmenter.total > 0 && (
+                    <span className={styles.backdropProgress}>
+                      <span
+                        className={styles.backdropProgressBar}
+                        style={{ width: `${(segmenter.loaded / segmenter.total) * 100}%` }}
+                      />
+                    </span>
+                  )}
+                </div>
               )}
             </div>
-          )}
-        </div>
 
-        <div className={styles.divider} />
+            <div className={styles.divider} />
+          </>
+        )}
 
         <div
           className={sectionClass('filter')}
@@ -521,7 +541,9 @@ export function StripSelector({
               {blockedReason ?? shotBlockedReason}
             </span>
           )}
-          <span className={styles.actionsNote}>{t('select.createNote')}</span>
+          <span className={styles.actionsNote}>
+            {t(env.backdropsEnabled ? 'select.createNoteBackdrop' : 'select.createNote')}
+          </span>
         </div>
       </div>
 

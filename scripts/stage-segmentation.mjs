@@ -24,9 +24,17 @@
  * instead of failing inside onnxruntime on every visit.
  *
  * The small JS glue module that loads the WASM is copied as-is.
+ *
+ * Behind `VITE_BACKDROPS_ENABLED`, read here the way Vite reads it for the app — same
+ * `.env*` files for the mode given as the first argument, `process.env` winning. With it
+ * off the folder is emptied and nothing is staged, so a build that doesn't offer
+ * backdrops doesn't upload ~73 MB it will never serve.
  */
 import { createHash } from 'node:crypto'
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
+
+import { loadEnv } from 'vite'
 
 const root = new URL('../', import.meta.url)
 const out = new URL('public/segmentation/', root)
@@ -51,7 +59,14 @@ async function split(source, stem, extension) {
   return { size: bytes.length, sha256: sha256(bytes), parts }
 }
 
+const mode = process.argv[2] ?? 'production'
+const enabled = loadEnv(mode, fileURLToPath(root), 'VITE_').VITE_BACKDROPS_ENABLED === 'true'
+
 await rm(out, { recursive: true, force: true })
+if (!enabled) {
+  console.log(`segmentation: VITE_BACKDROPS_ENABLED is off for "${mode}" — nothing staged`)
+  process.exit(0)
+}
 await mkdir(out, { recursive: true })
 
 const glue = await readFile(new URL('ort-wasm-simd-threaded.asyncify.mjs', ort))
