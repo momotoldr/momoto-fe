@@ -21,7 +21,7 @@
 # script/frame/connect entries for app.*.midtrans.com were for the Snap popup and were
 # removed with it; restoring Snap would mean restoring them.
 #
-# `'wasm-unsafe-eval'` is for strip backdrops: the background remover runs onnxruntime's
+# `'wasm-unsafe-eval'` is for strip backdrops: the background remover runs MediaPipe's
 # WebAssembly in a worker, and compiling WASM is refused under `script-src` without it.
 # It allows WebAssembly compilation only — not `eval` or inline script. The runtime and
 # model are served from our own origin (`/segmentation/`, staged by

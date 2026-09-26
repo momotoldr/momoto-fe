@@ -13,7 +13,7 @@ export type SegmenterRequest =
 export type SegmenterResponse =
   | { type: 'progress'; loaded: number; total: number }
   | { type: 'ready' }
-  /** `unsupported`: this device can't run it at all (no usable WebGPU) — don't retry. */
+  /** `unsupported`: this device can't run it at all (neither GPU nor CPU) — don't retry. */
   | { type: 'error'; message: string; unsupported?: boolean }
   | { type: 'mask'; id: string; mask: ImageBitmap }
   | { type: 'failed'; id: string; message: string }
@@ -25,7 +25,7 @@ interface Pending {
 
 /**
  * The smallest module using a SIMD instruction (a `v128.const`), per wasm-feature-detect.
- * onnxruntime-web ships SIMD builds only, so without this nothing can run.
+ * MediaPipe's module build is SIMD-only, so without this nothing can run.
  */
 // prettier-ignore
 const SIMD_PROBE = Uint8Array.of(
@@ -33,35 +33,28 @@ const SIMD_PROBE = Uint8Array.of(
   15, 253, 98, 11
 )
 
-/** Below this, a device that reports its memory is left out. */
-const MIN_DEVICE_MEMORY_GB = 4
+/**
+ * Below this, a device that reports its memory is left out. The model is small (16 MB)
+ * and so is its working memory, so this only turns away the very lowest-end phones.
+ */
+const MIN_DEVICE_MEMORY_GB = 2
 
-interface GpuAdapterLike {
-  isFallbackAdapter?: boolean
-  info?: { isFallbackAdapter?: boolean }
-}
-type CapableNavigator = Navigator & {
-  deviceMemory?: number
-  gpu?: { requestAdapter(): Promise<GpuAdapterLike | null> }
-}
+type CapableNavigator = Navigator & { deviceMemory?: number }
 
 let supportCheck: Promise<boolean> | null = null
 
 /**
- * Whether this device can run backdrops — decided before anything is downloaded, and
- * strictly: a device that would only manage it slowly, or might run out of memory
- * doing it, is left out rather than tried.
+ * Whether this device can run backdrops — decided before anything is downloaded.
  *
- * - **WebGPU with a hardware adapter.** The only path offered. On the GPU a cut takes
- *   ~0.2 s; the CPU fallback took ~6 s on a fast laptop (a minute or more for a strip on
- *   a phone) and peaked around 700 MB, enough for the OS to kill the tab. A software
- *   ("fallback") adapter is the CPU path in disguise, so it doesn't count.
- * - **At least 4 GB of RAM** where the browser says (Chromium only). iPhones don't
- *   report it, but WebGPU only arrived with iOS 26, whose oldest devices have 4 GB.
- * - **WebAssembly SIMD and a 2D `OffscreenCanvas` in a worker**, which the runtime and
- *   the pre-processing need.
+ * - **WebAssembly SIMD.** MediaPipe's module build (what a module worker can load) ships
+ *   no non-SIMD variant. Chrome/Edge 91, Firefox 89, Safari 16.4.
+ * - **A worker with a 2D `OffscreenCanvas`** for the pre- and post-processing. Firefox
+ *   105, Safari 16.4.
+ * - **At least 2 GB of RAM** where the browser says (Chromium only).
  *
- * Cached for the page: none of it changes without a new browser.
+ * The GPU is *not* required: the worker uses WebGL2 where it can and the CPU otherwise,
+ * and this model takes a couple of hundred milliseconds a cut even on a phone's CPU.
+ * Cached for the page — none of it changes without a new browser.
  */
 export function checkBackdropSupport(): Promise<boolean> {
   supportCheck ??= (async () => {
@@ -70,11 +63,8 @@ export function checkBackdropSupport(): Promise<boolean> {
       if (typeof OffscreenCanvas === 'undefined') return false
       if (typeof OffscreenCanvasRenderingContext2D === 'undefined') return false
       if (typeof WebAssembly !== 'object' || !WebAssembly.validate(SIMD_PROBE)) return false
-      const nav = navigator as CapableNavigator
-      if (nav.deviceMemory !== undefined && nav.deviceMemory < MIN_DEVICE_MEMORY_GB) return false
-      const adapter = await nav.gpu?.requestAdapter()
-      if (!adapter) return false
-      return !(adapter.info?.isFallbackAdapter ?? adapter.isFallbackAdapter ?? false)
+      const memory = (navigator as CapableNavigator).deviceMemory
+      return memory === undefined || memory >= MIN_DEVICE_MEMORY_GB
     } catch {
       return false
     }
@@ -89,8 +79,8 @@ let nextId = 0
 /**
  * How long an idle worker is kept before it's shut down.
  *
- * WebAssembly memory only ever grows, and the GPU buffers go with the session: after one
- * run the worker holds its whole peak for as long as it lives, even with nothing to do.
+ * WebAssembly memory only ever grows, and the GL context goes with the segmenter: after
+ * one run the worker holds its peak for as long as it lives, even with nothing to do.
  * Terminating it is the only way to hand that back, and bringing it up again costs
  * under a second once the model is in Cache Storage. Long enough to cover flicking
  * between backdrops and a single-slot retake; short enough that the booth doesn't sit
@@ -133,9 +123,9 @@ function onMessage(event: MessageEvent<SegmenterResponse>) {
       scheduleIdle()
       break
     case 'error':
-      // A device that passed the up-front check but still can't start the GPU session
-      // (a blocklisted driver, a worker without WebGPU) is out for the rest of the page —
-      // retrying would fail the same way.
+      // A device that passed the up-front check but still can't start the segmenter on
+      // either the GPU or the CPU is out for the rest of the page — retrying would fail
+      // the same way.
       useSegmenterStore.setState({ phase: message.unsupported ? 'unsupported' : 'error' })
       if (message.unsupported) {
         failAll(new Error(message.message))
@@ -185,8 +175,8 @@ export function loadSegmenter() {
 }
 
 /**
- * The foreground mask for `image`: a 1024x1024 bitmap whose alpha is the subject,
- * stretched over the whole cut — scale it back to the cut's own size to use it.
+ * The people in `image` as a mask: a bitmap (up to 512 px on its long side) whose alpha
+ * is everyone in the cut — stretch it over the cut's own size to use it.
  *
  * `image` is transferred, so it's unusable here afterwards.
  */

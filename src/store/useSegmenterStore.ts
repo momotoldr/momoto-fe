@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 /**
  * Where the background remover is (see `utils/segmentation/segmenter`). Global rather
- * than per screen: the worker and its ~73 MB of runtime and model outlive any one
+ * than per screen: the worker and its ~28 MB of runtime and model outlive any one
  * screen, and the arrange rail and the result screen both wait on the same one.
  */
 interface SegmenterState {
