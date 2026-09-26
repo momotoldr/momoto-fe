@@ -7,9 +7,8 @@ import { checkBackdropSupport } from '@/utils/segmentation/segmenter'
 export type BackdropSupport = 'checking' | 'supported' | 'unsupported'
 
 /**
- * Whether this device may offer backdrops — the up-front check (`checkBackdropSupport`,
- * a few milliseconds while the GPU adapter is asked for), overridden by the worker if the
- * GPU session still won't start.
+ * Whether this device may offer backdrops — the up-front check (`checkBackdropSupport`),
+ * overridden by the worker if the segmenter still won't start on either GPU or CPU.
  *
  * On an unsupported device a backdrop that is already chosen — restored from a draft, or
  * picked before the worker found out — is put back to none, so the strip shows the

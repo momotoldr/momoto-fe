@@ -1,34 +1,24 @@
 /**
  * Stage the background-removal runtime into `public/segmentation/` (generated, gitignored).
  *
- * Runs before `dev` and `build`. Two things have to be served from our own origin — the
- * CSP is `default-src 'self'`, so no CDN — and both are too big to serve whole:
+ * Runs before `dev` and `build`. The strip backdrops cut people out with MediaPipe's
+ * image segmenter (`utils/segmentation/segmentation.worker.ts`), which needs three files
+ * served from our own origin — the CSP is `default-src 'self'`, so no CDN:
  *
- * - the ISNet model (`models/isnet-w8.onnx`, 46.5 MB), and
- * - onnxruntime-web's WebGPU-capable WASM (`ort-wasm-simd-threaded.asyncify.wasm`,
- *   25.5 MiB).
+ * - `vision_wasm_module_internal.js` / `.wasm` — MediaPipe's runtime, the ES-module build
+ *   (the worker is a module worker), copied from `@mediapipe/tasks-vision`;
+ * - `selfie_multiclass_256x256.tflite` — Google's people-segmentation model (Apache-2.0),
+ *   committed under `models/`.
  *
- * Cloudflare Workers refuses any static asset over 25 MiB, so each is cut into parts
- * that the segmentation worker fetches in parallel and joins (see
- * `utils/segmentation/segmentation.worker.ts`; onnxruntime accepts the WASM as bytes via
- * `env.wasm.wasmBinary`). Part names carry a content hash, so a new model or runtime is a
- * new URL and never collides with a stale copy in someone's cache.
- *
- * The runtime's parts keep a `.wasm` extension so they are served as `application/wasm`,
- * which Cloudflare compresses on the way out (26.8 MB → ~4.6 MB brotli); a `.bin` part is
- * `application/octet-stream` and goes out raw. The model's parts stay `.bin` — quantized
- * weights barely compress (46.5 → 39.5 MB), so it isn't worth pretending they're WASM.
- *
- * Each file's full SHA-256 goes in the manifest; the worker checks the joined bytes
- * against it, so a truncated download or a damaged cache entry is caught and refetched
- * instead of failing inside onnxruntime on every visit.
- *
- * The small JS glue module that loads the WASM is copied as-is.
+ * They go into a folder named after their combined content hash, so a new runtime or
+ * model is a new URL and never mixes with a stale copy in someone's cache. MediaPipe
+ * builds the runtime's file names itself from a base path, which is why the hash is on
+ * the folder rather than on each file. `manifest.json` tells the worker where it is.
  *
  * Behind `VITE_BACKDROPS_ENABLED`, read here the way Vite reads it for the app — same
  * `.env*` files for the mode given as the first argument, `process.env` winning. With it
  * off the folder is emptied and nothing is staged, so a build that doesn't offer
- * backdrops doesn't upload ~73 MB it will never serve.
+ * backdrops doesn't upload files it will never serve.
  */
 import { createHash } from 'node:crypto'
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
@@ -38,26 +28,10 @@ import { loadEnv } from 'vite'
 
 const root = new URL('../', import.meta.url)
 const out = new URL('public/segmentation/', root)
-const ort = new URL('node_modules/onnxruntime-web/dist/', root)
+const mediapipe = new URL('node_modules/@mediapipe/tasks-vision/wasm/', root)
 
-/** Well under the 25 MiB limit, and small enough that parts download side by side. */
-const PART_BYTES = 12 * 1024 * 1024
-
-const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex')
-const hashOf = (bytes) => sha256(bytes).slice(0, 12)
-
-async function split(source, stem, extension) {
-  const bytes = await readFile(source)
-  const hash = hashOf(bytes)
-  const parts = []
-  for (let offset = 0, index = 0; offset < bytes.length; offset += PART_BYTES, index += 1) {
-    const chunk = bytes.subarray(offset, offset + PART_BYTES)
-    const name = `${stem}.${hash}.${String(index).padStart(2, '0')}.${extension}`
-    await writeFile(new URL(name, out), chunk)
-    parts.push({ url: `/segmentation/${name}`, size: chunk.length })
-  }
-  return { size: bytes.length, sha256: sha256(bytes), parts }
-}
+const MODEL = 'selfie_multiclass_256x256.tflite'
+const RUNTIME = ['vision_wasm_module_internal.js', 'vision_wasm_module_internal.wasm']
 
 const mode = process.argv[2] ?? 'production'
 const enabled = loadEnv(mode, fileURLToPath(root), 'VITE_').VITE_BACKDROPS_ENABLED === 'true'
@@ -67,20 +41,27 @@ if (!enabled) {
   console.log(`segmentation: VITE_BACKDROPS_ENABLED is off for "${mode}" — nothing staged`)
   process.exit(0)
 }
-await mkdir(out, { recursive: true })
 
-const glue = await readFile(new URL('ort-wasm-simd-threaded.asyncify.mjs', ort))
-const glueName = `ort-wasm-simd-threaded.asyncify.${hashOf(glue)}.mjs`
-await writeFile(new URL(glueName, out), glue)
+const files = [
+  ...(await Promise.all(
+    RUNTIME.map(async (name) => ({ name, bytes: await readFile(new URL(name, mediapipe)) }))
+  )),
+  { name: MODEL, bytes: await readFile(new URL(`models/${MODEL}`, root)) },
+]
+const hash = createHash('sha256')
+for (const file of files) hash.update(file.name).update(file.bytes)
+const folder = hash.digest('hex').slice(0, 12)
 
+await mkdir(new URL(`${folder}/`, out), { recursive: true })
+for (const file of files) await writeFile(new URL(`${folder}/${file.name}`, out), file.bytes)
+
+const model = files.at(-1)
 const manifest = {
-  model: await split(new URL('models/isnet-w8.onnx', root), 'isnet-w8', 'bin'),
-  wasm: await split(new URL('ort-wasm-simd-threaded.asyncify.wasm', ort), 'ort-asyncify', 'wasm'),
-  mjs: `/segmentation/${glueName}`,
+  base: `/segmentation/${folder}`,
+  model: { url: `/segmentation/${folder}/${MODEL}`, size: model.bytes.length },
 }
 await writeFile(new URL('manifest.json', out), `${JSON.stringify(manifest, null, 2)}\n`)
 
 const mb = (bytes) => (bytes / 1e6).toFixed(1)
-console.log(
-  `segmentation: staged model ${mb(manifest.model.size)} MB + wasm ${mb(manifest.wasm.size)} MB`
-)
+const total = files.reduce((sum, file) => sum + file.bytes.length, 0)
+console.log(`segmentation: staged MediaPipe runtime + model, ${mb(total)} MB in ${folder}/`)

@@ -66,7 +66,7 @@ interface AppEnv {
   /**
    * Strip backdrops — replacing the background behind the people in each cut after
    * capture (`utils/backdrop`). Off hides the Background tab and reads every stored
-   * backdrop as `none`, so the ~73 MB model and runtime are never fetched; the build
+   * backdrop as `none`, so the ~28 MB model and runtime are never fetched; the build
    * doesn't even stage them (`scripts/stage-segmentation.mjs` reads the same flag).
    */
   backdropsEnabled: boolean

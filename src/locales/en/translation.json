@@ -686,7 +686,7 @@
     "failed": "Couldn't remove the background on this device.",
     "retry": "Try again",
     "waitCreate": "Wait for the background to finish, or pick Original.",
-    "unsupported": "Background swap isn't available on this device — it needs a newer browser or more memory."
+    "unsupported": "Background swap isn't available on this device — it needs a newer browser."
   },
   "filters": {
     "none": "Original",

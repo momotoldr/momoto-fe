@@ -93,8 +93,8 @@ export function StripSelector({
   // Always `none` with the flag off, whatever the store (or a restored draft) holds.
   const backdrop = resolveBackdrop(useStripStore((state) => state.backdrop))
   const segmenter = useSegmenterStore()
-  // Strict: no WebGPU, too little memory or too old a browser and the backdrops stay
-  // off rather than running slowly or risking the tab (see `checkBackdropSupport`).
+  // Too old a browser or too little memory and the backdrops stay off rather than
+  // being tried (see `checkBackdropSupport`).
   const backdropSupport = useBackdropSupport()
   const isHost = useRoomStore((state) => state.isHost)
   const peerCreated = useRoomStore((state) => state.createdPeers.length > 0)

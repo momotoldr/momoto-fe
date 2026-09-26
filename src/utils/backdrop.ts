@@ -4,7 +4,7 @@
  * Two stages, cached separately because they cost very different amounts:
  *
  * 1. **Cutout** — the people in a cut, with the background made transparent. Needs a
- *    model inference (seconds on the CPU path), so it's done once per cut and kept for
+ *    model inference (tens to hundreds of ms), so it's done once per cut and kept for
  *    as long as the cut is in play.
  * 2. **Composite** — backdrop, then cutout, encoded as a frame. Two `drawImage`s and an
  *    async encode, so flicking between backdrops stays quick once the cutouts exist.
@@ -119,8 +119,8 @@ function cutout(frame: CapturedFrame): Promise<ImageBitmap> {
     const mask = await segmentImage(await createImageBitmap(photo))
     try {
       const { canvas, ctx } = canvasOf(frame.width, frame.height)
-      // The mask comes back squeezed to 1024x1024; stretching it over the cut undoes
-      // the squeeze, and smoothing turns the upscale into a soft edge rather than steps.
+      // The mask comes back smaller than the cut (the model works at 256, the worker
+      // hands it at most 512); smoothing turns the stretch into a soft edge, not steps.
       ctx.drawImage(mask, 0, 0, frame.width, frame.height)
       ctx.globalCompositeOperation = 'source-in'
       ctx.drawImage(photo, 0, 0, frame.width, frame.height)

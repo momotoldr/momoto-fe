@@ -685,7 +685,7 @@
     "failed": "Latar tidak bisa dihapus di perangkat ini.",
     "retry": "Coba lagi",
     "waitCreate": "Tunggu latar selesai, atau pilih Asli.",
-    "unsupported": "Ganti latar tidak tersedia di perangkat ini — perlu browser yang lebih baru atau memori lebih besar."
+    "unsupported": "Ganti latar tidak tersedia di perangkat ini — perlu browser yang lebih baru."
   },
   "filters": {
     "none": "Asli",

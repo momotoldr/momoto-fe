@@ -1,41 +1,44 @@
 /**
- * Background-removal worker: runs ISNet (via onnxruntime-web) on a captured cut and
- * returns its foreground mask.
+ * Background-removal worker: runs MediaPipe's people segmenter on a captured cut and
+ * returns a mask of everyone in it.
  *
- * Off the main thread so the pre- and post-processing (and onnxruntime's own
- * bookkeeping) never stall the arrange screen or the live camera tiles beside it.
- * Talks to `segmenter.ts` only; see `SegmenterRequest` / `SegmenterResponse` there.
+ * The model is Google's "selfie multiclass" (Apache-2.0), trained on people only —
+ * selfies, full body, several people in one frame — and it labels each pixel as
+ * background, hair, body skin, face skin, clothes or accessories. Everything that isn't
+ * background is the person. It replaced ISNet, a general *object* model that took
+ * seconds of GPU time per cut on phones (freezing the screen, which shares that GPU) and
+ * could drop a face as "background".
  *
- * The runtime and model are fetched in parts (see `scripts/stage-segmentation.mjs`)
- * and kept in Cache Storage, so the ~73 MB is paid once per browser rather than once
- * per session: the HTTP cache is free to evict files this size, and does.
+ * Off the main thread so none of it stalls the arrange screen or the live camera tiles
+ * beside it. Talks to `segmenter.ts` only; see `SegmenterRequest` / `SegmenterResponse`.
  */
-import * as ort from 'onnxruntime-web/webgpu'
+import { FilesetResolver, ImageSegmenter } from '@mediapipe/tasks-vision'
 
 import type { SegmenterRequest, SegmenterResponse } from './segmenter'
 
-/** ISNet's input is fixed at 1024x1024; the graph fails at any other size. */
-const SIZE = 1024
-const CACHE_NAME = 'momoto-segmentation'
 const MANIFEST_URL = '/segmentation/manifest.json'
 
-interface Part {
-  url: string
-  size: number
-}
-interface Asset {
-  size: number
-  /** SHA-256 of the whole file, hex — checked after the parts are joined. */
-  sha256: string
-  parts: Part[]
-}
-interface Manifest {
-  model: Asset
-  wasm: Asset
-  mjs: string
-}
+/**
+ * Long side of the image handed to the model. It works at 256x256 whatever it gets, and
+ * returns masks at the size it was given — so a full-size cut only buys a larger mask
+ * to read back, not a better one. The mask is stretched over the full cut afterwards.
+ */
+const MAX_INPUT_SIDE = 512
 
-type GpuNavigator = Navigator & { gpu?: { requestAdapter(): Promise<unknown> } }
+/**
+ * The model's person/background edge is soft (it is upscaled from 256). Remapping
+ * confidence from this band to 0..1 firms it up: a pixel under the low end is fully
+ * background, over the high end fully person, with the blend kept between. Without it a
+ * faint halo of the old background clings to everyone.
+ */
+const EDGE_LOW = 0.15
+const EDGE_HIGH = 0.85
+
+interface Manifest {
+  /** Folder holding MediaPipe's runtime files (`vision_wasm_module_internal.*`). */
+  base: string
+  model: { url: string; size: number }
+}
 
 /** This device can't run the model at all — reported as final, not as a retryable error. */
 class UnsupportedError extends Error {}
@@ -43,12 +46,11 @@ class UnsupportedError extends Error {}
 const post = (message: SegmenterResponse, transfer: Transferable[] = []) =>
   self.postMessage(message, { transfer })
 
-let session: Promise<ort.InferenceSession> | null = null
+let segmenter: Promise<ImageSegmenter> | null = null
 
 /**
  * A manifest path, resolved — only if it stays on our origin under `/segmentation/`.
- * The CSP would refuse a foreign script anyway; this keeps the worker from even asking,
- * and from caching or compiling bytes from anywhere else.
+ * The CSP would refuse a foreign script anyway; this keeps the worker from even asking.
  */
 function ownUrl(path: string): string {
   const url = new URL(path, self.location.origin)
@@ -58,201 +60,84 @@ function ownUrl(path: string): string {
   return url.href
 }
 
-async function openCache(): Promise<Cache | null> {
-  try {
-    return 'caches' in self ? await caches.open(CACHE_NAME) : null
-  } catch {
-    // Opaque origins and some private modes refuse Cache Storage — only slower, not fatal.
-    return null
-  }
-}
-
-/**
- * Fetch one part, from Cache Storage when it's there (and the right size). Streamed so
- * the download can report progress, then stored whole.
- */
-async function fetchPart(part: Part, cache: Cache | null, onBytes: (n: number) => void) {
-  const url = ownUrl(part.url)
-  const cached = await cache?.match(url)
-  if (cached) {
-    const bytes = new Uint8Array(await cached.arrayBuffer())
-    if (bytes.length === part.size) {
-      onBytes(bytes.length)
-      return bytes
-    }
-    // Truncated by a quota eviction or an interrupted write — fetch it again.
-    await cache?.delete(url)
-  }
-  const response = await fetch(url)
-  if (!response.ok || !response.body) throw new Error(`fetch ${part.url}: ${response.status}`)
-  const bytes = new Uint8Array(part.size)
+/** The model, streamed so the first download can report progress. */
+async function fetchModel(model: Manifest['model']): Promise<Uint8Array> {
+  const response = await fetch(ownUrl(model.url))
+  if (!response.ok || !response.body) throw new Error(`fetch ${model.url}: ${response.status}`)
+  const bytes = new Uint8Array(model.size)
   const reader = response.body.getReader()
   let offset = 0
+  let lastPosted = 0
   for (;;) {
     const { done, value } = await reader.read()
     if (done) break
-    // A size that disagrees with the manifest means a stale or truncated file.
-    if (offset + value.length > bytes.length) throw new Error(`part too long: ${part.url}`)
+    if (offset + value.length > bytes.length) throw new Error('model larger than the manifest')
     bytes.set(value, offset)
     offset += value.length
-    onBytes(value.length)
+    if (offset - lastPosted >= model.size / 50 || offset === model.size) {
+      lastPosted = offset
+      post({ type: 'progress', loaded: offset, total: model.size })
+    }
   }
-  if (offset !== bytes.length) throw new Error(`part too short: ${part.url}`)
-  await cache?.put(url, new Response(bytes)).catch(() => undefined)
+  if (offset !== bytes.length) throw new Error('model smaller than the manifest')
   return bytes
 }
 
-async function fetchJoined(parts: Part[], cache: Cache | null, onBytes: (n: number) => void) {
-  const chunks = await Promise.all(parts.map((part) => fetchPart(part, cache, onBytes)))
-  const joined = new Uint8Array(chunks.reduce((sum, chunk) => sum + chunk.length, 0))
-  let offset = 0
-  for (const chunk of chunks) {
-    joined.set(chunk, offset)
-    offset += chunk.length
-  }
-  return joined
-}
-
-async function sha256Hex(bytes: Uint8Array<ArrayBuffer>): Promise<string | null> {
-  // `crypto.subtle` exists only in secure contexts — which the booth needs for the
-  // camera anyway. Without it there's nothing to check with, so don't block on it.
-  if (!crypto.subtle) return null
-  const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))
-  return Array.from(digest, (byte) => byte.toString(16).padStart(2, '0')).join('')
-}
-
-/**
- * One file of the manifest, joined and verified. A hash mismatch drops that file's
- * cached parts and fetches them once more from the network: the usual cause is a cache
- * entry damaged in a way its size didn't show, and without this it would fail the same
- * way on every visit.
- */
-async function fetchAsset(asset: Asset, cache: Cache | null, onBytes: (n: number) => void) {
-  for (let attempt = 0; ; attempt += 1) {
-    const bytes = await fetchJoined(asset.parts, cache, onBytes)
-    const digest = await sha256Hex(bytes)
-    if (digest === null || digest === asset.sha256) return bytes
-    if (attempt > 0) throw new Error('segmentation asset failed its integrity check')
-    onBytes(-bytes.length)
-    await Promise.all(asset.parts.map((part) => cache?.delete(ownUrl(part.url))))
-  }
-}
-
-/** Drop parts from earlier builds — their names carry a hash, so nothing reuses them. */
-async function pruneCache(cache: Cache | null, manifest: Manifest) {
-  if (!cache) return
-  const keep = new Set([...manifest.model.parts, ...manifest.wasm.parts].map((p) => ownUrl(p.url)))
-  for (const request of await cache.keys()) {
-    if (!keep.has(request.url)) await cache.delete(request)
-  }
-}
-
-async function createSession(): Promise<ort.InferenceSession> {
-  // Before anything is downloaded: WebGPU is the only path offered (see
-  // `checkBackdropSupport`), and a worker can lack it even when the page has it.
-  const gpu = (navigator as GpuNavigator).gpu
-  const adapter = gpu ? await gpu.requestAdapter().catch(() => null) : null
-  if (!adapter) throw new UnsupportedError('WebGPU is not available in the worker')
-
+async function createSegmenter(): Promise<ImageSegmenter> {
   const response = await fetch(MANIFEST_URL, { cache: 'no-cache' })
   if (!response.ok) throw new Error(`fetch ${MANIFEST_URL}: ${response.status}`)
   const manifest = (await response.json()) as Manifest
-  const cache = await openCache()
-  void pruneCache(cache, manifest).catch(() => undefined)
 
-  const total = manifest.model.size + manifest.wasm.size
-  let loaded = 0
-  let lastPosted = 0
-  const onBytes = (n: number) => {
-    loaded += n
-    // ~100 messages over the whole download, not one per network chunk.
-    if (Math.abs(loaded - lastPosted) >= total / 100 || loaded === total) {
-      lastPosted = loaded
-      post({ type: 'progress', loaded, total })
-    }
-  }
-  const [wasm, model] = await Promise.all([
-    fetchAsset(manifest.wasm, cache, onBytes),
-    fetchAsset(manifest.model, cache, onBytes),
+  // `true`: the ES-module build of the runtime, which is what a module worker can load.
+  const [fileset, model] = await Promise.all([
+    FilesetResolver.forVisionTasks(ownUrl(manifest.base), true),
+    fetchModel(manifest.model),
   ])
 
-  // Single-threaded: threads need SharedArrayBuffer, which needs cross-origin isolation,
-  // which the Google sign-in popup can't live with.
-  ort.env.wasm.numThreads = 1
-  ort.env.wasm.wasmBinary = wasm.buffer
-  ort.env.wasm.wasmPaths = { mjs: ownUrl(manifest.mjs) }
-
-  // GPU only. There is deliberately no CPU fallback: it took ~6 s a cut on a fast laptop
-  // and peaked around 700 MB — slow everywhere, and enough to get a phone's tab killed.
-  let gpuSession: ort.InferenceSession
-  try {
-    gpuSession = await ort.InferenceSession.create(model, {
-      executionProviders: ['webgpu'],
-      graphOptimizationLevel: 'all',
+  const create = async (delegate: 'GPU' | 'CPU') => {
+    // MediaPipe takes its runtime's factory from `self.ModuleFactory` and clears it after
+    // one use, while the runtime module sets it only when first evaluated — and `import()`
+    // never evaluates a module twice. So a second segmenter in this worker (the CPU retry
+    // after a failed GPU attempt) would find nothing and throw "ModuleFactory not set".
+    // Put it back from the module's own default export first.
+    const scope = self as typeof globalThis & { ModuleFactory?: unknown }
+    scope.ModuleFactory ??= (
+      (await import(/* @vite-ignore */ fileset.wasmLoaderPath)) as { default: unknown }
+    ).default
+    return ImageSegmenter.createFromOptions(fileset, {
+      baseOptions: { modelAssetBuffer: model, delegate },
+      runningMode: 'IMAGE',
+      outputConfidenceMasks: true,
+      outputCategoryMask: false,
     })
-  } catch (error) {
-    // An adapter that can't take this graph (limits, a blocklisted driver).
-    throw new UnsupportedError(error instanceof Error ? error.message : String(error))
+  }
+
+  let created: ImageSegmenter
+  try {
+    // WebGL2 in the worker's own OffscreenCanvas, where the browser has it.
+    created = await create('GPU')
+  } catch {
+    try {
+      // No WebGL2 in workers (older Safari) or a blocklisted driver: the CPU runs this
+      // model in a couple of hundred milliseconds, so it is still worth offering.
+      created = await create('CPU')
+    } catch (error) {
+      throw new UnsupportedError(error instanceof Error ? error.message : String(error))
+    }
   }
   post({ type: 'ready' })
-  return gpuSession
+  return created
 }
 
 /**
- * The cut, squeezed to 1024x1024 as NCHW float32, scaled the way the model was trained:
- * divided by the brightest channel value, then shifted by -0.5 (std 1).
- */
-function toInput(image: ImageBitmap): ort.Tensor {
-  const canvas = new OffscreenCanvas(SIZE, SIZE)
-  const ctx = canvas.getContext('2d', { willReadFrequently: true })
-  if (!ctx) throw new Error('no 2d context')
-  ctx.imageSmoothingQuality = 'high'
-  ctx.drawImage(image, 0, 0, SIZE, SIZE)
-  const { data } = ctx.getImageData(0, 0, SIZE, SIZE)
-
-  let max = 1
-  for (let i = 0; i < data.length; i += 4) {
-    max = Math.max(max, data[i], data[i + 1], data[i + 2])
-  }
-  const plane = SIZE * SIZE
-  const input = new Float32Array(3 * plane)
-  for (let p = 0, i = 0; p < plane; p += 1, i += 4) {
-    input[p] = data[i] / max - 0.5
-    input[plane + p] = data[i + 1] / max - 0.5
-    input[2 * plane + p] = data[i + 2] / max - 0.5
-  }
-  return new ort.Tensor('float32', input, [1, 3, SIZE, SIZE])
-}
-
-/** The prediction, min-max stretched to 0..1, as the alpha of a 1024x1024 bitmap. */
-function toMask(prediction: Float32Array): ImageBitmap {
-  let min = Infinity
-  let max = -Infinity
-  for (const value of prediction) {
-    if (value < min) min = value
-    if (value > max) max = value
-  }
-  const range = max - min > 1e-6 ? max - min : 1
-  const pixels = new Uint8ClampedArray(SIZE * SIZE * 4)
-  for (let p = 0; p < prediction.length; p += 1) {
-    pixels[p * 4 + 3] = ((prediction[p] - min) / range) * 255
-  }
-  const canvas = new OffscreenCanvas(SIZE, SIZE)
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('no 2d context')
-  ctx.putImageData(new ImageData(pixels, SIZE, SIZE), 0, 0)
-  return canvas.transferToImageBitmap()
-}
-
-/**
- * The session, created on first use. A failed attempt is forgotten rather than kept,
+ * The segmenter, created on first use. A failed attempt is forgotten rather than kept,
  * so the next request (or the Retry button) really tries again.
  */
-async function ensureSession(): Promise<ort.InferenceSession> {
+async function ensureSegmenter(): Promise<ImageSegmenter> {
   try {
-    return await (session ??= createSession())
+    return await (segmenter ??= createSegmenter())
   } catch (error) {
-    session = null
+    segmenter = null
     post({
       type: 'error',
       message: error instanceof Error ? error.message : String(error),
@@ -262,16 +147,49 @@ async function ensureSession(): Promise<ort.InferenceSession> {
   }
 }
 
+/** The cut, scaled down so its long side is at most `MAX_INPUT_SIDE`. */
+function toInput(image: ImageBitmap): OffscreenCanvas {
+  const scale = Math.min(1, MAX_INPUT_SIDE / Math.max(image.width, image.height))
+  const canvas = new OffscreenCanvas(
+    Math.max(1, Math.round(image.width * scale)),
+    Math.max(1, Math.round(image.height * scale))
+  )
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('no 2d context')
+  ctx.imageSmoothingQuality = 'high'
+  ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+  return canvas
+}
+
+/** "Not background", as the alpha of a bitmap the size of the model's input. */
+function toMask(background: Float32Array, width: number, height: number): ImageBitmap {
+  const pixels = new Uint8ClampedArray(width * height * 4)
+  const span = EDGE_HIGH - EDGE_LOW
+  for (let p = 0; p < background.length; p += 1) {
+    const person = (1 - background[p] - EDGE_LOW) / span
+    pixels[p * 4 + 3] = Math.min(1, Math.max(0, person)) * 255
+  }
+  const canvas = new OffscreenCanvas(width, height)
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('no 2d context')
+  ctx.putImageData(new ImageData(pixels, width, height), 0, 0)
+  return canvas.transferToImageBitmap()
+}
+
 async function segment(id: string, image: ImageBitmap) {
   try {
-    const model = await ensureSession()
-    const input = toInput(image)
-    const outputs = await model.run({ [model.inputNames[0]]: input })
-    const output = outputs[model.outputNames[0]]
-    const mask = toMask(output.data as Float32Array)
-    input.dispose()
-    output.dispose()
-    post({ type: 'mask', id, mask }, [mask])
+    const model = await ensureSegmenter()
+    const result = model.segment(toInput(image))
+    try {
+      const labels = model.getLabels()
+      const index = Math.max(0, labels.indexOf('background'))
+      const background = result.confidenceMasks?.[index]
+      if (!background) throw new Error('segmenter returned no background mask')
+      const mask = toMask(background.getAsFloat32Array(), background.width, background.height)
+      post({ type: 'mask', id, mask }, [mask])
+    } finally {
+      result.close()
+    }
   } catch (error) {
     post({ type: 'failed', id, message: error instanceof Error ? error.message : String(error) })
   } finally {
@@ -281,13 +199,13 @@ async function segment(id: string, image: ImageBitmap) {
 
 /** Warm up without a frame: fetch and compile, so the first cut doesn't wait on it. */
 const load = () =>
-  ensureSession().then(
+  ensureSegmenter().then(
     () => undefined,
     () => undefined
   )
 
-// Requests are handled strictly one after another: a second inference running
-// alongside the first would only double the peak memory, not the throughput.
+// One request at a time: the segmenter is a single graph, and running cuts side by side
+// would only contend for the same GPU.
 let queue = Promise.resolve()
 self.addEventListener('message', (event: MessageEvent<SegmenterRequest>) => {
   const request = event.data
