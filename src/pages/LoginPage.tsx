@@ -144,17 +144,16 @@ export function LoginPage() {
             </>
           )}
 
-          {/* The redesign puts the sign-up cross-link here. It stays off while the
-              closed beta runs: `/register` is unrouted and the backend's INVITE_ONLY
-              403s the endpoint, so the link would only lead to a 404. Restore this
-              together with the `/register` route in `app/App.tsx`.
-
-          <p className={styles.footer}>
-            {t('auth.login.noAccount')}{' '}
-            <Link className={styles.footerLink} to={ROUTES.register}>
-              {t('auth.login.registerLink')}
-            </Link>
-          </p> */}
+          {/* Hidden during the closed beta: `/register` is unrouted there (see
+              `app/App.tsx`) and the backend's INVITE_ONLY 403s the endpoint. */}
+          {!env.betaMode && (
+            <p className={styles.footer}>
+              {t('auth.login.noAccount')}{' '}
+              <Link className={styles.footerLink} to={ROUTES.register}>
+                {t('auth.login.registerLink')}
+              </Link>
+            </p>
+          )}
         </div>
       </div>
     </main>
