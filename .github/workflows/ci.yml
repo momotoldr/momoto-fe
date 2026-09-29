@@ -1,0 +1,52 @@
+# Checks every pull request into staging or main, and runs again (via workflow_call) as
+# the first job of every deploy, so nothing ships that this would have blocked.
+#
+# The build here uses placeholder backends: it proves the app compiles and bundles, not
+# that an environment is configured — deploy.yml builds with the real values and guards.
+name: ci
+
+on:
+  pull_request:
+    branches: [staging, main]
+  workflow_call:
+
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.ref }}
+  # A new push to a PR supersedes the old run; a deploy's verify is never cut short.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run format:check
+
+      - run: npm run lint
+
+      - run: npm run typecheck
+
+      - name: Build
+        # Mode `ci` reads no .env file, so only these values reach the bundle. Backdrops
+        # on, so the model/runtime staging step (the part most likely to break) runs too.
+        env:
+          VITE_API_URL: https://api.ci.invalid
+          VITE_REALTIME_URL: https://realtime.ci.invalid
+          VITE_PEERJS_HOST: peer.ci.invalid
+          VITE_PEERJS_PORT: '443'
+          VITE_PEERJS_PATH: /
+          VITE_PEERJS_SECURE: 'true'
+          VITE_BACKDROPS_ENABLED: 'true'
+        run: node scripts/stage-segmentation.mjs ci && npx vite build --mode ci

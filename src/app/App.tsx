@@ -15,6 +15,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage'
 import { PhotoboothPage } from '@/pages/PhotoboothPage'
 import { PrivacyPage } from '@/pages/PrivacyPage'
 import { ProfilePage } from '@/pages/ProfilePage'
+import { RegisterPage } from '@/pages/RegisterPage'
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage'
 import { RoomPage } from '@/pages/RoomPage'
 import { ServerDownPage } from '@/pages/ServerDownPage'
@@ -53,7 +54,10 @@ const router = createBrowserRouter([
       { path: '/terms', element: <TermsPage /> },
       { path: '/privacy', element: <PrivacyPage /> },
       { path: '/login', element: <LoginPage /> },
-      // { path: '/register', element: <RegisterPage /> },
+      // Signup is shut for the closed beta (the account *is* the invitation), so the route
+      // only exists with `betaMode` off. The backend's INVITE_ONLY is the real gate; this
+      // just stops the page leading to a 403.
+      ...(env.betaMode ? [] : [{ path: '/register', element: <RegisterPage /> }]),
       // Account recovery and address confirmation stay **public in every mode**,
       // including the closed beta. `betaMode` moves the booth behind the login wall;
       // these three are how an invited tester gets back *to* that wall after losing a

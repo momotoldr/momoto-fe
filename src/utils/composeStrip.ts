@@ -71,7 +71,7 @@ function encodeThumbnail(canvas: HTMLCanvasElement): string | null {
   const scale = Math.min(
     THUMBNAIL_MAX_WIDTH / canvas.width,
     THUMBNAIL_MAX_HEIGHT / canvas.height,
-    1,
+    1
   )
   const width = Math.max(1, Math.floor(canvas.width * scale))
   const height = Math.max(1, Math.floor(canvas.height * scale))

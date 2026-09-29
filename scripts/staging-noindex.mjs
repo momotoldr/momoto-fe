@@ -19,7 +19,7 @@ await writeFile(
   `# Staging — deliberately excluded from search engines. See scripts/staging-noindex.mjs.
 User-agent: *
 Disallow: /
-`,
+`
 )
 
 await appendFile(
@@ -28,7 +28,7 @@ await appendFile(
 # Staging only, appended by scripts/staging-noindex.mjs.
 /*
   X-Robots-Tag: noindex, nofollow
-`,
+`
 )
 
 console.log('staging: robots.txt set to Disallow, X-Robots-Tag: noindex appended to _headers')

@@ -41,3 +41,7 @@ dist-ssr
 
 # Local Claude Code permissions — per machine, not project config.
 .claude/settings.local.json
+
+# Background-removal runtime — generated from models/ and node_modules by
+# scripts/stage-segmentation.mjs before dev/build.
+public/segmentation/

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 
+import { resolveBackdrop } from '@/constants/backdrops'
 import { SHOT_COUNT } from '@/constants/capture'
 import i18n from '@/lib/i18n'
 import { usePhotosStore } from '@/store/usePhotosStore'
@@ -65,6 +66,9 @@ export function useBoothDraft(mode: SessionMode, roomId: string) {
         // on peer-join anyway, which simply overwrites this with the same thing.
         useStripStore.getState().setTemplate(draft.templateId)
         useStripStore.getState().setFilter(draft.filter)
+        // The cutouts themselves aren't stored — they're remade from the frames, which
+        // costs one model run per cut the first time the backdrop is shown again.
+        useStripStore.getState().setBackdrop(resolveBackdrop(draft.backdrop))
         useStripStore.getState().setStickers(draft.stickers)
         toast.success(i18n.t('capture.draftRestored', { count: draft.frames.length }))
       })
@@ -101,6 +105,7 @@ export function useBoothDraft(mode: SessionMode, roomId: string) {
         resultConfig: selection ? photos.resultConfig : null,
         templateId: strip.templateId,
         filter: strip.filter,
+        backdrop: strip.backdrop,
         stickers: strip.stickers,
         endsAt: useSessionStore.getState().endsAt,
         savedAt: Date.now(),
@@ -144,6 +149,7 @@ export function useBoothDraft(mode: SessionMode, roomId: string) {
       if (
         state.templateId !== prev.templateId ||
         state.filter !== prev.filter ||
+        state.backdrop !== prev.backdrop ||
         state.stickers !== prev.stickers
       ) {
         schedule()

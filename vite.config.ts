@@ -2,7 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-import { cloudflare } from "@cloudflare/vite-plugin";
+import { cloudflare } from '@cloudflare/vite-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => ({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  // Module workers: the segmentation worker imports MediaPipe, which then `import()`s its
+  // own runtime (see `scripts/stage-segmentation.mjs`).
+  worker: { format: 'es' },
   css: {
     preprocessorOptions: {
       // Use Dart Sass's modern API (silences the legacy-js-api deprecation).
