@@ -9,18 +9,14 @@ import type { MomotoEvents } from './events'
 import { linkAnonId } from './identify'
 import { normalizeRoute } from './routes'
 
-/** localStorage key whose value `'true'` means this browser opted out (a Profile toggle, F5). */
-export const OPT_OUT_KEY = 'momoto.analytics.optout'
-
 /**
  * The one tracker for this tab — created at **module scope**, never in a component: React
  * StrictMode runs effects twice and HMR re-runs modules, and either would otherwise start a
  * second tracker. (The library also returns the running instance for a repeat call.)
  *
- * Off (`env.analyticsEnabled` false, Do Not Track / GPC, opted out, or this visit sampled
- * out) it is a no-op with the same interface: no listeners, no timers, no requests — so
- * callers never check whether tracking is on. In development it logs every call to the
- * console either way.
+ * Off (`env.analyticsEnabled` false, or this visit sampled out) it is a no-op with the same
+ * interface: no listeners, no timers, no requests — so callers never check whether tracking
+ * is on. Every event it does track is also written to the console (`onTrack` below).
  */
 export const tracker = createTracker<MomotoEvents>({
   event: {
@@ -38,7 +34,11 @@ export const tracker = createTracker<MomotoEvents>({
   batch: { storage: { queue: { persistToSession: true } } },
   consent: {
     enabled: env.analyticsEnabled,
-    optOutKey: OPT_OUT_KEY,
+    // Owner decision (2026-10-02): track every visitor. Do Not Track and Global Privacy
+    // Control are deliberately NOT honoured — Brave and several privacy extensions send GPC
+    // by default, and honouring it silently left those visitors out of the data.
+    respectDnt: false,
+    // No opt-out key either: there is no opt-out — only the build flag turns tracking off.
     sampleRate: env.analyticsSampleRate,
   },
   // Sent once per batch (not per event). Identifies a build and a device class, never a
@@ -55,6 +55,12 @@ export const tracker = createTracker<MomotoEvents>({
       backdrops: env.backdropsEnabled,
     },
   }),
+  // Every tracked event, in every build (production included), as a plain `console.log` —
+  // so what is being recorded can be checked in any browser's console. Page views and clicks
+  // come from the plugins, which is why this hooks the tracker rather than `track()`.
+  onTrack: (event) => console.log('[analytics]', event.name, event.data),
+  // The library's own diagnostics (sends, retries, timers) — development only, and at
+  // `console.debug` level, which browsers hide unless "Verbose" is on.
   debug: import.meta.env.DEV,
 })
 
