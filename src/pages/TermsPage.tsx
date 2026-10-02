@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import styles from './TermsPage.module.scss'
+import { useTrackPageView } from '@/analytics'
 
 /** Ordered T&C sections — each maps to `terms.sections.<key>.{title,body}` copy. */
 const SECTION_KEYS = [
@@ -18,6 +19,7 @@ const SECTION_KEYS = [
 
 /** Terms & Conditions — static legal page */
 export function TermsPage() {
+  useTrackPageView()
   const { t } = useTranslation()
 
   return (

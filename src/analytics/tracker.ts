@@ -1,13 +1,11 @@
 import { createTracker } from '@momotoldr/tracker'
-import { autocapture, pageViews } from '@momotoldr/tracker/plugins'
 
 import { env } from '@/env'
 import i18n from '@/lib/i18n'
 import { useAuthStore } from '@/store/useAuthStore'
 
-import type { MomotoEvents } from './events'
+import { ANALYTICS_EVENTS, type MomotoEvents } from './events'
 import { linkAnonId } from './identify'
-import { normalizeRoute } from './routes'
 
 /**
  * The one tracker for this tab — created at **module scope**, never in a component: React
@@ -56,8 +54,8 @@ export const tracker = createTracker<MomotoEvents>({
     },
   }),
   // Every tracked event, in every build (production included), as a plain `console.log` —
-  // so what is being recorded can be checked in any browser's console. Page views and clicks
-  // come from the plugins, which is why this hooks the tracker rather than `track()`.
+  // so what is being recorded can be checked in any browser's console. Hooking the tracker
+  // (not `trackEvents`) also catches the events this module sends itself.
   onTrack: (event) => console.log('[analytics]', event.name, event.data),
   // The library's own diagnostics (sends, retries, timers) — development only, and at
   // `console.debug` level, which browsers hide unless "Verbose" is on.
@@ -82,14 +80,9 @@ function appOpen(): MomotoEvents['app_open'] {
   }
 }
 
-// First, so a visit reads app_open → page_view → … (installing `pageViews` records the
-// current page straight away).
-void tracker.track('app_open', appOpen())
-
-// Page views and clicks, recorded as route patterns. Clicks carry the control's
-// `data-track` id, or `null` — untracked clicks are kept so the gaps in tagging show up.
-tracker.use(pageViews({ normalize: normalizeRoute }))
-tracker.use(autocapture({ normalize: normalizeRoute }))
+// At module load — before any page mounts — so a visit reads app_open → page_view → …
+// Page views and clicks are tracked by hand (`manual.ts`): no plugins are installed.
+void tracker.track(ANALYTICS_EVENTS.APP_OPEN, appOpen())
 
 // ── Account linking ──────────────────────────────────────────────────────────────
 //
@@ -119,7 +112,7 @@ useAuthStore.subscribe((state, previous) => {
     // Sign-out or an expired session. The event goes out under the old ids; then this
     // browser gets new ones, so the next person on a shared device isn't stitched to the
     // last.
-    void tracker.track('signed_out', {})
+    void tracker.track(ANALYTICS_EVENTS.SIGNED_OUT, {})
     tracker.resetIdentity()
     linkedAnonId = null
   }

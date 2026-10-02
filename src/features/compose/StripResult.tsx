@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
+import { TRACK_IDS, trackClick } from '@/analytics'
 import { Button } from '@/components/ui/button'
 import { resolveBackdrop } from '@/constants/backdrops'
 import { SHOT_COUNT } from '@/constants/capture'
@@ -468,6 +469,7 @@ export function StripResult({ onRetake }: StripResultProps) {
                 variant="outline"
                 className={styles.action}
                 onClick={() => {
+                  trackClick(TRACK_IDS.RESULT_DOWNLOAD)
                   void downloadStripFile().then(() => toast.success(t('result.saved')))
                 }}
               >
@@ -485,7 +487,13 @@ export function StripResult({ onRetake }: StripResultProps) {
       <div className={styles.composing}>
         <p className={styles.message}>{t('result.composeError')}</p>
         {canEdit && (
-          <Button variant="outline" onClick={onRetake}>
+          <Button
+            variant="outline"
+            onClick={() => {
+              trackClick(TRACK_IDS.RESULT_RETAKE)
+              onRetake()
+            }}
+          >
             <RotateCcw /> {t('result.retake')}
           </Button>
         )}
@@ -527,7 +535,13 @@ export function StripResult({ onRetake }: StripResultProps) {
           </p>
 
           <div className={styles.actions}>
-            <Button className={styles.action} onClick={openShare}>
+            <Button
+              className={styles.action}
+              onClick={() => {
+                trackClick(TRACK_IDS.RESULT_SHARE)
+                openShare()
+              }}
+            >
               <Share2 /> {t('result.shareTitle')}
             </Button>
             {isAuthenticated ? (

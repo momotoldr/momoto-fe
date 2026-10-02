@@ -1,6 +1,7 @@
 import { ChevronDown, LifeBuoy } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { useTrackPageView } from '@/analytics'
 import { openSupportDialog } from '@/components/common/SupportFab/openSupport'
 import { Button } from '@/components/ui/button'
 
@@ -23,6 +24,7 @@ const FAQ_KEYS = ['install', 'free', 'print', 'friend', 'privacy', 'need']
  * way in behind a sign-in would hide it from the readers who need it most.
  */
 export function HelpCenterPage() {
+  useTrackPageView()
   const { t } = useTranslation()
 
   return (

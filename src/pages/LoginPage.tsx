@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 
+import { TRACK_IDS, trackClick, useTrackPageView } from '@/analytics'
 import { login } from '@/api/services/authService'
 import logoUrl from '@/assets/logo-momoto.svg'
 import { GoogleButton } from '@/components/auth/GoogleButton'
@@ -21,6 +22,7 @@ import styles from './LoginPage.module.scss'
 
 /** Email/password + Google sign-in. Redirects to `?redirect=` (or home) on success. */
 export function LoginPage() {
+  useTrackPageView()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -61,6 +63,8 @@ export function LoginPage() {
   }
 
   const onSubmit = async (values: LoginValues) => {
+    // After validation passes — a submit the form refused isn't an attempt.
+    trackClick(TRACK_IDS.AUTH_LOGIN_SUBMIT)
     try {
       onAuthed(await login({ username: values.username.trim(), password: values.password }))
     } catch (err) {
