@@ -91,3 +91,73 @@ export type MomotoEvents = {
 }
 
 export type MomotoEventName = keyof MomotoEvents
+
+/**
+ * Every event name as a constant — call sites read `trackEvents(ANALYTICS_EVENTS.SHOT_TAKEN,
+ * …)` rather than a bare string. The values are the wire names (and the names in
+ * momoto-analytics' allowlist); the keys are those names in capitals.
+ */
+export const ANALYTICS_EVENTS = {
+  // Lifecycle
+  APP_OPEN: 'app_open',
+  PAGE_VIEW: 'page_view',
+  CLICK: 'click',
+  VISIT_HIDDEN: 'visit_hidden',
+  SIGNED_OUT: 'signed_out',
+  // Auth
+  AUTH_SUBMITTED: 'auth_submitted',
+  AUTH_SUCCEEDED: 'auth_succeeded',
+  AUTH_FAILED: 'auth_failed',
+  EMAIL_VERIFICATION_OPENED: 'email_verification_opened',
+  PASSWORD_RESET_REQUESTED: 'password_reset_requested',
+  PASSWORD_RESET_COMPLETED: 'password_reset_completed',
+  // Booth funnel
+  BOOTH_MODE_SELECTED: 'booth_mode_selected',
+  CAMERA_REQUESTED: 'camera_requested',
+  CAMERA_GRANTED: 'camera_granted',
+  CAMERA_DENIED: 'camera_denied',
+  ROOM_CREATED: 'room_created',
+  ROOM_JOINED: 'room_joined',
+  ROOM_REFUSED: 'room_refused',
+  PEER_CONNECTED: 'peer_connected',
+  PEER_FAILED: 'peer_failed',
+  PEER_DROPPED: 'peer_dropped',
+  SESSION_STARTED: 'session_started',
+  SHOT_TAKEN: 'shot_taken',
+  CAPTURE_COMPLETED: 'capture_completed',
+  RETAKE_REQUESTED: 'retake_requested',
+  STAGE_ENTERED: 'stage_entered',
+  TEMPLATE_SELECTED: 'template_selected',
+  FILTER_SELECTED: 'filter_selected',
+  BACKDROP_SELECTED: 'backdrop_selected',
+  STICKER_ADDED: 'sticker_added',
+  STRIP_CREATED: 'strip_created',
+  STRIP_DOWNLOADED: 'strip_downloaded',
+  STRIP_SHARED: 'strip_shared',
+  SESSION_FINISHED: 'session_finished',
+  SESSION_EXPIRED: 'session_expired',
+  // Commerce
+  CART_VIEWED: 'cart_viewed',
+  STRIP_ADDED_TO_CART: 'strip_added_to_cart',
+  UNLOCK_CLICKED: 'unlock_clicked',
+  CHECKOUT_STARTED: 'checkout_started',
+  PAYMENT_SUCCEEDED: 'payment_succeeded',
+  PAYMENT_FAILED: 'payment_failed',
+  GALLERY_VIEWED: 'gallery_viewed',
+  STRIP_DELETED: 'strip_deleted',
+  // Health
+  CLIENT_ERROR: 'client_error',
+  API_FAILED: 'api_failed',
+  NETWORK_TROUBLE: 'network_trouble',
+  SERVER_STATUS_CHANGED: 'server_status_changed',
+  WEB_VITAL: 'web_vital',
+  TIMING: 'timing',
+} as const satisfies Record<string, MomotoEventName>
+
+/** Compile-time check: an event added to `MomotoEvents` without a constant is a type error here. */
+type MissingConstant = Exclude<
+  MomotoEventName,
+  (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EVENTS]
+>
+const everyEventHasAConstant: [MissingConstant] extends [never] ? true : MissingConstant = true
+void everyEventHasAConstant

@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { useTrackPageView } from '@/analytics'
 import { ACTIVITIES } from '@/constants/activities'
 
 import styles from './ActivitiesPage.module.scss'
@@ -36,6 +37,7 @@ const DATE_CELLS = [
  * ink. The one live activity is a full-width taped card carrying its own strip
  * preview; the rest are dashed notes pinned below. */
 export function ActivitiesPage() {
+  useTrackPageView()
   const { t } = useTranslation()
 
   // Which card is which is read from ACTIVITIES rather than fixed here, so the page

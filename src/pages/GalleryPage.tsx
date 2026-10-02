@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { useTrackPageView } from '@/analytics'
 import { fetchPrintBlob } from '@/api/services/stripsService'
 import { FilterEmpty, GalleryEmpty } from '@/features/gallery/GalleryEmpty'
 import {
@@ -35,6 +36,7 @@ const FILTERS: GalleryFilter[] = ['all', 'solo', 'date', 'group']
  * grouping to a filter plus a marker on each tile.
  */
 export function GalleryPage() {
+  useTrackPageView()
   const { t, i18n } = useTranslation()
 
   const items = useCartStore((state) => state.items)

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useSearchParams } from 'react-router-dom'
 
+import { useTrackPageView } from '@/analytics'
 import ApiError from '@/api/apiError'
 import { verifyEmail } from '@/api/services/authService'
 import { Button } from '@/components/ui/button'
@@ -24,6 +25,7 @@ type State = 'checking' | 'done' | 'taken' | 'invalid'
  * it would strand exactly the person the link exists for.
  */
 export function VerifyEmailPage() {
+  useTrackPageView()
   const { t } = useTranslation()
   const [params] = useSearchParams()
   const token = params.get('token') ?? ''

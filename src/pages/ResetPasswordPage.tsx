@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
+import { useTrackPageView } from '@/analytics'
 import { checkResetToken, resetPassword } from '@/api/services/authService'
 import { RhfPasswordField } from '@/components/formFields/reactHookFormFields'
 import { Button } from '@/components/ui/button'
@@ -27,6 +28,7 @@ type State = 'checking' | 'valid' | 'invalid'
  * password into two fields.
  */
 export function ResetPasswordPage() {
+  useTrackPageView()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [params] = useSearchParams()

@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 
+import { TRACK_IDS, trackClick, useTrackPageView } from '@/analytics'
 import ApiError from '@/api/apiError'
 import { register as registerAccount } from '@/api/services/authService'
 import { GoogleButton } from '@/components/auth/GoogleButton'
@@ -24,6 +25,7 @@ import styles from '@/components/auth/authForms.module.scss'
 
 /** Create an account with email/password (or Google). */
 export function RegisterPage() {
+  useTrackPageView()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -55,6 +57,8 @@ export function RegisterPage() {
   }
 
   const onSubmit = async (values: RegisterValues) => {
+    // After validation passes — a submit the form refused isn't an attempt.
+    trackClick(TRACK_IDS.AUTH_REGISTER_SUBMIT)
     try {
       onAuthed(
         await registerAccount({

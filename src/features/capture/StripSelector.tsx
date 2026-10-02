@@ -2,6 +2,7 @@ import { Loader2, RotateCcw, Sparkles } from 'lucide-react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { TRACK_IDS, trackClick } from '@/analytics'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Button } from '@/components/ui/button'
 import { BACKDROPS, resolveBackdrop } from '@/constants/backdrops'
@@ -513,7 +514,10 @@ export function StripSelector({
         <div className={styles.actions} data-booth-actions>
           <Button
             className={styles.createButton}
-            onClick={() => setConfirmOpen(true)}
+            onClick={() => {
+              trackClick(TRACK_IDS.SELECT_CREATE_STRIP)
+              setConfirmOpen(true)
+            }}
             // A strip created mid-cutout would have to finish the job on the result
             // screen, with nothing on it to say why it's slow — so it waits here.
             disabled={frames.length === 0 || backdropPending}
@@ -525,7 +529,10 @@ export function StripSelector({
             <Button
               variant="outline"
               className={styles.retakeAllButton}
-              onClick={onRetake}
+              onClick={() => {
+                trackClick(TRACK_IDS.SELECT_RETAKE_ALL)
+                onRetake()
+              }}
               disabled={retakeBlocked || retakePending}
             >
               <RotateCcw /> {t('select.retake')}

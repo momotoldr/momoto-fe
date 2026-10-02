@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { useTrackPageView } from '@/analytics'
 import { requestPasswordReset } from '@/api/services/authService'
 import { RhfInputField } from '@/components/formFields/reactHookFormFields'
 import { Button } from '@/components/ui/button'
@@ -30,6 +31,7 @@ const RESET_COOLDOWN_KEY = 'momoto.cooldown.resetPassword'
  * back, so the screen below is the only outcome there is.
  */
 export function ForgotPasswordPage() {
+  useTrackPageView()
   const { t } = useTranslation()
   /**
    * The form is *replaced* by the confirmation rather than sitting behind a toast —

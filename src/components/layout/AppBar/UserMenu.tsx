@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { LogOut, UserRound } from 'lucide-react'
 
+import { TRACK_IDS, trackClick } from '@/analytics'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
 import { env } from '@/env'
@@ -37,7 +38,9 @@ export function UserMenu() {
     if (status === 'loading') return null
     return (
       <Button asChild size="sm" variant="outline">
-        <Link to={ROUTES.login}>{t('auth.login.submit')}</Link>
+        <Link to={ROUTES.login} onClick={() => trackClick(TRACK_IDS.NAV_LOGIN, 'a')}>
+          {t('auth.login.submit')}
+        </Link>
       </Button>
     )
   }
