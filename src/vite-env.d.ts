@@ -30,7 +30,16 @@ interface ImportMetaEnv {
   readonly VITE_GROUP_MODE_ENABLED?: string
   /** Set to "true" to offer strip backdrops (background removal after capture). */
   readonly VITE_BACKDROPS_ENABLED?: string
+  /** Set to "true" to send tracking events to momoto-analytics (needs the URL below). */
+  readonly VITE_ANALYTICS_ENABLED?: string
+  /** momoto-analytics, e.g. https://e-staging.momotoldr.com. */
+  readonly VITE_ANALYTICS_URL?: string
+  /** Share of visits tracked, 0–1. Unset = all of them. */
+  readonly VITE_ANALYTICS_SAMPLE_RATE?: string
 }
+
+/** The commit this bundle was built from (7 chars), or `dev` — see `vite.config.ts`. */
+declare const __APP_VERSION__: string
 
 interface ImportMeta {
   readonly env: ImportMetaEnv

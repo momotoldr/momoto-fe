@@ -18,6 +18,9 @@
  * - `VITE_PEERJS_SECURE` is `true`: the page is https, so an insecure broker can't connect.
  * - feature flags, when set, are exactly `true` or `false`. The app treats anything else
  *   as off, so `TRUE` or `yes` would silently ship a feature disabled.
+ * - tracking: with `VITE_ANALYTICS_ENABLED=true`, `VITE_ANALYTICS_URL` must pass the same
+ *   backend checks (https, environment naming, connect-src) — otherwise the tracker is
+ *   on but every batch is refused by the CSP. `VITE_ANALYTICS_SAMPLE_RATE`, if set, is 0–1.
  */
 import { readFile } from 'node:fs/promises'
 
@@ -81,6 +84,28 @@ requireKey('VITE_PEERJS_PORT')
 requireKey('VITE_PEERJS_PATH')
 if (value('VITE_PEERJS_SECURE') !== 'true') errors.push('VITE_PEERJS_SECURE must be "true"')
 
+if (value('VITE_ANALYTICS_ENABLED') === 'true') {
+  const v = requireKey('VITE_ANALYTICS_URL')
+  if (v) {
+    let url = null
+    try {
+      url = new URL(v)
+    } catch {
+      errors.push(`VITE_ANALYTICS_URL = "${v}" is not a URL`)
+    }
+    if (url) {
+      if (url.protocol !== 'https:') {
+        errors.push(`VITE_ANALYTICS_URL must be https, got ${url.protocol}`)
+      }
+      checkHost('VITE_ANALYTICS_URL', url.hostname)
+    }
+  }
+}
+const sample = value('VITE_ANALYTICS_SAMPLE_RATE')
+if (sample && !(Number(sample) >= 0 && Number(sample) <= 1)) {
+  errors.push(`VITE_ANALYTICS_SAMPLE_RATE = "${sample}" must be a number from 0 to 1`)
+}
+
 const maxItems = requireKey('VITE_STRIP_MAX_ITEMS')
 if (maxItems && !(Number(maxItems) > 0)) {
   errors.push(`VITE_STRIP_MAX_ITEMS = "${maxItems}" is not a positive number`)
@@ -91,6 +116,7 @@ for (const key of [
   'VITE_GROUP_MODE_ENABLED',
   'VITE_PAYMENTS_ENABLED',
   'VITE_BACKDROPS_ENABLED',
+  'VITE_ANALYTICS_ENABLED',
   'VITE_PEERJS_SECURE',
 ]) {
   const v = value(key)
@@ -102,7 +128,13 @@ if (errors.length > 0) {
   process.exit(1)
 }
 
-const flags = ['BETA_MODE', 'GROUP_MODE_ENABLED', 'PAYMENTS_ENABLED', 'BACKDROPS_ENABLED']
+const flags = [
+  'BETA_MODE',
+  'GROUP_MODE_ENABLED',
+  'PAYMENTS_ENABLED',
+  'BACKDROPS_ENABLED',
+  'ANALYTICS_ENABLED',
+]
   .map((f) => `${f}=${value(`VITE_${f}`) || 'off'}`)
   .join(' ')
 console.log(

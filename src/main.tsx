@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Toaster, toast } from 'sonner'
 
+import { tracker } from '@/analytics'
 import App from '@/app/App'
 import { useCartStore } from '@/store/useCartStore'
 import { useMediaStore } from '@/store/useMediaStore'
@@ -31,6 +32,9 @@ if (import.meta.env.DEV) {
       toast,
       captureCompositeFrame,
       composeStrip,
+      // `__photobooth.analytics.getIdentity().sessionId` — the visit to look up in
+      // momoto-analytics (queries.sql, query 1).
+      analytics: tracker,
     },
   })
 }
