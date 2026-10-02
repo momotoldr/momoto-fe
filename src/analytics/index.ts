@@ -7,7 +7,7 @@
  */
 import { tracker } from './tracker'
 
-export { tracker, OPT_OUT_KEY } from './tracker'
+export { tracker } from './tracker'
 export { unlinkAccount } from './identify'
 export type { MomotoEventName, MomotoEvents } from './events'
 
