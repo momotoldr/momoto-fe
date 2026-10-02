@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import styles from './PrivacyPage.module.scss'
+import { useTrackPageView } from '@/analytics'
 
 /** Ordered policy sections — each maps to `privacy.sections.<key>.{title,body}` copy. */
 const SECTION_KEYS = [
@@ -18,6 +19,7 @@ const SECTION_KEYS = [
 
 /** Privacy Policy — static legal page */
 export function PrivacyPage() {
+  useTrackPageView()
   const { t } = useTranslation()
 
   return (

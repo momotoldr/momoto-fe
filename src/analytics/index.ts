@@ -1,15 +1,15 @@
 /**
- * Tracking for Momoto — see `docs/plans/PLAN-observability.md`.
+ * Tracking for Momoto — see `docs/plans/PLAN-observability.md`. Everything is explicit;
+ * nothing is recorded automatically:
  *
- * `track(name, props)` never throws and never blocks; call it from event handlers,
- * effects and store subscriptions, never during render (render can run more than once).
- * Name a button for click tracking with a `data-track="area.action"` attribute.
+ * - a page: `useTrackPageView()` as the first line of the page component;
+ * - a primary action: `trackClick(TRACK_IDS.X)` in its handler;
+ * - anything else: `trackEvents(ANALYTICS_EVENTS.X, props)`.
  */
-import { tracker } from './tracker'
-
+export { ANALYTICS_EVENTS } from './events'
+export type { MomotoEventName, MomotoEvents } from './events'
+export { trackClick, useTrackPageView } from './manual'
+export { TRACK_IDS, type TrackId } from './trackIds'
+export { trackEvents } from './trackEvents'
 export { tracker } from './tracker'
 export { unlinkAccount } from './identify'
-export type { MomotoEventName, MomotoEvents } from './events'
-
-export const track: typeof tracker.track = (name, data, options) =>
-  tracker.track(name, data, options)

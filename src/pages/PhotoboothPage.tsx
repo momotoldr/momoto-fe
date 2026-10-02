@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { TRACK_IDS, trackClick, useTrackPageView } from '@/analytics'
 import ApiError from '@/api/apiError'
 import { RhfInputField } from '@/components/formFields/reactHookFormFields'
 import { Button } from '@/components/ui/button'
@@ -24,6 +25,7 @@ import styles from './PhotoboothPage.module.scss'
 
 /** Photobooth entry: pick Solo / Date, or join a friend's room by code. */
 export function PhotoboothPage() {
+  useTrackPageView()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [creating, setCreating] = useState(false)
@@ -130,7 +132,10 @@ export function PhotoboothPage() {
           type="button"
           className={styles.mode}
           disabled={busy}
-          onClick={() => void createRoom('solo')}
+          onClick={() => {
+            trackClick(TRACK_IDS.PHOTOBOOTH_MODE_SOLO)
+            void createRoom('solo')
+          }}
         >
           <span className={styles.modeArt} aria-hidden="true">
             <span className={cn(styles.frame, styles.frameSolo)}>
@@ -155,7 +160,10 @@ export function PhotoboothPage() {
           type="button"
           className={styles.mode}
           disabled={busy}
-          onClick={() => void createRoom('date')}
+          onClick={() => {
+            trackClick(TRACK_IDS.PHOTOBOOTH_MODE_DATE)
+            void createRoom('date')
+          }}
         >
           <span className={cn(styles.modeArt, styles.modeArtDate)} aria-hidden="true">
             <span className={cn(styles.frame, styles.frameDate)}>
@@ -185,7 +193,10 @@ export function PhotoboothPage() {
             type="button"
             className={styles.mode}
             disabled={busy}
-            onClick={() => void createRoom('group')}
+            onClick={() => {
+              trackClick(TRACK_IDS.PHOTOBOOTH_MODE_GROUP)
+              void createRoom('group')
+            }}
           >
             <span className={cn(styles.modeArt, styles.modeArtGroup)} aria-hidden="true">
               <span className={cn(styles.frame, styles.frameGroup)}>

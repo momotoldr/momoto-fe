@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { TRACK_IDS, trackClick } from '@/analytics'
 import { Button } from '@/components/ui/button'
 import { SHOT_COUNT } from '@/constants/capture'
 import { CountdownOverlay } from '@/features/capture/CountdownOverlay'
@@ -340,7 +341,10 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
   const startButton = (
     <Button
       className={styles.startButton}
-      onClick={startCapture}
+      onClick={() => {
+        trackClick(TRACK_IDS.CAPTURE_START_SESSION)
+        startCapture()
+      }}
       disabled={isCapturing || starting || peerAway || offline || camerasConnecting || peerCamOff}
     >
       {starting && <Loader2 className={styles.startSpinner} aria-hidden />}

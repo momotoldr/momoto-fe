@@ -27,6 +27,13 @@ decided in one place.
 > Where this plan and the library plan disagree on a pipeline detail, the library plan
 > is the one to follow.
 
+> **Revision 5 (2026-10-02): tracking is manual, not automatic.** The `pageViews` and
+> `autocapture` plugins are not used. Every page calls `useTrackPageView()`; the primary
+> actions listed in `src/analytics/trackIds.ts` (`TRACK_IDS`) call `trackClick(…)`; anything
+> else is `trackEvents(ANALYTICS_EVENTS.X, props)`. Clicks on controls without a call are
+> not recorded, so the "untracked clicks" idea below no longer applies. Also decided: no
+> privacy-page copy or opt-out, Do Not Track / GPC ignored, every event `console.log`ged.
+
 **Legend:** DoD = Definition of Done.
 
 ---
@@ -59,7 +66,7 @@ real testers, and it is producing none of the data it exists to collect.
   so a typo is a type error. The service's allowlist is checked against the same list in
   its CI.
 - **Two ways to emit.**
-  1. **Explicit `track(...)`** for anything with meaning: a shot taken, a template
+  1. **Explicit `trackEvents(ANALYTICS_EVENTS.X, props)`** for anything with meaning: a shot taken, a template
      chosen, a payment.
   2. **Click autocapture.** One delegated `document` listener records every click on a
      `button`, `a` or `[role=button]`. The element's `data-track` id is used when it has
@@ -222,7 +229,7 @@ A single `click` listener on `document` (capture phase, passive) walks up to the
 - shadcn `Button` spreads props, so `data-track` passes through with no component
   change.
 
-Explicit `track()` events stay as they are. A click answers "what did they press". A
+Explicit `trackEvents()` events stay as they are. A click answers "what did they press". A
 `strip_created` answers "did it work". Most funnel steps need the second.
 
 ---
@@ -359,9 +366,9 @@ service's saved queries:
   (required when enabled) to `env.ts`, `.env.example` and `scripts/check-env.mjs`. Add
   `__APP_VERSION__` via Vite `define` from `GITHUB_SHA`.
 - Write `events.ts` (`MomotoEvents`) with the taxonomy above. It can land before the
-  library does: until L6, `track()` only `console.debug`s.
+  library does: until L6, sending only `console.debug`s.
 
-**DoD:** `track('app_open', …)` type-checks; a typo'd name fails
+**DoD:** `trackEvents(ANALYTICS_EVENTS.APP_OPEN, …)` type-checks; a typo'd name fails
 `npm run typecheck`; nothing is sent.
 
 ### F1 — Integrate the library: page views + clicks *(1 day FE; = library L6)*

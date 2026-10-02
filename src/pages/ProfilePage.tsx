@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 
+import { useTrackPageView } from '@/analytics'
 import { galleryItems } from '@/features/gallery/selectors'
 import { AccountPanel } from '@/features/profile/AccountPanel'
 import {
@@ -35,6 +36,7 @@ import styles from './ProfilePage.module.scss'
  * people straight to Partner, and a reload keeps them where they were.
  */
 export function ProfilePage() {
+  useTrackPageView()
   const { i18n } = useTranslation()
   const user = useAuthStore((s) => s.user)
   const items = useCartStore((s) => s.items)

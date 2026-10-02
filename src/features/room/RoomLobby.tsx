@@ -2,6 +2,7 @@ import { Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { TRACK_IDS, trackClick } from '@/analytics'
 import { Button } from '@/components/ui/button'
 import { useBoothStage } from '@/hooks/useBoothStage'
 import { cn } from '@/lib/utils'
@@ -75,7 +76,14 @@ export function RoomLobby({ roomId, mode, present, capacity, onStart }: RoomLobb
             </span>
           </div>
 
-          <Button className={styles.start} onClick={onStart} disabled={!canStart}>
+          <Button
+            className={styles.start}
+            onClick={() => {
+              trackClick(TRACK_IDS.LOBBY_START_SESSION)
+              onStart()
+            }}
+            disabled={!canStart}
+          >
             {t('lobby.start')}
           </Button>
           <p className={styles.startNote}>

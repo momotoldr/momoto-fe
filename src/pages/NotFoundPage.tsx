@@ -2,6 +2,7 @@ import { SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { useTrackPageView } from '@/analytics'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
 
@@ -13,6 +14,7 @@ import styles from './NotFoundPage.module.scss'
  * being inside Momoto, with a way out.
  */
 export function NotFoundPage() {
+  useTrackPageView()
   const { t } = useTranslation()
 
   return (

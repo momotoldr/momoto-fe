@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createPortal } from 'react-dom'
 
+import { TRACK_IDS, trackClick } from '@/analytics'
 import { Button } from '@/components/ui/button'
 
 import styles from './ShareStripDialog.module.scss'
@@ -82,7 +83,14 @@ export function ShareStripDialog({
         </div>
 
         <div className={styles.actions}>
-          <Button className={styles.instagram} onClick={onInstagram} disabled={!ready}>
+          <Button
+            className={styles.instagram}
+            onClick={() => {
+              trackClick(TRACK_IDS.SHARE_INSTAGRAM)
+              onInstagram()
+            }}
+            disabled={!ready}
+          >
             <Instagram /> {t('result.shareInstagram')}
           </Button>
           {/* Side by side: the native sheet and the plain download are alternatives to
@@ -93,7 +101,10 @@ export function ShareStripDialog({
               <Button
                 variant="outline"
                 className={styles.action}
-                onClick={onShare}
+                onClick={() => {
+                  trackClick(TRACK_IDS.SHARE_NATIVE)
+                  onShare()
+                }}
                 disabled={!ready}
               >
                 <Share2 /> {t('result.share')}
@@ -102,7 +113,10 @@ export function ShareStripDialog({
             <Button
               variant="outline"
               className={styles.action}
-              onClick={onDownload}
+              onClick={() => {
+                trackClick(TRACK_IDS.SHARE_DOWNLOAD)
+                onDownload()
+              }}
               disabled={!ready}
             >
               <Download /> {t('result.download')}
