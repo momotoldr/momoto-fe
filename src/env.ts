@@ -70,6 +70,17 @@ interface AppEnv {
    * doesn't even stage them (`scripts/stage-segmentation.mjs` reads the same flag).
    */
   backdropsEnabled: boolean
+  /**
+   * Tracking (`src/analytics`): page views, clicks and product events sent to
+   * `momoto-analytics`. Off unless `VITE_ANALYTICS_ENABLED=true` **and** a URL is set; off,
+   * the tracker is a no-op that installs nothing. Turning it on in production also needs
+   * the privacy-page copy to describe it (PLAN-observability.md, F5).
+   */
+  analyticsEnabled: boolean
+  /** `momoto-analytics` (`VITE_ANALYTICS_URL`). Empty when tracking is off. */
+  analyticsUrl: string
+  /** Share of visits tracked, 0–1, rolled once per visit (`VITE_ANALYTICS_SAMPLE_RATE`). */
+  analyticsSampleRate: number
 }
 
 const DEFAULT_STUN_URL = 'stun:stun.l.google.com:19302'
@@ -129,6 +140,14 @@ const betaMode = import.meta.env.VITE_BETA_MODE === 'true'
  */
 const legacySingleBackendUrl = import.meta.env.VITE_SOCKET_URL || undefined
 
+const analyticsUrl = import.meta.env.VITE_ANALYTICS_URL?.trim() || ''
+
+/** A rate outside 0–1 (or not a number) means "track everyone" rather than silently none. */
+function sampleRate(raw: string | undefined): number {
+  const n = Number(raw)
+  return raw && Number.isFinite(n) && n >= 0 && n <= 1 ? n : 1
+}
+
 export const env: AppEnv = {
   apiUrl: import.meta.env.VITE_API_URL || legacySingleBackendUrl || 'http://localhost:3001',
   realtimeUrl:
@@ -152,4 +171,7 @@ export const env: AppEnv = {
   betaMode,
   groupModeEnabled: import.meta.env.VITE_GROUP_MODE_ENABLED === 'true',
   backdropsEnabled: import.meta.env.VITE_BACKDROPS_ENABLED === 'true',
+  analyticsEnabled: import.meta.env.VITE_ANALYTICS_ENABLED === 'true' && !!analyticsUrl,
+  analyticsUrl,
+  analyticsSampleRate: sampleRate(import.meta.env.VITE_ANALYTICS_SAMPLE_RATE),
 }

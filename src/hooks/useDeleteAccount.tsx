@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 import ApiError from '@/api/apiError'
+import { unlinkAccount } from '@/analytics'
 import { deleteAccount } from '@/api/services/authService'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Input } from '@/components/ui/input'
+import { getStoredToken } from '@/constants/auth'
 import { ROUTES } from '@/constants/routes'
 import { galleryItems } from '@/features/gallery/selectors'
 import { useAuthStore } from '@/store/useAuthStore'
@@ -56,8 +58,13 @@ export function useDeleteAccount(): { requestDelete: () => void; dialog: JSX.Ele
   const performDelete = async () => {
     setSubmitting(true)
     setError(null)
+    // Captured before the delete: `clearLocal` drops it, and the analytics unlink below
+    // still needs it (the token keeps verifying until it expires).
+    const token = getStoredToken()
     try {
       await deleteAccount(hasPassword ? confirmation : undefined)
+      // Only after the account is really gone — a wrong password must not unlink anything.
+      unlinkAccount(token)
       clearLocal()
       toast.success(t('auth.deleteConfirm.done'))
       navigate(ROUTES.home, { replace: true })

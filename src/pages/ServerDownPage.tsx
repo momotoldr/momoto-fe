@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
+import { useTrackPageView } from '@/analytics'
 import { pingServer } from '@/api/services/healthService'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
@@ -28,6 +29,7 @@ const POLL_INTERVAL_MS = 5000
  * without asserting it.
  */
 export function ServerDownPage() {
+  useTrackPageView()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [params] = useSearchParams()

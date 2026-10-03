@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useBlocker, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
+import { useTrackPageView } from '@/analytics'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
@@ -38,6 +39,7 @@ function Notice({ message }: { message: string }) {
 }
 
 export function RoomPage() {
+  useTrackPageView()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { roomId } = useParams<{ roomId: string }>()

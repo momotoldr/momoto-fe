@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { TRACK_IDS, trackClick, useTrackPageView } from '@/analytics'
 import { LandingStats } from '@/components/landing/LandingStats'
 import { LandingTestimonials } from '@/components/landing/LandingTestimonials'
 import { ACTIVITIES } from '@/constants/activities'
@@ -64,6 +65,7 @@ const GROUP_FRAMES = [
  * with tape doing the labelling. Only the structure is new — the palette, the hero
  * gradient and every string are the ones the app already had. */
 export function LandingPage() {
+  useTrackPageView()
   const { t } = useTranslation()
   const [activeHow, setActiveHow] = useState(ACTIVITIES[0].key)
   const steps = ACTIVITY_STEPS[activeHow] ?? []
@@ -111,7 +113,11 @@ export function LandingPage() {
             <h1 className={styles.title}>{t('landing.heroTitle')}</h1>
             <p className={styles.subtitle}>{t('landing.heroSubtitle')}</p>
             <div className={styles.heroActions}>
-              <Link to={ROUTES.photobooth} className={styles.pillDark}>
+              <Link
+                to={ROUTES.photobooth}
+                className={styles.pillDark}
+                onClick={() => trackClick(TRACK_IDS.LANDING_HERO_OPEN_PHOTOBOOTH, 'a')}
+              >
                 {t('landing.ctaSecondary')}
                 <ArrowRight className={styles.pillIcon} />
               </Link>
@@ -292,7 +298,11 @@ export function LandingPage() {
 
         <section className={styles.cta}>
           <h2 className={styles.ctaTitle}>{t('landing.ctaBannerTitle')}</h2>
-          <Link to={ROUTES.photobooth} className={styles.pillLight}>
+          <Link
+            to={ROUTES.photobooth}
+            className={styles.pillLight}
+            onClick={() => trackClick(TRACK_IDS.LANDING_BANNER_OPEN_PHOTOBOOTH, 'a')}
+          >
             {t('landing.ctaSecondary')}
             <ArrowRight className={styles.pillIcon} />
           </Link>

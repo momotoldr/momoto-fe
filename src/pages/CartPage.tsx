@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
+import { TRACK_IDS, trackClick, useTrackPageView } from '@/analytics'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
@@ -85,6 +86,7 @@ function groupByMode(items: StoredStrip[]): ModeGroup[] {
 
 /** The cart: saved strips grouped by session, with a batch checkout for the paid copies. */
 export function CartPage() {
+  useTrackPageView()
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const items = useCartStore((state) => state.items)
@@ -432,7 +434,10 @@ export function CartPage() {
               size="sm"
               className={styles.unlockBtn}
               disabled={unlockingId === strip.id || blocked || frozen}
-              onClick={() => void unlockStrip(strip)}
+              onClick={() => {
+                trackClick(TRACK_IDS.CART_UNLOCK)
+                void unlockStrip(strip)
+              }}
             >
               {unlockingId === strip.id ? <Loader2 className={styles.btnSpinner} /> : <LockOpen />}
               {t(

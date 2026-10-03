@@ -20,6 +20,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.5.3",
     "@mediapipe/tasks-vision": "^1.0.1",
+    "@momotoldr/tracker": "github:momotoldr/momoto-tracker#v0.2.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@react-oauth/google": "^0.13.5",
     "axios": "^1.18.1",
@@ -62,5 +63,8 @@
     "typescript-eslint": "^8.6.0",
     "vite": "^6.1.0",
     "wrangler": "^4.120.1"
+  },
+  "allowScripts": {
+    "github:momotoldr/momoto-tracker#633917bb692afcbe61eb56cf43f77f01e2de7c7a": true
   }
 }
