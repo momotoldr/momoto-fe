@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { SUPPORT_TOPICS } from '@/constants/feedback'
+
 /**
  * Central schema definitions for the app's forms (zod-based).
  *
@@ -174,13 +176,21 @@ const roomCodeSchema = z
 export const joinRoomSchema = z.object({ code: roomCodeSchema })
 
 // Support request (see `components/common/SupportFab`), the app's one "something's
-// wrong" form. The reply-to email is required — a support request we can't answer is a
-// dead end — and the message carries the rest. Unprompted opinions are a star rating on
+// wrong" form. A topic is picked first (a triage hint for the admin inbox), the reply-to
+// email is required — a support request we can't answer is a dead end — and the message
+// carries the rest. Unprompted opinions are a star rating on
 // the strip result screen instead (`features/compose/StripRating`), which needs no
 // schema of its own. Loose email shape, mirroring the server's own check.
 const SUPPORT_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export const supportSchema = z.object({
+  // A string rather than an enum so the form can start on the empty "choose…" option.
+  topic: z
+    .string()
+    .refine(
+      (v) => (SUPPORT_TOPICS as readonly string[]).includes(v),
+      'support.errors.topicRequired'
+    ),
   message: z
     .string()
     .trim()
