@@ -24,8 +24,36 @@
     "open": "Contact support",
     "title": "Need a hand?",
     "subtitle": "Tell us what's going wrong and we'll look into it. We'll reply by email.",
+    "topicLabel": "Category",
+    "topicPlaceholder": "Choose a category…",
+    "topics": {
+      "session": {
+        "label": "Photobooth session",
+        "hint": "Camera, joining a room, connection, countdown",
+        "placeholder": "What happened during the session? Tell us the room code if you have it, and which device and browser you were on…"
+      },
+      "strip": {
+        "label": "My strips",
+        "hint": "Templates, backgrounds, downloads, gallery",
+        "placeholder": "Which strip is it about, and what went wrong? A missing strip, a download that failed, a template that looks off…"
+      },
+      "payment": {
+        "label": "Payment & unlocking",
+        "hint": "Charges, unlocking strips, refunds",
+        "placeholder": "Tell us what you paid for, when, and what went wrong. Please don't include card numbers…"
+      },
+      "account": {
+        "label": "Account & sign-in",
+        "hint": "Login, email, password, partner link",
+        "placeholder": "What's going wrong with your account? Your username helps us find it…"
+      },
+      "other": {
+        "label": "Something else",
+        "hint": "Anything not listed above",
+        "placeholder": "Describe the issue and we'll look into it…"
+      }
+    },
     "messageLabel": "Your message",
-    "messagePlaceholder": "Describe the issue and we'll look into it…",
     "emailLabel": "Email",
     "emailPlaceholder": "you@example.com",
     "emailHint": "We'll use this to reply to you.",
@@ -35,6 +63,7 @@
     "success": "Thanks! Your request has been sent.",
     "error": "Couldn't send your request. Please try again.",
     "errors": {
+      "topicRequired": "Please choose a category.",
       "messageRequired": "Please enter a message first.",
       "messageTooLong": "That message is a bit too long.",
       "emailInvalid": "Please enter a valid email address.",

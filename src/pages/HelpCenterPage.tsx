@@ -57,7 +57,7 @@ export function HelpCenterPage() {
         </div>
         {/* Opens the same dialog as the floating button in the corner — a page about
          * getting unstuck shouldn't ask the reader to go find a bubble. */}
-        <Button onClick={openSupportDialog}>{t('support.open')}</Button>
+        <Button onClick={() => openSupportDialog()}>{t('support.open')}</Button>
       </section>
     </main>
   )

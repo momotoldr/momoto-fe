@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { EmailField } from './EmailField'
 import { InputField } from './InputField'
 import { PasswordField } from './PasswordField'
+import { SelectField } from './SelectField'
 import { TextareaField } from './TextareaField'
 
 /** Props the RHF wrapper injects itself — callers don't pass these. */
@@ -59,3 +60,4 @@ export const RhfInputField = withReactHookForm(InputField)
 export const RhfEmailField = withReactHookForm(EmailField)
 export const RhfPasswordField = withReactHookForm(PasswordField)
 export const RhfTextareaField = withReactHookForm(TextareaField)
+export const RhfSelectField = withReactHookForm(SelectField)
