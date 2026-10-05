@@ -24,8 +24,36 @@
     "open": "Hubungi bantuan",
     "title": "Butuh bantuan?",
     "subtitle": "Ceritakan masalahnya dan akan kami tindak lanjuti. Kami akan membalas lewat email.",
+    "topicLabel": "Kategori",
+    "topicPlaceholder": "Pilih kategori…",
+    "topics": {
+      "session": {
+        "label": "Sesi photobooth",
+        "hint": "Kamera, masuk room, koneksi, hitung mundur",
+        "placeholder": "Apa yang terjadi selama sesi? Sertakan kode room kalau ada, serta perangkat dan browser yang kamu pakai…"
+      },
+      "strip": {
+        "label": "Strip saya",
+        "hint": "Template, latar, unduhan, galeri",
+        "placeholder": "Strip yang mana, dan apa masalahnya? Strip hilang, unduhan gagal, template terlihat aneh…"
+      },
+      "payment": {
+        "label": "Pembayaran & buka strip",
+        "hint": "Tagihan, membuka strip, pengembalian dana",
+        "placeholder": "Ceritakan apa yang kamu bayar, kapan, dan apa masalahnya. Jangan sertakan nomor kartu…"
+      },
+      "account": {
+        "label": "Akun & masuk",
+        "hint": "Login, email, kata sandi, tautan pasangan",
+        "placeholder": "Apa masalah dengan akunmu? Sertakan username agar kami mudah menemukannya…"
+      },
+      "other": {
+        "label": "Lainnya",
+        "hint": "Hal lain yang tidak ada di atas",
+        "placeholder": "Jelaskan masalahnya dan akan kami tindak lanjuti…"
+      }
+    },
     "messageLabel": "Pesan kamu",
-    "messagePlaceholder": "Jelaskan masalahnya dan akan kami tindak lanjuti…",
     "emailLabel": "Email",
     "emailPlaceholder": "kamu@contoh.com",
     "emailHint": "Kami akan memakai ini untuk membalasmu.",
@@ -35,6 +63,7 @@
     "success": "Terima kasih! Permintaanmu sudah terkirim.",
     "error": "Gagal mengirim permintaanmu. Silakan coba lagi.",
     "errors": {
+      "topicRequired": "Silakan pilih kategori.",
       "messageRequired": "Silakan tulis pesan terlebih dahulu.",
       "messageTooLong": "Pesannya terlalu panjang.",
       "emailInvalid": "Masukkan alamat email yang valid.",

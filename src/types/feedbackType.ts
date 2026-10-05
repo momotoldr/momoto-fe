@@ -3,9 +3,18 @@ import type { SessionMode } from '@/types/roomsType'
 /** Whether a submission is general feedback or a support request. */
 export type FeedbackCategory = 'feedback' | 'support'
 
+/**
+ * What a support request is about, picked in the support dialog before the message is
+ * written. Mirrors the server's `SUPPORT_TOPICS`; display order is `SUPPORT_TOPICS` in
+ * `@/constants/feedback`.
+ */
+export type SupportTopic = 'session' | 'strip' | 'payment' | 'account' | 'other'
+
 /** A feedback / support submission — the floating feedback button, or a strip rating. */
 export interface FeedbackInput {
   category: FeedbackCategory
+  /** What a support request is about. Ignored by the server on anything but `support`. */
+  topic?: SupportTopic
   /**
    * The message body. Required unless a `rating` is supplied: the rating card beside a
    * finished strip can be one tap with nothing typed.
