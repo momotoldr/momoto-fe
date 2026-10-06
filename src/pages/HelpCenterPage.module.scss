@@ -1,8 +1,8 @@
-/* A reading column, like the terms and privacy pages — the questions are prose, and
- * the accordion is the only interactive thing here. */
+/* A reading column, like the terms and privacy pages. Three blocks top to bottom:
+ * troubleshooting by category, the FAQ card, and the contact card. */
 
 .page {
-  @apply mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-10 sm:py-14;
+  @apply mx-auto flex w-full max-w-3xl flex-col gap-10 px-4 py-10 sm:py-14;
 }
 
 .head {
@@ -25,17 +25,161 @@
   @apply text-base leading-relaxed text-muted-foreground;
 }
 
-/* ---- Questions ---- */
+.section {
+  @apply flex flex-col gap-4;
+}
+
+.sectionTitle {
+  @apply text-xl font-semibold tracking-tight;
+}
+
+/* ---- Categories ---- */
+
+/* Two columns from `sm:`; the catch-all ("Something else") is last and spans both, so
+ * five cards never leave a hole in the grid. */
+.categoryGrid {
+  @apply grid grid-cols-1 gap-3 sm:grid-cols-2;
+}
+
+.categoryCard {
+  @apply flex w-full items-start gap-3 rounded-2xl border bg-card px-4 py-4 text-left transition-colors;
+
+  &:hover {
+    @apply border-rose-200 bg-rose-50/40;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-rose-400 ring-offset-2 ring-offset-background;
+  }
+
+  &[data-active] {
+    @apply border-rose-300 bg-rose-50/70;
+  }
+
+  &:last-child {
+    @apply sm:col-span-2;
+  }
+}
+
+.categoryIcon {
+  @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600;
+
+  svg {
+    @apply h-5 w-5;
+  }
+}
+
+.categoryText {
+  @apply flex min-w-0 flex-col gap-0.5;
+}
+
+.categoryLabel {
+  @apply text-base font-semibold;
+}
+
+.categoryHint {
+  @apply text-sm leading-snug text-muted-foreground;
+}
+
+/* ---- The open category ---- */
+
+.panel {
+  @apply flex flex-col gap-4 rounded-2xl border border-rose-200 bg-card px-5 py-5 sm:px-6;
+  scroll-margin-top: 5rem;
+}
+
+.panelHead {
+  @apply flex items-start gap-3;
+}
+
+.panelIcon {
+  @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-rose-600 text-white;
+
+  svg {
+    @apply h-5 w-5;
+  }
+}
+
+.panelText {
+  @apply flex flex-col gap-1;
+}
+
+.panelTitle {
+  @apply text-lg font-semibold tracking-tight;
+}
+
+.panelSummary {
+  @apply text-sm leading-relaxed text-muted-foreground;
+}
+
+.issuesLabel {
+  @apply text-xs font-semibold uppercase tracking-wide text-muted-foreground;
+}
+
+.issueList {
+  @apply flex flex-col divide-y overflow-hidden rounded-xl border;
+}
+
+.issue {
+  @apply bg-background;
+}
+
+.issueQuestion {
+  @apply flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-left text-sm font-semibold;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+.issue[open] .faqIcon {
+  @apply rotate-180;
+}
+
+.issueBody {
+  @apply flex flex-col gap-2 px-4 pb-4 text-sm leading-relaxed text-muted-foreground;
+}
+
+.steps {
+  @apply flex list-decimal flex-col gap-1 pl-5;
+
+  li::marker {
+    @apply font-semibold text-rose-600;
+  }
+}
+
+.panelFoot {
+  @apply flex flex-col items-start gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between;
+}
+
+.panelFootText {
+  @apply text-sm text-muted-foreground;
+}
+
+/* ---- FAQ card ---- */
+
+.faqCard {
+  @apply flex flex-col gap-4 rounded-2xl border bg-card px-5 py-5 sm:px-6;
+}
+
+.faqHead {
+  @apply flex flex-col gap-1;
+}
+
+.faqHint {
+  @apply text-sm text-muted-foreground;
+}
+
 .faqList {
-  @apply flex w-full flex-col gap-3;
+  @apply flex w-full flex-col divide-y border-t;
 }
 
 .faqItem {
-  @apply overflow-hidden rounded-2xl border bg-card;
+  @apply w-full;
 }
 
 .faqQuestion {
-  @apply flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-left text-base font-semibold;
+  @apply flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-base font-semibold;
 
   /* Hide the default disclosure triangle (Safari/Chrome). */
   &::-webkit-details-marker {
@@ -52,7 +196,7 @@
 }
 
 .faqAnswer {
-  @apply px-5 pb-4 text-sm leading-relaxed text-muted-foreground;
+  @apply pb-4 text-sm leading-relaxed text-muted-foreground;
 }
 
 /* ---- Still stuck ---- */
