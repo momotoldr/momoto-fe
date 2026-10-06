@@ -8,12 +8,18 @@ import { useLocation } from 'react-router-dom'
 import { toast } from 'sonner'
 
 import { submitFeedback } from '@/api/services/feedbackService'
-import { RhfEmailField, RhfTextareaField } from '@/components/formFields/reactHookFormFields'
+import {
+  RhfEmailField,
+  RhfSelectField,
+  RhfTextareaField,
+} from '@/components/formFields/reactHookFormFields'
 import { Button } from '@/components/ui/button'
+import { SUPPORT_TOPICS } from '@/constants/feedback'
 import { useAuthStore } from '@/store/useAuthStore'
+import type { SupportTopic } from '@/types/feedbackType'
 import { supportSchema, type SupportValues } from '@/validations'
 
-import { OPEN_SUPPORT_EVENT } from './openSupport'
+import { OPEN_SUPPORT_EVENT, type OpenSupportDetail } from './openSupport'
 import styles from './SupportFab.module.scss'
 
 /**
@@ -21,6 +27,10 @@ import styles from './SupportFab.module.scss'
  * request. Available app-wide (mounted in RootLayout), works signed-in or anonymous;
  * submissions go to `POST /feedback` as the `support` category. Built on
  * react-hook-form + the centralized form fields / zod schema (`@/validations`).
+ *
+ * The form opens on a required topic dropdown (session, strips, payment, account,
+ * other). The topic is a triage hint for the admin inbox, and it lets the message
+ * placeholder ask the questions that topic needs answered.
  *
  * Support only: this is the "something's wrong" channel, so a reply-to email is
  * required. Unprompted opinions are collected as a star rating on the strip result
@@ -37,18 +47,21 @@ export function SupportFab() {
 
   const methods = useForm<SupportValues>({
     resolver: zodResolver(supportSchema),
-    defaultValues: { message: '', email: '' },
+    defaultValues: { topic: '', message: '', email: '' },
   })
   const {
     handleSubmit,
     reset,
     setFocus,
+    watch,
     formState: { isSubmitting },
   } = methods
+  const topic = watch('topic') as SupportTopic | ''
 
-  const openDialog = () => {
-    // Fresh form each open, with the reply-to prefilled from the account (if any).
-    reset({ message: '', email: userEmail ?? '' })
+  const openDialog = (preset?: SupportTopic) => {
+    // Fresh form each open, with the reply-to prefilled from the account (if any) and
+    // the topic preset when the caller already knows it.
+    reset({ topic: preset ?? '', message: '', email: userEmail ?? '' })
     setOpen(true)
   }
 
@@ -64,7 +77,8 @@ export function SupportFab() {
   const openRef = useRef(openDialog)
   openRef.current = openDialog
   useEffect(() => {
-    const onOpen = () => openRef.current()
+    const onOpen = (event: Event) =>
+      openRef.current((event as CustomEvent<OpenSupportDetail>).detail?.topic)
     window.addEventListener(OPEN_SUPPORT_EVENT, onOpen)
     return () => window.removeEventListener(OPEN_SUPPORT_EVENT, onOpen)
   }, [])
@@ -79,7 +93,8 @@ export function SupportFab() {
 
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    setFocus('message')
+    // Start where the form starts: on the topic, unless the caller already picked one.
+    setFocus(methods.getValues('topic') ? 'message' : 'topic')
 
     return () => {
       document.removeEventListener('keydown', onKeyDown)
@@ -93,6 +108,8 @@ export function SupportFab() {
     try {
       await submitFeedback({
         category: 'support',
+        // The schema only lets a listed topic through.
+        topic: values.topic as SupportTopic,
         message: values.message,
         email: values.email,
         context: location.pathname,
@@ -114,7 +131,7 @@ export function SupportFab() {
       <button
         type="button"
         className={styles.fab}
-        onClick={openDialog}
+        onClick={() => openDialog()}
         aria-label={t('support.open')}
         title={t('support.open')}
       >
@@ -151,16 +168,33 @@ export function SupportFab() {
                   noValidate
                   onSubmit={(e) => void handleSubmit(onSubmit)(e)}
                 >
+                  <div className={styles.fieldGroup}>
+                    <RhfSelectField
+                      name="topic"
+                      label="support.topicLabel"
+                      placeholder={t('support.topicPlaceholder')}
+                      options={SUPPORT_TOPICS.map((key) => ({
+                        value: key,
+                        label: t(`support.topics.${key}.label`),
+                      }))}
+                      required
+                    />
+                    {topic ? (
+                      <span className={styles.hint}>{t(`support.topics.${topic}.hint`)}</span>
+                    ) : null}
+                  </div>
+
                   <RhfTextareaField
                     name="message"
                     label="support.messageLabel"
-                    placeholder={t('support.messagePlaceholder')}
+                    // Until a topic is picked, the catch-all's prompt.
+                    placeholder={t(`support.topics.${topic || 'other'}.placeholder`)}
                     rows={4}
                     maxLength={4000}
                     required
                   />
 
-                  <div className={styles.emailGroup}>
+                  <div className={styles.fieldGroup}>
                     <RhfEmailField
                       name="email"
                       // A support request with no way back to the person is a dead end,

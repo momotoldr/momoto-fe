@@ -35,9 +35,9 @@
   @apply mt-4 flex flex-col gap-4;
 }
 
-/* Email field + its hint, kept close together (the field's own wrapper handles
+/* A field + its hint, kept close together (the field's own wrapper handles
    label/input/error; the hint sits just under it). */
-.emailGroup {
+.fieldGroup {
   @apply flex flex-col gap-1.5;
 }
 
