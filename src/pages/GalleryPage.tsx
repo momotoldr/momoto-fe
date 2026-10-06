@@ -1,10 +1,11 @@
-import { Loader2, TriangleAlert } from 'lucide-react'
+import { Download, Loader2, TriangleAlert } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-import { useTrackPageView } from '@/analytics'
+import { ANALYTICS_EVENTS, trackEvents, useTrackPageView } from '@/analytics'
 import { fetchPrintBlob } from '@/api/services/stripsService'
+import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { FilterEmpty, GalleryEmpty } from '@/features/gallery/GalleryEmpty'
 import {
   applyFilter,
@@ -43,6 +44,7 @@ export function GalleryPage() {
   const status = useCartStore((state) => state.status)
   const limit = useCartStore((state) => state.limits.gallery)
   const load = useCartStore((state) => state.load)
+  const removeFromGallery = useCartStore((state) => state.removeFromGallery)
 
   const [filter, setFilter] = useState<GalleryFilter>('all')
   const [expandedMonths, setExpandedMonths] = useState<Set<string>>(new Set())
@@ -57,6 +59,9 @@ export function GalleryPage() {
    */
   const [activeTileId, setActiveTileId] = useState<string | null>(null)
   const [activeMonth, setActiveMonth] = useState<string | null>(null)
+  /** The strip the remove dialog is asking about, if it's open. */
+  const [pendingRemove, setPendingRemove] = useState<StoredStrip | null>(null)
+  const [removing, setRemoving] = useState(false)
 
   const sheetRef = useRef<HTMLDivElement>(null)
 
@@ -165,6 +170,27 @@ export function GalleryPage() {
     [downloadOne, t]
   )
 
+  // Escape and the backdrop both cancel, so this must ignore them mid-request: closing
+  // the dialog wouldn't stop the delete, only hide that it happened.
+  const cancelRemove = useCallback(() => {
+    if (!removing) setPendingRemove(null)
+  }, [removing])
+
+  const confirmRemove = useCallback(async () => {
+    if (!pendingRemove) return
+    setRemoving(true)
+    const result = await removeFromGallery(pendingRemove.id)
+    setRemoving(false)
+    setPendingRemove(null)
+    if (result.ok) {
+      trackEvents(ANALYTICS_EVENTS.STRIP_DELETED, { from: 'gallery' })
+      toast.success(t('gallery.removed'))
+    } else {
+      // A stale strip has already been corrected by the refetch; say so, not "try again".
+      toast.error(t(result.reason === 'stale' ? 'gallery.removeStale' : 'gallery.removeError'))
+    }
+  }, [pendingRemove, removeFromGallery, t])
+
   if (status === 'loading' && items.length === 0) {
     return (
       <div className={styles.state}>
@@ -270,6 +296,7 @@ export function GalleryPage() {
                     onToggleExpanded={toggleExpanded}
                     onToggleTile={toggleTile}
                     onDownload={(strip) => void downloadStrip(strip)}
+                    onRemove={setPendingRemove}
                   />
                 ))}
               </div>
@@ -277,6 +304,30 @@ export function GalleryPage() {
           )}
         </>
       )}
+
+      {/* The clean copy is deleted for good, so the dialog says so plainly and puts the
+          safe path — download it first — one tap away, without leaving the dialog. */}
+      <ConfirmDialog
+        open={pendingRemove !== null}
+        title={t('gallery.removeTitle')}
+        description={t('gallery.removeDescription')}
+        confirmLabel={removing ? t('gallery.removing') : t('gallery.removeConfirm')}
+        cancelLabel={t('gallery.removeCancel')}
+        destructive
+        confirmDisabled={removing || busyId !== null}
+        onConfirm={() => void confirmRemove()}
+        onCancel={cancelRemove}
+      >
+        <button
+          type="button"
+          className={styles.removeDownload}
+          disabled={removing || busyId !== null}
+          onClick={() => pendingRemove && void downloadStrip(pendingRemove)}
+        >
+          {busyId !== null ? <Loader2 className={styles.removeDownloadSpinner} /> : <Download />}
+          {t('gallery.removeDownloadFirst')}
+        </button>
+      </ConfirmDialog>
     </div>
   )
 }

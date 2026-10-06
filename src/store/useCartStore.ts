@@ -4,6 +4,7 @@ import ApiError from '@/api/apiError'
 import {
   deleteStrip,
   listStrips,
+  removeGalleryStrip,
   unlockStrips,
   uploadStrip,
   type StripUploadMeta,
@@ -47,6 +48,15 @@ export type UnlockResult =
       reason:
         'gallery_full' | 'payments_enabled' | 'already_paid' | 'stale' | 'not_printable' | 'failed'
     }
+
+/**
+ * The outcome of removing a strip from the gallery.
+ *
+ * `stale` covers the server disagreeing about the strip — gone, not the caller's, or never
+ * unlocked — which a refetch fixes on its own, so it gets a quieter message than a failure
+ * the user should retry.
+ */
+export type RemoveResult = { ok: true } | { ok: false; reason: 'stale' | 'failed' }
 
 /**
  * The two storage ceilings, as the server reports them.
@@ -97,6 +107,8 @@ interface CartState {
   unlock: (stripIds: string[]) => Promise<UnlockResult>
   /** Delete one strip server-side, then drop it locally. */
   removeStrip: (id: string) => Promise<void>
+  /** Take one unlocked strip out of the gallery (its files are deleted for good). */
+  removeFromGallery: (id: string) => Promise<RemoveResult>
   /** Delete every strip server-side, then empty the cart. */
   /**
    * Empty the cart. `keepIds` survive it — strips inside a live payment, which the
@@ -254,6 +266,32 @@ export const useCartStore = create<CartState>((set, get) => ({
     // A slot just opened — drain whatever the full cart was holding back, so the user
     // doesn't have to know a "sync" step exists.
     if (get().pendingGuestCount > 0) await get().syncGuestStrips()
+  },
+
+  /**
+   * Unlike `removeStrip`, this never drains the waiting guest strips: those are held back
+   * by a full *cart*, and removing from the gallery frees a gallery slot, not a cart one.
+   */
+  removeFromGallery: async (id) => {
+    try {
+      const quota = await removeGalleryStrip(id)
+      set((state) => ({
+        items: state.items.filter((item) => item.id !== id),
+        limits: { cart: quota.cart.limit, gallery: quota.gallery.limit },
+      }))
+      return { ok: true }
+    } catch (error) {
+      // Not found, or not an unlocked strip after all: this store is out of date, and the
+      // refetch is the fix.
+      if (
+        error instanceof ApiError &&
+        (error.code === 'not_found' || error.code === 'strip_not_paid')
+      ) {
+        await get().load()
+        return { ok: false, reason: 'stale' }
+      }
+      return { ok: false, reason: 'failed' }
+    }
   },
 
   clear: async (keepIds = []) => {
