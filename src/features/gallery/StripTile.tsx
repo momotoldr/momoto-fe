@@ -1,4 +1,4 @@
-import { Download, Loader2, Lock } from 'lucide-react'
+import { Download, Loader2, Lock, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
@@ -18,6 +18,8 @@ interface StripTileProps {
   active: boolean
   onToggleActive: (id: string) => void
   onDownload: (strip: StoredStrip) => void
+  /** Ask to remove the strip; the page confirms before anything is deleted. */
+  onRemove: (strip: StoredStrip) => void
 }
 
 /**
@@ -30,10 +32,19 @@ interface StripTileProps {
  * a couple of dozen strips instead of four, which is the whole point once someone has a
  * hundred of them.
  *
- * Download is the only thing offered. A gallery strip has been paid for, so there is no
- * remove here — nothing on this page destroys something the user bought.
+ * Download comes first and is the primary action. Remove sits beside it, smaller, and
+ * only asks: the page confirms before anything is deleted, because a removed strip's
+ * clean copy is gone for good. Removing frees a gallery slot — the way out of a full
+ * gallery — while the purchase that bought the strip stays on record.
  */
-export function StripTile({ strip, busy, active, onToggleActive, onDownload }: StripTileProps) {
+export function StripTile({
+  strip,
+  busy,
+  active,
+  onToggleActive,
+  onDownload,
+  onRemove,
+}: StripTileProps) {
   const { t, i18n } = useTranslation()
   const date = tileDate(strip, i18n.language)
   // Strips saved before the mode was recorded have none; they get the solo badge, which
@@ -79,6 +90,16 @@ export function StripTile({ strip, busy, active, onToggleActive, onDownload }: S
             onClick={() => onDownload(strip)}
           >
             {busy ? <Loader2 className={styles.actionSpinner} /> : <Download />}
+          </button>
+          <button
+            type="button"
+            className={styles.actionSecondary}
+            title={t('gallery.removeStrip')}
+            aria-label={t('gallery.removeStrip')}
+            disabled={busy}
+            onClick={() => onRemove(strip)}
+          >
+            <Trash2 />
           </button>
         </div>
       </div>

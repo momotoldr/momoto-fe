@@ -29,6 +29,7 @@ interface MonthSectionProps {
   onToggleExpanded: (key: string) => void
   onToggleTile: (id: string) => void
   onDownload: (strip: StoredStrip) => void
+  onRemove: (strip: StoredStrip) => void
 }
 
 /** One month of the contact sheet: a heading, a dense grid, and a phone-only expander. */
@@ -42,6 +43,7 @@ export function MonthSection({
   onToggleExpanded,
   onToggleTile,
   onDownload,
+  onRemove,
 }: MonthSectionProps) {
   const { t } = useTranslation()
 
@@ -84,6 +86,7 @@ export function MonthSection({
             active={activeTileId === strip.id}
             onToggleActive={onToggleTile}
             onDownload={onDownload}
+            onRemove={onRemove}
           />
         ))}
       </div>

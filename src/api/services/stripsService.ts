@@ -4,6 +4,7 @@ import type {
   StoredStrip,
   StripListResponse,
   StripQuota,
+  StripRemoveResponse,
   StripResponse,
   StripUnlockResponse,
 } from '@/types/stripType'
@@ -219,4 +220,14 @@ export async function fetchPrintBlob(stripId: string): Promise<Blob> {
 /** Delete one strip from the user's cart. */
 export async function deleteStrip(id: string): Promise<void> {
   await client.deleteData(API_ROUTES.STRIPS.BY_ID(id))
+}
+
+/**
+ * Remove one unlocked strip from the gallery. Its files are deleted for good; the server
+ * keeps the record so the purchase that bought it still lists it. Returns the limits as
+ * they stand afterwards.
+ */
+export async function removeGalleryStrip(id: string): Promise<StripQuota> {
+  const { data } = await client.postData<StripRemoveResponse>(API_ROUTES.STRIPS.REMOVE(id))
+  return data.quota
 }
