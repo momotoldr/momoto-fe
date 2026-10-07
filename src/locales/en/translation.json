@@ -537,7 +537,8 @@
         "body": [
           "Creating strips, saving them to your cart, and sharing them are free. A clean, high-resolution copy of a strip without the watermark is an optional paid download. Prices are shown at checkout before you confirm, and you can buy several strips in a single order.",
           "Payments are handled by our third-party payment provider, Midtrans. By paying, you also agree to the provider's terms. We receive confirmation that a payment succeeded and an order reference, but we don't collect or store your full card or bank details.",
-          "Because a purchase immediately unlocks a digital file for download, paid strips are generally non-refundable once unlocked — except where a refund is required by law, or where a technical fault on our side stops you from downloading a strip you paid for. If that happens, contact us and we'll put it right."
+          "Because a purchase immediately unlocks a digital file for download, paid strips are generally non-refundable once unlocked — except where a refund is required by law, or where a technical fault on our side stops you from downloading a strip you paid for. If that happens, contact us and we'll put it right.",
+          "You can remove an unlocked strip from your gallery at any time. Removing it permanently deletes its files, so a removed strip can't be restored, downloaded again or refunded. The record of your purchase stays."
         ]
       },
       "acceptableUse": {
@@ -628,7 +629,7 @@
       "retention": {
         "title": "Data Retention & Deletion",
         "body": [
-          "The strips you save are stored with your account until you remove them from your cart or delete your account, at which point they're deleted from our servers. Photos you don't save stay only on your device — closing the tab or clearing your browser storage removes any local session data. Room codes are temporary and expire when a session ends.",
+          "The strips you save are stored with your account until you remove them from your cart or gallery or delete your account, at which point their images are deleted from our servers. For a strip you paid for, we keep a record that it existed — when it was made and the order it belonged to, never the photo — as part of our payment records. Photos you don't save stay only on your device — closing the tab or clearing your browser storage removes any local session data. Room codes are temporary and expire when a session ends.",
           "Any basic technical log data our hosting keeps is retained only for a short period for security and then discarded."
         ]
       },
@@ -1118,7 +1119,7 @@
     "tipText": "Open your cart to download your strips.",
     "tipCta": "Go to cart",
     "tipDismiss": "Dismiss",
-    "galleryFull": "Your gallery is full. Remove one there to make room.",
+    "galleryFull": "Your gallery is full. Remove a strip there to make room.",
     "viewGallery": "View gallery",
     "unlock": "Unlock",
     "unlockBusy": "Unlocking…",
@@ -1168,7 +1169,7 @@
     "downloadStrip": "Download this strip",
     "badgeToday": "TODAY",
     "stripAlt": "Photo strip from {{date}}",
-    "fullBanner": "Your gallery is full — {{used}} of {{limit}} paid strips. The strip waiting in your cart couldn’t be added.",
+    "fullBanner": "Your gallery is full — {{used}} of {{limit}} paid strips — so the strip waiting in your cart couldn’t be added. Remove one you’ve already downloaded to make room.",
     "notAdded": "Not added",
     "notAddedReason": "Gallery full",
     "emptyTitle": "No strips in your gallery",
@@ -1189,7 +1190,17 @@
     "mode_date": "Date",
     "filter_group": "Group {{count}}",
     "badge_group": "GROUP",
-    "mode_group": "Group"
+    "mode_group": "Group",
+    "removeStrip": "Remove this strip",
+    "removeTitle": "Remove this strip?",
+    "removeDescription": "Its clean copy is deleted for good — it can't be downloaded again, restored or refunded. Your purchase stays in your history, and the slot frees up for a new strip.",
+    "removeDownloadFirst": "Download it first",
+    "removeConfirm": "Remove",
+    "removing": "Removing…",
+    "removeCancel": "Keep it",
+    "removed": "Strip removed. That slot is free again.",
+    "removeError": "Couldn't remove that strip. Please try again.",
+    "removeStale": "That strip had already changed — your gallery is up to date now."
   },
   "payment": {
     "success": "Payment complete — your strip is unlocked!",

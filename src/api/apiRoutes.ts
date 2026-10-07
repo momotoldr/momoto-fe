@@ -99,6 +99,11 @@ export const API_ROUTES = {
      * are live — the paid checkout is the only unlock path then.
      */
     UNLOCK: '/strips/unlock',
+    /**
+     * Take an unlocked strip out of the gallery. `POST /strips/:id/remove`. A soft
+     * delete: the files go, the row stays so the payment that bought it still names it.
+     */
+    REMOVE: route('/strips/:id/remove', (id: string) => `/strips/${encodeURIComponent(id)}/remove`),
     /** Upload the clean (paid) copy. `POST /strips/:id/print-image`. */
     PRINT_IMAGE: route(
       '/strips/:id/print-image',
