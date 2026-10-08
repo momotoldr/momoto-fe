@@ -15,7 +15,8 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "deploy": "npm run build && node scripts/check-deploy-target.mjs production && npx wrangler deploy",
-    "deploy:staging": "npm run build:staging && node scripts/check-deploy-target.mjs staging && npx wrangler deploy"
+    "deploy:staging": "npm run build:staging && node scripts/check-deploy-target.mjs staging && npx wrangler deploy",
+    "rollout:status": "node scripts/rollout.mjs status"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.5.3",

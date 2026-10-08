@@ -38,8 +38,11 @@ interface ImportMetaEnv {
   readonly VITE_ANALYTICS_SAMPLE_RATE?: string
 }
 
-/** The commit this bundle was built from (7 chars), or `dev` — see `vite.config.ts`. */
+/** This build's readable name (`v16`, `staging-v48`), or `dev` — see `vite.config.ts`. */
 declare const __APP_VERSION__: string
+
+/** The commit this bundle was built from (7 chars), or `dev` — see `vite.config.ts`. */
+declare const __APP_COMMIT__: string
 
 interface ImportMeta {
   readonly env: ImportMetaEnv

@@ -1,0 +1,78 @@
+# Move traffic between frontend builds after deploy.yml has released a canary
+# (docs/plans/PLAN-canary.md). Run by hand: Actions → rollout → Run workflow, on `main`
+# for production or `staging` for staging.
+#
+#   10 / 25 / 50   give the canary that share of visitors
+#   100            promote it; the old build leaves the deployment
+#   0              drop the canary; everyone back on the old build
+#   previous       undo a finished release: restore the build that was fully live before
+#                  the current one (run twice, it toggles back)
+#   version        restore a named build at 100%, e.g. v14 (fill in `version`)
+#
+# The current split is printed in the job summary after every run.
+name: rollout
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 10/25/50 ramp up · 100 promote · 0 drop the canary · previous/version undo a finished release
+        type: choice
+        options: ['10', '25', '50', '100', '0', previous, version]
+      version:
+        description: Only for action "version" — the build to restore, e.g. v14
+        type: string
+        required: false
+
+concurrency:
+  # Shared with deploy.yml, so a ramp never runs during a deploy.
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  rollout:
+    if: github.ref_name == 'staging' || github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+      url: ${{ github.ref_name == 'main' && 'https://momotoldr.com' || 'https://staging.momotoldr.com' }}
+    env:
+      TARGET: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # For Wrangler. There is no build here: Wrangler reads wrangler.jsonc, and only its
+      # observability setting is synced on deploy — the same for both Workers.
+      - run: npm ci
+
+      - name: Apply ${{ inputs.action }}
+        env:
+          ACTION: ${{ inputs.action }}
+          VERSION: ${{ inputs.version }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          case "$ACTION" in
+            previous)
+              node scripts/rollout.mjs previous "$TARGET"
+              ;;
+            version)
+              if [ -z "$VERSION" ]; then
+                echo "::error::Action \"version\" needs the version input, e.g. v14"
+                exit 1
+              fi
+              node scripts/rollout.mjs restore "$TARGET" "$VERSION"
+              ;;
+            *)
+              node scripts/rollout.mjs set "$TARGET" "$ACTION"
+              ;;
+          esac
