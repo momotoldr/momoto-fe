@@ -213,7 +213,13 @@
   "help": {
     "badge": "Help Center",
     "title": "How can we help?",
-    "intro": "Answers to the questions we get asked most. Still stuck? Send us a message and we'll reply by email.",
+    "intro": "Pick a category to see the problems people run into most and how to fix them. Still stuck? Send us a message and we'll reply by email.",
+    "categoriesTitle": "Browse by category",
+    "commonIssues_one": "{{count}} common issue",
+    "commonIssues_other": "{{count}} common issues",
+    "panelContact": "Didn't find your answer? Tell us about it — we'll know which category it's in.",
+    "faqTitle": "Frequently asked questions",
+    "faqHint": "The basics, for anyone new to Momoto.",
     "contactTitle": "Still need a hand?",
     "contactHint": "Tell us what's going wrong and we'll look into it.",
     "items": {
@@ -227,7 +233,7 @@
       },
       "print": {
         "q": "How do I get a clean, printable strip?",
-        "a": "Each strip you create is saved to your cart with a light watermark. From the cart, tick the strips you want and check out to unlock high-resolution, watermark-free copies you can download and print."
+        "a": "Each strip you create is saved to your cart with a light watermark. In your cart, choose Unlock on a strip to get a clean, high-resolution copy without the watermark. It moves to your gallery, where you can download and print it."
       },
       "friend": {
         "q": "Can I use it with a friend?",
@@ -240,6 +246,274 @@
       "need": {
         "q": "What do I need to get started?",
         "a": "A device with a camera and a modern browser (Chrome, Safari, Edge, or Firefox). Allow camera access when prompted and you're set."
+      }
+    },
+    "categories": {
+      "session": {
+        "summary": "Everything that happens inside the booth: your camera, room codes, the live connection with your friend, and the countdown.",
+        "issues": {
+          "camera": {
+            "q": "My camera won't turn on",
+            "a": "Your browser has to be allowed to use the camera, and a camera can only be used by one app at a time.",
+            "steps": [
+              "When the browser asks, choose Allow for both the camera and the microphone.",
+              "If you blocked it earlier, tap the icon next to the address bar, set Camera and Microphone to Allow, then reload the page.",
+              "Close other apps or tabs that may be using the camera — video calls are the usual suspect.",
+              "Still black? Try another browser: Chrome, Safari, Edge or Firefox."
+            ]
+          },
+          "code": {
+            "q": "My room code doesn't work",
+            "a": "A code only works while its session is still running and the room has a free seat.",
+            "steps": [
+              "\"Room not found\" — check the code with whoever sent it; it's letters and numbers only.",
+              "\"Room is full\" — every seat is taken. Ask the host to check who's already in.",
+              "\"This room has closed\" — its session is over and the code won't work again. Ask the host to start a new booth and send you the new code."
+            ]
+          },
+          "peer": {
+            "q": "I can't see or hear my friend",
+            "a": "In a Date session your video travels straight between your two devices. Some networks — office, campus or public wifi — make that connection harder.",
+            "steps": [
+              "Make sure both of you allowed the camera and the microphone.",
+              "Check that neither of you is muted in the camera controls.",
+              "Switch networks — from wifi to mobile data, for example — then reload. You rejoin the same room and keep your shots.",
+              "Update your browser if it's out of date."
+            ]
+          },
+          "dropped": {
+            "q": "We got disconnected in the middle of a session",
+            "a": "A dropped connection doesn't end the session — only the host's Finish button or the timer does. The shots you've taken stay on your device.",
+            "steps": [
+              "Wait a few seconds; the booth reconnects on its own.",
+              "If it doesn't, reopen the room with the same code before time runs out — you'll pick up where you left off.",
+              "While someone is away, the camera is put on hold so no cut is taken alone. The host can start again once everyone is back."
+            ]
+          },
+          "start": {
+            "q": "The Start button doesn't do anything",
+            "a": "Only the host — the person who created the room — can start the countdown and retake photos. In a shared room, capture also waits until everyone is connected.",
+            "steps": [
+              "If you joined with a code, wait for the host to press Start.",
+              "If you're the host, check that your friend is in the room and both of you are online.",
+              "Turn your camera on — Start stays off until it is."
+            ]
+          },
+          "timesUp": {
+            "q": "Time ran out before we finished",
+            "a": "Every session has a time limit, shown at the top of the booth. When it reaches zero the booth closes. A strip you already created is kept; shots that weren't made into a strip are not.",
+            "steps": [
+              "Keep an eye on the timer — it turns red near the end.",
+              "Create your strip before the time is up.",
+              "Need more time? Start a new booth for a fresh session."
+            ]
+          },
+          "busy": {
+            "q": "It says the booth is full",
+            "a": "When a very large number of sessions are running at once, new rooms are paused for a moment. Rooms that are already running aren't affected.",
+            "steps": ["Wait a minute and try again."]
+          }
+        }
+      },
+      "strip": {
+        "summary": "Your finished photo strips: designing them, saving them to your cart, and downloading them.",
+        "issues": {
+          "missing": {
+            "q": "My strip isn't in my cart",
+            "a": "A strip is saved when you press Create. Strips made while signed out stay in that browser until you sign in, and the cart only has so many slots.",
+            "steps": [
+              "Made it while signed out? Sign in on the same device and browser — it moves to your cart by itself.",
+              "If the result screen says \"Not saved\", tap Try again.",
+              "If your cart is full, the newest strip wasn't saved. Remove one to make room; strips waiting from before you signed in are added once there's space.",
+              "Already unlocked it? Unlocked strips move from the cart to your gallery."
+            ]
+          },
+          "watermark": {
+            "q": "Why does my strip have a watermark?",
+            "a": "The free copy you download or share from the result screen carries a small Momoto watermark. The clean, print-ready copy is unlocked from your cart.",
+            "steps": [
+              "Open your cart and choose Unlock on the strip.",
+              "Open your gallery and download the clean copy."
+            ]
+          },
+          "download": {
+            "q": "My download didn't work",
+            "a": "Strips download as PNG files, the format phones, chat apps and print shops all accept.",
+            "steps": [
+              "On iPhone, the download may open the share sheet — choose Save Image.",
+              "Check your browser's downloads list; the file may already be there.",
+              "On some older phones the file is saved as .webp instead. It's the same picture, just in a different format.",
+              "Try again on a steadier connection."
+            ]
+          },
+          "different": {
+            "q": "My friend's strip looks different from mine",
+            "a": "That's on purpose. In a shared session everyone designs their own strip — template, filter, stickers and photo order — and you each appear first on your own copy."
+          },
+          "retake": {
+            "q": "Can I retake a photo?",
+            "a": "Yes, until the strip is created. Once it's created, the strip is final.",
+            "steps": [
+              "Before you create the strip, tap the retake icon on the photo you want to redo, or choose Retake all.",
+              "In a shared session only the host can retake — ask them."
+            ]
+          },
+          "remove": {
+            "q": "Can I remove a strip from my gallery?",
+            "a": "Yes. Removing a strip frees up a slot in your gallery, but it can't be undone: the clean copy is deleted for good and can't be restored, downloaded again or refunded.",
+            "steps": [
+              "Download the strip first if you want to keep it — the confirmation has a Download it first button.",
+              "In your gallery, choose Remove on the strip, then confirm."
+            ]
+          },
+          "backdrop": {
+            "q": "Changing the background isn't working",
+            "a": "The background is removed right on your device, so it needs a recent browser and some free memory. The first time, the background remover has to download.",
+            "steps": [
+              "Wait for the download to reach 100%.",
+              "Close other tabs and apps to free up memory, then try again.",
+              "If it says it isn't available on this device, choose Original — the rest of your strip works as usual."
+            ]
+          }
+        }
+      },
+      "payment": {
+        "summary": "Turning a watermarked strip into a clean, print-ready copy: unlocking it from your cart and finding it in your gallery.",
+        "issues": {
+          "unlock": {
+            "q": "How do I get a clean copy?",
+            "a": "Every strip you create waits in your cart with a watermark. Unlocking it moves a clean, high-resolution copy to your gallery.",
+            "steps": [
+              "Open your cart and choose Unlock on the strip you want.",
+              "If a payment window opens, finish the payment there.",
+              "Open your gallery and download the clean copy."
+            ]
+          },
+          "paidLocked": {
+            "q": "I paid but my strip is still locked",
+            "a": "Your payment provider has to confirm the payment first. The strip unlocks by itself as soon as it does.",
+            "steps": [
+              "Wait a few minutes, then refresh your cart or gallery.",
+              "Don't pay a second time for the same strip.",
+              "Still locked after a while? Contact us with when you paid and which method you used. Never send card numbers or PINs."
+            ]
+          },
+          "expired": {
+            "q": "My payment QR code expired",
+            "a": "Each payment has a short time limit, shown on screen. An expired payment isn't charged.",
+            "steps": [
+              "Press Unlock again to get a fresh code.",
+              "If your payment app shows money taken for a payment that expired, contact us."
+            ]
+          },
+          "galleryFull": {
+            "q": "It says my gallery is full",
+            "a": "Your gallery holds a limited number of unlocked strips. When it's full, new unlocks are paused until you make room. Nothing in it is ever deleted automatically.",
+            "steps": [
+              "Download any strip you want to keep.",
+              "In your gallery, choose Remove on that strip. It's deleted for good, and its slot is freed.",
+              "Go back to your cart and unlock the strip that was waiting."
+            ]
+          },
+          "noPrintable": {
+            "q": "It says there's no printable copy",
+            "a": "The clean copy uploads right after you create a strip. \"Preparing the printable copy\" means it's still on its way; if the upload was cut off, only the watermarked copy was saved.",
+            "steps": [
+              "If it's still preparing, wait a moment and press Refresh.",
+              "If there's no printable copy at all, the strip can't be unlocked. Contact us and tell us which strip it is."
+            ]
+          },
+          "refund": {
+            "q": "Can I get a refund?",
+            "a": "Unlocking gives you a digital file straight away, so unlocked strips generally can't be refunded — unless the law requires it, or a problem on our side stops you from downloading a strip you paid for. If that happens, contact us and we'll put it right."
+          }
+        }
+      },
+      "account": {
+        "summary": "Signing in, your email address, your password, your partner link, and your account itself.",
+        "issues": {
+          "signIn": {
+            "q": "I can't sign in",
+            "a": "You can sign in with either your username or your email address.",
+            "steps": [
+              "Use the eye icon to check your password, and make sure Caps Lock is off.",
+              "Try your username instead of your email, or the other way round.",
+              "If you signed up with Google, use the Google button instead of a password.",
+              "Still no luck? Use Forgot password? on the sign-in page."
+            ]
+          },
+          "forgot": {
+            "q": "I forgot my password",
+            "a": "We can only send a reset link to an email address you've confirmed.",
+            "steps": [
+              "Choose Forgot password? on the sign-in page and enter your username or email.",
+              "Open the link within 30 minutes — it only works once.",
+              "Nothing arrived? Check your spam or promotions folder.",
+              "No confirmed email on your account? Contact us with your username and we'll help you get back in."
+            ]
+          },
+          "verify": {
+            "q": "How do I confirm my email?",
+            "a": "Confirming proves the address is yours, and it's what lets you reset your password on your own. Until you open the link, your account keeps its previous address.",
+            "steps": [
+              "Go to Profile → Account and send yourself a confirmation link.",
+              "Open the link in the email within 24 hours — it only works once.",
+              "If it expired, send a fresh one from Profile."
+            ]
+          },
+          "partner": {
+            "q": "How do I link with my partner?",
+            "a": "Linking connects two accounts as a couple. Each account can be linked with one partner at a time, and either of you can unlink whenever you like.",
+            "steps": [
+              "Go to Profile → Partner and generate an invite code.",
+              "Send the code to your partner — it expires 24 hours after you make it.",
+              "Your partner enters it under \"Have an invite code?\" and presses Link partner."
+            ]
+          },
+          "signup": {
+            "q": "I can't create an account",
+            "a": "Momoto is in a closed beta, so new sign-ups aren't open yet. If you were invited, sign in with the details we emailed you."
+          },
+          "delete": {
+            "q": "How do I delete my account?",
+            "a": "Deleting is permanent: it removes your account along with your strips, your unlocked copies and your partner link.",
+            "steps": [
+              "Download any strips you want to keep first.",
+              "Go to Profile → Account and choose Delete account."
+            ]
+          }
+        }
+      },
+      "other": {
+        "summary": "Anything the other categories don't cover — bug reports, connection trouble, ideas, and questions about your data.",
+        "issues": {
+          "bug": {
+            "q": "How do I report a bug?",
+            "a": "Contact support and pick the category closest to the problem. The more we know, the faster we can fix it.",
+            "steps": [
+              "Tell us what you did, what you expected, and what happened instead.",
+              "Mention your device and browser, and the room code if it happened in a session.",
+              "We automatically see which page you sent it from — no need to copy the address."
+            ]
+          },
+          "connection": {
+            "q": "The site says it can't connect",
+            "a": "The message tells you where the problem is: \"You're offline\" means your device has no connection; \"Momoto is having trouble\" means it's on our side. Either way, anything you've already shot is safe.",
+            "steps": [
+              "Check your wifi or mobile data.",
+              "Wait a moment — the page reconnects on its own — or press Retry.",
+              "If our side is having trouble, we're already on it. Try again in a few minutes."
+            ]
+          },
+          "idea": {
+            "q": "I have an idea or some feedback",
+            "a": "We'd love to hear it. Rate your session on the screen right after you create a strip, or contact support and choose \"Something else\"."
+          },
+          "data": {
+            "q": "I have a question about my data",
+            "a": "Our Privacy Policy, linked at the bottom of every page, explains what we keep and why. To ask about your data or have a testimonial removed, contact us."
+          }
+        }
       }
     }
   },
@@ -927,7 +1201,17 @@
     "mode_date": "Date",
     "filter_group": "Group {{count}}",
     "badge_group": "GROUP",
-    "mode_group": "Group"
+    "mode_group": "Group",
+    "removeStrip": "Remove this strip",
+    "removeTitle": "Remove this strip?",
+    "removeDescription": "Its clean copy is deleted for good — it can't be downloaded again, restored or refunded.",
+    "removeDownloadFirst": "Download it first",
+    "removeConfirm": "Remove",
+    "removing": "Removing…",
+    "removeCancel": "Keep it",
+    "removed": "Strip removed. That slot is free again.",
+    "removeError": "Couldn't remove that strip. Please try again.",
+    "removeStale": "That strip had already changed — your gallery is up to date now."
   },
   "payment": {
     "success": "Payment complete — your strip is unlocked!",

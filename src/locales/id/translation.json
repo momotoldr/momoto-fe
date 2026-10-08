@@ -213,7 +213,12 @@
   "help": {
     "badge": "Pusat Bantuan",
     "title": "Ada yang bisa kami bantu?",
-    "intro": "Jawaban untuk pertanyaan yang paling sering masuk. Masih bingung? Kirim pesan dan kami balas lewat email.",
+    "intro": "Pilih kategori untuk melihat masalah yang paling sering dialami dan cara mengatasinya. Masih bingung? Kirim pesan dan kami balas lewat email.",
+    "categoriesTitle": "Cari berdasarkan kategori",
+    "commonIssues_other": "{{count}} masalah umum",
+    "panelContact": "Jawabanmu belum ada? Ceritakan ke kami — kategorinya sudah kami ketahui.",
+    "faqTitle": "Pertanyaan yang sering diajukan",
+    "faqHint": "Hal-hal dasar untuk yang baru mengenal Momoto.",
     "contactTitle": "Masih butuh bantuan?",
     "contactHint": "Ceritakan kendalanya dan kami akan periksa.",
     "items": {
@@ -227,7 +232,7 @@
       },
       "print": {
         "q": "Bagaimana cara mendapatkan strip bersih siap cetak?",
-        "a": "Setiap strip yang kamu buat tersimpan di keranjang dengan watermark tipis. Dari keranjang, centang strip yang kamu mau lalu checkout untuk membuka salinan resolusi tinggi tanpa watermark yang bisa diunduh dan dicetak."
+        "a": "Setiap strip yang kamu buat tersimpan di keranjang dengan watermark tipis. Di keranjang, pilih Buka pada strip untuk mendapatkan salinan bersih beresolusi tinggi tanpa watermark. Strip itu pindah ke galerimu, tempat kamu bisa mengunduh dan mencetaknya."
       },
       "friend": {
         "q": "Bisakah dipakai bareng teman?",
@@ -240,6 +245,274 @@
       "need": {
         "q": "Apa yang saya butuhkan untuk mulai?",
         "a": "Perangkat berkamera dan browser modern (Chrome, Safari, Edge, atau Firefox). Izinkan akses kamera saat diminta dan kamu siap."
+      }
+    },
+    "categories": {
+      "session": {
+        "summary": "Semua yang terjadi di dalam booth: kamera, kode ruangan, koneksi langsung dengan temanmu, dan hitung mundur.",
+        "issues": {
+          "camera": {
+            "q": "Kamera saya tidak menyala",
+            "a": "Browser harus diizinkan memakai kamera, dan satu kamera hanya bisa dipakai satu aplikasi dalam satu waktu.",
+            "steps": [
+              "Saat browser meminta izin, pilih Izinkan untuk kamera dan mikrofon.",
+              "Kalau sebelumnya kamu memblokirnya, ketuk ikon di samping kolom alamat, ubah Kamera dan Mikrofon menjadi Izinkan, lalu muat ulang halaman.",
+              "Tutup aplikasi atau tab lain yang mungkin sedang memakai kamera — biasanya aplikasi video call.",
+              "Masih hitam? Coba browser lain: Chrome, Safari, Edge, atau Firefox."
+            ]
+          },
+          "code": {
+            "q": "Kode ruangan saya tidak berfungsi",
+            "a": "Kode hanya berlaku selama sesinya masih berjalan dan ruangannya masih punya kursi kosong.",
+            "steps": [
+              "\"Ruangan tidak ditemukan\" — cek lagi kodenya dengan yang mengirim; kodenya hanya berisi huruf dan angka.",
+              "\"Ruangan penuh\" — semua kursi sudah terisi. Minta host mengecek siapa saja yang sudah masuk.",
+              "\"Ruangan ini sudah ditutup\" — sesinya sudah selesai dan kodenya tidak berlaku lagi. Minta host membuat booth baru dan mengirimkan kode barunya."
+            ]
+          },
+          "peer": {
+            "q": "Saya tidak bisa melihat atau mendengar teman saya",
+            "a": "Dalam sesi Berdua, videomu dikirim langsung antara dua perangkat kalian. Beberapa jaringan — wifi kantor, kampus, atau publik — membuat koneksi ini lebih sulit.",
+            "steps": [
+              "Pastikan kalian berdua sudah mengizinkan kamera dan mikrofon.",
+              "Cek bahwa tidak ada yang sedang mute di kontrol kamera.",
+              "Ganti jaringan — misalnya dari wifi ke data seluler — lalu muat ulang. Kamu akan masuk lagi ke ruangan yang sama dan fotomu tetap ada.",
+              "Perbarui browser kalau versinya sudah lama."
+            ]
+          },
+          "dropped": {
+            "q": "Koneksi kami terputus di tengah sesi",
+            "a": "Koneksi yang terputus tidak mengakhiri sesi — hanya tombol Selesai milik host atau timer yang bisa. Foto yang sudah diambil tetap tersimpan di perangkatmu.",
+            "steps": [
+              "Tunggu beberapa detik; booth akan tersambung kembali dengan sendirinya.",
+              "Kalau tidak, buka lagi ruangannya dengan kode yang sama sebelum waktu habis — kamu akan lanjut dari posisi terakhir.",
+              "Selama ada yang keluar, kamera ditahan agar tidak ada foto yang diambil sendirian. Host bisa memulai lagi setelah semua kembali."
+            ]
+          },
+          "start": {
+            "q": "Tombol Mulai tidak berfungsi",
+            "a": "Hanya host — orang yang membuat ruangan — yang bisa memulai hitung mundur dan mengambil ulang foto. Di ruangan bersama, pengambilan foto juga menunggu sampai semua orang tersambung.",
+            "steps": [
+              "Kalau kamu masuk dengan kode, tunggu host menekan Mulai.",
+              "Kalau kamu host, pastikan temanmu sudah di dalam ruangan dan kalian berdua sedang online.",
+              "Nyalakan kameramu — tombol Mulai tetap nonaktif sampai kamera menyala."
+            ]
+          },
+          "timesUp": {
+            "q": "Waktu habis sebelum kami selesai",
+            "a": "Setiap sesi punya batas waktu yang ditampilkan di bagian atas booth. Saat mencapai nol, booth ditutup. Strip yang sudah dibuat tetap tersimpan; foto yang belum dijadikan strip tidak.",
+            "steps": [
+              "Perhatikan timer — warnanya berubah merah menjelang akhir.",
+              "Buat stripmu sebelum waktu habis.",
+              "Butuh waktu lebih? Mulai booth baru untuk sesi yang baru."
+            ]
+          },
+          "busy": {
+            "q": "Muncul pesan booth sedang penuh",
+            "a": "Saat ada sangat banyak sesi yang berjalan bersamaan, pembuatan ruangan baru dijeda sebentar. Ruangan yang sudah berjalan tidak terpengaruh.",
+            "steps": ["Tunggu sebentar lalu coba lagi."]
+          }
+        }
+      },
+      "strip": {
+        "summary": "Strip foto yang sudah jadi: mendesainnya, menyimpannya ke keranjang, dan mengunduhnya.",
+        "issues": {
+          "missing": {
+            "q": "Strip saya tidak ada di keranjang",
+            "a": "Strip tersimpan saat kamu menekan Buat strip. Strip yang dibuat sebelum masuk akun tetap ada di browser itu sampai kamu masuk, dan slot keranjang terbatas.",
+            "steps": [
+              "Dibuat sebelum masuk akun? Masuk di perangkat dan browser yang sama — strip akan pindah ke keranjang dengan sendirinya.",
+              "Kalau layar hasil menampilkan \"Belum tersimpan\", ketuk Coba lagi.",
+              "Kalau keranjang penuh, strip terbaru tidak tersimpan. Hapus satu strip untuk memberi ruang; strip dari sebelum kamu masuk akan ditambahkan begitu ada slot.",
+              "Sudah dibuka? Strip yang sudah dibuka pindah dari keranjang ke galeri."
+            ]
+          },
+          "watermark": {
+            "q": "Kenapa strip saya ada watermark-nya?",
+            "a": "Salinan gratis yang kamu unduh atau bagikan dari layar hasil memuat watermark kecil Momoto. Salinan bersih siap cetak dibuka dari keranjang.",
+            "steps": [
+              "Buka keranjang dan pilih Buka pada strip tersebut.",
+              "Buka galeri dan unduh salinan bersihnya."
+            ]
+          },
+          "download": {
+            "q": "Unduhan saya gagal",
+            "a": "Strip diunduh sebagai file PNG, format yang diterima ponsel, aplikasi chat, dan tempat cetak.",
+            "steps": [
+              "Di iPhone, unduhan bisa membuka menu bagikan — pilih Simpan Gambar.",
+              "Cek daftar unduhan di browser; filenya mungkin sudah ada.",
+              "Di beberapa ponsel lama, file tersimpan sebagai .webp. Gambarnya tetap sama, hanya formatnya berbeda.",
+              "Coba lagi dengan koneksi yang lebih stabil."
+            ]
+          },
+          "different": {
+            "q": "Strip teman saya terlihat berbeda dari punya saya",
+            "a": "Memang begitu. Dalam sesi bersama, setiap orang mendesain stripnya sendiri — template, filter, stiker, dan urutan foto — dan masing-masing tampil paling depan di salinannya sendiri."
+          },
+          "retake": {
+            "q": "Bisakah saya mengambil ulang foto?",
+            "a": "Bisa, selama strip belum dibuat. Setelah dibuat, strip sudah final.",
+            "steps": [
+              "Sebelum membuat strip, ketuk ikon ambil ulang di foto yang ingin diulang, atau pilih Ambil ulang semua.",
+              "Dalam sesi bersama, hanya host yang bisa mengambil ulang — minta tolong host."
+            ]
+          },
+          "remove": {
+            "q": "Bisakah saya menghapus strip dari galeri?",
+            "a": "Bisa. Menghapus strip akan mengosongkan satu slot di galerimu, tapi tidak bisa dibatalkan: salinan bersihnya dihapus permanen dan tidak bisa dipulihkan, diunduh lagi, atau dikembalikan dananya.",
+            "steps": [
+              "Unduh dulu stripnya kalau ingin disimpan — di jendela konfirmasi ada tombol Unduh dulu.",
+              "Di galeri, pilih Hapus pada strip itu, lalu konfirmasi."
+            ]
+          },
+          "backdrop": {
+            "q": "Ganti latar tidak berfungsi",
+            "a": "Latar dihapus langsung di perangkatmu, jadi butuh browser terbaru dan memori yang cukup. Pertama kali dipakai, penghapus latar perlu diunduh dulu.",
+            "steps": [
+              "Tunggu sampai unduhannya mencapai 100%.",
+              "Tutup tab dan aplikasi lain agar memori lebih lega, lalu coba lagi.",
+              "Kalau muncul pesan tidak tersedia di perangkat ini, pilih Asli — bagian lain stripmu tetap berfungsi seperti biasa."
+            ]
+          }
+        }
+      },
+      "payment": {
+        "summary": "Mengubah strip ber-watermark menjadi salinan bersih siap cetak: membukanya dari keranjang dan menemukannya di galeri.",
+        "issues": {
+          "unlock": {
+            "q": "Bagaimana cara mendapatkan salinan bersih?",
+            "a": "Setiap strip yang kamu buat menunggu di keranjang dengan watermark. Membukanya akan memindahkan salinan bersih beresolusi tinggi ke galerimu.",
+            "steps": [
+              "Buka keranjang dan pilih Buka pada strip yang kamu mau.",
+              "Kalau jendela pembayaran terbuka, selesaikan pembayarannya di sana.",
+              "Buka galeri dan unduh salinan bersihnya."
+            ]
+          },
+          "paidLocked": {
+            "q": "Saya sudah bayar tapi strip masih terkunci",
+            "a": "Penyedia pembayaran perlu mengonfirmasi pembayaranmu dulu. Strip akan terbuka dengan sendirinya begitu terkonfirmasi.",
+            "steps": [
+              "Tunggu beberapa menit, lalu muat ulang keranjang atau galeri.",
+              "Jangan membayar dua kali untuk strip yang sama.",
+              "Masih terkunci setelah beberapa saat? Hubungi kami dengan waktu pembayaran dan metode yang kamu pakai. Jangan pernah mengirim nomor kartu atau PIN."
+            ]
+          },
+          "expired": {
+            "q": "Kode QR pembayaran saya kedaluwarsa",
+            "a": "Setiap pembayaran punya batas waktu singkat yang ditampilkan di layar. Pembayaran yang kedaluwarsa tidak ditagih.",
+            "steps": [
+              "Tekan Buka lagi untuk mendapatkan kode baru.",
+              "Kalau aplikasi pembayaranmu menunjukkan saldo terpotong untuk pembayaran yang kedaluwarsa, hubungi kami."
+            ]
+          },
+          "galleryFull": {
+            "q": "Muncul pesan galeri saya penuh",
+            "a": "Galeri menampung strip yang sudah dibuka dalam jumlah terbatas. Saat penuh, pembukaan strip baru dijeda sampai kamu memberi ruang. Isi galeri tidak pernah dihapus otomatis.",
+            "steps": [
+              "Unduh strip yang ingin kamu simpan.",
+              "Di galeri, pilih Hapus pada strip itu. Strip dihapus permanen dan slotnya jadi kosong.",
+              "Kembali ke keranjang dan buka strip yang tadi menunggu."
+            ]
+          },
+          "noPrintable": {
+            "q": "Muncul pesan tidak ada salinan siap cetak",
+            "a": "Salinan bersih diunggah tepat setelah kamu membuat strip. \"Menyiapkan salinan siap cetak\" berarti masih dalam proses; kalau unggahannya terputus, hanya salinan ber-watermark yang tersimpan.",
+            "steps": [
+              "Kalau masih disiapkan, tunggu sebentar lalu tekan Muat ulang.",
+              "Kalau salinan siap cetak tidak ada sama sekali, strip tersebut tidak bisa dibuka. Hubungi kami dan sebutkan strip yang mana."
+            ]
+          },
+          "refund": {
+            "q": "Bisakah saya mendapatkan pengembalian dana?",
+            "a": "Membuka strip langsung memberimu file digital, jadi strip yang sudah dibuka umumnya tidak bisa dikembalikan dananya — kecuali diwajibkan oleh hukum, atau ada gangguan di pihak kami yang membuatmu tidak bisa mengunduh strip yang sudah dibayar. Kalau itu terjadi, hubungi kami dan akan kami bereskan."
+          }
+        }
+      },
+      "account": {
+        "summary": "Masuk akun, alamat email, kata sandi, tautan pasangan, dan akunmu sendiri.",
+        "issues": {
+          "signIn": {
+            "q": "Saya tidak bisa masuk",
+            "a": "Kamu bisa masuk dengan username atau alamat email.",
+            "steps": [
+              "Pakai ikon mata untuk mengecek kata sandi, dan pastikan Caps Lock mati.",
+              "Coba pakai username alih-alih email, atau sebaliknya.",
+              "Kalau kamu mendaftar dengan Google, pakai tombol Google, bukan kata sandi.",
+              "Masih belum bisa? Pakai Lupa kata sandi? di halaman masuk."
+            ]
+          },
+          "forgot": {
+            "q": "Saya lupa kata sandi",
+            "a": "Kami hanya bisa mengirim tautan reset ke alamat email yang sudah kamu konfirmasi.",
+            "steps": [
+              "Pilih Lupa kata sandi? di halaman masuk dan masukkan username atau emailmu.",
+              "Buka tautannya dalam 30 menit — tautan hanya bisa dipakai sekali.",
+              "Tidak ada email masuk? Cek folder spam atau promosi.",
+              "Akunmu belum punya email yang dikonfirmasi? Hubungi kami dengan username-mu dan kami bantu kamu masuk kembali."
+            ]
+          },
+          "verify": {
+            "q": "Bagaimana cara mengonfirmasi email?",
+            "a": "Konfirmasi membuktikan alamat itu milikmu, dan itulah yang memungkinkanmu mereset kata sandi sendiri. Sampai tautannya dibuka, akunmu tetap memakai alamat sebelumnya.",
+            "steps": [
+              "Buka Profil → Akun dan kirim tautan konfirmasi ke dirimu sendiri.",
+              "Buka tautan di email dalam 24 jam — tautan hanya bisa dipakai sekali.",
+              "Kalau kedaluwarsa, kirim yang baru dari Profil."
+            ]
+          },
+          "partner": {
+            "q": "Bagaimana cara menautkan akun dengan pasangan?",
+            "a": "Menautkan menghubungkan dua akun sebagai pasangan. Setiap akun hanya bisa ditautkan dengan satu pasangan dalam satu waktu, dan kalian berdua bisa memutus tautan kapan saja.",
+            "steps": [
+              "Buka Profil → Pasangan dan buat kode undangan.",
+              "Kirim kodenya ke pasanganmu — kode kedaluwarsa 24 jam setelah dibuat.",
+              "Pasanganmu memasukkannya di \"Punya kode undangan?\" lalu menekan Tautkan pasangan."
+            ]
+          },
+          "signup": {
+            "q": "Saya tidak bisa membuat akun",
+            "a": "Momoto sedang dalam beta tertutup, jadi pendaftaran baru belum dibuka. Kalau kamu diundang, masuk dengan detail yang kami kirim lewat email."
+          },
+          "delete": {
+            "q": "Bagaimana cara menghapus akun?",
+            "a": "Penghapusan bersifat permanen: akunmu dihapus bersama strip, salinan yang sudah dibuka, dan tautan pasanganmu.",
+            "steps": [
+              "Unduh dulu strip yang ingin kamu simpan.",
+              "Buka Profil → Akun dan pilih Hapus akun."
+            ]
+          }
+        }
+      },
+      "other": {
+        "summary": "Hal-hal yang tidak masuk kategori lain — laporan bug, masalah koneksi, ide, dan pertanyaan tentang datamu.",
+        "issues": {
+          "bug": {
+            "q": "Bagaimana cara melaporkan bug?",
+            "a": "Hubungi bantuan dan pilih kategori yang paling dekat dengan masalahnya. Makin banyak yang kami tahu, makin cepat kami bisa memperbaikinya.",
+            "steps": [
+              "Ceritakan apa yang kamu lakukan, apa yang kamu harapkan, dan apa yang terjadi.",
+              "Sebutkan perangkat dan browser-mu, serta kode ruangan kalau terjadi saat sesi.",
+              "Kami otomatis tahu dari halaman mana kamu mengirimnya — tidak perlu menyalin alamatnya."
+            ]
+          },
+          "connection": {
+            "q": "Situs bilang tidak bisa tersambung",
+            "a": "Pesannya menunjukkan letak masalahnya: \"Kamu sedang offline\" berarti perangkatmu tidak punya koneksi; \"Momoto sedang bermasalah\" berarti masalahnya di pihak kami. Apa pun itu, foto yang sudah diambil tetap aman.",
+            "steps": [
+              "Cek wifi atau data selulermu.",
+              "Tunggu sebentar — halaman akan tersambung kembali sendiri — atau tekan Coba lagi.",
+              "Kalau masalahnya di pihak kami, kami sudah menanganinya. Coba lagi beberapa menit lagi."
+            ]
+          },
+          "idea": {
+            "q": "Saya punya ide atau masukan",
+            "a": "Kami senang mendengarnya. Beri rating sesimu di layar setelah membuat strip, atau hubungi bantuan dan pilih \"Lainnya\"."
+          },
+          "data": {
+            "q": "Saya punya pertanyaan tentang data saya",
+            "a": "Kebijakan Privasi kami, yang ada di bagian bawah setiap halaman, menjelaskan apa yang kami simpan dan alasannya. Untuk bertanya tentang datamu atau meminta testimoni dihapus, hubungi kami."
+          }
+        }
       }
     }
   },
@@ -926,7 +1199,17 @@
     "mode_date": "Date",
     "filter_group": "Grup {{count}}",
     "badge_group": "GRUP",
-    "mode_group": "Grup"
+    "mode_group": "Grup",
+    "removeStrip": "Hapus strip ini",
+    "removeTitle": "Hapus strip ini?",
+    "removeDescription": "Salinan bersihnya dihapus permanen — tidak bisa diunduh lagi, dipulihkan, atau dikembalikan dananya.",
+    "removeDownloadFirst": "Unduh dulu",
+    "removeConfirm": "Hapus",
+    "removing": "Menghapus…",
+    "removeCancel": "Simpan saja",
+    "removed": "Strip dihapus. Slotnya kosong lagi.",
+    "removeError": "Gagal menghapus strip itu. Silakan coba lagi.",
+    "removeStale": "Strip itu sudah berubah — galerimu sekarang sudah diperbarui."
   },
   "payment": {
     "success": "Pembayaran berhasil — strip kamu terbuka!",
