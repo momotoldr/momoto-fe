@@ -14,10 +14,22 @@ interface MediaControlsProps {
   compact?: boolean
   /** Stretch each toggle to share the row evenly (mobile action bar). */
   fluid?: boolean
+  /**
+   * Hold the camera on: photos are being taken. A camera switched off mid-sequence
+   * leaves a blank cut in the strip — the frame is grabbed from a video with no
+   * picture — so the toggle is disabled until the shots are done. The mic stays free;
+   * it never reaches a photo.
+   */
+  cameraLocked?: boolean
 }
 
 /** Toggle buttons for the local camera and microphone. */
-export function MediaControls({ mode, compact = false, fluid = false }: MediaControlsProps) {
+export function MediaControls({
+  mode,
+  compact = false,
+  fluid = false,
+  cameraLocked = false,
+}: MediaControlsProps) {
   const { t } = useTranslation()
   const camEnabled = useMediaStore((state) => state.camEnabled)
   const micEnabled = useMediaStore((state) => state.micEnabled)
@@ -44,6 +56,9 @@ export function MediaControls({ mode, compact = false, fluid = false }: MediaCon
         size={compact ? 'icon' : 'default'}
         className={buttonClass}
         onClick={toggleCam}
+        // Only ever locks a camera that is on: capture can't start with it off, and a
+        // lock must never trap someone with their camera off.
+        disabled={cameraLocked && camEnabled}
         aria-pressed={!camEnabled}
         aria-label={camEnabled ? t('mediaControls.turnCameraOff') : t('mediaControls.turnCameraOn')}
       >
