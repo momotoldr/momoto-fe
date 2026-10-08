@@ -123,8 +123,9 @@ Per-environment files: `.env.development.local`, `.env.staging`, `.env.productio
 - `npm run dev` — start the Vite dev server
 - `npm run build` — type-check and build for production
 - `npm run preview` — build, then serve the production bundle locally with `wrangler dev`
-- `npm run deploy` — build and deploy to production (`momotoldr.com`)
-- `npm run deploy:staging` — build and deploy to staging (`staging.momotoldr.com`)
+- `npm run deploy` — build and deploy to production (`momotoldr.com`) by hand, at 100% (no canary)
+- `npm run deploy:staging` — the same for staging (`staging.momotoldr.com`)
+- `npm run rollout:status -- <staging|production>` — show which builds serve how much traffic
 - `npm run lint` — run ESLint
 - `npm run format` / `npm run format:check` — format with Prettier / check formatting
 - `npm run typecheck` — type-check without emitting
@@ -132,6 +133,34 @@ Per-environment files: `.env.development.local`, `.env.staging`, `.env.productio
 Deploy config lives in [wrangler.jsonc](wrangler.jsonc): SPA fallback, so deep links like
 `/room/ABCD` survive a reload. Security headers (CSP, Permissions-Policy, HSTS) are in
 [public/_headers](public/_headers). Its `connect-src` must list your API and broker hosts.
+
+## Releasing
+
+Pushes to `staging` and `main` deploy through GitHub Actions
+([deploy.yml](.github/workflows/deploy.yml)), as a **canary**
+([plan](docs/plans/PLAN-canary.md)):
+
+1. The build is named after the branch's commit count: `v16` on main, `staging-v48` on
+   staging. Analytics batches carry it as `appVersion`, with the commit as `appCommit`.
+2. It is uploaded as a new Worker version, staged at 0% and smoke-tested with requests
+   pinned to it. If the smoke test fails, it is dropped and nobody sees it.
+3. It gets `CANARY_PERCENT` of visitors (a GitHub Environment variable; unset = 100%).
+   Each visitor stays on one build (Transform Rule on `Cloudflare-Workers-Version-Key`).
+
+Afterwards, **Actions → rollout → Run workflow** on the same branch:
+
+| Action | Effect |
+|---|---|
+| `10` / `25` / `50` | give the canary that share |
+| `100` | promote it; the old build leaves |
+| `0` | drop the canary; everyone back on the old build |
+| `previous` | after a promotion: restore the build live before it (twice = toggle back) |
+| `version` + `v14` | restore that build at 100% |
+
+A push while a canary is still split fails on purpose: finish it (`100`) or drop it (`0`)
+first. Put `[skip canary]` in the PR title for a release that can't run next to the
+previous build (a breaking socket event or IndexedDB change); it goes to 100% right after
+the smoke test. The PR template's "Release safety" checklist says when.
 
 ## Known limitations
 

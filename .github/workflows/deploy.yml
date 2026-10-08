@@ -1,21 +1,37 @@
 # Push to `staging` → staging.momotoldr.com. Push to `main` → momotoldr.com.
 # Also runnable by hand (Actions → deploy → Run workflow) on either branch, to redeploy it.
 #
+# Each build is released as a canary (docs/plans/PLAN-canary.md): uploaded as a new Worker
+# version with no traffic, staged at 0%, smoke-tested with requests pinned to it, then
+# given CANARY_PERCENT of visitors. The rest stay on the build they had. Ramp up, promote
+# or roll back afterwards with the `rollout` workflow — not here.
+#
+# `[skip canary]` in the head commit message (a squash merge's subject is the PR title),
+# or the `skip_canary` box on a manual run, releases straight to 100% after the smoke test:
+# for builds that can't run next to the previous one (plan §6.4).
+#
 # Per GitHub Environment (`staging`, `production`):
-#   variables  VITE_* build config (see .env.example) and CLOUDFLARE_ACCOUNT_ID
+#   variables  VITE_* build config (see .env.example), CLOUDFLARE_ACCOUNT_ID, and
+#              CANARY_PERCENT (1-100; unset = 100, i.e. no canary)
 #   secret     CLOUDFLARE_API_TOKEN (Workers Scripts: Edit; Workers Routes: Edit)
 #
-# Rollback does not need this workflow: `npx wrangler rollback --name <worker>` or the
-# Cloudflare dashboard → Deployments, then revert the commit so the next push can't
-# bring it back.
+# Undo is the `rollout` workflow too: 0 drops a canary in flight, `previous` restores the
+# build that was live before the last promotion. Not `wrangler rollback`, which returns to
+# the previous *deployment* — after a ramp, that is a split.
 name: deploy
 
 on:
   push:
     branches: [staging, main]
   workflow_dispatch:
+    inputs:
+      skip_canary:
+        description: Release straight to 100% after the smoke test (no canary)
+        type: boolean
+        default: false
 
 concurrency:
+  # Shared with rollout.yml, so a ramp never runs during a deploy.
   group: deploy-${{ github.ref_name }}
   # Never cancel a deploy halfway; the next one queues behind it.
   cancel-in-progress: false
@@ -39,6 +55,9 @@ jobs:
       TARGET: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
     steps:
       - uses: actions/checkout@v5
+        with:
+          # The whole history: the build's name is the branch's commit count.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v5
         with:
@@ -63,6 +82,41 @@ jobs:
             console.log(`wrote ${lines.length} VITE_* keys to .env.${process.env.TARGET}`)
           '
 
+      - name: Name this build
+        # `v16` on main, `staging-v48` on staging: the count of commits on this branch,
+        # following its own line only (a merge-commit promotion counts once). Exported as
+        # APP_VERSION for the build (`__APP_VERSION__`) and used as the Cloudflare version
+        # tag, so analytics and the rollout table say the same thing. Plan §5.1.
+        run: |
+          count="$(git rev-list --count --first-parent HEAD)"
+          # A shallow clone counts 1, and every build would be v1.
+          if [ "$count" -lt 10 ]; then
+            echo "::error::Only $count commits in history — is the checkout shallow?"
+            exit 1
+          fi
+          if [ "$TARGET" = production ]; then name="v$count"; else name="staging-v$count"; fi
+          echo "APP_VERSION=$name" >> "$GITHUB_ENV"
+          echo "This build is $name (${GITHUB_SHA::7})"
+
+      - name: Pick the canary share
+        id: share
+        env:
+          HEAD_MESSAGE: ${{ github.event.head_commit.message }}
+          SKIP_CANARY: ${{ inputs.skip_canary }}
+          CANARY_PERCENT: ${{ vars.CANARY_PERCENT }}
+        run: |
+          percent="${CANARY_PERCENT:-100}"
+          if ! [[ "$percent" =~ ^[0-9]+$ ]] || [ "$percent" -lt 1 ] || [ "$percent" -gt 100 ]; then
+            # 0 would stage the build and then drop it.
+            echo "::error::CANARY_PERCENT must be 1-100, got '$CANARY_PERCENT'"
+            exit 1
+          fi
+          if [[ "$HEAD_MESSAGE" == *"[skip canary]"* || "$SKIP_CANARY" == true ]]; then
+            echo "Skip canary requested: releasing to 100%"
+            percent=100
+          fi
+          echo "percent=$percent" >> "$GITHUB_OUTPUT"
+
       - name: Build
         run: |
           if [ "$TARGET" = production ]; then npm run build; else npm run build:staging; fi
@@ -70,13 +124,36 @@ jobs:
       - name: Deploy guard
         run: node scripts/check-deploy-target.mjs "$TARGET"
 
-      - name: Deploy
+      - name: Upload version
+        id: upload
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           subject="$(git log -1 --format=%s | cut -c1-80)"
-          npx wrangler deploy --tag "${GITHUB_SHA::7}" --message "${GITHUB_SHA::7} ${subject}"
+          node scripts/rollout.mjs upload "$TARGET" "$APP_VERSION" "$APP_VERSION ${GITHUB_SHA::7} ${subject}"
 
-      - name: Smoke test
-        run: node scripts/smoke.mjs "$TARGET"
+      - name: Stage at 0%
+        id: stage
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/rollout.mjs stage "$TARGET" "${{ steps.upload.outputs.version_id }}"
+
+      - name: Smoke test (pinned to the new version)
+        run: node scripts/smoke.mjs "$TARGET" --version "${{ steps.upload.outputs.version_id }}"
+
+      - name: Release to ${{ steps.share.outputs.percent }}%
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/rollout.mjs set "$TARGET" "${{ steps.share.outputs.percent }}"
+
+      - name: Drop the new version
+        # Something after staging failed (the smoke test, most likely): take the new build
+        # back out, so no visitor gets it and the next deploy starts from one version.
+        if: failure() && steps.stage.outcome == 'success'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/rollout.mjs set "$TARGET" 0
