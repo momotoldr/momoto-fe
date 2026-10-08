@@ -169,3 +169,31 @@
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 }
+
+/* ── Remove dialog ───────────────────────────────────────────────────────── */
+
+/* "Download it first", inside the confirm dialog: a quiet text button above the dialog's
+ * own actions, so the safe path is offered without competing with Cancel / Remove. */
+.removeDownload {
+  @apply mt-3 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-foreground underline-offset-4 transition-colors;
+
+  svg {
+    @apply h-4 w-4;
+  }
+
+  &:hover:not(:disabled) {
+    @apply underline;
+  }
+
+  &:disabled {
+    @apply cursor-not-allowed opacity-60;
+  }
+
+  &:focus-visible {
+    @apply rounded-sm outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+.removeDownloadSpinner {
+  @apply animate-spin;
+}

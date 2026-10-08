@@ -5,9 +5,9 @@
  * lets a month section hold two dozen strips at their real 1:3 shape instead of four
  * padded cards.
  *
- * Download is the only action: a gallery strip has been paid for, and nothing on this
- * page destroys something the user bought. So the tile's only states are "resting" and
- * "showing its action". */
+ * Two actions: Download, the primary, and a smaller Remove beside it. Remove only asks —
+ * the page confirms before anything is deleted. The tile's only states are still
+ * "resting" and "showing its actions". */
 
 .tile {
   @apply flex flex-col gap-1.5 sm:gap-[0.4375rem];
@@ -50,7 +50,7 @@
  * back: it covers the whole tile, so a clickable container would swallow the taps meant
  * for the reveal surface underneath. */
 .actions {
-  @apply pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-end gap-1.5 p-2 opacity-0 transition-opacity;
+  @apply pointer-events-none absolute inset-0 z-20 flex flex-row items-end justify-center gap-1.5 p-2 opacity-0 transition-opacity;
 
   background: linear-gradient(to top, rgb(15 23 42 / 0.72) 0 40%, rgb(15 23 42 / 0));
 }
@@ -89,21 +89,50 @@
   }
 }
 
+/* Remove: quieter than Download — a translucent ring rather than a solid disc — so the
+ * eye lands on the thing people come here to do, and destroying a strip is never the
+ * button a stray tap finds first. */
+.actionSecondary {
+  @apply pointer-events-auto flex h-7 w-7 items-center justify-center rounded-full border border-white/60 bg-slate-900/40 text-white transition-colors;
+
+  svg {
+    @apply h-[0.8125rem] w-[0.8125rem];
+  }
+
+  &:hover:not(:disabled) {
+    @apply border-white bg-destructive;
+  }
+
+  &:disabled {
+    @apply cursor-not-allowed opacity-60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-background ring-offset-1 ring-offset-transparent;
+  }
+}
+
 .actionSpinner {
   @apply animate-spin;
 }
 
-/* On touch the button grows to a real finger target.
+/* On touch the buttons grow to real finger targets.
  *
- * At 28px it is comfortable under a cursor and far too small under a thumb, and on touch
- * it is the only way to act on a strip. A 44px circle still fits the ~78px tile of a
- * four-up grid at 375px.
+ * At 28px they are comfortable under a cursor and far too small under a thumb, and on
+ * touch they are the only way to act on a strip. Two 44px circles side by side would not
+ * fit the ~78px tile of a four-up grid at 375px, so on touch the pair stacks instead
+ * (see `.actions` below).
  *
  * This block has to sit *below* the base rules it overrides: a media query adds no
  * specificity, so `.actionPrimary` here and `.actionPrimary` above tie, and source order
  * is what decides. */
 @media (hover: none) {
-  .actionPrimary {
+  .actions {
+    @apply flex-col items-center;
+  }
+
+  .actionPrimary,
+  .actionSecondary {
     @apply h-11 w-11;
 
     svg {
