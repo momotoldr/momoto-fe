@@ -113,6 +113,11 @@ export interface StripListResponse {
   quota: StripQuota
 }
 
+/** What `POST /strips/:id/remove` hands back: the limits after the slot was freed. */
+export interface StripRemoveResponse {
+  quota: StripQuota
+}
+
 /** What `POST /strips/unlock` hands back: the same strips, now `paid`. */
 export interface StripUnlockResponse {
   strips: StoredStrip[]

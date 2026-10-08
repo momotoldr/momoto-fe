@@ -548,7 +548,8 @@
         "body": [
           "Membuat strip, menyimpannya ke keranjang, dan membagikannya itu gratis. Salinan strip yang bersih dan beresolusi tinggi tanpa watermark adalah unduhan berbayar yang bersifat opsional. Harga ditampilkan di halaman checkout sebelum kamu mengonfirmasi, dan kamu bisa membeli beberapa strip dalam satu pesanan.",
           "Pembayaran ditangani oleh penyedia pembayaran pihak ketiga kami, Midtrans. Dengan membayar, kamu juga menyetujui ketentuan penyedia tersebut. Kami menerima konfirmasi bahwa pembayaran berhasil beserta nomor referensi pesanan, tetapi kami tidak mengumpulkan atau menyimpan detail lengkap kartu atau rekening bankmu.",
-          "Karena pembelian langsung membuka file digital untuk diunduh, strip berbayar umumnya tidak dapat dikembalikan setelah dibuka — kecuali bila pengembalian dana diwajibkan oleh hukum, atau bila ada gangguan teknis dari pihak kami yang membuat kamu tidak bisa mengunduh strip yang sudah kamu bayar. Jika itu terjadi, hubungi kami dan akan kami perbaiki."
+          "Karena pembelian langsung membuka file digital untuk diunduh, strip berbayar umumnya tidak dapat dikembalikan setelah dibuka — kecuali bila pengembalian dana diwajibkan oleh hukum, atau bila ada gangguan teknis dari pihak kami yang membuat kamu tidak bisa mengunduh strip yang sudah kamu bayar. Jika itu terjadi, hubungi kami dan akan kami perbaiki.",
+          "Kamu bisa menghapus strip yang sudah dibuka dari galerimu kapan saja. Menghapusnya akan menghapus filenya secara permanen, jadi strip yang sudah dihapus tidak bisa dipulihkan, diunduh lagi, atau dikembalikan dananya. Catatan pembelianmu tetap tersimpan."
         ]
       },
       "acceptableUse": {
@@ -639,7 +640,7 @@
       "retention": {
         "title": "Penyimpanan & Penghapusan Data",
         "body": [
-          "Strip yang kamu simpan disimpan bersama akunmu sampai kamu menghapusnya dari keranjang atau menghapus akunmu, dan saat itu strip tersebut dihapus dari server kami. Foto yang tidak kamu simpan tetap hanya berada di perangkatmu — menutup tab atau membersihkan penyimpanan peramban akan menghapus data sesi lokal. Kode ruang bersifat sementara dan berakhir saat sesi selesai.",
+          "Strip yang kamu simpan disimpan bersama akunmu sampai kamu menghapusnya dari keranjang atau galeri, atau menghapus akunmu, dan saat itu gambarnya dihapus dari server kami. Untuk strip yang kamu bayar, kami menyimpan catatan bahwa strip itu pernah ada — kapan dibuat dan pesanan mana yang mencakupnya, tidak pernah fotonya — sebagai bagian dari catatan pembayaran kami. Foto yang tidak kamu simpan tetap hanya berada di perangkatmu — menutup tab atau membersihkan penyimpanan peramban akan menghapus data sesi lokal. Kode ruang bersifat sementara dan berakhir saat sesi selesai.",
           "Data log teknis dasar yang disimpan hosting kami hanya dipertahankan untuk waktu singkat demi keamanan lalu dihapus."
         ]
       },
@@ -1128,7 +1129,7 @@
     "tipText": "Buka keranjang untuk mengunduh strip kamu.",
     "tipCta": "Ke keranjang",
     "tipDismiss": "Tutup",
-    "galleryFull": "Galeri kamu penuh. Hapus satu di sana untuk memberi ruang.",
+    "galleryFull": "Galeri kamu penuh. Hapus satu strip di sana untuk memberi ruang.",
     "viewGallery": "Lihat galeri",
     "unlock": "Buka",
     "unlockBusy": "Membuka…",
@@ -1178,7 +1179,7 @@
     "downloadStrip": "Unduh strip ini",
     "badgeToday": "HARI INI",
     "stripAlt": "Strip foto dari {{date}}",
-    "fullBanner": "Galeri kamu penuh — {{used}} dari {{limit}} strip berbayar. Strip yang menunggu di keranjang belum bisa masuk.",
+    "fullBanner": "Galeri kamu penuh — {{used}} dari {{limit}} strip berbayar — jadi strip yang menunggu di keranjang belum bisa masuk. Hapus strip yang sudah kamu unduh untuk memberi ruang.",
     "notAdded": "Belum masuk",
     "notAddedReason": "Galeri penuh",
     "emptyTitle": "Belum ada strip di galeri kamu",
