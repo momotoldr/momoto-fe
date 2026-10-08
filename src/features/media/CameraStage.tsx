@@ -281,7 +281,15 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
   }
   useCountdownAudio()
   usePeerConnection()
-  const { startSession, starting, retakeAll, retakeShot, retakingSlot } = useCountdownSync()
+  const { startSession, starting, scheduled, retakeAll, retakeShot, retakingSlot } =
+    useCountdownSync()
+  // The camera can't be switched off from the moment the host presses Start (or a
+  // retake) until the shots are done — a camera switched off in between leaves a blank
+  // cut. `starting` / `retakingSlot` cover the host's own press while it travels to the
+  // server; `scheduled` covers every client from the server's broadcast — a second before
+  // the countdown — which is the earliest a guest can know; `isCapturing` covers the
+  // shots themselves.
+  const cameraLocked = isCapturing || starting || retakingSlot !== null || scheduled
 
   // The room changed under a running sequence. Someone leaving means every remaining
   // shot comes back with an empty cell where they were; someone arriving means the rest
@@ -479,7 +487,7 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
       {/* Phone-only gloss: on the narrow layout the rail collapses into a
        * single strip of chrome, and the label above is hidden. */}
       <span className={styles.arrangeInlineNote}>{t('select.camerasLive')}</span>
-      <MediaControls mode={mode} compact />
+      <MediaControls mode={mode} compact cameraLocked={cameraLocked} />
       <p className={styles.arrangeNote}>{note}</p>
     </div>
   )
@@ -598,7 +606,7 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
           {/* Desktop-only: the toggles sit under the stage. On a phone they ride in
            * the action bar at the bottom of the screen instead. */}
           <div className={styles.stageControls}>
-            <MediaControls mode={mode} />
+            <MediaControls mode={mode} cameraLocked={cameraLocked} />
             <span className={styles.liveNote}>{line('capture.liveNote')}</span>
           </div>
         </div>
@@ -632,7 +640,7 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
          * you actually press are always in reach. Stays through capture, where the
          * button becomes the progress readout. */}
         <div className={styles.actionBar} data-booth-actions>
-          <MediaControls mode={mode} fluid />
+          <MediaControls mode={mode} fluid cameraLocked={cameraLocked} />
           {isHost && startButton}
           {(isCapturing || !isHost) && startNote}
         </div>
