@@ -66,6 +66,15 @@ export function useCountdownSync() {
    * busy.
    */
   const [retakingSlot, setRetakingSlot] = useState<number | null>(null)
+  /**
+   * The room has been told to shoot — a start or retake broadcast has arrived — and this
+   * client is waiting out the shared delay before the count begins.
+   *
+   * Unlike `starting`, which only the host's own press sets, every client gets this: the
+   * server sends the broadcast the moment the host presses, a full `START_DELAY_MS` before
+   * the countdown. It is how a guest knows the host has pressed Start at all.
+   */
+  const [scheduled, setScheduled] = useState(false)
   const isCapturing = usePhotosStore((state) => state.isCapturing)
   const retakeSlot = usePhotosStore((state) => state.retakeSlot)
 
@@ -158,7 +167,11 @@ export function useCountdownSync() {
       window.clearTimeout(timer)
       const tiles = tileCount()
       const members = memberCount()
-      timer = window.setTimeout(() => usePhotosStore.getState().startCapture(tiles, members), delay)
+      setScheduled(true)
+      timer = window.setTimeout(() => {
+        usePhotosStore.getState().startCapture(tiles, members)
+        setScheduled(false)
+      }, delay)
     }
 
     // Host pressed "Retake all" — drop back to the pre-capture booth in sync. Their
@@ -184,7 +197,11 @@ export function useCountdownSync() {
       const { clockOffset } = useRoomStore.getState()
       const delay = Math.max(0, startAt - clockOffset - Date.now())
       window.clearTimeout(timer)
-      timer = window.setTimeout(() => usePhotosStore.getState().startRetake(slot), delay)
+      setScheduled(true)
+      timer = window.setTimeout(() => {
+        usePhotosStore.getState().startRetake(slot)
+        setScheduled(false)
+      }, delay)
     }
 
     socket.on(SocketEvents.countdownStart, onCountdownStart)
@@ -195,6 +212,7 @@ export function useCountdownSync() {
       socket.off(SocketEvents.sessionReset, onSessionReset)
       socket.off(SocketEvents.sessionRetakeStart, onRetakeStart)
       window.clearTimeout(timer)
+      setScheduled(false)
     }
   }, [])
 
@@ -240,5 +258,5 @@ export function useCountdownSync() {
     }
   }, [])
 
-  return { startSession, starting, retakeAll, retakeShot, retakingSlot }
+  return { startSession, starting, scheduled, retakeAll, retakeShot, retakingSlot }
 }
