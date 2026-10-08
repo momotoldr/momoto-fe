@@ -233,7 +233,7 @@
       },
       "print": {
         "q": "How do I get a clean, printable strip?",
-        "a": "Each strip you create is saved to your cart with a light watermark. From the cart, tick the strips you want and check out to unlock high-resolution, watermark-free copies you can download and print."
+        "a": "Each strip you create is saved to your cart with a light watermark. In your cart, choose Unlock on a strip to get a clean, high-resolution copy without the watermark. It moves to your gallery, where you can download and print it."
       },
       "friend": {
         "q": "Can I use it with a friend?",
@@ -358,6 +358,14 @@
               "In a shared session only the host can retake — ask them."
             ]
           },
+          "remove": {
+            "q": "Can I remove a strip from my gallery?",
+            "a": "Yes. Removing a strip frees up a slot in your gallery, but it can't be undone: the clean copy is deleted for good and can't be restored, downloaded again or refunded.",
+            "steps": [
+              "Download the strip first if you want to keep it — the confirmation has a Download it first button.",
+              "In your gallery, choose Remove on the strip, then confirm."
+            ]
+          },
           "backdrop": {
             "q": "Changing the background isn't working",
             "a": "The background is removed right on your device, so it needs a recent browser and some free memory. The first time, the background remover has to download.",
@@ -400,8 +408,12 @@
           },
           "galleryFull": {
             "q": "It says my gallery is full",
-            "a": "Your gallery holds a limited number of unlocked strips. When it's full, new unlocks are paused. Nothing is ever deleted from it automatically, and strips waiting in your cart stay there until there's room.",
-            "steps": ["Download the strips in your gallery so you have them on your own device."]
+            "a": "Your gallery holds a limited number of unlocked strips. When it's full, new unlocks are paused until you make room. Nothing in it is ever deleted automatically.",
+            "steps": [
+              "Download any strip you want to keep.",
+              "In your gallery, choose Remove on that strip. It's deleted for good, and its slot is freed.",
+              "Go back to your cart and unlock the strip that was waiting."
+            ]
           },
           "noPrintable": {
             "q": "It says there's no printable copy",
@@ -1193,7 +1205,7 @@
     "mode_group": "Group",
     "removeStrip": "Remove this strip",
     "removeTitle": "Remove this strip?",
-    "removeDescription": "Its clean copy is deleted for good — it can't be downloaded again, restored or refunded. Your purchase stays in your history, and the slot frees up for a new strip.",
+    "removeDescription": "Its clean copy is deleted for good — it can't be downloaded again, restored or refunded.",
     "removeDownloadFirst": "Download it first",
     "removeConfirm": "Remove",
     "removing": "Removing…",

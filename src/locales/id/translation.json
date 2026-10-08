@@ -232,7 +232,7 @@
       },
       "print": {
         "q": "Bagaimana cara mendapatkan strip bersih siap cetak?",
-        "a": "Setiap strip yang kamu buat tersimpan di keranjang dengan watermark tipis. Dari keranjang, centang strip yang kamu mau lalu checkout untuk membuka salinan resolusi tinggi tanpa watermark yang bisa diunduh dan dicetak."
+        "a": "Setiap strip yang kamu buat tersimpan di keranjang dengan watermark tipis. Di keranjang, pilih Buka pada strip untuk mendapatkan salinan bersih beresolusi tinggi tanpa watermark. Strip itu pindah ke galerimu, tempat kamu bisa mengunduh dan mencetaknya."
       },
       "friend": {
         "q": "Bisakah dipakai bareng teman?",
@@ -357,6 +357,14 @@
               "Dalam sesi bersama, hanya host yang bisa mengambil ulang — minta tolong host."
             ]
           },
+          "remove": {
+            "q": "Bisakah saya menghapus strip dari galeri?",
+            "a": "Bisa. Menghapus strip akan mengosongkan satu slot di galerimu, tapi tidak bisa dibatalkan: salinan bersihnya dihapus permanen dan tidak bisa dipulihkan, diunduh lagi, atau dikembalikan dananya.",
+            "steps": [
+              "Unduh dulu stripnya kalau ingin disimpan — di jendela konfirmasi ada tombol Unduh dulu.",
+              "Di galeri, pilih Hapus pada strip itu, lalu konfirmasi."
+            ]
+          },
           "backdrop": {
             "q": "Ganti latar tidak berfungsi",
             "a": "Latar dihapus langsung di perangkatmu, jadi butuh browser terbaru dan memori yang cukup. Pertama kali dipakai, penghapus latar perlu diunduh dulu.",
@@ -399,8 +407,12 @@
           },
           "galleryFull": {
             "q": "Muncul pesan galeri saya penuh",
-            "a": "Galeri menampung strip yang sudah dibuka dalam jumlah terbatas. Saat penuh, pembukaan strip baru dijeda. Isi galeri tidak pernah dihapus otomatis, dan strip di keranjang tetap di sana sampai ada ruang.",
-            "steps": ["Unduh strip di galerimu agar tersimpan di perangkatmu sendiri."]
+            "a": "Galeri menampung strip yang sudah dibuka dalam jumlah terbatas. Saat penuh, pembukaan strip baru dijeda sampai kamu memberi ruang. Isi galeri tidak pernah dihapus otomatis.",
+            "steps": [
+              "Unduh strip yang ingin kamu simpan.",
+              "Di galeri, pilih Hapus pada strip itu. Strip dihapus permanen dan slotnya jadi kosong.",
+              "Kembali ke keranjang dan buka strip yang tadi menunggu."
+            ]
           },
           "noPrintable": {
             "q": "Muncul pesan tidak ada salinan siap cetak",
@@ -1191,7 +1203,7 @@
     "mode_group": "Grup",
     "removeStrip": "Hapus strip ini",
     "removeTitle": "Hapus strip ini?",
-    "removeDescription": "Salinan bersihnya dihapus permanen — tidak bisa diunduh lagi, dipulihkan, atau dikembalikan dananya. Pembelianmu tetap ada di riwayat, dan slotnya kosong untuk strip baru.",
+    "removeDescription": "Salinan bersihnya dihapus permanen — tidak bisa diunduh lagi, dipulihkan, atau dikembalikan dananya.",
     "removeDownloadFirst": "Unduh dulu",
     "removeConfirm": "Hapus",
     "removing": "Menghapus…",

@@ -38,6 +38,7 @@ export const HELP_CATEGORIES: Record<SupportTopic, readonly HelpIssue[]> = {
     { key: 'download' },
     { key: 'different' },
     { key: 'retake' },
+    { key: 'remove' },
     { key: 'backdrop', shown: env.backdropsEnabled },
   ],
   payment: [
