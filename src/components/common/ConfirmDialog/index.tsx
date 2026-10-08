@@ -39,23 +39,32 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   const cancelRef = useRef<HTMLButtonElement>(null)
 
+  // Escape calls the *current* `onCancel` through a ref, so the effect below can depend
+  // on `open` alone. Callers routinely pass a fresh inline function every render, and
+  // when `onCancel` was a dependency, each re-render re-ran the effect — refocusing
+  // Cancel. With an input in `children` (the delete-account password), every keystroke
+  // re-renders the caller, so focus jumped to the button after the first letter.
+  const onCancelRef = useRef(onCancel)
+  onCancelRef.current = onCancel
+
   useEffect(() => {
     if (!open) return
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onCancel()
+      if (event.key === 'Escape') onCancelRef.current()
     }
     document.addEventListener('keydown', onKeyDown)
 
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+    // Once per opening, never again while it stays open.
     cancelRef.current?.focus()
 
     return () => {
       document.removeEventListener('keydown', onKeyDown)
       document.body.style.overflow = previousOverflow
     }
-  }, [open, onCancel])
+  }, [open])
 
   if (!open) return null
 
