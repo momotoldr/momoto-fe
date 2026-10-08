@@ -1,10 +1,14 @@
 /**
  * Post-deploy smoke test: is the build we just uploaded the one being served?
  *
- * Usage: node scripts/smoke.mjs <staging|production>
+ * Usage: node scripts/smoke.mjs <staging|production> [--version <version-id>]
  *
- * Runs after `wrangler deploy`, against the live origin, using the local `dist/` as the
- * reference. Retries for up to ~90 s while the new version reaches the edge.
+ * Runs against the live origin, using the local `dist/` as the reference. Retries for up
+ * to ~90 s while the new version reaches the edge.
+ *
+ * With `--version`, every request carries `Cloudflare-Workers-Version-Overrides`, so it
+ * tests that version while it still serves 0% of real traffic (rollout.mjs `stage`).
+ * Cloudflare only honours the override for a version in the current deployment.
  *
  * 1. `/` serves THIS build's entry script (`/assets/index-<hash>.js`), not a cached one.
  * 2. `/room/SMOKE` still falls back to the SPA shell.
@@ -22,6 +26,15 @@ import { targetFor } from './deploy-targets.mjs'
 
 const name = process.argv[2]
 const target = targetFor(name)
+const versionFlag = process.argv.indexOf('--version')
+const versionId = versionFlag === -1 ? null : process.argv[versionFlag + 1]
+if (versionFlag !== -1 && !versionId) {
+  console.error('--version needs a version id')
+  process.exit(1)
+}
+const overrideHeaders = versionId
+  ? { 'cloudflare-workers-version-overrides': `${target.worker}="${versionId}"` }
+  : {}
 const root = new URL('../', import.meta.url)
 
 const builtHtml = await readFile(new URL('dist/index.html', root), 'utf8')
@@ -37,7 +50,7 @@ const INTERVAL_MS = 5_000
 
 async function get(path) {
   const res = await fetch(new URL(path, target.origin), {
-    headers: { 'cache-control': 'no-cache' },
+    headers: { 'cache-control': 'no-cache', ...overrideHeaders },
     redirect: 'manual',
   })
   return { status: res.status, headers: res.headers, body: await res.text() }
@@ -83,4 +96,5 @@ if (failures.length > 0) {
   )
   process.exit(1)
 }
-console.log(`smoke ok: ${target.origin} serves ${entry}`)
+const pinned = versionId ? ` (pinned to version ${versionId})` : ''
+console.log(`smoke ok: ${target.origin} serves ${entry}${pinned}`)

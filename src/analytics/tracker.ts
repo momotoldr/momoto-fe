@@ -43,6 +43,7 @@ export const tracker = createTracker<MomotoEvents>({
   // person; the library adds viewport, language and connection type itself.
   context: () => ({
     appVersion: __APP_VERSION__,
+    appCommit: __APP_COMMIT__,
     env: import.meta.env.MODE,
     locale: i18n.language ?? null,
     isMobile: typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches,
