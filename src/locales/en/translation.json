@@ -841,8 +841,10 @@
     "title": "Arrange your strip",
     "subtitle": "Reorder or retake your shots before building your strip.",
     "subtitleGuest": "Your host is designing the strip — here's how yours will look.",
-    "dragHint": "Drag a photo to reorder it, or tap the retake icon to re-shoot it.",
-    "dragHintGuest": "Drag a photo to reorder it on your own strip.",
+    "reorderHint": "Tap a photo, then tap another to swap them. Tap the retake icon to re-shoot one.",
+    "reorderHintGuest": "Tap a photo, then tap another to swap them on your own strip.",
+    "swapSlot": "Swap photo {{index}}",
+    "swapPicked": "Now tap the photo to swap with photo {{index}}, or tap it again to cancel.",
     "slotAlt": "Strip slot {{index}}",
     "stripAria": "Your photo strip",
     "retakeShot": "Retake photo {{index}}",
@@ -930,7 +932,7 @@
       "items": {
         "reorder": {
           "title": "Reorder your cuts",
-          "text": "Drag a photo into the slot you want it in."
+          "text": "Tap a photo, then tap the one it should trade places with."
         },
         "retake": {
           "title": "Retake what you don't like",

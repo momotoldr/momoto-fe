@@ -1,5 +1,5 @@
 import { Loader2, RotateCcw, Sparkles } from 'lucide-react'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TRACK_IDS, trackClick } from '@/analytics'
@@ -8,15 +8,16 @@ import { Button } from '@/components/ui/button'
 import { BACKDROPS, resolveBackdrop } from '@/constants/backdrops'
 import { PHOTO_FILTERS, PHOTO_FILTER_MAP } from '@/constants/filters'
 import { STICKERS } from '@/constants/stickers'
-import { env } from '@/env'
 import {
   STRIP_TEMPLATES,
   STRIP_TEMPLATE_MAP,
   slotAspect,
   slotRadius,
 } from '@/constants/stripTemplates'
+import { env } from '@/env'
 import { useBackdropFrames } from '@/hooks/useBackdropFrames'
 import { useBackdropSupport } from '@/hooks/useBackdropSupport'
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import { usePhotosStore } from '@/store/usePhotosStore'
 import { useRoomStore } from '@/store/useRoomStore'
@@ -69,7 +70,7 @@ const TAB_LABELS: Record<Tab, string> = {
 
 /**
  * Review step shown after the capture sequence: arrange the shots into the template's
- * fixed slots (drag to reorder), pick a filter, place stickers, then confirm.
+ * fixed slots (tap two to swap them), pick a filter, place stickers, then confirm.
  *
  * Two roles, split along a line that isn't "who is in charge" but "whose strip is it":
  *  - **Design** is everyone's, over their own shots. Each member's frames hold the room's
@@ -146,9 +147,6 @@ export function StripSelector({
   // Slots in strip order; fall back to capture order if the arrangement is unset.
   const slotOrder = order.length === frames.length ? order : frames.map((_, index) => index)
 
-  // Index of the slot currently being dragged (for reorder-by-swap).
-  const dragIndex = useRef<number | null>(null)
-  const [isDragging, setIsDragging] = useState(false)
   // Creating the strip is irreversible (no going back to re-arrange/retake), so
   // confirm the current setup first.
   const [confirmOpen, setConfirmOpen] = useState(false)
@@ -196,26 +194,90 @@ export function StripSelector({
     return refs
   }, [markStickerReady])
 
-  const onDragStart = (slot: number) => (event: React.DragEvent) => {
-    dragIndex.current = slot
-    setIsDragging(true)
-    event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setData('text/plain', String(slot))
+  /**
+   * Reorder is tap-to-swap: tap a photo to pick it up, tap another to trade places.
+   * Native drag-and-drop never fires on a touchscreen — a finger on the strip just
+   * scrolls the page — and a tap is the same gesture on a phone and a mouse, and
+   * reads the same on a 4x1 ribbon as on a 2x2 card.
+   */
+  const [picked, setPicked] = useState<number | null>(null)
+  const stripRef = useRef<HTMLDivElement>(null)
+
+  /**
+   * Where the two photos of a swap stood just before it, keyed by frame id — read
+   * once the new order has rendered to glide each one from there (FLIP). A plain CSS
+   * transition on left/top won't do: the slots are keyed by frame, so React moves
+   * their DOM nodes on a swap, and a moved node starts from its new style, not the old.
+   */
+  const swapFrom = useRef<Map<string, DOMRect> | null>(null)
+  const reducedMotion = usePrefersReducedMotion()
+
+  const slotElement = (frameId: string) =>
+    stripRef.current?.querySelector<HTMLElement>(`[data-frame-id="${frameId}"]`) ?? null
+
+  const tapSlot = (slot: number) => {
+    if (picked === null) return setPicked(slot)
+    if (picked !== slot) {
+      const from = new Map<string, DOMRect>()
+      for (const index of [picked, slot]) {
+        const frame = frames[slotOrder[index]]
+        const rect = frame && slotElement(frame.id)?.getBoundingClientRect()
+        if (frame && rect) from.set(frame.id, rect)
+      }
+      swapFrom.current = from
+      usePhotosStore.getState().swapSlots(picked, slot)
+    }
+    setPicked(null)
   }
 
-  const onDragEnd = () => {
-    dragIndex.current = null
-    setIsDragging(false)
-  }
+  useLayoutEffect(() => {
+    const from = swapFrom.current
+    swapFrom.current = null
+    if (!from || reducedMotion) return
+    for (const [frameId, first] of from) {
+      const element = slotElement(frameId)
+      if (!element) continue
+      const last = element.getBoundingClientRect()
+      // Centre to centre, to match the default (centre) transform-origin of the scale.
+      const dx = first.left + first.width / 2 - (last.left + last.width / 2)
+      const dy = first.top + first.height / 2 - (last.top + last.height / 2)
+      const sx = first.width / last.width
+      const sy = first.height / last.height
+      // Lifted for the trip: above the other slots' photos and badges (z-20), still
+      // under the sticker overlay (z-30), and swelling slightly at the halfway mark.
+      element.animate(
+        [
+          { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, zIndex: 25 },
+          {
+            transform: `translate(${dx / 2}px, ${dy / 2}px) scale(${((sx + 1) / 2) * 1.06}, ${((sy + 1) / 2) * 1.06})`,
+            boxShadow: '0 12px 28px -8px rgb(0 0 0 / 45%)',
+            zIndex: 25,
+            offset: 0.5,
+          },
+          { transform: 'none', zIndex: 25 },
+        ],
+        { duration: 360, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' }
+      )
+    }
+    // Runs on every order change; only a swap from `tapSlot` leaves a `from` behind.
+  }, [order, reducedMotion])
 
-  const allowDrop = (event: React.DragEvent) => event.preventDefault()
-
-  const onDropSlot = (slot: number) => (event: React.DragEvent) => {
-    event.preventDefault()
-    const from = dragIndex.current
-    if (from !== null) usePhotosStore.getState().swapSlots(from, slot)
-    onDragEnd()
-  }
+  // A pick is let go by Esc or by a tap anywhere off the strip.
+  useEffect(() => {
+    if (picked === null) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setPicked(null)
+    }
+    const onPointer = (event: PointerEvent) => {
+      if (!stripRef.current?.contains(event.target as Node)) setPicked(null)
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('pointerdown', onPointer)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('pointerdown', onPointer)
+    }
+  }, [picked])
 
   // The buttons are disabled while one is pending, so this is the backstop for the
   // press that lands in the same tick as the first.
@@ -251,7 +313,8 @@ export function StripSelector({
       <div className={styles.stripColumn}>
         <h2 className={styles.railLabel}>{t('select.stripLabel')}</h2>
         <div
-          className={cn(styles.strip, isDragging && styles.stripDragging)}
+          ref={stripRef}
+          className={styles.strip}
           style={{
             aspectRatio: String(template.aspect),
             backgroundImage: `url("${template.src}")`,
@@ -267,7 +330,28 @@ export function StripSelector({
             return (
               <div
                 key={frame.id}
-                className={styles.slot}
+                data-frame-id={frame.id}
+                role="button"
+                tabIndex={0}
+                aria-pressed={picked === slot}
+                aria-label={t('select.swapSlot', { index: slot + 1 })}
+                className={cn(
+                  styles.slot,
+                  picked === slot && styles.slotPicked,
+                  picked !== null && picked !== slot && styles.slotTarget
+                )}
+                // The retake button sits inside the slot; its taps (even disabled ones)
+                // must not pick the photo up.
+                onClick={(event) => {
+                  if ((event.target as HTMLElement).closest('button')) return
+                  tapSlot(slot)
+                }}
+                onKeyDown={(event) => {
+                  if (event.target !== event.currentTarget) return
+                  if (event.key !== 'Enter' && event.key !== ' ') return
+                  event.preventDefault()
+                  tapSlot(slot)
+                }}
                 style={{
                   left: `${rect.x * 100}%`,
                   top: `${rect.y * 100}%`,
@@ -275,11 +359,6 @@ export function StripSelector({
                   height: `${rect.h * 100}%`,
                   borderRadius: slotRadius(rect, template.aspect),
                 }}
-                draggable
-                onDragStart={onDragStart(slot)}
-                onDragEnd={onDragEnd}
-                onDragOver={allowDrop}
-                onDrop={onDropSlot(slot)}
               >
                 <span className={styles.slotNumber}>{slot + 1}</span>
                 <img
@@ -323,8 +402,12 @@ export function StripSelector({
         </div>
         {/* Everyone may reorder; only the host's hint mentions the retake icon, which
          * is the one control on this strip a guest doesn't have. */}
-        <p className={styles.stripHint}>
-          {canDirect ? t('select.dragHint') : t('select.dragHintGuest')}
+        <p className={styles.stripHint} aria-live="polite">
+          {picked !== null
+            ? t('select.swapPicked', { index: picked + 1 })
+            : canDirect
+              ? t('select.reorderHint')
+              : t('select.reorderHintGuest')}
         </p>
       </div>
 

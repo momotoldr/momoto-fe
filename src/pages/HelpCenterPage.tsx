@@ -17,6 +17,7 @@ import { openSupportDialog } from '@/components/common/SupportFab/openSupport'
 import { Button } from '@/components/ui/button'
 import { SUPPORT_TOPICS } from '@/constants/feedback'
 import { HELP_CATEGORIES, HELP_FAQ_KEYS } from '@/constants/help'
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import type { SupportTopic } from '@/types/feedbackType'
 
 import styles from './HelpCenterPage.module.scss'
@@ -57,6 +58,7 @@ export function HelpCenterPage() {
   const location = useLocation()
   const navigate = useNavigate()
   const panelRef = useRef<HTMLElement>(null)
+  const reducedMotion = usePrefersReducedMotion()
 
   const active = topicFromHash(location.hash)
 
@@ -66,9 +68,16 @@ export function HelpCenterPage() {
   }
 
   // Bring the answers into view: on a phone the panel opens below a screenful of cards.
+  // A jump rather than a glide for anyone who has asked the OS for less motion. (The
+  // preference changing re-runs this too — harmless, `nearest` won't move a panel
+  // that is already in view.)
   useEffect(() => {
-    if (active) panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  }, [active])
+    if (!active) return
+    panelRef.current?.scrollIntoView({
+      behavior: reducedMotion ? 'auto' : 'smooth',
+      block: 'nearest',
+    })
+  }, [active, reducedMotion])
 
   return (
     <main className={styles.page}>

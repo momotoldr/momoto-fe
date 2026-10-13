@@ -40,10 +40,6 @@
   box-shadow: 0 18px 40px -24px rgb(15 23 42 / 35%);
 }
 
-.stripDragging {
-  @apply ring-2 ring-primary/40;
-}
-
 .stripHint {
   @apply text-center text-xs leading-[1.5] text-muted-foreground lg:text-left;
   text-wrap: pretty;
@@ -51,7 +47,39 @@
 
 .slot {
   /* left/top/width/height are set inline per slot from the template. */
-  @apply absolute flex cursor-grab items-center justify-center overflow-hidden active:cursor-grabbing;
+  @apply absolute flex cursor-pointer items-center justify-center overflow-hidden outline-none;
+
+  /* Ring and tint drawn over the photo (which is z-10), under the badges (z-20). */
+  &::after {
+    @apply pointer-events-none absolute inset-0 z-[15] rounded-[inherit] transition;
+    content: '';
+  }
+
+  &:focus-visible::after {
+    @apply ring-2 ring-inset ring-ring;
+  }
+}
+
+/* Picked up, waiting for the slot it should swap with. White, not the theme's
+ * primary: that is near-black in light mode and vanishes into dark template frames
+ * (classic), and a dark tint reads as "disabled". The thin dark edge keeps the white
+ * ring visible on a pale photo. */
+.slotPicked {
+  &::after {
+    @apply bg-white/20;
+    box-shadow:
+      inset 0 0 0 3px #fff,
+      inset 0 0 0 4px rgb(0 0 0 / 25%);
+  }
+
+  .slotNumber {
+    @apply bg-white text-black;
+  }
+}
+
+/* Every other slot while one is picked: somewhere it can go. */
+.slotTarget::after {
+  @apply border-2 border-dashed border-white/75;
 }
 
 .slotNumber {
