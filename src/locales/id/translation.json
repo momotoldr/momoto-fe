@@ -867,7 +867,12 @@
     "retakeWaitingGroup": "Ambil ulang ditunda sampai cukup banyak dari kalian kembali ke ruangan.",
     "retakeShortHanded": "Ambil ulang ditunda — strip ini diambil dengan lebih banyak orang daripada yang ada di ruangan sekarang. Mereka bisa gabung lagi dengan kode yang sama.",
     "retakeCreatedGroup": "Ambil ulang ditutup — seseorang sudah membuat stripnya.",
-    "retakeCastGrew": "Ambil ulang satu foto ditunda — ada yang bergabung setelah strip ini diambil. Ambil ulang semua untuk mulai lagi bersama semuanya."
+    "retakeCastGrew": "Ambil ulang satu foto ditunda — ada yang bergabung setelah strip ini diambil. Ambil ulang semua untuk mulai lagi bersama semuanya.",
+    "retakeCamOffSelf": "Ambil ulang ditunda — kameramu mati. Nyalakan untuk mengambil ulang.",
+    "retakeCamOff": "Ambil ulang ditunda sampai temanmu menyalakan kameranya.",
+    "retakeCamOffGroup": "Ambil ulang ditunda sampai semua kamera menyala — ada yang masih mati.",
+    "retakeCameras": "Ambil ulang ditunda sampai kamera temanmu terhubung — masih menghubungkan.",
+    "retakeCamerasGroup": "Ambil ulang ditunda sampai semua kamera terhubung — satu masih menghubungkan."
   },
   "tips": {
     "button": "Tips",
