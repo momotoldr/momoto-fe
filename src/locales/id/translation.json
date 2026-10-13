@@ -839,8 +839,10 @@
     "title": "Susun stripmu",
     "subtitle": "Susun ulang atau ambil ulang fotomu sebelum membuat strip.",
     "subtitleGuest": "Host sedang mendesain strip — beginilah tampilan stripmu.",
-    "dragHint": "Seret foto untuk menyusun ulang, atau ketuk ikon ambil ulang untuk mengambilnya lagi.",
-    "dragHintGuest": "Seret foto untuk menyusun ulang stripmu sendiri.",
+    "reorderHint": "Ketuk satu foto, lalu ketuk foto lain untuk menukarnya. Ketuk ikon ambil ulang untuk mengambil ulang satu foto.",
+    "reorderHintGuest": "Ketuk satu foto, lalu ketuk foto lain untuk menukarnya di stripmu sendiri.",
+    "swapSlot": "Tukar foto {{index}}",
+    "swapPicked": "Sekarang ketuk foto yang mau ditukar dengan foto {{index}}, atau ketuk lagi untuk batal.",
     "slotAlt": "Slot strip {{index}}",
     "stripAria": "Strip foto kamu",
     "retakeShot": "Ambil ulang foto {{index}}",
@@ -928,7 +930,7 @@
       "items": {
         "reorder": {
           "title": "Susun ulang potonganmu",
-          "text": "Seret foto ke slot yang kamu mau."
+          "text": "Ketuk satu foto, lalu ketuk foto yang mau ditukar dengannya."
         },
         "retake": {
           "title": "Ambil ulang yang kurang pas",
