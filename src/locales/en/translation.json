@@ -869,7 +869,12 @@
     "retakeWaitingGroup": "Retakes are paused until enough of you are back in the room.",
     "retakeShortHanded": "Retakes are paused — this strip was shot with more people than are in the room now. They can rejoin with the same code.",
     "retakeCreatedGroup": "Retakes are closed — someone has already created their strip.",
-    "retakeCastGrew": "Single retakes are paused — someone joined after this strip was shot. Retake all to start over with everyone."
+    "retakeCastGrew": "Single retakes are paused — someone joined after this strip was shot. Retake all to start over with everyone.",
+    "retakeCamOffSelf": "Retakes are paused — your camera is off. Turn it on to retake.",
+    "retakeCamOff": "Retakes are paused until your friend turns their camera on.",
+    "retakeCamOffGroup": "Retakes are paused until every camera is on — someone has theirs off.",
+    "retakeCameras": "Retakes are paused until your friend's camera is through — it's still connecting.",
+    "retakeCamerasGroup": "Retakes are paused until every camera is through — one is still connecting."
   },
   "tips": {
     "button": "Tips",
