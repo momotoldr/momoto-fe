@@ -8,15 +8,16 @@ import { Button } from '@/components/ui/button'
 import { BACKDROPS, resolveBackdrop } from '@/constants/backdrops'
 import { PHOTO_FILTERS, PHOTO_FILTER_MAP } from '@/constants/filters'
 import { STICKERS } from '@/constants/stickers'
-import { env } from '@/env'
 import {
   STRIP_TEMPLATES,
   STRIP_TEMPLATE_MAP,
   slotAspect,
   slotRadius,
 } from '@/constants/stripTemplates'
+import { env } from '@/env'
 import { useBackdropFrames } from '@/hooks/useBackdropFrames'
 import { useBackdropSupport } from '@/hooks/useBackdropSupport'
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import { usePhotosStore } from '@/store/usePhotosStore'
 import { useRoomStore } from '@/store/useRoomStore'
@@ -209,6 +210,7 @@ export function StripSelector({
    * their DOM nodes on a swap, and a moved node starts from its new style, not the old.
    */
   const swapFrom = useRef<Map<string, DOMRect> | null>(null)
+  const reducedMotion = usePrefersReducedMotion()
 
   const slotElement = (frameId: string) =>
     stripRef.current?.querySelector<HTMLElement>(`[data-frame-id="${frameId}"]`) ?? null
@@ -231,7 +233,7 @@ export function StripSelector({
   useLayoutEffect(() => {
     const from = swapFrom.current
     swapFrom.current = null
-    if (!from || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!from || reducedMotion) return
     for (const [frameId, first] of from) {
       const element = slotElement(frameId)
       if (!element) continue
@@ -258,7 +260,7 @@ export function StripSelector({
       )
     }
     // Runs on every order change; only a swap from `tapSlot` leaves a `from` behind.
-  }, [order])
+  }, [order, reducedMotion])
 
   // A pick is let go by Esc or by a tap anywhere off the strip.
   useEffect(() => {
