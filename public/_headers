@@ -31,9 +31,19 @@
 # scripts/stage-segmentation.mjs), so no CDN host is needed. MediaPipe also posts usage
 # stats to odml.pa.googleapis.com and has no switch to stop it; `connect-src` not listing
 # that host is what keeps it from leaving the device — don't add it, or a wildcard.
+#
+# `b0b4459f….r2.cloudflarestorage.com` is our R2 account's S3 endpoint. Strip and avatar
+# bytes move between the browser and it directly through presigned URLs — PUTs on save
+# (`POST /strips/uploads`, `/auth/me/avatar/uploads`), a ~60 s GET for the paid download
+# (`GET /strips/:id/print-url`) — so they skip Railway egress. Pinned to our account
+# rather than `*.r2.cloudflarestorage.com`: a wildcard would let injected script post data
+# to anyone's bucket. If this is missing, saves and downloads still work — they fall back
+# to going through the API — but every byte is billed again. Every upload goes to the print
+# bucket first, so it is the one bucket that needs a CORS policy for the app origins
+# (docs/ARCHITECTURE.md §5).
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' https://api.momotoldr.com wss://api.momotoldr.com https://realtime.momotoldr.com wss://realtime.momotoldr.com https://peer.momotoldr.com wss://peer.momotoldr.com https://api-staging.momotoldr.com wss://api-staging.momotoldr.com https://realtime-staging.momotoldr.com wss://realtime-staging.momotoldr.com https://peer-staging.momotoldr.com wss://peer-staging.momotoldr.com https://e.momotoldr.com https://e-staging.momotoldr.com https://accounts.google.com; frame-src https://accounts.google.com; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' https://api.momotoldr.com wss://api.momotoldr.com https://realtime.momotoldr.com wss://realtime.momotoldr.com https://peer.momotoldr.com wss://peer.momotoldr.com https://api-staging.momotoldr.com wss://api-staging.momotoldr.com https://realtime-staging.momotoldr.com wss://realtime-staging.momotoldr.com https://peer-staging.momotoldr.com wss://peer-staging.momotoldr.com https://e.momotoldr.com https://e-staging.momotoldr.com https://b0b4459f630920626614f29ce75a51d0.r2.cloudflarestorage.com https://accounts.google.com; frame-src https://accounts.google.com; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(self), microphone=(self), geolocation=(), payment=(self "https://app.midtrans.com" "https://app.sandbox.midtrans.com"), usb=()

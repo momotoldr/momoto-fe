@@ -163,8 +163,8 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   /**
    * On sign-in, push any strips the user cached while signed out up to the server cart,
-   * then load it. Each cached strip is uploaded (watermarked → `/strips`, clean →
-   * print-image); only strips that upload cleanly are dropped from the local cache, so a
+   * then load it. Each cached strip is uploaded through `addStrip`, both copies in one
+   * save; only strips that upload cleanly are dropped from the local cache, so a
    * failure just retries on the next sign-in (and can't re-create a server row it already
    * made).
    *

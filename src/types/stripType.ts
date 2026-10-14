@@ -1,4 +1,5 @@
 import type { SessionMode } from '@/types/roomsType'
+import type { DirectUploadTarget } from '@/types/uploadType'
 
 /** A photo strip stored on the server (the user's cart). Never carries the bytes. */
 export interface StoredStrip {
@@ -118,10 +119,38 @@ export interface StripRemoveResponse {
   quota: StripQuota
 }
 
+/**
+ * What `GET /strips/:id/print-url` hands back: a presigned R2 URL for the clean copy.
+ * Good for one GET of one object, and only until `expiresAt` (about a minute).
+ */
+export interface StripPrintUrlResponse {
+  url: string
+  /** ISO-8601. */
+  expiresAt: string
+}
+
 /** What `POST /strips/unlock` hands back: the same strips, now `paid`. */
 export interface StripUnlockResponse {
   strips: StoredStrip[]
 }
+
+/**
+ * What `POST /strips/uploads` hands back: the strip itself when this `clientKey` was
+ * already saved, otherwise where to PUT each file and the token that completes them.
+ * `thumbnail` is null when none was declared (or it didn't fit) — the server renders one.
+ */
+export type StripUploadStartResponse =
+  | { strip: StoredStrip }
+  | {
+      upload: {
+        token: string
+        files: {
+          watermarked: DirectUploadTarget
+          clean: DirectUploadTarget
+          thumbnail: DirectUploadTarget | null
+        }
+      }
+    }
 
 export interface StripResponse {
   strip: StoredStrip
