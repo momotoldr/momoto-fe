@@ -2,6 +2,7 @@ import { clearStoredToken, getStoredToken, setStoredToken } from '@/constants/au
 import i18n from '@/lib/i18n'
 import type {
   AuthResponse,
+  AvatarUploadStartResponse,
   ChangePasswordRequest,
   LoginRequest,
   MeResponse,
@@ -12,6 +13,7 @@ import type {
 } from '@/types/authType'
 
 import { API_ROUTES } from '../apiRoutes'
+import { putDirect, shouldFallBack, withDirectRetry } from '../directUpload'
 import AxiosClient from '../client/axiosClient'
 
 const authClient = new AxiosClient()
@@ -53,16 +55,46 @@ export async function updateProfile(body: UpdateProfileRequest): Promise<User> {
   return data.user
 }
 
+/** How long the browser → R2 PUT of an avatar may take. A ~30 KB file; this is slack. */
+const AVATAR_UPLOAD_TIMEOUT_MS = 30_000
+
 /**
  * Replace the profile picture. The blob is already cropped and re-encoded by
- * `cropToAvatarBlob`, and goes up as a raw body — there's one file and no other
- * fields, so multipart would only add framing.
+ * `cropToAvatarBlob`.
+ *
+ * Straight to the avatar bucket when it can be, retried there once with a fresh URL, and
+ * through the API only when that fails for a reason the API path could get past (see
+ * `shouldFallBack`) — including a server with no bucket at all, where only the API path
+ * can keep the picture (in Postgres). Replacing a picture twice is harmless, so a
+ * retried upload that landed both times just leaves the second one current.
  */
 export async function uploadAvatar(image: Blob): Promise<User> {
+  try {
+    // A second direct attempt, with a fresh URL, before going through the API.
+    return await withDirectRetry(() => uploadAvatarDirect(image))
+  } catch (err) {
+    if (!shouldFallBack(err)) throw err
+    console.warn('[auth] direct avatar upload failed; uploading through the API', err)
+  }
+  // A raw body — there's one file and no other fields, so multipart would only add framing.
   const { data } = await authClient.postData<MeResponse>(API_ROUTES.AUTH.AVATAR, image, {
     headers: { 'Content-Type': image.type },
   })
   return data.user
+}
+
+/** Declare the avatar, PUT it to the URL the server signed, then complete. */
+async function uploadAvatarDirect(image: Blob): Promise<User> {
+  const { data } = await authClient.postData<AvatarUploadStartResponse>(
+    API_ROUTES.AUTH.AVATAR_UPLOADS,
+    { type: image.type, size: image.size }
+  )
+  await putDirect([{ target: data.upload.file, blob: image }], AVATAR_UPLOAD_TIMEOUT_MS)
+  const { data: done } = await authClient.postData<MeResponse>(
+    API_ROUTES.AUTH.AVATAR_UPLOADS_COMPLETE,
+    { token: data.upload.token }
+  )
+  return done.user
 }
 
 /** Remove the uploaded picture, falling back to the initial-letter placeholder. */

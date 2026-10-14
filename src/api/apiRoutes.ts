@@ -53,8 +53,15 @@ export const API_ROUTES = {
     LOGOUT: '/auth/logout',
     /** Current user (GET) / update profile (PATCH). `/auth/me`. */
     ME: '/auth/me',
-    /** Upload (POST) / remove (DELETE) the profile picture. `/auth/me/avatar`. */
+    /**
+     * Upload (POST) / remove (DELETE) the profile picture. `/auth/me/avatar`. The upload
+     * here sends the bytes through the API — now the fallback to the direct pair below.
+     */
     AVATAR: '/auth/me/avatar',
+    /** Start a direct-to-R2 avatar upload. `POST` `{ type, size }` → `{ upload }`. */
+    AVATAR_UPLOADS: '/auth/me/avatar/uploads',
+    /** Finish one. `POST` `{ token }` → `{ user }`. */
+    AVATAR_UPLOADS_COMPLETE: '/auth/me/avatar/uploads/complete',
     /** Claim an address; mails a confirmation link. `POST /auth/me/email` → 202. */
     EMAIL: '/auth/me/email',
     /** Re-send the pending confirmation link. `POST /auth/me/email/resend` → 202. */
@@ -89,8 +96,18 @@ export const API_ROUTES = {
   },
 
   STRIPS: {
-    /** List the user's saved strips (GET) / upload a new one (POST). `/strips`. */
+    /**
+     * List the user's saved strips (GET) / upload a new one (POST). `/strips`. The upload
+     * here sends the bytes through the API — now the fallback to the direct pair below.
+     */
     ROOT: '/strips',
+    /**
+     * Start a direct-to-R2 strip upload. `POST` with the files' types and sizes and the
+     * save metadata → `{ strip }` (already saved) or `{ upload }` (presigned PUTs + token).
+     */
+    UPLOADS: '/strips/uploads',
+    /** Finish one. `POST` `{ token }` → `{ strip }`. */
+    UPLOADS_COMPLETE: '/strips/uploads/complete',
     /** Serve (GET) / delete (DELETE) one strip. `/strips/:id`. */
     BY_ID: route('/strips/:id', (id: string) => `/strips/${encodeURIComponent(id)}`),
     /**
@@ -104,13 +121,19 @@ export const API_ROUTES = {
      * delete: the files go, the row stays so the payment that bought it still names it.
      */
     REMOVE: route('/strips/:id/remove', (id: string) => `/strips/${encodeURIComponent(id)}/remove`),
-    /** Upload the clean (paid) copy. `POST /strips/:id/print-image`. */
-    PRINT_IMAGE: route(
-      '/strips/:id/print-image',
-      (id: string) => `/strips/${encodeURIComponent(id)}/print-image`
-    ),
-    /** Download the clean file (paid). `GET /strips/:id/print`. */
+    /**
+     * Download the clean file (paid), streamed through the API. `GET /strips/:id/print`.
+     * Now only the fallback when the direct R2 download below fails.
+     */
     PRINT: route('/strips/:id/print', (id: string) => `/strips/${encodeURIComponent(id)}/print`),
+    /**
+     * A presigned, ~60 s R2 URL for the clean file (paid), so the browser downloads it
+     * straight from the bucket. `GET /strips/:id/print-url` → `{ url, expiresAt }`.
+     */
+    PRINT_URL: route(
+      '/strips/:id/print-url',
+      (id: string) => `/strips/${encodeURIComponent(id)}/print-url`
+    ),
   },
 
   PAYMENTS: {

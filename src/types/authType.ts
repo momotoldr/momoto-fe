@@ -1,3 +1,5 @@
+import type { DirectUploadTarget } from '@/types/uploadType'
+
 /** A linked partner's public summary (see partner linking). */
 export interface PublicPartner {
   id: string
@@ -78,6 +80,11 @@ export interface AuthResponse {
 /** Response shape for `GET /auth/me` and `PATCH /auth/me`. */
 export interface MeResponse {
   user: User
+}
+
+/** What `POST /auth/me/avatar/uploads` hands back: where to PUT it, and the completing token. */
+export interface AvatarUploadStartResponse {
+  upload: { token: string; file: DirectUploadTarget }
 }
 
 /**
