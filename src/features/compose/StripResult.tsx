@@ -37,6 +37,11 @@ import styles from './StripResult.module.scss'
 interface StripResultProps {
   /** Recovery only: re-run capture from scratch if composition fails. */
   onRetake: () => void
+  /**
+   * Why that recovery retake is on hold (a camera is off or still connecting), or null.
+   * Already localized.
+   */
+  retakeBlockedReason: string | null
 }
 
 /** How few slots must remain before a save is worth warning about. */
@@ -56,7 +61,7 @@ function withSlotsLeft(t: TFunction, message: string, held: number): string {
 }
 
 /** Composes the captured frames into a strip and offers share / download / retake. */
-export function StripResult({ onRetake }: StripResultProps) {
+export function StripResult({ onRetake, retakeBlockedReason }: StripResultProps) {
   const { t } = useTranslation()
   const { roomId } = useParams<{ roomId: string }>()
   const [searchParams] = useSearchParams()
@@ -493,9 +498,15 @@ export function StripResult({ onRetake }: StripResultProps) {
               trackClick(TRACK_IDS.RESULT_RETAKE)
               onRetake()
             }}
+            disabled={retakeBlockedReason !== null}
           >
             <RotateCcw /> {t('result.retake')}
           </Button>
+        )}
+        {canEdit && retakeBlockedReason && (
+          <p className={styles.message} role="status" aria-live="polite">
+            {retakeBlockedReason}
+          </p>
         )}
       </div>
     )

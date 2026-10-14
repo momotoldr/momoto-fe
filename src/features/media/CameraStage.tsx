@@ -139,31 +139,6 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
     [mode, t]
   )
 
-  // Why the cameras are on hold, worded for the retake controls, or null when they
-  // aren't. The start button says the same thing in its own words (`waitingNote`).
-  const retakeBlockedReason = peerAway
-    ? t(mode === 'group' ? 'select.retakeWaitingGroup' : 'select.retakeWaiting')
-    : offline
-      ? t('select.retakeOffline')
-      : peerCreated
-        ? line('select.retakeCreated')
-        : castBelow
-          ? t('select.retakeShortHanded')
-          : null
-
-  /**
-   * Re-shooting one slot has a hold that "Retake all" doesn't: someone has *joined*
-   * since the strip was shot.
-   *
-   * The two directions aren't symmetric. Fewer people than the strip holds both, because
-   * discarding four good cuts over an absence that is usually a reconnect costs more
-   * than waiting. More people holds only the single-slot retake — starting over is
-   * exactly how you get the newcomer into the strip, so taking that away would strand
-   * them out of it for the rest of the session.
-   */
-  const retakeShotBlockedReason =
-    retakeBlockedReason ?? (castAbove ? t('select.retakeCastGrew') : null)
-
   // Shape the live tiles like the cut they will produce: the chosen template's slot,
   // split between however many cameras are in the room. Without this the tiles are
   // portrait while every slot is landscape, so the strip crops the framing away —
@@ -207,6 +182,45 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
    * cut is blank.
    */
   const peerCamOff = mode !== 'solo' && livePeerIds.some((id) => peers[id]?.camEnabled === false)
+
+  // The start button's camera holds apply to a retake too — it re-runs the same
+  // countdown. A camera still connecting would leave this device laying out a smaller
+  // grid than everyone else's; one switched off would be shot as a black square. Kept
+  // apart from the rest so the compose-error retake on the result screen can hold on
+  // these alone.
+  const retakeCameraReason = camerasConnecting
+    ? line('select.retakeCameras')
+    : !camEnabled
+      ? t('select.retakeCamOffSelf')
+      : peerCamOff
+        ? line('select.retakeCamOff')
+        : null
+
+  // Why the cameras are on hold, worded for the retake controls, or null when they
+  // aren't. The start button says the same thing in its own words (`waitingNote`).
+  const retakeBlockedReason = peerAway
+    ? t(mode === 'group' ? 'select.retakeWaitingGroup' : 'select.retakeWaiting')
+    : offline
+      ? t('select.retakeOffline')
+      : peerCreated
+        ? line('select.retakeCreated')
+        : castBelow
+          ? t('select.retakeShortHanded')
+          : retakeCameraReason
+
+  /**
+   * Re-shooting one slot has a hold that "Retake all" doesn't: someone has *joined*
+   * since the strip was shot.
+   *
+   * The two directions aren't symmetric. Fewer people than the strip holds both, because
+   * discarding four good cuts over an absence that is usually a reconnect costs more
+   * than waiting. More people holds only the single-slot retake — starting over is
+   * exactly how you get the newcomer into the strip, so taking that away would strand
+   * them out of it for the rest of the session.
+   */
+  const retakeShotBlockedReason =
+    retakeBlockedReason ?? (castAbove ? t('select.retakeCastGrew') : null)
+
   /**
    * The tiles on screen, and the grid they sit in.
    *
@@ -524,7 +538,7 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
         <div className={styles.arrange}>
           {cameraRail(t('result.stillLiveNote'))}
           <div className={styles.arrangePanel}>
-            <StripResult onRetake={retakeAll} />
+            <StripResult onRetake={retakeAll} retakeBlockedReason={retakeCameraReason} />
           </div>
         </div>
       </div>
