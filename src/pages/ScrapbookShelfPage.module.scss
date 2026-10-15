@@ -25,10 +25,6 @@
   @apply flex items-center gap-5;
 }
 
-.spin {
-  @apply animate-spin;
-}
-
 /* ── Capacity meter (the gallery's) ──────────────────────────────────────── */
 
 .meter {
@@ -134,6 +130,10 @@
 
 .emptyText {
   @apply text-sm leading-relaxed text-muted-foreground;
+}
+
+.emptyCta {
+  @apply mt-4;
 }
 
 .state {

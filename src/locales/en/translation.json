@@ -124,6 +124,7 @@
     "ctaSecondary": "Open the Photobooth",
     "menuTitle": "What you can do",
     "menuSubtitle": "One booth today, more moments on the way.",
+    "menuSubtitleMany": "A few things to do together today, more moments on the way.",
     "browseActivities": "Browse all activities",
     "howTitle": "How it works",
     "ctaBannerTitle": "Ready for your close-up?",
@@ -146,6 +147,20 @@
         "share": {
           "title": "Make it yours",
           "desc": "Add filters and stickers, then download or share."
+        }
+      },
+      "scrapbook": {
+        "fill": {
+          "title": "Fill the pages",
+          "desc": "Place your unlocked strips in the spots each page saves for them."
+        },
+        "write": {
+          "title": "Add your words",
+          "desc": "Give it a title, then write captions and little notes beside your photos."
+        },
+        "keep": {
+          "title": "Finish and keep",
+          "desc": "Unlock your finished scrapbook and download it as a PDF."
         }
       },
       "draw": {
@@ -1690,7 +1705,8 @@
       "createError": "Couldn't start a scrapbook. Try again.",
       "emptyTitle": "No scrapbooks yet",
       "emptyText": "A scrapbook is {{pages}} pages to fill with your unlocked strips and your own words.",
-      "coverAlt": "Cover of {{title}}"
+      "coverAlt": "Cover of {{title}}",
+      "emptyCta": "Start your first scrapbook"
     },
     "editor": {
       "back": "All scrapbooks",
@@ -1801,6 +1817,15 @@
       "changed": "This scrapbook was changed somewhere else. Check it and finish again.",
       "unsaved": "Couldn't save your latest changes. Try again.",
       "failed": "Couldn't finish it. Try again."
+    },
+    "picker": {
+      "title": "Choose a template",
+      "subtitle": "Each template is a fixed set of pages to fill with your strips and words. A scrapbook keeps its template — to try another, start a new scrapbook.",
+      "templates": "Templates",
+      "pagesLabel": "Pages in this template",
+      "pages_one": "{{count}} page",
+      "pages_other": "{{count}} pages",
+      "use": "Use this template"
     }
   }
 }

@@ -5,6 +5,7 @@ export const ROUTES = {
   cart: '/cart',
   gallery: '/gallery',
   scrapbook: '/scrapbook',
+  scrapbookNew: '/scrapbook/new',
   scrapbookEdit: '/scrapbook/:scrapbookId',
   help: '/help',
   terms: '/terms',

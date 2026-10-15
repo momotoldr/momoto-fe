@@ -20,6 +20,7 @@ import { ResetPasswordPage } from '@/pages/ResetPasswordPage'
 import { RoomPage } from '@/pages/RoomPage'
 import { ScrapbookPage } from '@/pages/ScrapbookPage'
 import { ScrapbookShelfPage } from '@/pages/ScrapbookShelfPage'
+import { ScrapbookTemplatePage } from '@/pages/ScrapbookTemplatePage'
 import { ServerDownPage } from '@/pages/ServerDownPage'
 import { TermsPage } from '@/pages/TermsPage'
 import { VerifyEmailPage } from '@/pages/VerifyEmailPage'
@@ -85,6 +86,8 @@ const router = createBrowserRouter([
           ...(env.scrapbookEnabled
             ? [
                 { path: '/scrapbook', element: <ScrapbookShelfPage /> },
+                // Static, so it ranks above `:scrapbookId` — "new" is never an id.
+                { path: '/scrapbook/new', element: <ScrapbookTemplatePage /> },
                 { path: '/scrapbook/:scrapbookId', element: <ScrapbookPage /> },
               ]
             : []),

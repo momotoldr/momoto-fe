@@ -1,10 +1,9 @@
 import { BookHeart, Loader2, Plus, TriangleAlert } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
+import { Link } from 'react-router-dom'
 
-import { ANALYTICS_EVENTS, trackEvents, useTrackPageView } from '@/analytics'
+import { useTrackPageView } from '@/analytics'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
 import { DEFAULT_SCRAPBOOK_TEMPLATE_ID, getScrapbookTemplate } from '@/constants/scrapbookTemplates'
@@ -21,57 +20,27 @@ const editPath = (id: string) => ROUTES.scrapbookEdit.replace(':scrapbookId', id
  * and paid alike, each with a tape saying which — and the way to start another. Paid
  * scrapbooks live here, never in the gallery (user decision, 2026-10-14).
  *
- * Someone arriving with no scrapbooks at all is dropped straight into a new draft: an empty
- * shelf with one button on it is a step that asks nothing of them.
+ * Nothing is created here. "New scrapbook" — and the empty shelf's own button — go to the
+ * template picker (`/scrapbook/new`), and a draft exists only once a template is chosen
+ * there. (Until 2026-10-15 an empty shelf created a draft on arrival; the user changed
+ * that, since merely looking left an empty draft saved to the account.)
  */
 export function ScrapbookShelfPage() {
   useTrackPageView()
   const { t, i18n } = useTranslation()
-  const navigate = useNavigate()
 
   const shelf = useScrapbookStore((state) => state.shelf)
   const quota = useScrapbookStore((state) => state.quota)
   const status = useScrapbookStore((state) => state.shelfStatus)
   const loadShelf = useScrapbookStore((state) => state.loadShelf)
-  const create = useScrapbookStore((state) => state.create)
 
   // Whether *this visit's* load has landed. The store may still hold an earlier visit's
-  // list, and starting a draft off that stale (possibly empty) copy would be wrong.
+  // list, which shouldn't be shown as current — an empty one least of all.
   const [loaded, setLoaded] = useState(false)
-  const [creating, setCreating] = useState(false)
-  // Once per visit, whatever React does with effects in development.
-  const autoStarted = useRef(false)
 
   useEffect(() => {
     void loadShelf().then(() => setLoaded(true))
   }, [loadShelf])
-
-  const startNew = useCallback(
-    async (auto: boolean) => {
-      setCreating(true)
-      const result = await create()
-      setCreating(false)
-      if (result.ok) {
-        trackEvents(ANALYTICS_EVENTS.SCRAPBOOK_CREATED, { from: 'new' })
-        navigate(editPath(result.scrapbook.id), { replace: auto })
-        return
-      }
-      if (!auto || result.reason === 'limit') {
-        toast.error(
-          result.reason === 'limit'
-            ? t('scrapbook.shelf.limit', { limit: quota?.limit ?? 0 })
-            : t('scrapbook.shelf.createError')
-        )
-      }
-    },
-    [create, navigate, quota?.limit, t]
-  )
-
-  useEffect(() => {
-    if (!loaded || status !== 'ready' || shelf.length > 0 || autoStarted.current) return
-    autoStarted.current = true
-    void startNew(true)
-  }, [loaded, status, shelf.length, startNew])
 
   if (!loaded && shelf.length === 0) {
     return (
@@ -124,10 +93,22 @@ export function ScrapbookShelfPage() {
               </span>
             </div>
           )}
-          <Button disabled={full || creating} onClick={() => void startNew(false)}>
-            {creating ? <Loader2 className={styles.spin} /> : <Plus />}
-            {t(creating ? 'scrapbook.shelf.creating' : 'scrapbook.shelf.new')}
-          </Button>
+          {/* A link styled as the button, so it can't be followed at the cap. */}
+          {full ? (
+            <Button disabled>
+              <Plus />
+              {t('scrapbook.shelf.new')}
+            </Button>
+          ) : (
+            shelf.length > 0 && (
+              <Button asChild>
+                <Link to={ROUTES.scrapbookNew}>
+                  <Plus />
+                  {t('scrapbook.shelf.new')}
+                </Link>
+              </Button>
+            )
+          )}
         </div>
       </header>
 
@@ -138,6 +119,12 @@ export function ScrapbookShelfPage() {
           </span>
           <h2 className={styles.emptyTitle}>{t('scrapbook.shelf.emptyTitle')}</h2>
           <p className={styles.emptyText}>{t('scrapbook.shelf.emptyText', { pages })}</p>
+          <Button asChild className={styles.emptyCta}>
+            <Link to={ROUTES.scrapbookNew}>
+              <Plus />
+              {t('scrapbook.shelf.emptyCta')}
+            </Link>
+          </Button>
         </div>
       ) : (
         <ul className={styles.shelf}>

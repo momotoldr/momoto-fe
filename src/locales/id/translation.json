@@ -124,6 +124,7 @@
     "ctaSecondary": "Buka Photobooth",
     "menuTitle": "Yang bisa kamu lakukan",
     "menuSubtitle": "Satu booth hari ini, lebih banyak momen menyusul.",
+    "menuSubtitleMany": "Beberapa hal untuk dilakukan bersama hari ini, lebih banyak momen menyusul.",
     "browseActivities": "Lihat semua aktivitas",
     "howTitle": "Cara kerjanya",
     "ctaBannerTitle": "Siap tampil di depan kamera?",
@@ -146,6 +147,20 @@
         "share": {
           "title": "Sesuaikan gayamu",
           "desc": "Tambahkan filter dan stiker, lalu unduh atau bagikan."
+        }
+      },
+      "scrapbook": {
+        "fill": {
+          "title": "Isi halamannya",
+          "desc": "Letakkan strip yang sudah kamu buka di tempat yang disediakan tiap halaman."
+        },
+        "write": {
+          "title": "Tambahkan tulisanmu",
+          "desc": "Beri judul, lalu tulis keterangan dan catatan kecil di samping fotomu."
+        },
+        "keep": {
+          "title": "Selesaikan dan simpan",
+          "desc": "Buka scrapbook yang sudah selesai dan unduh sebagai PDF."
         }
       },
       "draw": {
@@ -1683,7 +1698,8 @@
       "createError": "Scrapbook tidak bisa dibuat. Coba lagi.",
       "emptyTitle": "Belum ada scrapbook",
       "emptyText": "Scrapbook berisi {{pages}} halaman untuk diisi dengan strip yang sudah kamu buka dan tulisanmu sendiri.",
-      "coverAlt": "Sampul {{title}}"
+      "coverAlt": "Sampul {{title}}",
+      "emptyCta": "Mulai scrapbook pertamamu"
     },
     "editor": {
       "back": "Semua scrapbook",
@@ -1794,6 +1810,15 @@
       "changed": "Scrapbook ini diubah di tempat lain. Periksa lalu selesaikan lagi.",
       "unsaved": "Perubahan terakhirmu tidak bisa disimpan. Coba lagi.",
       "failed": "Tidak bisa diselesaikan. Coba lagi."
+    },
+    "picker": {
+      "title": "Pilih template",
+      "subtitle": "Setiap template berisi halaman tetap untuk diisi dengan strip dan tulisanmu. Template tidak bisa diganti — untuk mencoba yang lain, mulai scrapbook baru.",
+      "templates": "Template",
+      "pagesLabel": "Halaman di template ini",
+      "pages_one": "{{count}} halaman",
+      "pages_other": "{{count}} halaman",
+      "use": "Pakai template ini"
     }
   }
 }
