@@ -114,7 +114,7 @@ const FONT_STACK = 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-se
 const MIN_CANVAS_WIDTH = 600
 const MAX_CANVAS_WIDTH = 1400
 
-function loadImage(src: string): Promise<HTMLImageElement> {
+export function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
     img.onload = () => resolve(img)

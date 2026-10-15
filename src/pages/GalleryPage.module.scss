@@ -172,6 +172,11 @@
 
 /* ── Remove dialog ───────────────────────────────────────────────────────── */
 
+/* The strip is placed in a scrapbook that can still change: say what removing it does there. */
+.removeScrapbook {
+  @apply mt-3 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900;
+}
+
 /* "Download it first", inside the confirm dialog: a quiet text button above the dialog's
  * own actions, so the safe path is offered without competing with Cancel / Remove. */
 .removeDownload {

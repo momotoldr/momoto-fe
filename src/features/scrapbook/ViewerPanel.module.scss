@@ -1,0 +1,31 @@
+/* A finished or paid scrapbook's actions, in the page's side column (and on a phone, under
+ * the page — there's no selection to wait for). */
+
+.panel {
+  @apply flex flex-col gap-4;
+}
+
+.text {
+  @apply text-sm leading-relaxed;
+}
+
+/* A payment opened earlier and not yet settled — the cart's resume banner, in small. */
+.pending {
+  @apply flex items-center justify-between gap-3 rounded-[0.625rem] border border-amber-300/60 bg-amber-50 px-3 py-2.5 text-[0.8125rem] font-medium text-amber-900;
+}
+
+.actions {
+  @apply flex flex-col gap-2;
+}
+
+.discard {
+  @apply text-destructive;
+
+  &:hover {
+    @apply bg-destructive/10 text-destructive;
+  }
+}
+
+.spin {
+  @apply animate-spin;
+}

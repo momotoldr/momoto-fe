@@ -18,6 +18,8 @@ import { ProfilePage } from '@/pages/ProfilePage'
 import { RegisterPage } from '@/pages/RegisterPage'
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage'
 import { RoomPage } from '@/pages/RoomPage'
+import { ScrapbookPage } from '@/pages/ScrapbookPage'
+import { ScrapbookShelfPage } from '@/pages/ScrapbookShelfPage'
 import { ServerDownPage } from '@/pages/ServerDownPage'
 import { TermsPage } from '@/pages/TermsPage'
 import { VerifyEmailPage } from '@/pages/VerifyEmailPage'
@@ -78,6 +80,14 @@ const router = createBrowserRouter([
           // The gallery holds unlocked strips, which only exist against an account —
           // there is nothing here for a guest to see, so it sits behind the same wall.
           { path: '/gallery', element: <GalleryPage /> },
+          // Scrapbooks are built from unlocked strips and saved to the account, so they
+          // sit behind the wall like the gallery. Unregistered while the flag is off.
+          ...(env.scrapbookEnabled
+            ? [
+                { path: '/scrapbook', element: <ScrapbookShelfPage /> },
+                { path: '/scrapbook/:scrapbookId', element: <ScrapbookPage /> },
+              ]
+            : []),
           { path: '/profile', element: <ProfilePage /> },
         ],
       },

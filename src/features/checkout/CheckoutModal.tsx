@@ -18,10 +18,16 @@ import styles from './CheckoutModal.module.scss'
 interface CheckoutModalProps {
   phase: CheckoutPhase
   attempt: PaymentAttempt | null
+  /** What this checkout pays for. Strips (the cart) unless said otherwise. */
+  kind?: 'strips' | 'scrapbook'
   /** Strips this checkout covers — drives the header count before an attempt exists. */
   count: number
-  /** Total in whole rupiah, shown before charging (the server recomputes it anyway). */
-  grossAmount: number
+  /**
+   * Total in whole rupiah, shown before charging (the server recomputes it anyway). Null
+   * when the client doesn't know the price yet — the header then shows no total until the
+   * charge returns the real one.
+   */
+  grossAmount: number | null
   onChoose: (method: PaymentMethod) => void
   onClose: () => void
 }
@@ -37,6 +43,7 @@ interface CheckoutModalProps {
 export function CheckoutModal({
   phase,
   attempt,
+  kind = 'strips',
   count,
   grossAmount,
   onChoose,
@@ -103,7 +110,11 @@ export function CheckoutModal({
           <div>
             <h2 className={styles.title}>{t('checkout.title')}</h2>
             <p className={styles.subtitle}>
-              {t('checkout.summary', { count: strips, total: formatIdr(total) })}
+              {kind === 'scrapbook'
+                ? total === null
+                  ? t('checkout.summaryScrapbookNoPrice')
+                  : t('checkout.summaryScrapbook', { total: formatIdr(total) })
+                : t('checkout.summary', { count: strips, total: formatIdr(total ?? 0) })}
             </p>
           </div>
           <button
@@ -195,16 +206,22 @@ export function CheckoutModal({
         {phase === 'paid' && (
           <div className={styles.centred}>
             <CheckCircle2 className={styles.success} />
-            <p className={styles.message}>{t('payment.success')}</p>
+            <p className={styles.message}>
+              {t(kind === 'scrapbook' ? 'checkout.successScrapbook' : 'payment.success')}
+            </p>
             <Button onClick={onClose}>{t('common.close')}</Button>
           </div>
         )}
 
-        {(phase === 'failed' || phase === 'expired') && (
+        {(phase === 'failed' || phase === 'expired' || phase === 'busy') && (
           <div className={styles.centred}>
             <TimerOff className={styles.failure} />
             <p className={styles.message}>
-              {phase === 'expired' ? t('checkout.expired') : t('payment.failed')}
+              {phase === 'expired'
+                ? t('checkout.expired')
+                : phase === 'busy'
+                  ? t('checkout.otherPayment')
+                  : t('payment.failed')}
             </p>
             <Button onClick={onClose}>{t('common.close')}</Button>
           </div>

@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
-import { TRACK_IDS, trackClick, useTrackPageView } from '@/analytics'
+import { ANALYTICS_EVENTS, TRACK_IDS, trackClick, trackEvents, useTrackPageView } from '@/analytics'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
@@ -248,6 +248,7 @@ export function CartPage() {
    * amount of retrying here will do.
    */
   const unlockStrip = async (strip: StoredStrip) => {
+    trackEvents(ANALYTICS_EVENTS.UNLOCK_CLICKED, { paymentsEnabled: payEnabled, item: 'strips' })
     if (payEnabled) {
       checkout([strip.id])
       return

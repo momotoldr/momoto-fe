@@ -6,6 +6,7 @@ import { getMe, hasStoredToken } from '@/api/services/authService'
 import { pingServer } from '@/api/services/healthService'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useCartStore } from '@/store/useCartStore'
+import { useScrapbookStore } from '@/store/useScrapbookStore'
 import { useServerStore } from '@/store/useServerStore'
 
 /**
@@ -30,7 +31,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // sign-out — it's only ever written while signed out and cleared as it syncs.
   useEffect(() => {
     if (authStatus === 'authenticated') void useCartStore.getState().syncGuestStrips()
-    else if (authStatus === 'unauthenticated') useCartStore.getState().reset()
+    else if (authStatus === 'unauthenticated') {
+      useCartStore.getState().reset()
+      // Scrapbooks are loaded on demand, not here, but go with the session all the same.
+      useScrapbookStore.getState().reset()
+    }
   }, [authStatus])
 
   useEffect(() => {

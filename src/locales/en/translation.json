@@ -97,6 +97,11 @@
         "title": "Virtual Photobooth",
         "desc": "Snap a synced four-cut strip solo or with a friend, add filters and stickers, then download or share."
       },
+      "scrapbook": {
+        "title": "Scrapbook",
+        "desc": "Fill a little book with your unlocked strips and your own words, then keep it as a PDF.",
+        "open": "Open your scrapbooks"
+      },
       "draw": {
         "title": "Draw Together",
         "desc": "Draw something connected to the two of you."
@@ -374,6 +379,14 @@
               "Close other tabs and apps to free up memory, then try again.",
               "If it says it isn't available on this device, choose Original — the rest of your strip works as usual."
             ]
+          },
+          "scrapbookStrips": {
+            "q": "Why can't I use a strip from my cart in my scrapbook?",
+            "a": "A scrapbook is made from the clean, watermark-free copies of your strips, and only strips you've unlocked have one. Unlock the strip first — it moves to your gallery — and it will show up in the scrapbook's strip tray.",
+            "steps": [
+              "Open your cart and choose Unlock on the strip.",
+              "Go back to your scrapbook and tap the place for it — the strip is in the tray now."
+            ]
           }
         }
       },
@@ -426,6 +439,14 @@
           "refund": {
             "q": "Can I get a refund?",
             "a": "Unlocking gives you a digital file straight away, so unlocked strips generally can't be refunded — unless the law requires it, or a problem on our side stops you from downloading a strip you paid for. If that happens, contact us and we'll put it right."
+          },
+          "scrapbookFinal": {
+            "q": "Can I edit my scrapbook after buying it?",
+            "a": "No — a paid scrapbook is final, so the PDF you bought always matches what you paid for. You can make a new version from it, though: Duplicate copies its pages and text into a new draft.",
+            "steps": [
+              "Before paying, Keep editing takes a finished scrapbook back to a draft.",
+              "After paying, open it and choose Duplicate to start a new draft from it."
+            ]
           }
         }
       },
@@ -551,7 +572,8 @@
           "Payments are handled by our third-party payment provider, Midtrans. By paying, you also agree to the provider's terms. We receive confirmation that a payment succeeded and an order reference, but we don't collect or store your full card or bank details.",
           "Because a purchase immediately unlocks a digital file for download, paid strips are generally non-refundable once unlocked — except where a refund is required by law, or where a technical fault on our side stops you from downloading a strip you paid for. If that happens, contact us and we'll put it right.",
           "You can remove an unlocked strip from your gallery at any time. Removing it permanently deletes its files, so a removed strip can't be restored, downloaded again or refunded. The record of your purchase stays."
-        ]
+        ],
+        "scrapbook": "Scrapbooks work the same way. Once you finish a scrapbook and pay for it, it's final: it can't be edited, and it's non-refundable on the same terms as strips. Before you pay, you can still go back and keep editing. Removing a paid scrapbook permanently deletes its PDF; the record of your purchase stays."
       },
       "acceptableUse": {
         "title": "Acceptable Use",
@@ -1219,7 +1241,8 @@
     "removeCancel": "Keep it",
     "removed": "Strip removed. That slot is free again.",
     "removeError": "Couldn't remove that strip. Please try again.",
-    "removeStale": "That strip had already changed — your gallery is up to date now."
+    "removeStale": "That strip had already changed — your gallery is up to date now.",
+    "removeInScrapbook": "This strip is in a scrapbook you haven't bought yet. Its place there will be left empty."
   },
   "payment": {
     "success": "Payment complete — your strip is unlocked!",
@@ -1402,6 +1425,7 @@
         "colAmount": "Amount",
         "orderLine_one": "{{count}} strip · print",
         "orderLine_other": "{{count}} strips · print",
+        "scrapbookLine": "Scrapbook · {{title}}",
         "emptyTitle": "No purchases yet",
         "emptyBody": "Paying for a strip unlocks the clean, watermark-free copy and moves it into your gallery. Orders show up here once you do.",
         "openCart": "Open your cart",
@@ -1633,6 +1657,150 @@
     "expired": "This payment expired. Start a new one when you’re ready.",
     "resumed": "You have a payment in progress.",
     "saveQr": "Save QR",
-    "qrSaveError": "Couldn't save that QR code."
+    "qrSaveError": "Couldn't save that QR code.",
+    "summaryScrapbook": "Scrapbook · {{total}}",
+    "summaryScrapbookNoPrice": "Scrapbook",
+    "otherPayment": "Another payment is still open on your account. Finish it, or wait for it to expire, then try again.",
+    "successScrapbook": "Payment complete — your scrapbook is unlocked!"
+  },
+  "scrapbook": {
+    "templates": {
+      "kraftNotes": "Kraft notes"
+    },
+    "states": {
+      "draft": "Draft",
+      "finished": "Ready to unlock",
+      "paid": "Yours"
+    },
+    "shelf": {
+      "title": "Your scrapbooks",
+      "subtitle_one": "{{count}} scrapbook",
+      "subtitle_other": "{{count}} scrapbooks",
+      "subtitleEmpty": "Fill pages with your strips and a few words",
+      "new": "New scrapbook",
+      "creating": "Starting…",
+      "meter": "{{used}} of {{limit}}",
+      "meterFull": "Full · {{used}} of {{limit}}",
+      "loading": "Loading your scrapbooks…",
+      "loadError": "Couldn't load your scrapbooks.",
+      "retry": "Try again",
+      "untitled": "Untitled scrapbook",
+      "edited": "Edited {{date}}",
+      "limit": "You have {{limit}} scrapbooks already. Delete a draft to start another.",
+      "createError": "Couldn't start a scrapbook. Try again.",
+      "emptyTitle": "No scrapbooks yet",
+      "emptyText": "A scrapbook is {{pages}} pages to fill with your unlocked strips and your own words.",
+      "coverAlt": "Cover of {{title}}"
+    },
+    "editor": {
+      "back": "All scrapbooks",
+      "titleLabel": "Scrapbook name",
+      "titlePlaceholder": "Name your scrapbook",
+      "saved": "Saved",
+      "saving": "Saving…",
+      "pending": "Unsaved changes",
+      "saveError": "Couldn't save — retrying",
+      "page": "Page {{n}} of {{total}}",
+      "pageCover": "Cover",
+      "pageBack": "Back cover",
+      "pages": "Pages",
+      "previous": "Previous page",
+      "next": "Next page",
+      "hint": "Tap a place on the page to add a strip or write.",
+      "loading": "Opening your scrapbook…",
+      "loadError": "Couldn't open this scrapbook.",
+      "notFound": "This scrapbook doesn't exist, or isn't yours.",
+      "unsupported": "This scrapbook was made with a design this version of Momoto doesn't have. Reload the page to update.",
+      "addStrip_4x1": "Add a 4×1 strip",
+      "addStrip_2x2": "Add a 2×2 strip",
+      "stripRemoved": "Photo removed from your gallery",
+      "close": "Done"
+    },
+    "tray": {
+      "title_4x1": "Your 4×1 strips",
+      "title_2x2": "Your 2×2 strips",
+      "hint": "Only strips you've unlocked can go in a scrapbook.",
+      "remove": "Take this strip out",
+      "inUse": "On this page",
+      "empty_4x1": "No unlocked 4×1 strips yet.",
+      "empty_2x2": "No unlocked 2×2 strips yet.",
+      "toCart": "Unlock strips in your cart",
+      "toBooth": "Take new photos",
+      "loading": "Loading your strips…",
+      "stripAlt": "Strip from {{date}}"
+    },
+    "text": {
+      "label_coverTitle": "Title",
+      "label_coverSubtitle": "Subtitle",
+      "label_heading": "Heading",
+      "label_caption": "Caption",
+      "label_note": "Note",
+      "label_closing": "Closing note",
+      "counter": "{{used}} / {{max}}",
+      "lines": "Line {{used}} of {{max}}",
+      "full": "That's as much as fits here."
+    },
+    "placeholders": {
+      "coverTitle": "Your title",
+      "coverSubtitle": "A date or a place",
+      "heading": "A heading",
+      "caption": "A caption",
+      "note": "Write something…",
+      "closing": "A last word"
+    },
+    "viewer": {
+      "finished": "Finished. Unlock it to download the PDF.",
+      "paid": "This scrapbook is yours. It can't be changed now — duplicate it to make another.",
+      "keepEditing": "Keep editing",
+      "duplicate": "Duplicate",
+      "duplicated": "Copied — this is your new draft.",
+      "delete": "Delete",
+      "remove": "Remove",
+      "reopenError": "Couldn't reopen it. Try again.",
+      "paymentInProgress": "A payment for this scrapbook is still open.",
+      "unlock": "Unlock",
+      "unlockPrice": "Unlock · {{price}}",
+      "unlocking": "Unlocking…",
+      "unlocked": "Unlocked — your PDF is ready.",
+      "unlockError": "Couldn't unlock it. Try again.",
+      "download": "Download PDF",
+      "downloading": "Preparing…",
+      "downloadError": "Couldn't download the PDF. Try again.",
+      "paymentPending": "Payment in progress · {{total}}",
+      "resume": "Resume",
+      "paidToast": "Payment received — your scrapbook is ready."
+    },
+    "discard": {
+      "deleteTitle": "Delete this scrapbook?",
+      "deleteDescription": "Its pages and text are deleted for good. Your strips stay in your gallery.",
+      "removeTitle": "Remove this scrapbook?",
+      "removeDescription": "Its PDF is deleted for good — download it first if you want to keep it. Your purchase stays on record, but this can't be undone.",
+      "confirmDelete": "Delete",
+      "confirmRemove": "Remove",
+      "working": "Working…",
+      "cancel": "Cancel",
+      "done": "Scrapbook deleted.",
+      "stale": "That scrapbook changed in the meantime — the list has been refreshed.",
+      "error": "Couldn't do that. Try again."
+    },
+    "finish": {
+      "button": "Finish",
+      "confirmTitle": "Finish this scrapbook?",
+      "confirmDescription": "We'll make the PDF from your pages. After that it can't be changed — unless you choose Keep editing before you unlock it.",
+      "empty_one": "{{count}} place for a strip is still empty. It will print as blank paper.",
+      "empty_other": "{{count}} places for strips are still empty. They will print as blank paper.",
+      "confirm": "Finish",
+      "cancel": "Keep editing",
+      "saving": "Saving your changes…",
+      "rendering": "Making page {{page}} of {{total}}…",
+      "uploading": "Uploading…",
+      "stop": "Cancel",
+      "otherTab": "Finishing in another tab…",
+      "done": "Finished. Unlock it to download the PDF.",
+      "cancelled": "Finish cancelled — nothing was changed.",
+      "changed": "This scrapbook was changed somewhere else. Check it and finish again.",
+      "unsaved": "Couldn't save your latest changes. Try again.",
+      "failed": "Couldn't finish it. Try again."
+    }
   }
 }

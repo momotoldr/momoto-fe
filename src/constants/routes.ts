@@ -4,6 +4,8 @@ export const ROUTES = {
   photobooth: '/photobooth',
   cart: '/cart',
   gallery: '/gallery',
+  scrapbook: '/scrapbook',
+  scrapbookEdit: '/scrapbook/:scrapbookId',
   help: '/help',
   terms: '/terms',
   privacy: '/privacy',

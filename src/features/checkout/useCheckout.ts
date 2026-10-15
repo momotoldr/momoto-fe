@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { ANALYTICS_EVENTS, trackEvents } from '@/analytics'
+import ApiError from '@/api/apiError'
 import {
   createCharge,
   getPayment,
@@ -16,7 +18,24 @@ import type { PaymentAttempt, PaymentMethod } from '@/types/stripType'
  * ends only on a terminal status from the server or on the attempt expiring.
  */
 export type CheckoutPhase =
-  'closed' | 'method' | 'charging' | 'awaiting' | 'paid' | 'failed' | 'expired'
+  'closed' | 'method' | 'charging' | 'awaiting' | 'paid' | 'failed' | 'expired' | 'busy'
+
+/**
+ * What this checkout is for. The server allows one live payment per account, whatever it
+ * buys — so the cart and a scrapbook each watch only their own kind, and a charge refused
+ * because the *other* kind is open says so (`busy`) instead of resuming a scrapbook's QR
+ * inside the cart, or the reverse.
+ */
+export type CheckoutScope = { kind: 'strips' } | { kind: 'scrapbook'; scrapbookId: string }
+
+const STRIPS: CheckoutScope = { kind: 'strips' }
+
+function inScope(attempt: PaymentAttempt, scope: CheckoutScope): boolean {
+  // An attempt from a backend that predates `kind` can only be a strips one.
+  const kind = attempt.kind ?? 'strips'
+  if (scope.kind === 'strips') return kind === 'strips'
+  return kind === 'scrapbook' && (attempt.scrapbookIds ?? []).includes(scope.scrapbookId)
+}
 
 /** How often to re-ask the server while a payment is outstanding. */
 const POLL_INTERVAL_MS = 3000
@@ -37,8 +56,16 @@ function isLive(attempt: PaymentAttempt | null): attempt is PaymentAttempt {
  * attempt is kept in state (and polled) while the cart shows a banner offering to
  * reopen it.
  */
-export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void>) {
+export function useCheckout(
+  onPaid: (wasVisible: boolean) => void | Promise<void>,
+  scope: CheckoutScope = STRIPS
+) {
   const [phase, setPhase] = useState<CheckoutPhase>('closed')
+  // The phase as it is right now, for code that must decide something synchronously. A
+  // state updater can't do that: React runs it later, at render, so a value assigned inside
+  // one is still unset on the next line.
+  const phaseRef = useRef<CheckoutPhase>('closed')
+  phaseRef.current = phase
   const [attempt, setAttempt] = useState<PaymentAttempt | null>(null)
   const [stripIds, setStripIds] = useState<string[]>([])
 
@@ -48,6 +75,11 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
   useEffect(() => {
     onPaidRef.current = onPaid
   }, [onPaid])
+  // The scope as a primitive, so a caller passing a fresh object each render doesn't
+  // re-run the effects below.
+  const scopeKey = scope.kind === 'scrapbook' ? `scrapbook:${scope.scrapbookId}` : 'strips'
+  const scopeRef = useRef(scope)
+  scopeRef.current = scope
 
   /** Take ownership of an attempt without deciding whether to show it. */
   const adopt = useCallback((existing: PaymentAttempt) => {
@@ -78,7 +110,7 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
     let cancelled = false
     void getPendingPayment()
       .then((pending) => {
-        if (!cancelled && pending) adopt(pending)
+        if (!cancelled && pending && inScope(pending, scopeRef.current)) adopt(pending)
       })
       // A failure here is not worth surfacing: the user simply gets the normal flow,
       // and a duplicate charge is refused server-side anyway.
@@ -86,10 +118,10 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
     return () => {
       cancelled = true
     }
-  }, [adopt])
+  }, [adopt, scopeKey])
 
   const open = useCallback(
-    (ids: string[]) => {
+    (ids: string[] = []) => {
       // A payment already running wins over a fresh channel choice — the server would
       // refuse a second charge anyway.
       if (isLive(attempt)) {
@@ -117,14 +149,27 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
   const choose = useCallback(
     async (method: PaymentMethod) => {
       setPhase('charging')
+      const item = scopeRef.current.kind
+      trackEvents(ANALYTICS_EVENTS.CHECKOUT_STARTED, { item })
       try {
-        const created = await createCharge(stripIds, method)
+        const current = scopeRef.current
+        const created = await createCharge(
+          current.kind === 'scrapbook' ? { scrapbookId: current.scrapbookId } : { stripIds },
+          method
+        )
         resume(created)
       } catch (error) {
         if (error instanceof PaymentInProgressError) {
-          resume(error.payment)
+          // Ours to resume only if it pays for the same thing; otherwise another payment
+          // is holding the account's one live slot.
+          if (inScope(error.payment, scopeRef.current)) resume(error.payment)
+          else setPhase('busy')
           return
         }
+        trackEvents(ANALYTICS_EVENTS.PAYMENT_FAILED, {
+          code: error instanceof ApiError && error.code ? error.code : 'charge_failed',
+          item,
+        })
         setPhase('failed')
       }
     },
@@ -145,19 +190,24 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
         if (stopped) return
         setAttempt(latest)
         if (latest.status === 'paid') {
+          trackEvents(ANALYTICS_EVENTS.PAYMENT_SUCCEEDED, {
+            amountIdr: latest.grossAmount,
+            item: scopeRef.current.kind,
+          })
           // Only take over the screen if the user is watching; otherwise let the banner
           // go and refresh the cart under them. `wasVisible` tells the caller which
           // happened, so settlement behind a closed modal can be announced instead of
           // silently rearranging the page.
-          let wasVisible = false
-          setPhase((current) => {
-            wasVisible = current === 'awaiting'
-            return wasVisible ? 'paid' : 'closed'
-          })
+          const wasVisible = phaseRef.current === 'awaiting'
+          setPhase(wasVisible ? 'paid' : 'closed')
           await onPaidRef.current(wasVisible)
           return
         }
         if (latest.status !== 'pending') {
+          trackEvents(ANALYTICS_EVENTS.PAYMENT_FAILED, {
+            code: latest.status,
+            item: scopeRef.current.kind,
+          })
           setPhase((current) => (current === 'awaiting' ? 'failed' : 'closed'))
         }
       } catch {

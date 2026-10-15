@@ -45,6 +45,12 @@ export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
  * than from the method name.
  */
 export interface PaymentAttempt {
+  /**
+   * What the payment is for. A payment holds strips or one scrapbook, never both — and
+   * `GET /payments/pending`, which the cart resumes from, can return either, so the modal
+   * must not assume strips.
+   */
+  kind: 'strips' | 'scrapbook'
   /** Our order id, to poll `GET /payments/:orderId`. */
   orderId: string
   status: PaymentStatus
@@ -57,8 +63,11 @@ export interface PaymentAttempt {
   deeplinkUrl: string | null
   /** ISO timestamp after which this attempt can no longer be paid. */
   expiresAt: string | null
-  /** The strips this attempt unlocks. */
+  /** The strips this attempt unlocks (empty for a scrapbook). */
   stripIds: string[]
+  /** The scrapbook this attempt unlocks (empty for strips). */
+  scrapbookIds: string[]
+  /** How many strips — 0 for a scrapbook. */
   count: number
 }
 
@@ -78,6 +87,11 @@ export interface PaymentOrder {
    * row's thumbnails, so a purged strip simply falls out of the row.
    */
   stripIds: string[]
+  /**
+   * The scrapbook a scrapbook order bought, with what its row shows — the client keeps no
+   * store of scrapbooks to resolve an id against. `coverUrl` is null once it was removed.
+   */
+  scrapbooks: { id: string; title: string; coverUrl: string | null }[]
   createdAt: string
   paidAt: string | null
 }

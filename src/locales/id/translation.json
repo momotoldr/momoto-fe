@@ -97,6 +97,11 @@
         "title": "Photobooth Virtual",
         "desc": "Ambil foto 4-strip sendiri atau bareng teman, hias dengan filter dan stiker, lalu simpan atau bagikan."
       },
+      "scrapbook": {
+        "title": "Scrapbook",
+        "desc": "Isi buku kecil dengan strip yang sudah kamu buka dan tulisanmu sendiri, lalu simpan sebagai PDF.",
+        "open": "Buka scrapbook kamu"
+      },
       "draw": {
         "title": "Menggambar Bareng",
         "desc": "Gambar sesuatu yang menghubungkan kalian berdua."
@@ -373,6 +378,14 @@
               "Tutup tab dan aplikasi lain agar memori lebih lega, lalu coba lagi.",
               "Kalau muncul pesan tidak tersedia di perangkat ini, pilih Asli — bagian lain stripmu tetap berfungsi seperti biasa."
             ]
+          },
+          "scrapbookStrips": {
+            "q": "Kenapa strip di keranjang tidak bisa dipakai di scrapbook?",
+            "a": "Scrapbook dibuat dari salinan strip yang bersih tanpa watermark, dan hanya strip yang sudah kamu buka yang memilikinya. Buka dulu strip-nya — strip akan pindah ke galeri — lalu strip itu akan muncul di baki strip scrapbook.",
+            "steps": [
+              "Buka keranjang dan pilih Buka pada strip tersebut.",
+              "Kembali ke scrapbook dan ketuk tempatnya — strip-nya sudah ada di baki."
+            ]
           }
         }
       },
@@ -425,6 +438,14 @@
           "refund": {
             "q": "Bisakah saya mendapatkan pengembalian dana?",
             "a": "Membuka strip langsung memberimu file digital, jadi strip yang sudah dibuka umumnya tidak bisa dikembalikan dananya — kecuali diwajibkan oleh hukum, atau ada gangguan di pihak kami yang membuatmu tidak bisa mengunduh strip yang sudah dibayar. Kalau itu terjadi, hubungi kami dan akan kami bereskan."
+          },
+          "scrapbookFinal": {
+            "q": "Apakah scrapbook bisa diubah setelah dibeli?",
+            "a": "Tidak — scrapbook berbayar bersifat final, supaya PDF yang kamu beli selalu sama dengan yang kamu bayar. Tapi kamu bisa membuat versi baru darinya: Duplikat menyalin halaman dan tulisannya ke draf baru.",
+            "steps": [
+              "Sebelum membayar, Lanjut mengedit mengembalikan scrapbook yang sudah selesai menjadi draf.",
+              "Setelah membayar, buka scrapbook-nya lalu pilih Duplikat untuk memulai draf baru."
+            ]
           }
         }
       },
@@ -550,7 +571,8 @@
           "Pembayaran ditangani oleh penyedia pembayaran pihak ketiga kami, Midtrans. Dengan membayar, kamu juga menyetujui ketentuan penyedia tersebut. Kami menerima konfirmasi bahwa pembayaran berhasil beserta nomor referensi pesanan, tetapi kami tidak mengumpulkan atau menyimpan detail lengkap kartu atau rekening bankmu.",
           "Karena pembelian langsung membuka file digital untuk diunduh, strip berbayar umumnya tidak dapat dikembalikan setelah dibuka — kecuali bila pengembalian dana diwajibkan oleh hukum, atau bila ada gangguan teknis dari pihak kami yang membuat kamu tidak bisa mengunduh strip yang sudah kamu bayar. Jika itu terjadi, hubungi kami dan akan kami perbaiki.",
           "Kamu bisa menghapus strip yang sudah dibuka dari galerimu kapan saja. Menghapusnya akan menghapus filenya secara permanen, jadi strip yang sudah dihapus tidak bisa dipulihkan, diunduh lagi, atau dikembalikan dananya. Catatan pembelianmu tetap tersimpan."
-        ]
+        ],
+        "scrapbook": "Scrapbook berlaku dengan cara yang sama. Setelah kamu menyelesaikan scrapbook dan membayarnya, scrapbook itu bersifat final: tidak bisa diubah, dan tidak dapat dikembalikan dananya dengan ketentuan yang sama seperti strip. Sebelum membayar, kamu masih bisa kembali dan lanjut mengedit. Menghapus scrapbook berbayar akan menghapus PDF-nya secara permanen; catatan pembelianmu tetap tersimpan."
       },
       "acceptableUse": {
         "title": "Penggunaan yang Wajar",
@@ -1217,7 +1239,8 @@
     "removeCancel": "Simpan saja",
     "removed": "Strip dihapus. Slotnya kosong lagi.",
     "removeError": "Gagal menghapus strip itu. Silakan coba lagi.",
-    "removeStale": "Strip itu sudah berubah — galerimu sekarang sudah diperbarui."
+    "removeStale": "Strip itu sudah berubah — galerimu sekarang sudah diperbarui.",
+    "removeInScrapbook": "Strip ini ada di scrapbook yang belum kamu beli. Tempatnya di sana akan jadi kosong."
   },
   "payment": {
     "success": "Pembayaran berhasil — strip kamu terbuka!",
@@ -1397,6 +1420,7 @@
         "colDate": "Tanggal",
         "colAmount": "Jumlah",
         "orderLine_other": "{{count}} strip · cetak",
+        "scrapbookLine": "Scrapbook · {{title}}",
         "emptyTitle": "Belum ada pembelian",
         "emptyBody": "Membayar sebuah strip membuka salinan bersih tanpa watermark dan memindahkannya ke galerimu. Pesanan akan muncul di sini setelahnya.",
         "openCart": "Buka keranjang",
@@ -1626,6 +1650,150 @@
     "expired": "Pembayaran ini kedaluwarsa. Mulai lagi kapan pun kamu siap.",
     "resumed": "Ada pembayaran yang sedang berlangsung.",
     "saveQr": "Simpan QR",
-    "qrSaveError": "Gagal menyimpan kode QR."
+    "qrSaveError": "Gagal menyimpan kode QR.",
+    "summaryScrapbook": "Scrapbook · {{total}}",
+    "summaryScrapbookNoPrice": "Scrapbook",
+    "otherPayment": "Masih ada pembayaran lain yang terbuka di akunmu. Selesaikan atau tunggu sampai kedaluwarsa, lalu coba lagi.",
+    "successScrapbook": "Pembayaran selesai — scrapbook-mu sudah terbuka!"
+  },
+  "scrapbook": {
+    "templates": {
+      "kraftNotes": "Kraft notes"
+    },
+    "states": {
+      "draft": "Draf",
+      "finished": "Siap dibuka",
+      "paid": "Milikmu"
+    },
+    "shelf": {
+      "title": "Scrapbook kamu",
+      "subtitle_one": "{{count}} scrapbook",
+      "subtitle_other": "{{count}} scrapbook",
+      "subtitleEmpty": "Isi halaman dengan strip-mu dan sedikit cerita",
+      "new": "Scrapbook baru",
+      "creating": "Menyiapkan…",
+      "meter": "{{used}} dari {{limit}}",
+      "meterFull": "Penuh · {{used}} dari {{limit}}",
+      "loading": "Memuat scrapbook kamu…",
+      "loadError": "Scrapbook kamu tidak bisa dimuat.",
+      "retry": "Coba lagi",
+      "untitled": "Scrapbook tanpa judul",
+      "edited": "Diubah {{date}}",
+      "limit": "Kamu sudah punya {{limit}} scrapbook. Hapus satu draf untuk mulai yang baru.",
+      "createError": "Scrapbook tidak bisa dibuat. Coba lagi.",
+      "emptyTitle": "Belum ada scrapbook",
+      "emptyText": "Scrapbook berisi {{pages}} halaman untuk diisi dengan strip yang sudah kamu buka dan tulisanmu sendiri.",
+      "coverAlt": "Sampul {{title}}"
+    },
+    "editor": {
+      "back": "Semua scrapbook",
+      "titleLabel": "Nama scrapbook",
+      "titlePlaceholder": "Beri nama scrapbook-mu",
+      "saved": "Tersimpan",
+      "saving": "Menyimpan…",
+      "pending": "Belum tersimpan",
+      "saveError": "Gagal menyimpan — mencoba lagi",
+      "page": "Halaman {{n}} dari {{total}}",
+      "pageCover": "Sampul",
+      "pageBack": "Sampul belakang",
+      "pages": "Halaman",
+      "previous": "Halaman sebelumnya",
+      "next": "Halaman berikutnya",
+      "hint": "Ketuk tempat di halaman untuk menambah strip atau menulis.",
+      "loading": "Membuka scrapbook kamu…",
+      "loadError": "Scrapbook ini tidak bisa dibuka.",
+      "notFound": "Scrapbook ini tidak ada, atau bukan milikmu.",
+      "unsupported": "Scrapbook ini dibuat dengan desain yang belum ada di versi Momoto ini. Muat ulang halaman untuk memperbarui.",
+      "addStrip_4x1": "Tambah strip 4×1",
+      "addStrip_2x2": "Tambah strip 2×2",
+      "stripRemoved": "Foto sudah dihapus dari galeri",
+      "close": "Selesai"
+    },
+    "tray": {
+      "title_4x1": "Strip 4×1 kamu",
+      "title_2x2": "Strip 2×2 kamu",
+      "hint": "Hanya strip yang sudah kamu buka yang bisa masuk scrapbook.",
+      "remove": "Lepas strip ini",
+      "inUse": "Di halaman ini",
+      "empty_4x1": "Belum ada strip 4×1 yang terbuka.",
+      "empty_2x2": "Belum ada strip 2×2 yang terbuka.",
+      "toCart": "Buka strip di keranjang",
+      "toBooth": "Ambil foto baru",
+      "loading": "Memuat strip kamu…",
+      "stripAlt": "Strip dari {{date}}"
+    },
+    "text": {
+      "label_coverTitle": "Judul",
+      "label_coverSubtitle": "Subjudul",
+      "label_heading": "Judul halaman",
+      "label_caption": "Keterangan",
+      "label_note": "Catatan",
+      "label_closing": "Kata penutup",
+      "counter": "{{used}} / {{max}}",
+      "lines": "Baris {{used}} dari {{max}}",
+      "full": "Sudah penuh untuk tempat ini."
+    },
+    "placeholders": {
+      "coverTitle": "Judulmu",
+      "coverSubtitle": "Tanggal atau tempat",
+      "heading": "Judul halaman",
+      "caption": "Keterangan",
+      "note": "Tulis sesuatu…",
+      "closing": "Kata terakhir"
+    },
+    "viewer": {
+      "finished": "Sudah selesai. Buka untuk mengunduh PDF-nya.",
+      "paid": "Scrapbook ini milikmu. Sekarang tidak bisa diubah — duplikat untuk membuat yang lain.",
+      "keepEditing": "Lanjut mengedit",
+      "duplicate": "Duplikat",
+      "duplicated": "Tersalin — ini draf barumu.",
+      "delete": "Hapus",
+      "remove": "Hapus",
+      "reopenError": "Tidak bisa dibuka lagi. Coba lagi.",
+      "paymentInProgress": "Masih ada pembayaran yang terbuka untuk scrapbook ini.",
+      "unlock": "Buka",
+      "unlockPrice": "Buka · {{price}}",
+      "unlocking": "Membuka…",
+      "unlocked": "Terbuka — PDF-mu siap.",
+      "unlockError": "Tidak bisa dibuka. Coba lagi.",
+      "download": "Unduh PDF",
+      "downloading": "Menyiapkan…",
+      "downloadError": "PDF tidak bisa diunduh. Coba lagi.",
+      "paymentPending": "Pembayaran berlangsung · {{total}}",
+      "resume": "Lanjutkan",
+      "paidToast": "Pembayaran diterima — scrapbook-mu siap."
+    },
+    "discard": {
+      "deleteTitle": "Hapus scrapbook ini?",
+      "deleteDescription": "Halaman dan tulisannya dihapus permanen. Strip-mu tetap ada di galeri.",
+      "removeTitle": "Hapus scrapbook ini?",
+      "removeDescription": "PDF-nya dihapus permanen — unduh dulu kalau ingin menyimpannya. Pembelianmu tetap tercatat, tapi ini tidak bisa dibatalkan.",
+      "confirmDelete": "Hapus",
+      "confirmRemove": "Hapus",
+      "working": "Memproses…",
+      "cancel": "Batal",
+      "done": "Scrapbook dihapus.",
+      "stale": "Scrapbook itu berubah sementara itu — daftarnya sudah dimuat ulang.",
+      "error": "Tidak berhasil. Coba lagi."
+    },
+    "finish": {
+      "button": "Selesai",
+      "confirmTitle": "Selesaikan scrapbook ini?",
+      "confirmDescription": "Kami akan membuat PDF dari halaman-halamanmu. Setelah itu tidak bisa diubah — kecuali kamu pilih Lanjut mengedit sebelum membukanya.",
+      "empty_one": "{{count}} tempat strip masih kosong. Akan tercetak sebagai kertas kosong.",
+      "empty_other": "{{count}} tempat strip masih kosong. Akan tercetak sebagai kertas kosong.",
+      "confirm": "Selesaikan",
+      "cancel": "Lanjut mengedit",
+      "saving": "Menyimpan perubahan…",
+      "rendering": "Membuat halaman {{page}} dari {{total}}…",
+      "uploading": "Mengunggah…",
+      "stop": "Batal",
+      "otherTab": "Sedang diselesaikan di tab lain…",
+      "done": "Selesai. Buka untuk mengunduh PDF-nya.",
+      "cancelled": "Dibatalkan — tidak ada yang berubah.",
+      "changed": "Scrapbook ini diubah di tempat lain. Periksa lalu selesaikan lagi.",
+      "unsaved": "Perubahan terakhirmu tidak bisa disimpan. Coba lagi.",
+      "failed": "Tidak bisa diselesaikan. Coba lagi."
+    }
   }
 }

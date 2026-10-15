@@ -1,3 +1,4 @@
+import { env } from '@/env'
 import type { OrderHistory, PaymentAttempt, PaymentMethod } from '@/types/stripType'
 
 import ApiError from '../apiError'
@@ -5,6 +6,9 @@ import { API_ROUTES } from '../apiRoutes'
 import AxiosClient from '../client/axiosClient'
 
 const client = new AxiosClient()
+
+/** What a checkout pays for: strips from the cart, or one finished scrapbook. */
+export type CheckoutTarget = { stripIds: string[] } | { scrapbookId: string }
 
 /** Raised when a live attempt already exists; carries it so the caller can resume. */
 export class PaymentInProgressError extends Error {
@@ -15,7 +19,7 @@ export class PaymentInProgressError extends Error {
 }
 
 /**
- * Open a payment for the selected strips on one channel.
+ * Open a payment for the selected strips — or one scrapbook — on one channel.
  *
  * A `409 payment_in_progress` is not a failure: the server refuses to charge twice
  * while a QR is still payable, and the caller resumes that attempt instead. Anything
@@ -28,12 +32,12 @@ export class PaymentInProgressError extends Error {
  * payment into "payment failed" the moment the user reopened the modal.
  */
 export async function createCharge(
-  stripIds: string[],
+  target: CheckoutTarget,
   method: PaymentMethod
 ): Promise<PaymentAttempt> {
   try {
     const { data } = await client.postData<PaymentAttempt>(API_ROUTES.PAYMENTS.CHARGE, {
-      stripIds,
+      ...target,
       method,
     })
     return data
@@ -96,5 +100,17 @@ export async function fetchQrBlob(orderId: string): Promise<Blob> {
  */
 export async function listOrders(): Promise<OrderHistory> {
   const { data } = await client.getData<OrderHistory>(API_ROUTES.PAYMENTS.ROOT)
-  return data
+  // A scrapbook's cover is a CDN URL, or a path on the API when there is no CDN (local
+  // dev) — the same contract as a strip's image URLs.
+  const absolute = (url: string) => (/^https?:\/\//i.test(url) ? url : `${env.apiUrl}${url}`)
+  return {
+    ...data,
+    orders: data.orders.map((order) => ({
+      ...order,
+      scrapbooks: (order.scrapbooks ?? []).map((scrapbook) => ({
+        ...scrapbook,
+        coverUrl: scrapbook.coverUrl ? absolute(scrapbook.coverUrl) : null,
+      })),
+    })),
+  }
 }
