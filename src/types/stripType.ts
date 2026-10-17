@@ -45,12 +45,8 @@ export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
  * than from the method name.
  */
 export interface PaymentAttempt {
-  /**
-   * What the payment is for. A payment holds strips or one scrapbook, never both — and
-   * `GET /payments/pending`, which the cart resumes from, can return either, so the modal
-   * must not assume strips.
-   */
-  kind: 'strips' | 'scrapbook'
+  /** What the payment is for: since 2026-10-17 one cart checkout can hold both kinds. */
+  kind: 'strips' | 'scrapbook' | 'mixed'
   /** Our order id, to poll `GET /payments/:orderId`. */
   orderId: string
   status: PaymentStatus
@@ -63,11 +59,11 @@ export interface PaymentAttempt {
   deeplinkUrl: string | null
   /** ISO timestamp after which this attempt can no longer be paid. */
   expiresAt: string | null
-  /** The strips this attempt unlocks (empty for a scrapbook). */
+  /** The strips this attempt unlocks. */
   stripIds: string[]
-  /** The scrapbook this attempt unlocks (empty for strips). */
+  /** The scrapbooks this attempt unlocks. */
   scrapbookIds: string[]
-  /** How many strips — 0 for a scrapbook. */
+  /** How many strips (scrapbooks not included). */
   count: number
 }
 

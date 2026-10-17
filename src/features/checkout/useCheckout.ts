@@ -2,7 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { ANALYTICS_EVENTS, trackEvents } from '@/analytics'
 import ApiError from '@/api/apiError'
+import { type CommerceItem } from '@/analytics/events'
 import {
+  type CheckoutTarget,
   createCharge,
   getPayment,
   getPendingPayment,
@@ -18,23 +20,17 @@ import type { PaymentAttempt, PaymentMethod } from '@/types/stripType'
  * ends only on a terminal status from the server or on the attempt expiring.
  */
 export type CheckoutPhase =
-  'closed' | 'method' | 'charging' | 'awaiting' | 'paid' | 'failed' | 'expired' | 'busy'
+  'closed' | 'method' | 'charging' | 'awaiting' | 'paid' | 'failed' | 'expired'
 
-/**
- * What this checkout is for. The server allows one live payment per account, whatever it
- * buys — so the cart and a scrapbook each watch only their own kind, and a charge refused
- * because the *other* kind is open says so (`busy`) instead of resuming a scrapbook's QR
- * inside the cart, or the reverse.
- */
-export type CheckoutScope = { kind: 'strips' } | { kind: 'scrapbook'; scrapbookId: string }
+/** What a checkout covers — the cart's selection, or what a resumed attempt pays for. */
+export type CheckoutSelection = CheckoutTarget
 
-const STRIPS: CheckoutScope = { kind: 'strips' }
+const NOTHING: CheckoutSelection = { stripIds: [], scrapbookIds: [] }
 
-function inScope(attempt: PaymentAttempt, scope: CheckoutScope): boolean {
-  // An attempt from a backend that predates `kind` can only be a strips one.
-  const kind = attempt.kind ?? 'strips'
-  if (scope.kind === 'strips') return kind === 'strips'
-  return kind === 'scrapbook' && (attempt.scrapbookIds ?? []).includes(scope.scrapbookId)
+/** Which kind of thing a checkout sells, for analytics. */
+function commerceItem(selection: CheckoutSelection): CommerceItem {
+  if (selection.scrapbookIds.length === 0) return 'strips'
+  return selection.stripIds.length === 0 ? 'scrapbook' : 'mixed'
 }
 
 /** How often to re-ask the server while a payment is outstanding. */
@@ -56,10 +52,7 @@ function isLive(attempt: PaymentAttempt | null): attempt is PaymentAttempt {
  * attempt is kept in state (and polled) while the cart shows a banner offering to
  * reopen it.
  */
-export function useCheckout(
-  onPaid: (wasVisible: boolean) => void | Promise<void>,
-  scope: CheckoutScope = STRIPS
-) {
+export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void>) {
   const [phase, setPhase] = useState<CheckoutPhase>('closed')
   // The phase as it is right now, for code that must decide something synchronously. A
   // state updater can't do that: React runs it later, at render, so a value assigned inside
@@ -67,7 +60,7 @@ export function useCheckout(
   const phaseRef = useRef<CheckoutPhase>('closed')
   phaseRef.current = phase
   const [attempt, setAttempt] = useState<PaymentAttempt | null>(null)
-  const [stripIds, setStripIds] = useState<string[]>([])
+  const [selection, setSelection] = useState<CheckoutSelection>(NOTHING)
 
   // Kept in a ref so the polling effect can read the latest callback without being
   // re-created on every status change — restarting the interval would drift the cadence.
@@ -75,16 +68,10 @@ export function useCheckout(
   useEffect(() => {
     onPaidRef.current = onPaid
   }, [onPaid])
-  // The scope as a primitive, so a caller passing a fresh object each render doesn't
-  // re-run the effects below.
-  const scopeKey = scope.kind === 'scrapbook' ? `scrapbook:${scope.scrapbookId}` : 'strips'
-  const scopeRef = useRef(scope)
-  scopeRef.current = scope
-
   /** Take ownership of an attempt without deciding whether to show it. */
   const adopt = useCallback((existing: PaymentAttempt) => {
     setAttempt(existing)
-    setStripIds(existing.stripIds)
+    setSelection({ stripIds: existing.stripIds, scrapbookIds: existing.scrapbookIds ?? [] })
   }, [])
 
   /** Adopt an attempt *and* show it — used when the user just asked to pay. */
@@ -110,7 +97,7 @@ export function useCheckout(
     let cancelled = false
     void getPendingPayment()
       .then((pending) => {
-        if (!cancelled && pending && inScope(pending, scopeRef.current)) adopt(pending)
+        if (!cancelled && pending) adopt(pending)
       })
       // A failure here is not worth surfacing: the user simply gets the normal flow,
       // and a duplicate charge is refused server-side anyway.
@@ -118,17 +105,17 @@ export function useCheckout(
     return () => {
       cancelled = true
     }
-  }, [adopt, scopeKey])
+  }, [adopt])
 
   const open = useCallback(
-    (ids: string[] = []) => {
+    (next: CheckoutSelection) => {
       // A payment already running wins over a fresh channel choice — the server would
       // refuse a second charge anyway.
       if (isLive(attempt)) {
         setPhase('awaiting')
         return
       }
-      setStripIds(ids)
+      setSelection(next)
       setAttempt(null)
       setPhase('method')
     },
@@ -149,21 +136,15 @@ export function useCheckout(
   const choose = useCallback(
     async (method: PaymentMethod) => {
       setPhase('charging')
-      const item = scopeRef.current.kind
+      const item = commerceItem(selection)
       trackEvents(ANALYTICS_EVENTS.CHECKOUT_STARTED, { item })
       try {
-        const current = scopeRef.current
-        const created = await createCharge(
-          current.kind === 'scrapbook' ? { scrapbookId: current.scrapbookId } : { stripIds },
-          method
-        )
-        resume(created)
+        resume(await createCharge(selection, method))
       } catch (error) {
+        // The account's one live payment — opened in another tab, say. It's the cart's
+        // whatever it covers, so resume it rather than fail.
         if (error instanceof PaymentInProgressError) {
-          // Ours to resume only if it pays for the same thing; otherwise another payment
-          // is holding the account's one live slot.
-          if (inScope(error.payment, scopeRef.current)) resume(error.payment)
-          else setPhase('busy')
+          resume(error.payment)
           return
         }
         trackEvents(ANALYTICS_EVENTS.PAYMENT_FAILED, {
@@ -173,7 +154,7 @@ export function useCheckout(
         setPhase('failed')
       }
     },
-    [stripIds, resume]
+    [selection, resume]
   )
 
   // Poll while an attempt is live, whether or not the modal is showing — otherwise a
@@ -192,7 +173,7 @@ export function useCheckout(
         if (latest.status === 'paid') {
           trackEvents(ANALYTICS_EVENTS.PAYMENT_SUCCEEDED, {
             amountIdr: latest.grossAmount,
-            item: scopeRef.current.kind,
+            item: commerceItem(latest),
           })
           // Only take over the screen if the user is watching; otherwise let the banner
           // go and refresh the cart under them. `wasVisible` tells the caller which
@@ -206,7 +187,7 @@ export function useCheckout(
         if (latest.status !== 'pending') {
           trackEvents(ANALYTICS_EVENTS.PAYMENT_FAILED, {
             code: latest.status,
-            item: scopeRef.current.kind,
+            item: commerceItem(latest),
           })
           setPhase((current) => (current === 'awaiting' ? 'failed' : 'closed'))
         }
@@ -246,7 +227,8 @@ export function useCheckout(
   return {
     phase,
     attempt,
-    stripIds,
+    /** What the open checkout covers. */
+    selection,
     /** A payment is outstanding — drives the cart's resume banner. */
     liveAttempt: isLive(attempt) ? attempt : null,
     open,

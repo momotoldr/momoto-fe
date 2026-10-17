@@ -14,7 +14,7 @@
  */
 
 export type BoothMode = 'solo' | 'date' | 'group'
-export type CommerceItem = 'strips' | 'scrapbook'
+export type CommerceItem = 'strips' | 'scrapbook' | 'mixed'
 export type BoothStageName = 'lobby' | 'booth' | 'arrange' | 'result'
 
 /** Every booth event says which booth run it belongs to (a hash of room + start, never the code). */

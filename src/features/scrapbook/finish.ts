@@ -159,8 +159,14 @@ async function landedAs(id: string): Promise<Scrapbook | null> {
  * the API — the scrapbook's state is read, and `finished` is the success it looks like.
  *
  * `content_changed` is thrown as it is: the content moved since the PDF was rendered, and
- * only the caller can re-render.
+ * only the caller can re-render. So is `cart_full`: no retry or fallback can make room in
+ * the cart (2026-10-17).
  */
+/** A refusal no other attempt could change — the caller has to deal with it. */
+function isFinal(error: unknown): boolean {
+  return isCode(error, 'content_changed') || isCode(error, 'cart_full')
+}
+
 export async function uploadFinishedScrapbook(
   id: string,
   files: ScrapbookFinishFiles,
@@ -170,7 +176,7 @@ export async function uploadFinishedScrapbook(
   try {
     return await finishScrapbookDirect(id, files, contentVersion)
   } catch (error) {
-    if (isCode(error, 'content_changed')) throw error
+    if (isFinal(error)) throw error
     failure = error
   }
 
@@ -181,7 +187,7 @@ export async function uploadFinishedScrapbook(
     try {
       return await finishScrapbookDirect(id, files, contentVersion)
     } catch (error) {
-      if (isCode(error, 'content_changed')) throw error
+      if (isFinal(error)) throw error
       failure = error
     }
     const landedOnRetry = await landedAs(id)
@@ -194,7 +200,7 @@ export async function uploadFinishedScrapbook(
   try {
     return await finishScrapbookThroughApi(id, files, contentVersion)
   } catch (error) {
-    if (isCode(error, 'content_changed')) throw error
+    if (isFinal(error)) throw error
     const landedLast = await landedAs(id)
     if (landedLast) return landedLast
     throw error

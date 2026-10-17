@@ -19,6 +19,7 @@ import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ROUTES } from '@/constants/routes'
+import { env } from '@/env'
 import { PageRail } from '@/features/scrapbook/PageRail'
 import { pageLabel } from '@/features/scrapbook/pageLabel'
 import { ScrapbookPageView, type ScrapbookSelection } from '@/features/scrapbook/ScrapbookPageView'
@@ -29,6 +30,7 @@ import { useDesktopLayout } from '@/features/scrapbook/useDesktopLayout'
 import { useScrapbookFinish, type FinishOutcome } from '@/features/scrapbook/useScrapbookFinish'
 import { ViewerPanel } from '@/features/scrapbook/ViewerPanel'
 import { cn } from '@/lib/utils'
+import { useCartStore } from '@/store/useCartStore'
 import { useScrapbookStore } from '@/store/useScrapbookStore'
 import type { StoredStrip } from '@/types/stripType'
 
@@ -55,6 +57,7 @@ const FINISH_MESSAGES: Record<Exclude<FinishOutcome, 'done'>, string> = {
   cancelled: 'scrapbook.finish.cancelled',
   changed: 'scrapbook.finish.changed',
   unsaved: 'scrapbook.finish.unsaved',
+  cartFull: 'scrapbook.finish.cartFull',
   failed: 'scrapbook.finish.failed',
 }
 export function ScrapbookPage() {
@@ -176,6 +179,20 @@ export function ScrapbookPage() {
       }).length
   }, [template, scrapbook, missing])
 
+  /**
+   * Finishing puts the scrapbook in the cart, where it takes a slot like a strip (user
+   * decision, 2026-10-17) — so a full cart holds Finish back here, before minutes of
+   * rendering, rather than refusing at upload. The server refuses too (`cart_full`); this
+   * is the early, friendlier copy of that rule, read from what the stores already hold.
+   */
+  const stripsInCart = useCartStore((state) =>
+    state.items.reduce((n, item) => n + (item.paid ? 0 : 1), 0)
+  )
+  const scrapbooksInCart = useScrapbookStore((state) =>
+    state.shelf.reduce((n, item) => n + (item.state === 'finished' ? 1 : 0), 0)
+  )
+  const cartFull = stripsInCart + scrapbooksInCart >= env.stripMaxItems
+
   /** Put a strip in a place, the same way from the side column and the phone's pop-up. */
   const pickStrip = useCallback(
     (slot: { id: string; layout: '4x1' | '2x2' }, strip: StoredStrip) => {
@@ -189,13 +206,16 @@ export function ScrapbookPage() {
     setConfirmFinish(false)
     // The button is disabled while places are empty; this is the same rule for any other way
     // in. The server doesn't check it — it knows slot ids by shape only, not the template.
-    if (emptyPlaces > 0) return
+    if (emptyPlaces > 0 || cartFull) return
     setSelection(null)
     const outcome = await finish()
-    if (outcome === 'done') toast.success(t('scrapbook.finish.done'))
-    else if (outcome === 'cancelled') toast.info(t(FINISH_MESSAGES[outcome]))
+    if (outcome === 'done') {
+      // Finished means it's waiting in the cart, where it's paid for (2026-10-17).
+      toast.success(t('scrapbook.finish.done'))
+      navigate(ROUTES.cart)
+    } else if (outcome === 'cancelled') toast.info(t(FINISH_MESSAGES[outcome]))
     else toast.error(t(FINISH_MESSAGES[outcome]))
-  }, [finish, t, emptyPlaces])
+  }, [finish, t, emptyPlaces, cartFull, navigate])
 
   if (openStatus === 'error') {
     return (
@@ -287,13 +307,20 @@ export function ScrapbookPage() {
             >
               <Trash2 />
             </Button>
-            {editing && emptyPlaces > 0 && (
+            {editing && emptyPlaces > 0 ? (
               <span className={styles.placesLeft}>
                 {t('scrapbook.finish.placesLeft', { count: emptyPlaces })}
               </span>
+            ) : (
+              editing &&
+              cartFull && (
+                <Link to={ROUTES.cart} className={styles.placesLeft}>
+                  {t('scrapbook.finish.cartFullHint')}
+                </Link>
+              )
             )}
             <Button
-              disabled={!editing || emptyPlaces > 0}
+              disabled={!editing || emptyPlaces > 0 || cartFull}
               title={emptyPlaces > 0 ? t('scrapbook.finish.fillAll') : undefined}
               onClick={() => setConfirmFinish(true)}
             >

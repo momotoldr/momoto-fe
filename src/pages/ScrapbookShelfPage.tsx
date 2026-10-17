@@ -24,6 +24,9 @@ const editPath = (id: string) => ROUTES.scrapbookEdit.replace(':scrapbookId', id
  * template picker (`/scrapbook/new`), and a draft exists only once a template is chosen
  * there. (Until 2026-10-15 an empty shelf created a draft on arrival; the user changed
  * that, since merely looking left an empty draft saved to the account.)
+ *
+ * A finished, unpaid scrapbook stays on the shelf, taped "In cart": it's also a cart item,
+ * paid for there with everything else (user decisions, 2026-10-17).
  */
 export function ScrapbookShelfPage() {
   useTrackPageView()

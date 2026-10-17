@@ -310,6 +310,13 @@
   @apply rotate-[5deg];
 }
 
+/* A scrapbook among the strips: the page's A5 shape, as tall as the strips beside it. */
+.emptyBook {
+  @apply h-[8.25rem] rounded-md bg-muted;
+
+  aspect-ratio: 148 / 210;
+}
+
 .emptyMessage {
   @apply max-w-[18rem] text-sm leading-relaxed text-muted-foreground sm:text-[0.90625rem];
 }

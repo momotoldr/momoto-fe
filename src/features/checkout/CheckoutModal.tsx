@@ -18,13 +18,15 @@ import styles from './CheckoutModal.module.scss'
 interface CheckoutModalProps {
   phase: CheckoutPhase
   attempt: PaymentAttempt | null
-  /** What this checkout pays for. Strips (the cart) unless said otherwise. */
-  kind?: 'strips' | 'scrapbook'
-  /** Strips this checkout covers — drives the header count before an attempt exists. */
-  count: number
+  /**
+   * How many strips and scrapbooks this checkout covers — the header's count before an
+   * attempt exists (an attempt then speaks for itself).
+   */
+  strips: number
+  scrapbooks: number
   /**
    * Total in whole rupiah, shown before charging (the server recomputes it anyway). Null
-   * when the client doesn't know the price yet — the header then shows no total until the
+   * when the client doesn't know a price yet — the header then shows no total until the
    * charge returns the real one.
    */
   grossAmount: number | null
@@ -43,8 +45,8 @@ interface CheckoutModalProps {
 export function CheckoutModal({
   phase,
   attempt,
-  kind = 'strips',
-  count,
+  strips,
+  scrapbooks,
   grossAmount,
   onChoose,
   onClose,
@@ -95,7 +97,21 @@ export function CheckoutModal({
 
   const touchFirst = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
   const total = attempt?.grossAmount ?? grossAmount
-  const strips = attempt?.count ?? count
+  const stripCount = attempt?.stripIds.length ?? strips
+  const scrapbookCount = attempt?.scrapbookIds.length ?? scrapbooks
+  // "2 strips + 1 scrapbook" — only the kinds the order holds.
+  const items = [
+    stripCount > 0 && t('checkout.partStrips', { count: stripCount }),
+    scrapbookCount > 0 && t('checkout.partScrapbooks', { count: scrapbookCount }),
+  ]
+    .filter(Boolean)
+    .join(' + ')
+  const success =
+    scrapbookCount === 0
+      ? 'payment.success'
+      : stripCount === 0
+        ? 'checkout.successScrapbook'
+        : 'checkout.successMixed'
 
   return createPortal(
     <div className={styles.overlay} onClick={onClose}>
@@ -110,11 +126,7 @@ export function CheckoutModal({
           <div>
             <h2 className={styles.title}>{t('checkout.title')}</h2>
             <p className={styles.subtitle}>
-              {kind === 'scrapbook'
-                ? total === null
-                  ? t('checkout.summaryScrapbookNoPrice')
-                  : t('checkout.summaryScrapbook', { total: formatIdr(total) })
-                : t('checkout.summary', { count: strips, total: formatIdr(total ?? 0) })}
+              {total === null ? items : t('checkout.summary', { items, total: formatIdr(total) })}
             </p>
           </div>
           <button
@@ -206,22 +218,16 @@ export function CheckoutModal({
         {phase === 'paid' && (
           <div className={styles.centred}>
             <CheckCircle2 className={styles.success} />
-            <p className={styles.message}>
-              {t(kind === 'scrapbook' ? 'checkout.successScrapbook' : 'payment.success')}
-            </p>
+            <p className={styles.message}>{t(success)}</p>
             <Button onClick={onClose}>{t('common.close')}</Button>
           </div>
         )}
 
-        {(phase === 'failed' || phase === 'expired' || phase === 'busy') && (
+        {(phase === 'failed' || phase === 'expired') && (
           <div className={styles.centred}>
             <TimerOff className={styles.failure} />
             <p className={styles.message}>
-              {phase === 'expired'
-                ? t('checkout.expired')
-                : phase === 'busy'
-                  ? t('checkout.otherPayment')
-                  : t('payment.failed')}
+              {phase === 'expired' ? t('checkout.expired') : t('payment.failed')}
             </p>
             <Button onClick={onClose}>{t('common.close')}</Button>
           </div>

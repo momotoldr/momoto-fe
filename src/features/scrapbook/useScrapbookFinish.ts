@@ -17,7 +17,7 @@ import { useFinishChannel } from './useFinishChannel'
  * running); `unsaved` — the latest edits couldn't be saved, so there was nothing safe to
  * render from.
  */
-export type FinishOutcome = 'done' | 'cancelled' | 'changed' | 'unsaved' | 'failed'
+export type FinishOutcome = 'done' | 'cancelled' | 'changed' | 'unsaved' | 'cartFull' | 'failed'
 
 /**
  * Finish the open scrapbook (docs/PLAN-scrapbook.md §7):
@@ -83,6 +83,8 @@ export function useScrapbookFinish(scrapbookId: string | undefined) {
           })
           return 'done'
         } catch (error) {
+          // Finishing puts it in the cart, which has no slot for it (2026-10-17).
+          if (error instanceof ApiError && error.code === 'cart_full') return ended('cartFull')
           if (!(error instanceof ApiError && error.code === 'content_changed')) throw error
           if (round === 1) return ended('changed')
           // Edited elsewhere since the render: take the server's content and go again.

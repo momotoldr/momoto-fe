@@ -1,0 +1,118 @@
+/* A finished scrapbook in the cart, built like a strip card (CartPage.module.scss) so the
+ * two sit as equals: a row on a phone, a column in the shelf grid from `sm:` — a tinted
+ * well with the cover, the checkbox on its corner, then the text and the actions. */
+
+.card {
+  @apply relative m-0 flex items-center gap-3.5 rounded-[1.25rem] border bg-card p-3 transition-colors sm:flex-col sm:items-stretch sm:gap-3.5 sm:rounded-3xl sm:p-3.5;
+}
+
+/* Selected for checkout — a heavier border, as on a strip card. */
+.cardSelected {
+  @apply border-[1.5px] border-primary;
+}
+
+.cardAwaiting {
+  @apply ring-1 ring-amber-300/70 dark:ring-amber-500/30;
+}
+
+/* Checkbox: leading in the phone row, on the well's top-left corner once stacked. */
+.selectArea {
+  @apply flex shrink-0 cursor-pointer items-center sm:absolute sm:left-3 sm:top-3 sm:z-10;
+}
+
+.checkbox {
+  @apply sr-only;
+}
+
+.checkboxBox {
+  @apply flex h-[1.375rem] w-[1.375rem] items-center justify-center rounded-md border-[1.5px] border-input bg-background text-transparent transition-colors;
+
+  svg {
+    @apply h-3.5 w-3.5;
+    stroke-width: 3;
+  }
+}
+
+.checkbox:checked + .checkboxBox {
+  @apply border-primary bg-primary text-primary-foreground;
+}
+
+.checkbox:focus-visible + .checkboxBox {
+  @apply ring-2 ring-ring ring-offset-2 ring-offset-background;
+}
+
+.well {
+  @apply flex w-16 shrink-0 items-center justify-center rounded-xl bg-muted/40 p-2 sm:w-full sm:rounded-2xl sm:p-4;
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+/* The page's A5 shape. Width-led in the phone row; from `sm:` the same height a strip
+ * preview takes (14.25rem), so a scrapbook and a strip line up in one grid row. */
+.cover {
+  @apply flex w-11 items-center justify-center overflow-hidden rounded-[0.3125rem] bg-[#d8bb8f] shadow-[0_12px_26px_-18px_rgba(15,23,42,0.5)] sm:rounded-lg;
+
+  aspect-ratio: 148 / 210;
+
+  // Plain media query (not @screen) so the sass compiler doesn't need Tailwind's
+  // directives. Matches the `sm` breakpoint.
+  @media (min-width: 640px) {
+    width: auto;
+    max-width: 100%;
+    height: 14.25rem;
+  }
+}
+
+.coverImage {
+  @apply block h-full w-full object-cover;
+}
+
+.coverIcon {
+  @apply h-5 w-5 text-[#4a3826]/60 sm:h-8 sm:w-8;
+}
+
+.body {
+  @apply flex min-w-0 flex-1 flex-col gap-2.5 sm:gap-3;
+}
+
+.text {
+  @apply flex min-w-0 flex-col gap-1;
+}
+
+.title {
+  @apply truncate text-[0.875rem] font-semibold;
+}
+
+/* The strip card's date line, in the same mono caps. */
+.meta {
+  @apply font-mono text-[0.65625rem] uppercase tracking-[0.08em] text-muted-foreground/80;
+}
+
+/* As on a strip card: in the body on a phone, pinned top-right once the card stacks. */
+.payBadge {
+  @apply inline-flex w-fit items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 text-[0.6875rem] font-semibold text-amber-700 sm:absolute sm:right-3 sm:top-3 sm:z-10 sm:shadow-sm;
+  @apply dark:bg-amber-900/60 dark:text-amber-200;
+}
+
+.payBadgeIcon {
+  @apply h-3 w-3;
+}
+
+/* Unlock across the width, the remove icon beside it. */
+.actions {
+  @apply flex items-center gap-2;
+}
+
+.unlockBtn {
+  @apply h-[2.375rem] flex-1 text-[0.8125rem] font-semibold sm:h-10 sm:text-[0.84375rem];
+}
+
+.iconBtn {
+  @apply h-[2.375rem] w-[2.375rem] shrink-0 p-0 text-muted-foreground sm:h-10 sm:w-10;
+}
+
+.spin {
+  @apply animate-spin;
+}

@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
+import ApiError from '@/api/apiError'
 import { ANALYTICS_EVENTS, TRACK_IDS, trackClick, trackEvents, useTrackPageView } from '@/analytics'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Button } from '@/components/ui/button'
@@ -26,8 +27,12 @@ import { CheckoutModal } from '@/features/checkout/CheckoutModal'
 import { useCheckout } from '@/features/checkout/useCheckout'
 import { useCountdown } from '@/features/checkout/useCountdown'
 import { formatIdr } from '@/features/profile/profileData'
+import { CartScrapbookCard } from '@/features/scrapbook/CartScrapbookCard'
 import { cn } from '@/lib/utils'
+import { reopenScrapbook, unlockScrapbook } from '@/api/services/scrapbooksService'
 import { useCartStore } from '@/store/useCartStore'
+import { useScrapbookStore } from '@/store/useScrapbookStore'
+import type { ScrapbookSummary } from '@/types/scrapbookType'
 import type { StoredStrip } from '@/types/stripType'
 
 import styles from './CartPage.module.scss'
@@ -102,9 +107,9 @@ export function CartPage() {
   // (`VITE_PAYMENTS_ENABLED`). With it off the cart is a free download shelf: no
   // checkboxes, no prices, no bar. Nothing below reaches Midtrans while it is false.
   const payEnabled = env.paymentsEnabled
-  // Ids of unpaid strips the user ticked to pay for.
+  // Ids of the unpaid strips and scrapbooks the user ticked to pay for.
   const [selected, setSelected] = useState<Set<string>>(new Set())
-  // A strip being moved to the gallery.
+  // A strip being moved to the gallery, or a scrapbook back to the shelf (free unlock).
   const [unlockingId, setUnlockingId] = useState<string | null>(null)
   // The strip pending a delete confirmation, or null when the dialog is closed.
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
@@ -115,6 +120,21 @@ export function CartPage() {
   useEffect(() => {
     void load()
   }, [load])
+
+  // Finished scrapbooks wait here until they're paid for (user decision, 2026-10-17): the
+  // cart is where every payment happens. They leave the shelf while they're here, and go
+  // back to it once paid. Each is a cart item like a strip — it takes a slot, and it can
+  // be ticked into the same checkout.
+  const shelf = useScrapbookStore((state) => state.shelf)
+  const loadShelf = useScrapbookStore((state) => state.loadShelf)
+  const scrapbookQuota = useScrapbookStore((state) => state.quota)
+  useEffect(() => {
+    if (env.scrapbookEnabled) void loadShelf()
+  }, [loadShelf])
+  const scrapbooks = useMemo(
+    () => (env.scrapbookEnabled ? shelf.filter((item) => item.state === 'finished') : []),
+    [shelf]
+  )
 
   // The clock `printStateOf` is read against, re-stamped on every list change so a strip
   // whose clean copy never arrived stops claiming to be "preparing" once the refresh that
@@ -129,21 +149,24 @@ export function CartPage() {
   // waiting — the two pages are one list split on `paid`, not two stores.
   const unpaid = useMemo(() => cartItems(items), [items])
   const groups = useMemo(() => groupByMode(unpaid), [unpaid])
-  // Only unpaid strips count against the cap — a strip they bought is theirs to keep.
+  // What's in the cart: unpaid strips plus finished scrapbooks, one slot each. Only unpaid
+  // items count against the cap — what they bought is theirs to keep. The server counts
+  // the same way (`cartIsFull`).
+  const cartCount = unpaid.length + scrapbooks.length
   // Clamped at zero: lowering the cap below what someone already holds is a real state,
   // and "-1 slots left" is not how to describe it.
-  const slotsLeft = Math.max(0, env.stripMaxItems - unpaid.length)
+  const slotsLeft = Math.max(0, env.stripMaxItems - cartCount)
   const cartFull = slotsLeft === 0
   // Pips to paint as taken. Clamped the same way, so an over-cap cart shows a full
   // meter rather than overflowing it.
-  const slotsUsed = Math.min(unpaid.length, env.stripMaxItems)
+  const slotsUsed = Math.min(cartCount, env.stripMaxItems)
   // Our own checkout owns the payment lifecycle: channel choice, the QR or deeplink,
   // polling, and resuming an attempt the user walked away from. It reloads the cart on
   // settlement so the paid strips leave for the gallery.
   const {
     phase: checkoutPhase,
     attempt,
-    stripIds: checkoutStripIds,
+    selection: checkoutSelection,
     liveAttempt,
     open: openCheckout,
     reopen: reopenCheckout,
@@ -151,11 +174,22 @@ export function CartPage() {
     choose: chooseMethod,
   } = useCheckout(async (wasVisible) => {
     setSelected(new Set())
-    await load()
+    // Paid strips leave for the gallery, paid scrapbooks for the shelf.
+    await Promise.all([load(), env.scrapbookEnabled ? loadShelf() : undefined])
     // The modal says this itself when it is open; a toast as well would say it twice.
     if (!wasVisible) {
-      toast.success(t('payment.success'), {
-        action: { label: t('cart.viewGallery'), onClick: () => navigate(ROUTES.gallery) },
+      const { stripIds, scrapbookIds } = checkoutSelection
+      const message =
+        scrapbookIds.length === 0
+          ? 'payment.success'
+          : stripIds.length === 0
+            ? 'scrapbook.cart.paid'
+            : 'checkout.successMixed'
+      toast.success(t(message), {
+        action:
+          stripIds.length === 0
+            ? { label: t('scrapbook.cart.viewShelf'), onClick: () => navigate(ROUTES.scrapbook) }
+            : { label: t('cart.viewGallery'), onClick: () => navigate(ROUTES.gallery) },
       })
     }
   })
@@ -166,6 +200,10 @@ export function CartPage() {
   // Strips the payment currently running already covers — drives the badge and which
   // card offers to resume.
   const awaitingIds = useMemo(() => new Set(liveAttempt?.stripIds ?? []), [liveAttempt])
+  const awaitingScrapbookIds = useMemo(
+    () => new Set(liveAttempt?.scrapbookIds ?? []),
+    [liveAttempt]
+  )
   // The server allows one live payment per account, so while one is running there is
   // nothing a second selection could buy. The cart says so plainly rather than leaving a
   // pay bar that quietly reopens the *existing* QR and discards what was ticked.
@@ -184,11 +222,29 @@ export function CartPage() {
     () => selectableStrips.filter((s) => selected.has(s.id)),
     [selectableStrips, selected]
   )
-
-  const totalLabel = useMemo(
-    () => formatIdr(env.stripPrintPriceIdr * selectedStrips.length),
-    [selectedStrips.length]
+  // Every finished scrapbook is sellable — it has its PDF by definition.
+  const selectableScrapbooks = useMemo(
+    () => (payEnabled && !paymentInFlight ? scrapbooks : []),
+    [payEnabled, paymentInFlight, scrapbooks]
   )
+  const selectedScrapbooks = useMemo(
+    () => selectableScrapbooks.filter((s) => selected.has(s.id)),
+    [selectableScrapbooks, selected]
+  )
+  const selectedCount = selectedStrips.length + selectedScrapbooks.length
+
+  /**
+   * What a checkout for these would cost, as the server will compute it. Null while a
+   * scrapbook is in it and its price isn't known here (`VITE_SCRAPBOOK_PRICE_IDR` unset) —
+   * the modal then waits for the charge to state the real total.
+   */
+  const totalOf = (strips: number, scrapbookCount: number): number | null => {
+    const scrapbookPrice = scrapbookCount > 0 ? env.scrapbookPriceIdr : 0
+    if (scrapbookPrice === null) return null
+    return env.stripPrintPriceIdr * strips + scrapbookPrice * scrapbookCount
+  }
+  const selectedTotal = totalOf(selectedStrips.length, selectedScrapbooks.length)
+  const totalLabel = selectedTotal === null ? '' : formatIdr(selectedTotal)
 
   const dateFmt = useMemo(
     () =>
@@ -217,19 +273,23 @@ export function CartPage() {
     })
   }
 
-  const allUnpaidSelected =
-    selectableStrips.length > 0 && selectedStrips.length === selectableStrips.length
+  const selectableCount = selectableStrips.length + selectableScrapbooks.length
+  const allUnpaidSelected = selectableCount > 0 && selectedCount === selectableCount
   const toggleSelectAll = () => {
-    setSelected(allUnpaidSelected ? new Set() : new Set(selectableStrips.map((s) => s.id)))
+    setSelected(
+      allUnpaidSelected
+        ? new Set()
+        : new Set([...selectableStrips, ...selectableScrapbooks].map((item) => item.id))
+    )
   }
 
   // The pay bar disables only while the charge request is in flight — once the modal
   // is showing a QR it is on top anyway, and the bar behind it is not reachable.
   const checkingOut = checkoutPhase === 'charging'
 
-  const checkout = (ids: string[]) => {
-    if (ids.length === 0) return
-    openCheckout(ids)
+  const checkout = (stripIds: string[], scrapbookIds: string[] = []) => {
+    if (stripIds.length + scrapbookIds.length === 0) return
+    openCheckout({ stripIds, scrapbookIds })
   }
 
   /**
@@ -285,6 +345,75 @@ export function CartPage() {
     toast.error(t('cart.unlockError'))
   }
 
+  /**
+   * Unlock one scrapbook — its card's own button. With payments live it checks out this
+   * one alone (or resumes the payment that covers it); while they're dark it's free, and
+   * the scrapbook goes straight back to the shelf.
+   */
+  const unlockOneScrapbook = async (scrapbook: ScrapbookSummary) => {
+    trackEvents(ANALYTICS_EVENTS.UNLOCK_CLICKED, { paymentsEnabled: payEnabled, item: 'scrapbook' })
+    if (payEnabled) {
+      checkout([], [scrapbook.id])
+      return
+    }
+    setUnlockingId(scrapbook.id)
+    try {
+      await unlockScrapbook(scrapbook.id)
+      await loadShelf()
+      toast.success(t('scrapbook.cart.unlocked'), {
+        action: {
+          label: t('scrapbook.cart.open'),
+          onClick: () => navigate(ROUTES.scrapbookEdit.replace(':scrapbookId', scrapbook.id)),
+        },
+      })
+    } catch {
+      toast.error(t('scrapbook.cart.unlockError'))
+    } finally {
+      setUnlockingId(null)
+    }
+  }
+
+  /**
+   * Take a scrapbook out of the cart without deleting it: it reopens as a draft (user
+   * decision, 2026-10-17), freeing its slot. Its PDF goes; the next Finish renders a new
+   * one. The server refuses while a payment covers it, and the card hides Remove then.
+   * Asked first, like a strip's delete: the PDF can't be had back without finishing again.
+   */
+  const [removingScrapbookId, setRemovingScrapbookId] = useState<string | null>(null)
+  // The scrapbook pending a remove confirmation, or null when the dialog is closed.
+  const [pendingRemoveScrapbook, setPendingRemoveScrapbook] = useState<ScrapbookSummary | null>(
+    null
+  )
+  const confirmRemoveScrapbook = () => {
+    const scrapbook = pendingRemoveScrapbook
+    setPendingRemoveScrapbook(null)
+    if (scrapbook) void removeScrapbookFromCart(scrapbook)
+  }
+  const removeScrapbookFromCart = async (scrapbook: ScrapbookSummary) => {
+    setRemovingScrapbookId(scrapbook.id)
+    try {
+      await reopenScrapbook(scrapbook.id)
+      setSelected((prev) => {
+        const next = new Set(prev)
+        next.delete(scrapbook.id)
+        return next
+      })
+      await loadShelf()
+      toast.success(t('scrapbook.cart.removed'), {
+        action: {
+          label: t('scrapbook.cart.edit'),
+          onClick: () => navigate(ROUTES.scrapbookEdit.replace(':scrapbookId', scrapbook.id)),
+        },
+      })
+    } catch (error) {
+      const paying = error instanceof ApiError && error.code === 'payment_in_progress'
+      toast.error(t(paying ? 'scrapbook.viewer.paymentInProgress' : 'scrapbook.cart.removeError'))
+      void loadShelf()
+    } finally {
+      setRemovingScrapbookId(null)
+    }
+  }
+
   const remove = async (id: string) => {
     try {
       await removeStrip(id)
@@ -300,20 +429,32 @@ export function CartPage() {
     if (id) void remove(id)
   }
 
+  // What "Clear all" would do: delete these strips, send these scrapbooks back to drafts,
+  // and keep what the running payment covers.
+  const clearableStrips = unpaid.filter((strip) => !awaitingIds.has(strip.id))
+  const clearableScrapbooks = scrapbooks.filter((item) => !awaitingScrapbookIds.has(item.id))
+  const keptByPayment = cartCount - clearableStrips.length - clearableScrapbooks.length
+
+  /**
+   * Empty the cart (user decision, 2026-10-17): strips are deleted, scrapbooks go back to
+   * being drafts — the same as their own Remove, so no book is lost to a sweep of strips.
+   */
   const clearAll = async () => {
     setConfirmClearOpen(false)
-    try {
-      setSelected(new Set())
+    setSelected(new Set())
+    const [strips, ...reopened] = await Promise.allSettled([
       // Strips inside the running payment are held back rather than deleted: the server
       // refuses them, and clearing the cart should not quietly leave a few cards behind
-      // with no explanation for why they survived.
-      await clear([...awaitingIds])
-      if (awaitingIds.size > 0) {
-        toast.message(t('cart.clearKeptPaying', { count: awaitingIds.size }))
-      }
-    } catch {
+      // with no explanation for why they survived. The same goes for scrapbooks.
+      clearableStrips.length > 0 ? clear([...awaitingIds]) : Promise.resolve(),
+      ...clearableScrapbooks.map((item) => reopenScrapbook(item.id)),
+    ])
+    if (clearableScrapbooks.length > 0) await loadShelf()
+    if (strips.status === 'rejected' || reopened.some((r) => r.status === 'rejected')) {
       toast.error(t('cart.removeError'))
+      return
     }
+    if (keptByPayment > 0) toast.message(t('cart.clearKeptPaying', { count: keptByPayment }))
   }
 
   /** The cap, drawn: one pip per allowed strip, filled left to right by what's held. */
@@ -512,6 +653,29 @@ export function CartPage() {
     )
   }
 
+  /**
+   * The Scrapbooks shelf's own invitation, like each strip shelf's: it starts a new one at
+   * the template picker. Gone when the cart is full (a finished scrapbook would have
+   * nowhere to go) and when the scrapbook limit is reached (the picker would refuse).
+   */
+  const canStartScrapbook =
+    env.scrapbookEnabled &&
+    !cartFull &&
+    !(scrapbookQuota && scrapbookQuota.limit > 0 && scrapbookQuota.used >= scrapbookQuota.limit)
+  const renderScrapbookTile = () => {
+    if (!canStartScrapbook) return null
+    return (
+      <Link to={ROUTES.scrapbookNew} className={styles.tile}>
+        <span className={styles.tileIcon}>
+          <Plus />
+        </span>
+        <span className={styles.tileBody}>
+          <span className={styles.tileTitle}>{t('scrapbook.shelf.new')}</span>
+        </span>
+      </Link>
+    )
+  }
+
   // Skeleton placeholder for the fetch/flush loading state — mirrors the group →
   // shelf layout so real strips slot in without the page jumping.
   const renderSkeleton = () => (
@@ -541,7 +705,40 @@ export function CartPage() {
     </div>
   )
 
-  const renderBody = () => {
+  const renderScrapbooks = () =>
+    scrapbooks.length > 0 && (
+      <section className={styles.session}>
+        <header className={styles.sessionHead}>
+          <h2 className={styles.sessionTitle}>{t('cart.scrapbookGroup')}</h2>
+          <span className={styles.sessionCount}>
+            {t('cart.scrapbookCount', { count: scrapbooks.length })}
+          </span>
+        </header>
+        <div className={styles.cards}>
+          {scrapbooks.map((scrapbook) => {
+            const awaiting = awaitingScrapbookIds.has(scrapbook.id)
+            return (
+              <CartScrapbookCard
+                key={scrapbook.id}
+                scrapbook={scrapbook}
+                selectable={selectableScrapbooks.includes(scrapbook)}
+                selected={selected.has(scrapbook.id)}
+                onToggle={() => toggleSelect(scrapbook.id)}
+                awaiting={awaiting}
+                frozen={paymentInFlight && !awaiting}
+                unlocking={unlockingId === scrapbook.id}
+                onUnlock={() => void unlockOneScrapbook(scrapbook)}
+                removing={removingScrapbookId === scrapbook.id}
+                onRemove={() => setPendingRemoveScrapbook(scrapbook)}
+              />
+            )
+          })}
+          {renderScrapbookTile()}
+        </div>
+      </section>
+    )
+
+  const renderStrips = () => {
     if (status === 'loading' && items.length === 0) {
       return renderSkeleton()
     }
@@ -558,16 +755,20 @@ export function CartPage() {
     }
 
     if (unpaid.length === 0) {
+      if (scrapbooks.length > 0) return null
       return (
         <div className={styles.empty}>
+          {/* Strips either side of a book once scrapbooks exist: the cart holds both. */}
           <div className={styles.emptyStrips} aria-hidden="true">
             <span className={cn(styles.emptyStrip, styles.emptyStripLeft)} />
-            <span className={styles.emptyStrip} />
+            <span className={env.scrapbookEnabled ? styles.emptyBook : styles.emptyStrip} />
             <span className={cn(styles.emptyStrip, styles.emptyStripRight)} />
           </div>
+          {/* Names no kind of item: the cart holds whatever an activity makes — strips
+              and scrapbooks today, more later — so the way in is the activities list. */}
           <p className={styles.emptyMessage}>{t('cart.empty')}</p>
           <Button asChild className={styles.emptyCta}>
-            <Link to={ROUTES.photobooth}>
+            <Link to={ROUTES.activities}>
               {t('cart.emptyCta')} <ArrowRight />
             </Link>
           </Button>
@@ -605,17 +806,21 @@ export function CartPage() {
           <div className={styles.headMain}>
             <h1 className={styles.title}>{t('cart.title')}</h1>
             <p className={styles.subtitle}>
-              {unpaid.length === 0
+              {cartCount === 0
                 ? t('cart.subtitleEmpty')
-                : t('cart.subtitle', { count: unpaid.length })}
+                : scrapbooks.length === 0
+                  ? t('cart.subtitle', { count: unpaid.length })
+                  : unpaid.length === 0
+                    ? t('cart.subtitleScrapbooks', { count: scrapbooks.length })
+                    : t('cart.subtitleItems', { count: cartCount })}
             </p>
           </div>
 
-          {unpaid.length > 0 && (
+          {cartCount > 0 && (
             <div className={styles.headAside}>
               {renderSlotMeter()}
               <div className={styles.headActions}>
-                {selectableStrips.length > 0 && payEnabled && (
+                {selectableCount > 0 && payEnabled && (
                   <Button variant="outline" className={styles.headButton} onClick={toggleSelectAll}>
                     {allUnpaidSelected ? t('cart.clearSelection') : t('cart.selectAll')}
                   </Button>
@@ -652,7 +857,7 @@ export function CartPage() {
         {/* One banner at a time, the more actionable one winning. A full cart is the
             blocking fact — and when guest strips are the thing waiting on that space,
             their message is the one that explains what happens after a delete. */}
-        {unpaid.length > 0 && cartFull && (
+        {cartCount > 0 && cartFull && (
           <div className={cn(styles.banner, styles.bannerFull)} role="status">
             <span className={styles.bannerIconTile} aria-hidden="true">
               <TriangleAlert />
@@ -673,16 +878,21 @@ export function CartPage() {
           </div>
         )}
 
-        {renderBody()}
+        {/* Scrapbooks lead: there are at most a handful, and one just finished is the
+            reason the user was sent here. */}
+        {renderScrapbooks()}
+        {renderStrips()}
       </div>
 
-      {payEnabled && selectedStrips.length > 0 && (
+      {payEnabled && selectedCount > 0 && (
         <div className={styles.checkoutBar}>
           <div className={styles.checkoutBarInner}>
             <div className={styles.checkoutInfo}>
               <div className={styles.checkoutFigures}>
                 <span className={styles.checkoutCount}>
-                  {t('cart.selectedCount', { count: selectedStrips.length })}
+                  {selectedScrapbooks.length === 0
+                    ? t('cart.selectedCount', { count: selectedCount })
+                    : t('cart.selectedItems', { count: selectedCount })}
                 </span>
                 <span className={styles.checkoutTotal}>{totalLabel}</span>
               </div>
@@ -700,7 +910,12 @@ export function CartPage() {
               <Button
                 className={styles.checkoutBtn}
                 disabled={checkingOut}
-                onClick={() => checkout(selectedStrips.map((strip) => strip.id))}
+                onClick={() =>
+                  checkout(
+                    selectedStrips.map((strip) => strip.id),
+                    selectedScrapbooks.map((scrapbook) => scrapbook.id)
+                  )
+                }
               >
                 {checkingOut ? <Loader2 className={styles.btnSpinner} /> : <CreditCard />}
                 {t('cart.checkout')}
@@ -722,13 +937,29 @@ export function CartPage() {
       />
 
       <ConfirmDialog
+        open={pendingRemoveScrapbook !== null}
+        title={t('scrapbook.cart.removeTitle')}
+        description={t('scrapbook.cart.removeDescription')}
+        confirmLabel={t('scrapbook.cart.removeConfirm')}
+        cancelLabel={t('cart.deleteCancel')}
+        destructive
+        onConfirm={confirmRemoveScrapbook}
+        onCancel={() => setPendingRemoveScrapbook(null)}
+      />
+
+      <ConfirmDialog
         open={confirmClearOpen}
         title={t('cart.clearTitle')}
-        description={
-          awaitingIds.size > 0
-            ? t('cart.clearDescriptionPaying', { count: awaitingIds.size })
-            : t('cart.clearDescription')
-        }
+        // One sentence per thing that happens: strips deleted, scrapbooks back to drafts,
+        // and whatever the running payment covers kept.
+        description={[
+          clearableStrips.length > 0 && t('cart.clearDescription'),
+          clearableScrapbooks.length > 0 &&
+            t('cart.clearDescriptionScrapbooks', { count: clearableScrapbooks.length }),
+          keptByPayment > 0 && t('cart.clearDescriptionPaying', { count: keptByPayment }),
+        ]
+          .filter(Boolean)
+          .join(' ')}
         confirmLabel={t('cart.clearConfirm')}
         cancelLabel={t('cart.deleteCancel')}
         destructive
@@ -739,8 +970,12 @@ export function CartPage() {
       <CheckoutModal
         phase={checkoutPhase}
         attempt={attempt}
-        count={checkoutStripIds.length}
-        grossAmount={checkoutStripIds.length * env.stripPrintPriceIdr}
+        strips={checkoutSelection.stripIds.length}
+        scrapbooks={checkoutSelection.scrapbookIds.length}
+        grossAmount={totalOf(
+          checkoutSelection.stripIds.length,
+          checkoutSelection.scrapbookIds.length
+        )}
         onChoose={(method) => void chooseMethod(method)}
         onClose={closeCheckout}
       />

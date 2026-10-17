@@ -7,8 +7,14 @@ import AxiosClient from '../client/axiosClient'
 
 const client = new AxiosClient()
 
-/** What a checkout pays for: strips from the cart, or one finished scrapbook. */
-export type CheckoutTarget = { stripIds: string[] } | { scrapbookId: string }
+/**
+ * What a checkout pays for: whatever was selected in the cart — strips, finished
+ * scrapbooks, or both in one order (2026-10-17).
+ */
+export interface CheckoutTarget {
+  stripIds: string[]
+  scrapbookIds: string[]
+}
 
 /** Raised when a live attempt already exists; carries it so the caller can resume. */
 export class PaymentInProgressError extends Error {
@@ -19,7 +25,7 @@ export class PaymentInProgressError extends Error {
 }
 
 /**
- * Open a payment for the selected strips — or one scrapbook — on one channel.
+ * Open a payment for the cart's selection on one channel.
  *
  * A `409 payment_in_progress` is not a failure: the server refuses to charge twice
  * while a QR is still payable, and the caller resumes that attempt instead. Anything
