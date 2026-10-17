@@ -1796,8 +1796,6 @@
       "button": "Selesai",
       "confirmTitle": "Selesaikan scrapbook ini?",
       "confirmDescription": "Kami akan membuat PDF dari halaman-halamanmu. Setelah itu tidak bisa diubah — kecuali kamu pilih Lanjut mengedit sebelum membukanya.",
-      "empty_one": "{{count}} tempat strip masih kosong. Akan tercetak sebagai kertas kosong.",
-      "empty_other": "{{count}} tempat strip masih kosong. Akan tercetak sebagai kertas kosong.",
       "confirm": "Selesaikan",
       "cancel": "Lanjut mengedit",
       "saving": "Menyimpan perubahan…",
@@ -1809,7 +1807,10 @@
       "cancelled": "Dibatalkan — tidak ada yang berubah.",
       "changed": "Scrapbook ini diubah di tempat lain. Periksa lalu selesaikan lagi.",
       "unsaved": "Perubahan terakhirmu tidak bisa disimpan. Coba lagi.",
-      "failed": "Tidak bisa diselesaikan. Coba lagi."
+      "failed": "Tidak bisa diselesaikan. Coba lagi.",
+      "placesLeft_one": "{{count}} tempat strip lagi",
+      "placesLeft_other": "{{count}} tempat strip lagi",
+      "fillAll": "Isi semua tempat strip untuk menyelesaikan."
     },
     "picker": {
       "title": "Pilih template",

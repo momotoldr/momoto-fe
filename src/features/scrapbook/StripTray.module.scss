@@ -29,10 +29,12 @@
   }
 }
 
-/* Padded inside, pulled back by the same margin: the list scrolls, and a scroll box clips
- * the current strip's ring (which sits outside the tile) unless there's room for it. */
+/* Padded so the current strip's ring (which sits outside the tile) has room: the list
+ * scrolls, and a scroll box clips anything past its edge. No negative margin to pull the
+ * padding back — that made the list wider than the side column, and since the column
+ * scrolls vertically, the extra width became a horizontal scrollbar under the tray. */
 .list {
-  @apply -m-1.5 grid grid-cols-3 gap-2.5 overflow-y-auto p-1.5;
+  @apply grid grid-cols-3 gap-2.5 overflow-y-auto p-1.5;
 }
 
 /* 2x2 cards are wide; two across keeps each one big enough to recognise. */

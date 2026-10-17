@@ -1803,8 +1803,6 @@
       "button": "Finish",
       "confirmTitle": "Finish this scrapbook?",
       "confirmDescription": "We'll make the PDF from your pages. After that it can't be changed — unless you choose Keep editing before you unlock it.",
-      "empty_one": "{{count}} place for a strip is still empty. It will print as blank paper.",
-      "empty_other": "{{count}} places for strips are still empty. They will print as blank paper.",
       "confirm": "Finish",
       "cancel": "Keep editing",
       "saving": "Saving your changes…",
@@ -1816,7 +1814,10 @@
       "cancelled": "Finish cancelled — nothing was changed.",
       "changed": "This scrapbook was changed somewhere else. Check it and finish again.",
       "unsaved": "Couldn't save your latest changes. Try again.",
-      "failed": "Couldn't finish it. Try again."
+      "failed": "Couldn't finish it. Try again.",
+      "placesLeft_one": "{{count}} strip place left",
+      "placesLeft_other": "{{count}} strip places left",
+      "fillAll": "Fill every place for a strip to finish."
     },
     "picker": {
       "title": "Choose a template",

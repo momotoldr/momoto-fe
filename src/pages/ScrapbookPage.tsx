@@ -22,13 +22,15 @@ import { ROUTES } from '@/constants/routes'
 import { PageRail } from '@/features/scrapbook/PageRail'
 import { pageLabel } from '@/features/scrapbook/pageLabel'
 import { ScrapbookPageView, type ScrapbookSelection } from '@/features/scrapbook/ScrapbookPageView'
+import { StripPickerModal } from '@/features/scrapbook/StripPickerModal'
 import { StripTray } from '@/features/scrapbook/StripTray'
 import { TextPanel } from '@/features/scrapbook/TextPanel'
+import { useDesktopLayout } from '@/features/scrapbook/useDesktopLayout'
 import { useScrapbookFinish, type FinishOutcome } from '@/features/scrapbook/useScrapbookFinish'
 import { ViewerPanel } from '@/features/scrapbook/ViewerPanel'
-import { stripSlotsOf } from '@/constants/scrapbookTemplates'
 import { cn } from '@/lib/utils'
 import { useScrapbookStore } from '@/store/useScrapbookStore'
+import type { StoredStrip } from '@/types/stripType'
 
 import styles from './ScrapbookPage.module.scss'
 
@@ -96,6 +98,8 @@ export function ScrapbookPage() {
   const draft = scrapbook?.state === 'draft'
   // A draft only takes edits while nothing is finishing it — here or in another tab.
   const editing = draft && !frozen && !progress && !otherTabFinishing
+  // Where the strip picker opens: the side column on desktop, a pop-up on a phone.
+  const desktop = useDesktopLayout()
 
   const page = template?.pages[pageIndex]
   const stripSlot =
@@ -157,24 +161,41 @@ export function ScrapbookPage() {
     }
   }, [scrapbook, discard, navigate, t])
 
+  /**
+   * Every place for a strip that is still empty — or emptied by its strip leaving the gallery,
+   * since that prints as blank paper too. Finish waits until there are none (user decision,
+   * 2026-10-17); text places stay optional.
+   */
+  const emptyPlaces = useMemo(() => {
+    if (!template || !scrapbook) return 0
+    return template.pages
+      .flatMap((page) => page.strips)
+      .filter((slot) => {
+        const stripId = scrapbook.content.strips[slot.id]
+        return !stripId || missing.has(stripId)
+      }).length
+  }, [template, scrapbook, missing])
+
+  /** Put a strip in a place, the same way from the side column and the phone's pop-up. */
+  const pickStrip = useCallback(
+    (slot: { id: string; layout: '4x1' | '2x2' }, strip: StoredStrip) => {
+      placeStrip(slot.id, strip)
+      trackEvents(ANALYTICS_EVENTS.SCRAPBOOK_STRIP_PLACED, { layout: slot.layout })
+    },
+    [placeStrip]
+  )
+
   const startFinish = useCallback(async () => {
     setConfirmFinish(false)
+    // The button is disabled while places are empty; this is the same rule for any other way
+    // in. The server doesn't check it — it knows slot ids by shape only, not the template.
+    if (emptyPlaces > 0) return
     setSelection(null)
     const outcome = await finish()
     if (outcome === 'done') toast.success(t('scrapbook.finish.done'))
     else if (outcome === 'cancelled') toast.info(t(FINISH_MESSAGES[outcome]))
     else toast.error(t(FINISH_MESSAGES[outcome]))
-  }, [finish, t])
-
-  // Places for a strip still empty (or emptied by a strip leaving the gallery) — named in
-  // the confirmation, since they print as blank paper.
-  const emptyPlaces = useMemo(() => {
-    if (!template || !scrapbook) return 0
-    return stripSlotsOf(template).filter((slot) => {
-      const stripId = scrapbook.content.strips[slot.id]
-      return !stripId || missing.has(stripId)
-    }).length
-  }, [template, scrapbook, missing])
+  }, [finish, t, emptyPlaces])
 
   if (openStatus === 'error') {
     return (
@@ -213,7 +234,8 @@ export function ScrapbookPage() {
   const total = template.pages.length
   // On a phone the side column is a sheet: open while a slot is picked, and while a finish
   // runs so its progress (and Cancel) stays in view.
-  const sheetOpen = draft && (selection !== null || progress !== null || otherTabFinishing)
+  // A strip place on a phone opens the picker pop-up instead, so only text uses the sheet.
+  const sheetOpen = draft && (selection?.kind === 'text' || progress !== null || otherTabFinishing)
 
   return (
     <div className={styles.page}>
@@ -265,7 +287,16 @@ export function ScrapbookPage() {
             >
               <Trash2 />
             </Button>
-            <Button disabled={!editing} onClick={() => setConfirmFinish(true)}>
+            {editing && emptyPlaces > 0 && (
+              <span className={styles.placesLeft}>
+                {t('scrapbook.finish.placesLeft', { count: emptyPlaces })}
+              </span>
+            )}
+            <Button
+              disabled={!editing || emptyPlaces > 0}
+              title={emptyPlaces > 0 ? t('scrapbook.finish.fillAll') : undefined}
+              onClick={() => setConfirmFinish(true)}
+            >
               <BookCheck />
               {t('scrapbook.finish.button')}
             </Button>
@@ -349,16 +380,11 @@ export function ScrapbookPage() {
             </div>
           ) : draft ? (
             <>
-              {stripSlot ? (
+              {stripSlot && desktop ? (
                 <StripTray
                   layout={stripSlot.layout}
                   currentStripId={scrapbook.content.strips[stripSlot.id]}
-                  onPick={(strip) => {
-                    placeStrip(stripSlot.id, strip)
-                    trackEvents(ANALYTICS_EVENTS.SCRAPBOOK_STRIP_PLACED, {
-                      layout: stripSlot.layout,
-                    })
-                  }}
+                  onPick={(strip) => pickStrip(stripSlot, strip)}
                   onClear={() => placeStrip(stripSlot.id, null)}
                 />
               ) : textSlot ? (
@@ -401,6 +427,23 @@ export function ScrapbookPage() {
         </aside>
       </div>
 
+      {stripSlot && (
+        <StripPickerModal
+          open={!desktop && editing}
+          layout={stripSlot.layout}
+          currentStripId={scrapbook.content.strips[stripSlot.id]}
+          onPick={(strip) => {
+            pickStrip(stripSlot, strip)
+            setSelection(null)
+          }}
+          onClear={() => {
+            placeStrip(stripSlot.id, null)
+            setSelection(null)
+          }}
+          onClose={() => setSelection(null)}
+        />
+      )}
+
       <ConfirmDialog
         open={confirmFinish}
         title={t('scrapbook.finish.confirmTitle')}
@@ -409,13 +452,7 @@ export function ScrapbookPage() {
         cancelLabel={t('scrapbook.finish.cancel')}
         onConfirm={() => void startFinish()}
         onCancel={() => setConfirmFinish(false)}
-      >
-        {emptyPlaces > 0 && (
-          <p className={styles.finishEmpty}>
-            {t('scrapbook.finish.empty', { count: emptyPlaces })}
-          </p>
-        )}
-      </ConfirmDialog>
+      />
 
       <ConfirmDialog
         open={confirmDiscard}

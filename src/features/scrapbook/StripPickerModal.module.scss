@@ -1,0 +1,28 @@
+/* The phone's strip picker: a pop-up above everything but the confirm dialogs' layer. The
+ * dialog scrolls as a whole when there are more strips than fit. */
+
+.overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in-0;
+}
+
+.dialog {
+  @apply relative max-h-[80dvh] w-full max-w-md overflow-y-auto rounded-lg border bg-card p-5 pt-12 shadow-lg animate-in fade-in-0 zoom-in-95;
+}
+
+/* Top-right, above the tray's own heading row (the dialog's top padding makes the room),
+ * so it never sits on the tray's "Take this strip out". */
+.close {
+  @apply absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors;
+
+  svg {
+    @apply h-4 w-4;
+  }
+
+  &:hover {
+    @apply bg-muted text-foreground;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring;
+  }
+}

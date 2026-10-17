@@ -143,9 +143,10 @@
   @apply text-sm font-medium;
 }
 
-/* The empty-places warning inside the finish confirmation. */
-.finishEmpty {
-  @apply mt-3 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900;
+/* "N strip places left", beside the disabled Finish button — shown on phones too,
+ * where there's no hover to explain why the button is off. */
+.placesLeft {
+  @apply inline-flex items-center gap-1.5 text-[0.8125rem] text-muted-foreground;
 }
 
 /* The finished/paid viewer has no selection to wait for, so its panel shows on a phone too. */
