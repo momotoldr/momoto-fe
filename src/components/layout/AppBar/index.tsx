@@ -4,6 +4,8 @@ import { ROUTES } from '@/constants/routes'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useCartStore } from '@/store/useCartStore'
+import { useScrapbookStore } from '@/store/useScrapbookStore'
+import { env } from '@/env'
 import { Menu, ShoppingBag, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -34,6 +36,12 @@ export default function Appbar() {
   // list would badge the cart with strips that aren't in it — and fire the "you saved a
   // strip" tip when one merely moved out.
   const cartCount = useCartStore((state) => state.items.reduce((n, i) => n + (i.paid ? 0 : 1), 0))
+  // Finished, unpaid scrapbooks wait in the cart too (2026-10-17), so the badge counts
+  // them. The tip below stays about strips: it's the "you just saved a strip" nudge.
+  const scrapbookCount = useScrapbookStore((state) =>
+    env.scrapbookEnabled ? state.shelf.reduce((n, s) => n + (s.state === 'finished' ? 1 : 0), 0) : 0
+  )
+  const badgeCount = cartCount + scrapbookCount
   // The cart holds this user's strips, so only surface it once signed in.
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const navLinks = isAuthenticated ? [...NAV_LINKS, ...AUTHED_NAV_LINKS] : NAV_LINKS
@@ -108,9 +116,9 @@ export default function Appbar() {
                 }}
               >
                 <ShoppingBag />
-                {cartCount > 0 && (
+                {badgeCount > 0 && (
                   <span className={styles.cartBadge} aria-hidden="true">
-                    {cartCount}
+                    {badgeCount}
                   </span>
                 )}
               </NavLink>

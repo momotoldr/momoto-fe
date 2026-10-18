@@ -136,6 +136,59 @@ export const API_ROUTES = {
     ),
   },
 
+  /** Scrapbooks (docs/PLAN-scrapbook.md §2). Every route needs a signed-in user. */
+  SCRAPBOOKS: {
+    /** The shelf (GET) / start a new draft (POST `{ templateId }`). `/scrapbooks`. */
+    ROOT: '/scrapbooks',
+    /** One scrapbook (GET), autosave its layout (PUT), delete an unpaid one (DELETE). */
+    BY_ID: route('/scrapbooks/:id', (id: string) => `/scrapbooks/${encodeURIComponent(id)}`),
+    /**
+     * Start a direct-to-R2 finish. `POST` with the PDF's and cover's types and sizes and the
+     * page count → `{ upload }` (presigned PUTs + token).
+     */
+    FINISH_UPLOADS: route(
+      '/scrapbooks/:id/finish/uploads',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/finish/uploads`
+    ),
+    /** Complete one. `POST` `{ token }` → `{ scrapbook }`. */
+    FINISH_UPLOADS_COMPLETE: route(
+      '/scrapbooks/:id/finish/uploads/complete',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/finish/uploads/complete`
+    ),
+    /** The fallback finish, bytes through the API. `POST` raw `MOMS` body → `{ scrapbook }`. */
+    FINISH: route(
+      '/scrapbooks/:id/finish',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/finish`
+    ),
+    /** Back to a draft (finished, unpaid only). `POST` → `{ scrapbook }`. */
+    REOPEN: route(
+      '/scrapbooks/:id/reopen',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/reopen`
+    ),
+    /** Free unlock while payments are dark; `403 payments_enabled` otherwise. */
+    UNLOCK: route(
+      '/scrapbooks/:id/unlock',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/unlock`
+    ),
+    /** A new draft with the same template, title and content. `POST` → `{ scrapbook }`. */
+    DUPLICATE: route(
+      '/scrapbooks/:id/duplicate',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/duplicate`
+    ),
+    /** Soft remove of a paid scrapbook (files deleted, row kept). `POST` → `{ quota }`. */
+    REMOVE: route(
+      '/scrapbooks/:id/remove',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/remove`
+    ),
+    /** A presigned, ~60 s R2 URL for the paid PDF. `GET` → `{ url, expiresAt }`. */
+    PDF_URL: route(
+      '/scrapbooks/:id/pdf-url',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/pdf-url`
+    ),
+    /** The paid PDF streamed through the API — the fallback for `PDF_URL`. */
+    PDF: route('/scrapbooks/:id/pdf', (id: string) => `/scrapbooks/${encodeURIComponent(id)}/pdf`),
+  },
+
   PAYMENTS: {
     /** The account's recent orders + lifetime spend. `GET /payments` → `{ orders, spent }`. */
     ROOT: '/payments',

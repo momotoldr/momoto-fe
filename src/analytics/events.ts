@@ -14,6 +14,7 @@
  */
 
 export type BoothMode = 'solo' | 'date' | 'group'
+export type CommerceItem = 'strips' | 'scrapbook' | 'mixed'
 export type BoothStageName = 'lobby' | 'booth' | 'arrange' | 'result'
 
 /** Every booth event says which booth run it belongs to (a hash of room + start, never the code). */
@@ -72,14 +73,24 @@ export type MomotoEvents = {
   session_expired: Booth & { hadStrip: boolean }
 
   // ── Commerce ──────────────────────────────────────────────────────────────────
+  // `item` is what is being bought: strips from the cart, or one scrapbook.
   cart_viewed: { itemCount: number; slotsUsed: number }
   strip_added_to_cart: { source: 'result' | 'guest_sync' }
-  unlock_clicked: { paymentsEnabled: boolean }
-  checkout_started: Record<string, never>
-  payment_succeeded: { amountIdr: number }
-  payment_failed: { code: string }
+  unlock_clicked: { paymentsEnabled: boolean; item: CommerceItem }
+  checkout_started: { item: CommerceItem }
+  payment_succeeded: { amountIdr: number; item: CommerceItem }
+  payment_failed: { code: string; item: CommerceItem }
   gallery_viewed: { itemCount: number }
   strip_deleted: { from: 'cart' | 'gallery' }
+
+  // ── Scrapbook ─────────────────────────────────────────────────────────────────
+  // No titles and no text, ever: those are what people wrote.
+  scrapbook_created: { from: 'new' | 'duplicate' }
+  scrapbook_strip_placed: { layout: '4x1' | '2x2' }
+  scrapbook_finished: { pages: number; filledStrips: number; ms: number; bytes: number }
+  /** `code`: why — `changed`, `unsaved`, `failed`, or `cancelled` by the user. */
+  scrapbook_finish_failed: { code: string }
+  scrapbook_downloaded: Record<string, never>
 
   // ── Health ────────────────────────────────────────────────────────────────────
   client_error: { source: string; name: string; messageHash: string; route: string }
@@ -145,6 +156,12 @@ export const ANALYTICS_EVENTS = {
   PAYMENT_FAILED: 'payment_failed',
   GALLERY_VIEWED: 'gallery_viewed',
   STRIP_DELETED: 'strip_deleted',
+  // Scrapbook
+  SCRAPBOOK_CREATED: 'scrapbook_created',
+  SCRAPBOOK_STRIP_PLACED: 'scrapbook_strip_placed',
+  SCRAPBOOK_FINISHED: 'scrapbook_finished',
+  SCRAPBOOK_FINISH_FAILED: 'scrapbook_finish_failed',
+  SCRAPBOOK_DOWNLOADED: 'scrapbook_downloaded',
   // Health
   CLIENT_ERROR: 'client_error',
   API_FAILED: 'api_failed',

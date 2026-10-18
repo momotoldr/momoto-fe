@@ -487,7 +487,7 @@ $hero-gradient: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 40%, #d9ffea 100%);
   @apply flex flex-col gap-1 lg:gap-[0.3125rem];
 }
 
-/* The one live activity, taped down and given the whole width. */
+/* Each live activity, taped down and given the whole width. */
 .liveCard {
   @apply relative flex flex-col gap-3.5 bg-white px-5 py-6 transition-shadow;
   @apply lg:flex-row lg:items-center lg:gap-7 lg:px-[2.125rem] lg:py-[1.875rem];
@@ -511,6 +511,11 @@ $hero-gradient: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 40%, #d9ffea 100%);
       width: 96px;
     }
   }
+}
+
+/* A second live card leans the other way, as on the Activities page. */
+.liveCardAlt {
+  transform: rotate(0.5deg);
 }
 
 .tapeLive {

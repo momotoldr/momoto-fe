@@ -146,6 +146,17 @@
   aspect-ratio: 600 / 1800;
 }
 
+/* A scrapbook order's cover: the same chip height as a strip, at the page's A5 shape. */
+.thumbCover {
+  @apply w-[2.25rem] shrink-0 rounded-[0.3125rem] border object-cover sm:w-[2.625rem];
+
+  aspect-ratio: 148 / 210;
+}
+
+.thumbCoverMissing {
+  @apply border-dashed bg-muted;
+}
+
 .thumbMissing {
   @apply w-[1.5625rem] shrink-0 rounded-[0.3125rem] border border-dashed bg-muted sm:w-[1.875rem];
 

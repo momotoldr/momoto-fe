@@ -1,0 +1,35 @@
+/* The desktop page rail: a narrow column of live thumbnails, scrolling on its own. */
+
+.rail {
+  @apply hidden flex-col gap-3 overflow-y-auto pb-6 pr-1 lg:flex;
+
+  max-height: calc(100dvh - 9rem);
+}
+
+.item {
+  @apply flex flex-col items-center gap-1.5 rounded-[0.5rem] p-1.5 transition-colors;
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+.itemActive {
+  @apply bg-muted;
+
+  &:hover {
+    @apply bg-muted;
+  }
+}
+
+.label {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground;
+
+  .itemActive & {
+    @apply font-semibold text-foreground;
+  }
+}

@@ -1,0 +1,110 @@
+/* One scrapbook page in the DOM. Geometry (slot boxes, rotation, font size) is computed
+ * per slot and arrives as inline style; everything here is the look around it.
+ *
+ * `container-type: inline-size` is what makes the page scale as one piece: text sizes are
+ * in `cqw`, i.e. fractions of this page's width — the same unit the template defines
+ * them in, and the one the PDF compositor multiplies by its own width. */
+
+.page {
+  @apply relative w-full select-none overflow-hidden rounded-[0.375rem] bg-[#d8bb8f] shadow-[0_1px_2px_rgba(0,0,0,0.08),0_8px_24px_-12px_rgba(0,0,0,0.35)];
+
+  container-type: inline-size;
+}
+
+.pageThumb {
+  @apply rounded-[0.1875rem] shadow-[0_1px_2px_rgba(0,0,0,0.12)];
+}
+
+.art {
+  @apply pointer-events-none absolute inset-0 h-full w-full;
+}
+
+/* ── Strip slots ─────────────────────────────────────────────────────────── */
+
+.stripSlot {
+  @apply absolute block p-0;
+
+  transform-origin: center;
+}
+
+.stripSlotEdit {
+  @apply cursor-pointer rounded-[0.6cqw] transition-[box-shadow,background-color];
+
+  &:hover {
+    @apply bg-white/10;
+  }
+
+  &:focus-visible {
+    @apply outline-none;
+  }
+}
+
+/* An empty (or emptied) slot in the editor: an invitation, not art — the PDF draws
+ * nothing here. */
+.stripSlotEmpty {
+  @apply flex items-center justify-center bg-white/25;
+
+  border: 0.35cqw dashed rgba(74, 56, 38, 0.45);
+}
+
+.stripImage {
+  @apply pointer-events-none absolute inset-0 h-full w-full object-contain;
+}
+
+.decoration {
+  @apply pointer-events-none absolute max-w-none;
+}
+
+.emptyNote,
+.removedNote {
+  @apply flex flex-col items-center gap-[0.8cqw] px-[1.5cqw] text-center font-semibold leading-tight text-[#4a3826];
+
+  font-size: 2.2cqw;
+
+  svg {
+    width: 3.4cqw;
+    height: 3.4cqw;
+  }
+}
+
+.removedNote {
+  @apply text-[#7a3b2c];
+}
+
+/* ── Text slots ──────────────────────────────────────────────────────────── */
+
+.textSlot {
+  @apply absolute flex flex-col overflow-visible p-0;
+
+  font-family: Chivo, ui-sans-serif, system-ui, sans-serif;
+}
+
+.textSlotEdit {
+  @apply cursor-text rounded-[0.5cqw] transition-[box-shadow,background-color];
+
+  outline: 0.25cqw dashed transparent;
+  outline-offset: 0.6cqw;
+
+  &:hover {
+    outline-color: rgba(74, 56, 38, 0.35);
+  }
+
+  &:focus-visible {
+    @apply outline-none;
+  }
+}
+
+/* One laid-out line. Wrapping is off: the line breaks come from `layoutScrapbookText`. */
+.line {
+  @apply block whitespace-pre;
+}
+
+.placeholder {
+  @apply italic opacity-45;
+}
+
+.selected {
+  box-shadow:
+    0 0 0 0.45cqw hsl(var(--background)),
+    0 0 0 0.9cqw hsl(var(--primary));
+}

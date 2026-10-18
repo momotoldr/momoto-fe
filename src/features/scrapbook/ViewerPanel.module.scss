@@ -1,0 +1,26 @@
+/* A finished or paid scrapbook's actions, in the page's side column (and on a phone, under
+ * the page — there's no selection to wait for). */
+
+.panel {
+  @apply flex flex-col gap-4;
+}
+
+.text {
+  @apply text-sm leading-relaxed;
+}
+
+.actions {
+  @apply flex flex-col gap-2;
+}
+
+.discard {
+  @apply text-destructive;
+
+  &:hover {
+    @apply bg-destructive/10 text-destructive;
+  }
+}
+
+.spin {
+  @apply animate-spin;
+}

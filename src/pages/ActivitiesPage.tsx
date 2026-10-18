@@ -13,6 +13,7 @@ import styles from './ActivitiesPage.module.scss'
  * an activity with no entry here simply renders no chips. */
 const ACTIVITY_MODES: Record<string, string[]> = {
   photobooth: ['solo', 'date', 'group'],
+  scrapbook: ['solo'],
 }
 
 /* ---- Strip preview ----
@@ -32,20 +33,73 @@ const DATE_CELLS = [
   styles.splitBluePeach,
 ]
 
+/** Two strips taped beside the booth's card. */
+function StripPreview() {
+  return (
+    <div className={styles.preview} aria-hidden="true">
+      <span className={styles.stripSolo}>
+        {SOLO_CELLS.map((tone, index) => (
+          <span key={index} className={`${styles.cell} ${tone}`} />
+        ))}
+      </span>
+      <span className={styles.stripDate}>
+        {DATE_CELLS.map((split, index) => (
+          <span key={index} className={`${styles.cell} ${split}`} />
+        ))}
+      </span>
+      {/* Painted as a CSS background rather than an <img>: the preview is
+       * `display:none` below lg, and a background inside a hidden subtree is
+       * never fetched — so phones don't pay for the sticker. */}
+      <span className={styles.stickerSparkle} />
+    </div>
+  )
+}
+
+/** An open scrapbook beside its card: a strip taped on one page, a note on the other. */
+function BookPreview() {
+  return (
+    <div className={styles.preview} aria-hidden="true">
+      <span className={styles.book}>
+        <span className={styles.bookPage}>
+          <span className={styles.bookStrip}>
+            {SOLO_CELLS.map((tone, index) => (
+              <span key={index} className={`${styles.cell} ${tone}`} />
+            ))}
+          </span>
+        </span>
+        <span className={`${styles.bookPage} ${styles.bookPageRight}`}>
+          <span className={styles.bookHeading} />
+          <span className={styles.bookNote}>
+            <span />
+            <span />
+            <span />
+            <span />
+          </span>
+        </span>
+      </span>
+    </div>
+  )
+}
+
+/** Each live activity's preview, by `ACTIVITIES` key. */
+const PREVIEWS: Record<string, () => JSX.Element> = {
+  photobooth: StripPreview,
+  scrapbook: BookPreview,
+}
+
 /** Full listing of Momoto activities (menus), laid out as a pinboard in the same
  * language as the landing redesign: taped paper, tape as the labelling system, slate
- * ink. The one live activity is a full-width taped card carrying its own strip
- * preview; the rest are dashed notes pinned below. */
+ * ink. Each live activity is a full-width taped card carrying its own preview; the
+ * rest are dashed notes pinned below. */
 export function ActivitiesPage() {
   useTrackPageView()
   const { t } = useTranslation()
 
   // Which card is which is read from ACTIVITIES rather than fixed here, so the page
   // stays honest when the next activity goes live.
-  const live = ACTIVITIES.find((activity) => activity.available && activity.to)
+  const live = ACTIVITIES.filter((activity) => activity.available && activity.to)
   const comingSoon = ACTIVITIES.filter((activity) => !activity.available)
-  const liveCount = ACTIVITIES.filter((activity) => activity.available).length
-  const modes = live ? (ACTIVITY_MODES[live.key] ?? []) : []
+  const liveCount = live.length
 
   return (
     <div className={styles.page}>
@@ -71,54 +125,51 @@ export function ActivitiesPage() {
       </section>
 
       <div className={styles.body}>
-        {live?.to && (
-          <Link to={live.to} className={styles.liveCard}>
-            <span className={styles.tapeGrey} aria-hidden="true" />
-            <span className={styles.tapeLive}>{t('activities.live')}</span>
+        {live.map((activity, index) => {
+          const modes = ACTIVITY_MODES[activity.key] ?? []
+          const Preview = PREVIEWS[activity.key]
+          return (
+            <Link
+              key={activity.key}
+              to={activity.to!}
+              className={`${styles.liveCard} ${index % 2 === 1 ? styles.liveCardAlt : ''}`}
+            >
+              <span className={styles.tapeGrey} aria-hidden="true" />
+              <span className={styles.tapeLive}>{t('activities.live')}</span>
 
-            <div className={styles.liveText}>
-              <div className={styles.liveHead}>
-                <span className={styles.liveIcon} aria-hidden="true">
-                  <live.Icon />
-                </span>
-                <h2 className={styles.liveTitle}>{t(`activities.items.${live.key}.title`)}</h2>
-              </div>
-              <p className={styles.liveDesc}>{t(`activities.items.${live.key}.desc`)}</p>
-
-              {modes.length > 0 && (
-                <div className={styles.modes}>
-                  {modes.map((mode) => (
-                    <span key={mode} className={styles.mode}>
-                      {t(`activities.modes.${mode}`)}
-                    </span>
-                  ))}
+              <div className={styles.liveText}>
+                <div className={styles.liveHead}>
+                  <span className={styles.liveIcon} aria-hidden="true">
+                    <activity.Icon />
+                  </span>
+                  <h2 className={styles.liveTitle}>
+                    {t(`activities.items.${activity.key}.title`)}
+                  </h2>
                 </div>
-              )}
+                <p className={styles.liveDesc}>{t(`activities.items.${activity.key}.desc`)}</p>
 
-              <span className={styles.pillDark}>
-                {t('activities.open')}
-                <ArrowRight className={styles.pillIcon} />
-              </span>
-            </div>
+                {modes.length > 0 && (
+                  <div className={styles.modes}>
+                    {modes.map((mode) => (
+                      <span key={mode} className={styles.mode}>
+                        {t(`activities.modes.${mode}`)}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
-            <div className={styles.preview} aria-hidden="true">
-              <span className={styles.stripSolo}>
-                {SOLO_CELLS.map((tone, index) => (
-                  <span key={index} className={`${styles.cell} ${tone}`} />
-                ))}
-              </span>
-              <span className={styles.stripDate}>
-                {DATE_CELLS.map((split, index) => (
-                  <span key={index} className={`${styles.cell} ${split}`} />
-                ))}
-              </span>
-              {/* Painted as a CSS background rather than an <img>: the preview is
-               * `display:none` below lg, and a background inside a hidden subtree is
-               * never fetched — so phones don't pay for the sticker. */}
-              <span className={styles.stickerSparkle} />
-            </div>
-          </Link>
-        )}
+                <span className={styles.pillDark}>
+                  {t(`activities.items.${activity.key}.open`, {
+                    defaultValue: t('activities.open'),
+                  })}
+                  <ArrowRight className={styles.pillIcon} />
+                </span>
+              </div>
+
+              {Preview && <Preview />}
+            </Link>
+          )
+        })}
 
         {comingSoon.length > 0 && (
           <section className={styles.soon} aria-labelledby="soon-heading">

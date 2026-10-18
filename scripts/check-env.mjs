@@ -116,11 +116,17 @@ for (const key of [
   'VITE_GROUP_MODE_ENABLED',
   'VITE_PAYMENTS_ENABLED',
   'VITE_BACKDROPS_ENABLED',
+  'VITE_SCRAPBOOK_ENABLED',
   'VITE_ANALYTICS_ENABLED',
   'VITE_PEERJS_SECURE',
 ]) {
   const v = value(key)
   if (v && v !== 'true' && v !== 'false') errors.push(`${key} = "${v}" must be true or false`)
+}
+
+const scrapbookPrice = value('VITE_SCRAPBOOK_PRICE_IDR')
+if (scrapbookPrice && !(Number.isInteger(Number(scrapbookPrice)) && Number(scrapbookPrice) > 0)) {
+  errors.push(`VITE_SCRAPBOOK_PRICE_IDR = "${scrapbookPrice}" is not a positive whole number`)
 }
 
 if (errors.length > 0) {
@@ -133,6 +139,7 @@ const flags = [
   'GROUP_MODE_ENABLED',
   'PAYMENTS_ENABLED',
   'BACKDROPS_ENABLED',
+  'SCRAPBOOK_ENABLED',
   'ANALYTICS_ENABLED',
 ]
   .map((f) => `${f}=${value(`VITE_${f}`) || 'off'}`)

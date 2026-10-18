@@ -1,0 +1,181 @@
+/* One scrapbook (plan §6): header, then rail / page / side column on desktop. On a phone
+ * the page takes the width, the pager sits under it, and the side column becomes a bottom
+ * sheet that opens while a slot is selected — the page stays in view above it, so what is
+ * typed or placed shows at once. */
+
+.page {
+  @apply flex w-full flex-col;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.head {
+  @apply mx-auto flex w-full max-w-[84rem] flex-wrap items-center gap-x-4 gap-y-2 border-b px-4 py-3 sm:px-8 lg:px-10;
+}
+
+.back {
+  @apply inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-muted-foreground transition-colors;
+
+  svg {
+    @apply h-4 w-4;
+  }
+
+  span {
+    @apply hidden sm:inline;
+  }
+
+  &:hover {
+    @apply text-foreground;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+.titleRow {
+  @apply flex min-w-0 flex-1 items-center gap-3;
+}
+
+.title {
+  @apply truncate text-lg font-extrabold tracking-[-0.02em] sm:text-xl;
+}
+
+.titleInput {
+  @apply h-9 max-w-[22rem] border-transparent bg-transparent px-2 text-base font-bold shadow-none sm:text-lg;
+
+  &:hover {
+    @apply border-input;
+  }
+}
+
+/* The state, as the shelf's tape shows it. */
+.tape {
+  @apply shrink-0 rounded-[0.25rem] px-2 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-[0.12em];
+}
+
+.tape_draft {
+  @apply bg-muted text-muted-foreground;
+}
+
+.tape_finished {
+  @apply bg-amber-100 text-amber-900;
+}
+
+.tape_paid {
+  @apply bg-emerald-100 text-emerald-900;
+}
+
+.headActions {
+  @apply ml-auto flex items-center gap-1;
+}
+
+.saveState {
+  @apply mr-1 text-[0.8125rem] text-muted-foreground;
+}
+
+.saveStateError {
+  @apply text-destructive;
+}
+
+/* ── Body ────────────────────────────────────────────────────────────────── */
+
+.body {
+  @apply mx-auto grid w-full max-w-[84rem] grid-cols-1 items-start gap-6 px-4 pb-32 pt-5 sm:px-8 lg:grid-cols-[8.5rem_minmax(0,1fr)_20rem] lg:gap-8 lg:px-10 lg:pb-10;
+}
+
+.stage {
+  @apply flex min-w-0 flex-col items-center gap-4;
+}
+
+/* The page is as wide as the column allows, but never taller than the viewport under the
+ * header: past that the bottom of the page — often where its note is — falls off-screen. */
+.pageWrap {
+  @apply w-full;
+
+  max-width: calc((100dvh - 12rem) * var(--page-aspect));
+}
+
+.pager {
+  @apply flex items-center gap-3;
+}
+
+.pagerLabel {
+  @apply flex min-w-[8rem] flex-col items-center text-sm font-semibold;
+}
+
+.pagerCount {
+  @apply font-mono text-[0.625rem] font-normal uppercase tracking-[0.14em] text-muted-foreground;
+}
+
+/* ── Side column / bottom sheet ──────────────────────────────────────────── */
+
+.side {
+  @apply hidden flex-col gap-4 lg:sticky lg:top-24 lg:flex lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto;
+}
+
+/* Phone: a sheet over the bottom of the screen while a slot is selected. Above the
+ * support button (z-40), which sits exactly where the sheet's Done button is — covered
+ * only while the sheet is open, rather than hidden from the whole editor. Below dialogs
+ * (z-50). */
+.sideOpen {
+  @apply fixed inset-x-0 bottom-0 z-[45] flex max-h-[55dvh] overflow-y-auto rounded-t-[1rem] border-t bg-background px-4 pb-6 pt-4 shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.3)] lg:sticky lg:z-auto lg:max-h-[calc(100dvh-8rem)] lg:rounded-none lg:border-0 lg:p-0 lg:shadow-none;
+}
+
+.hint {
+  @apply text-sm leading-relaxed text-muted-foreground;
+}
+
+.done {
+  @apply self-end lg:hidden;
+}
+
+/* A finish running — in this tab, or announced by another one. */
+.progress {
+  @apply flex flex-col items-start gap-3 rounded-[0.75rem] border bg-muted/40 p-4;
+}
+
+.progressSpinner {
+  @apply h-5 w-5 animate-spin text-muted-foreground;
+}
+
+.progressText {
+  @apply text-sm font-medium;
+}
+
+/* "N strip places left", beside the disabled Finish button — shown on phones too,
+ * where there's no hover to explain why the button is off. */
+.placesLeft {
+  @apply inline-flex items-center gap-1.5 text-[0.8125rem] text-muted-foreground;
+}
+
+/* The finished/paid viewer has no selection to wait for, so its panel shows on a phone too. */
+.sideViewer {
+  @apply flex;
+}
+
+/* ── Loading / error ─────────────────────────────────────────────────────── */
+
+.state {
+  @apply mx-auto flex w-full max-w-[84rem] flex-col items-center gap-3 px-4 py-24 text-center;
+}
+
+.stateSpinner {
+  @apply h-5 w-5 animate-spin text-muted-foreground;
+}
+
+.stateIcon {
+  @apply h-5 w-5 text-destructive;
+}
+
+.stateText {
+  @apply max-w-md text-sm text-muted-foreground;
+}
+
+.stateLink {
+  @apply mt-1 text-sm font-semibold underline-offset-4;
+
+  &:hover {
+    @apply underline;
+  }
+}

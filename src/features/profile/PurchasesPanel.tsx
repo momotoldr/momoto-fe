@@ -139,9 +139,22 @@ export function PurchasesPanel({ galleryCount }: PurchasesPanelProps) {
               {orders.map((order) => {
                 const shown = order.stripIds.slice(0, MAX_ROW_THUMBS)
                 const overflow = order.stripIds.length - shown.length
+                // A scrapbook order bought one scrapbook and no strips; its row shows the
+                // cover the order carries (the client keeps no scrapbook store to look in).
+                const scrapbook = order.scrapbooks?.[0]
                 return (
                   <div key={order.orderId} className={styles.row}>
                     <div className={styles.colStrips}>
+                      {scrapbook &&
+                        (scrapbook.coverUrl ? (
+                          <img className={styles.thumbCover} src={scrapbook.coverUrl} alt="" />
+                        ) : (
+                          // Removed since: the purchase stays on record, the cover doesn't.
+                          <span
+                            className={cn(styles.thumbCover, styles.thumbCoverMissing)}
+                            aria-hidden="true"
+                          />
+                        ))}
                       {shown.map((id) => {
                         const src = thumbnails.get(id)
                         return src ? (
@@ -157,7 +170,11 @@ export function PurchasesPanel({ galleryCount }: PurchasesPanelProps) {
 
                     <div className={styles.colOrder}>
                       <span className={styles.orderTitle}>
-                        {t('auth.profile.purchases.orderLine', { count: order.stripIds.length })}
+                        {scrapbook
+                          ? t('auth.profile.purchases.scrapbookLine', {
+                              title: scrapbook.title || t('scrapbook.shelf.untitled'),
+                            })
+                          : t('auth.profile.purchases.orderLine', { count: order.stripIds.length })}
                       </span>
                       <span className={styles.orderRef}>{order.orderId}</span>
                     </div>

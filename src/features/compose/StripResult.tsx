@@ -13,6 +13,7 @@ import { ROUTES } from '@/constants/routes'
 import { env } from '@/env'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useCartStore } from '@/store/useCartStore'
+import { useScrapbookStore } from '@/store/useScrapbookStore'
 import { usePhotosStore } from '@/store/usePhotosStore'
 import { useRoomStore } from '@/store/useRoomStore'
 import { resolveSessionMode } from '@/utils/rooms'
@@ -243,7 +244,9 @@ export function StripResult({ onRetake, retakeBlockedReason }: StripResultProps)
           withSlotsLeft(
             t,
             t('cart.added'),
-            useCartStore.getState().items.filter((item) => !item.paid).length
+            useCartStore.getState().items.filter((item) => !item.paid).length +
+              // Finished scrapbooks wait in the cart and take a slot each (2026-10-17).
+              useScrapbookStore.getState().shelf.filter((item) => item.state === 'finished').length
           )
         )
         setStatus('ready')

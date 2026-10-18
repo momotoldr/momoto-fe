@@ -17,6 +17,7 @@ import styles from './LandingPage.module.scss'
  * activity `key` from `ACTIVITIES`, so the tabs and their steps stay in sync. */
 const ACTIVITY_STEPS: Record<string, string[]> = {
   photobooth: ['pick', 'pose', 'share'],
+  scrapbook: ['fill', 'write', 'keep'],
   draw: ['prompt', 'draw', 'save'],
   lovematch: ['room', 'answer', 'score'],
   spot: ['scenes', 'find', 'celebrate'],
@@ -95,7 +96,7 @@ export function LandingPage() {
 
   // The live card is whichever activity is actually shippable; the rest are teased.
   // Reading both from ACTIVITIES keeps the page honest when the next one goes live.
-  const live = ACTIVITIES.find((activity) => activity.available && activity.to)
+  const live = ACTIVITIES.filter((activity) => activity.available && activity.to)
   const comingSoon = ACTIVITIES.filter((activity) => !activity.available)
 
   return (
@@ -249,27 +250,38 @@ export function LandingPage() {
               <h2 id="menu-heading" className={styles.sectionTitle}>
                 {t('landing.menuTitle')}
               </h2>
-              <p className={styles.sectionSubtitle}>{t('landing.menuSubtitle')}</p>
+              {/* "One booth today" stays true only while the booth is the one live activity. */}
+              <p className={styles.sectionSubtitle}>
+                {t(live.length > 1 ? 'landing.menuSubtitleMany' : 'landing.menuSubtitle')}
+              </p>
             </div>
             <Link to={ROUTES.activities} className={styles.quietLink}>
               {t('landing.browseActivities')}
             </Link>
           </div>
 
-          {live?.to && (
-            <Link to={live.to} className={styles.liveCard}>
+          {/* Every live activity gets its card — not just the first, or a second one is
+              neither live nor coming soon here, and simply missing. */}
+          {live.map((activity, index) => (
+            <Link
+              key={activity.key}
+              to={activity.to!}
+              className={`${styles.liveCard} ${index % 2 === 1 ? styles.liveCardAlt : ''}`}
+            >
               <span className={styles.tapeGrey} aria-hidden="true" />
               <span className={styles.tapeLive}>{t('activities.live')}</span>
               <div className={styles.liveText}>
-                <h3 className={styles.liveTitle}>{t(`activities.items.${live.key}.title`)}</h3>
-                <p className={styles.liveDesc}>{t(`activities.items.${live.key}.desc`)}</p>
+                <h3 className={styles.liveTitle}>{t(`activities.items.${activity.key}.title`)}</h3>
+                <p className={styles.liveDesc}>{t(`activities.items.${activity.key}.desc`)}</p>
               </div>
               <span className={styles.pillDark}>
-                {t('activities.open')}
+                {t(`activities.items.${activity.key}.open`, {
+                  defaultValue: t('activities.open'),
+                })}
                 <ArrowRight className={styles.pillIcon} />
               </span>
             </Link>
-          )}
+          ))}
 
           {comingSoon.length > 0 && (
             <div className={styles.soon}>
