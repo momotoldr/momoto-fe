@@ -1,0 +1,95 @@
+/* The strip tray: the unlocked strips that fit the selected slot. Lives in the editor's
+ * side column on desktop and in the bottom sheet on a phone. */
+
+.tray {
+  @apply flex min-h-0 flex-col gap-3;
+}
+
+.head {
+  @apply flex items-center justify-between gap-3;
+}
+
+.title {
+  @apply font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground;
+}
+
+.clear {
+  @apply inline-flex items-center gap-1 rounded-md px-2 py-1 text-[0.8125rem] font-semibold text-destructive transition-colors;
+
+  svg {
+    @apply h-3.5 w-3.5;
+  }
+
+  &:hover {
+    @apply bg-destructive/10;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring;
+  }
+}
+
+/* Padded so the current strip's ring (which sits outside the tile) has room: the list
+ * scrolls, and a scroll box clips anything past its edge. No negative margin to pull the
+ * padding back — that made the list wider than the side column, and since the column
+ * scrolls vertically, the extra width became a horizontal scrollbar under the tray. */
+.list {
+  @apply grid grid-cols-3 gap-2.5 overflow-y-auto p-1.5;
+}
+
+/* 2x2 cards are wide; two across keeps each one big enough to recognise. */
+.listCards {
+  @apply grid-cols-2;
+}
+
+.strip {
+  @apply block w-full overflow-hidden rounded-[0.375rem] bg-muted ring-offset-background transition-[box-shadow,transform];
+
+  &:hover {
+    @apply -translate-y-px shadow-md;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2;
+  }
+}
+
+.stripCurrent {
+  @apply ring-2 ring-primary ring-offset-2;
+}
+
+.image {
+  @apply block h-auto w-full object-contain;
+}
+
+.empty {
+  @apply flex flex-col gap-2;
+}
+
+.note {
+  @apply flex items-center gap-2 text-sm text-muted-foreground;
+}
+
+.hint {
+  @apply text-[0.8125rem] leading-relaxed text-muted-foreground/80;
+}
+
+.spinner {
+  @apply h-4 w-4 animate-spin;
+}
+
+.links {
+  @apply mt-1 flex flex-wrap gap-2;
+}
+
+.link {
+  @apply inline-flex h-9 items-center rounded-[0.5rem] border px-3 text-[0.8125rem] font-semibold transition-colors;
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}

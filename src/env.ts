@@ -71,6 +71,18 @@ interface AppEnv {
    */
   backdropsEnabled: boolean
   /**
+   * Scrapbooks (docs/PLAN-scrapbook.md) — the second activity. Off hides the activity card
+   * and leaves `/scrapbook` unregistered; the backend routes exist either way and do
+   * nothing until something calls them.
+   */
+  scrapbookEnabled: boolean
+  /**
+   * The scrapbook's price, for display only — the server computes the real charge from its
+   * own `SCRAPBOOK_PRICE_IDR`. Null while unset (the price is not decided yet), which the UI
+   * shows as the cart's placeholder rather than inventing a number.
+   */
+  scrapbookPriceIdr: number | null
+  /**
    * Tracking (`src/analytics`): page views, clicks and product events sent to
    * `momoto-analytics`. Off unless `VITE_ANALYTICS_ENABLED=true` **and** a URL is set; off,
    * the tracker is a no-op that installs nothing. Turning it on in production also needs
@@ -171,6 +183,8 @@ export const env: AppEnv = {
   betaMode,
   groupModeEnabled: import.meta.env.VITE_GROUP_MODE_ENABLED === 'true',
   backdropsEnabled: import.meta.env.VITE_BACKDROPS_ENABLED === 'true',
+  scrapbookEnabled: import.meta.env.VITE_SCRAPBOOK_ENABLED === 'true',
+  scrapbookPriceIdr: Number(import.meta.env.VITE_SCRAPBOOK_PRICE_IDR) || null,
   analyticsEnabled: import.meta.env.VITE_ANALYTICS_ENABLED === 'true' && !!analyticsUrl,
   analyticsUrl,
   analyticsSampleRate: sampleRate(import.meta.env.VITE_ANALYTICS_SAMPLE_RATE),

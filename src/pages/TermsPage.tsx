@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import styles from './TermsPage.module.scss'
 import { useTrackPageView } from '@/analytics'
+import { env } from '@/env'
 
 /** Ordered T&C sections — each maps to `terms.sections.<key>.{title,body}` copy. */
 const SECTION_KEYS = [
@@ -16,6 +17,14 @@ const SECTION_KEYS = [
   'governingLaw',
   'contact',
 ]
+
+/**
+ * Paragraphs that apply only while a feature is offered, appended to their section. A
+ * scrapbook clause on a site with no scrapbooks would describe something nobody can buy.
+ */
+const FEATURE_PARAGRAPHS: Record<string, { key: string; shown: boolean }[]> = {
+  payments: [{ key: 'terms.sections.payments.scrapbook', shown: env.scrapbookEnabled }],
+}
 
 /** Terms & Conditions — static legal page */
 export function TermsPage() {
@@ -32,7 +41,12 @@ export function TermsPage() {
 
       <div className={styles.sections}>
         {SECTION_KEYS.map((key, index) => {
-          const body = t(`terms.sections.${key}.body`, { returnObjects: true }) as string[]
+          const body = [
+            ...(t(`terms.sections.${key}.body`, { returnObjects: true }) as string[]),
+            ...(FEATURE_PARAGRAPHS[key] ?? [])
+              .filter((paragraph) => paragraph.shown)
+              .map((paragraph) => t(paragraph.key)),
+          ]
           return (
             <section key={key} className={styles.section} aria-labelledby={`terms-${key}`}>
               <h2 id={`terms-${key}`} className={styles.sectionTitle}>

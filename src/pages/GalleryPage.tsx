@@ -18,7 +18,9 @@ import { MonthSection } from '@/features/gallery/MonthSection'
 import { MonthSpine } from '@/features/gallery/MonthSpine'
 import { galleryItems } from '@/features/gallery/selectors'
 import { cn } from '@/lib/utils'
+import { env } from '@/env'
 import { useCartStore } from '@/store/useCartStore'
+import { useScrapbookStore } from '@/store/useScrapbookStore'
 import type { StoredStrip } from '@/types/stripType'
 import { extensionForBlob, saveImageBlob, toPngBlob } from '@/utils/download'
 
@@ -64,6 +66,24 @@ export function GalleryPage() {
   const [removing, setRemoving] = useState(false)
 
   const sheetRef = useRef<HTMLDivElement>(null)
+
+  // Which strips sit in a scrapbook that can still change — a draft, or finished but not
+  // yet paid (it can be reopened). Removing one of those leaves an empty place there, so
+  // the remove dialog says so. A paid scrapbook already holds the photo in its PDF.
+  const scrapbooks = useScrapbookStore((state) => state.shelf)
+  const loadShelf = useScrapbookStore((state) => state.loadShelf)
+  useEffect(() => {
+    if (env.scrapbookEnabled) void loadShelf()
+  }, [loadShelf])
+  const inOpenScrapbook = useMemo(
+    () =>
+      new Set(
+        scrapbooks
+          .filter((scrapbook) => scrapbook.state !== 'paid')
+          .flatMap((scrapbook) => scrapbook.stripIds)
+      ),
+    [scrapbooks]
+  )
 
   useEffect(() => {
     if (status === 'idle') void load()
@@ -318,6 +338,9 @@ export function GalleryPage() {
         onConfirm={() => void confirmRemove()}
         onCancel={cancelRemove}
       >
+        {pendingRemove && inOpenScrapbook.has(pendingRemove.id) && (
+          <p className={styles.removeScrapbook}>{t('gallery.removeInScrapbook')}</p>
+        )}
         <button
           type="button"
           className={styles.removeDownload}
