@@ -35,29 +35,29 @@ export default function Appbar() {
   // Unpaid strips only. Unlocked ones live in the gallery now, so counting the whole
   // list would badge the cart with strips that aren't in it — and fire the "you saved a
   // strip" tip when one merely moved out.
-  const cartCount = useCartStore((state) => state.items.reduce((n, i) => n + (i.paid ? 0 : 1), 0))
-  // Finished, unpaid scrapbooks wait in the cart too (2026-10-17), so the badge counts
-  // them. The tip below stays about strips: it's the "you just saved a strip" nudge.
+  const stripCount = useCartStore((state) => state.items.reduce((n, i) => n + (i.paid ? 0 : 1), 0))
+  // Finished, unpaid scrapbooks wait in the cart too (2026-10-17), so the badge and the
+  // tip below count them: the cart holds items, whatever kind.
   const scrapbookCount = useScrapbookStore((state) =>
     env.scrapbookEnabled ? state.shelf.reduce((n, s) => n + (s.state === 'finished' ? 1 : 0), 0) : 0
   )
-  const badgeCount = cartCount + scrapbookCount
+  const badgeCount = stripCount + scrapbookCount
   // The cart holds this user's strips, so only surface it once signed in.
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const navLinks = isAuthenticated ? [...NAV_LINKS, ...AUTHED_NAV_LINKS] : NAV_LINKS
 
-  // A little popup nudging the user to check out the strips they just saved. It pops
-  // whenever the cart count grows (a strip was added) — unless they're already looking
-  // at the cart — and auto-dismisses after a few seconds.
+  // A little popup nudging the user to check out what they just added. It pops whenever
+  // the cart count grows (an item was added) — unless they're already looking at the
+  // cart — and auto-dismisses after a few seconds.
   const [tipOpen, setTipOpen] = useState(false)
-  const prevCountRef = useRef(cartCount)
+  const prevCountRef = useRef(badgeCount)
   const onCartPage = location.pathname === ROUTES.cart
 
   useEffect(() => {
-    const grew = cartCount > prevCountRef.current
-    prevCountRef.current = cartCount
-    if (grew && cartCount > 0 && !onCartPage) setTipOpen(true)
-  }, [cartCount, onCartPage])
+    const grew = badgeCount > prevCountRef.current
+    prevCountRef.current = badgeCount
+    if (grew && badgeCount > 0 && !onCartPage) setTipOpen(true)
+  }, [badgeCount, onCartPage])
 
   // Never show it on the cart page itself (they're already there).
   useEffect(() => {
@@ -123,7 +123,7 @@ export default function Appbar() {
                 )}
               </NavLink>
 
-              {tipOpen && cartCount > 0 && (
+              {tipOpen && badgeCount > 0 && (
                 <>
                   <div className={styles.cartTip} role="status">
                     <button
@@ -135,7 +135,7 @@ export default function Appbar() {
                       <X />
                     </button>
                     <p className={styles.cartTipTitle}>
-                      {t('cart.tipTitle', { count: cartCount })}
+                      {t('cart.tipTitle', { count: badgeCount })}
                     </p>
                     <p className={styles.cartTipText}>{t('cart.tipText')}</p>
                     <Link to={ROUTES.cart} className={styles.cartTipCta} onClick={closeTip}>
