@@ -100,7 +100,7 @@
       "scrapbook": {
         "title": "Scrapbook",
         "desc": "Isi buku kecil dengan strip yang sudah kamu buka dan tulisanmu sendiri, lalu simpan sebagai PDF.",
-        "open": "Buka scrapbook kamu"
+        "open": "Buka the scrapbook"
       },
       "draw": {
         "title": "Menggambar Bareng",
@@ -456,10 +456,10 @@
           },
           "scrapbookFinal": {
             "q": "Apakah scrapbook bisa diubah setelah dibeli?",
-            "a": "Tidak — scrapbook berbayar bersifat final, supaya PDF yang kamu beli selalu sama dengan yang kamu bayar. Tapi kamu bisa membuat versi baru darinya: Duplikat menyalin halaman dan tulisannya ke draf baru.",
+            "a": "Tidak — scrapbook berbayar bersifat final, supaya PDF yang kamu beli selalu sama dengan yang kamu bayar. Untuk membuat yang berbeda, mulai scrapbook baru.",
             "steps": [
               "Sebelum membayar, Lanjut mengedit mengembalikan scrapbook yang sudah selesai menjadi draf.",
-              "Setelah membayar, buka scrapbook-nya lalu pilih Duplikat untuk memulai draf baru."
+              "Setelah membayar, scrapbook tetap seperti itu — mulai scrapbook baru untuk versi yang berbeda."
             ]
           }
         }
@@ -1689,14 +1689,24 @@
     },
     "states": {
       "draft": "Draf",
-      "finished": "Di keranjang",
-      "paid": "Milikmu"
+      "finished": "Belum dibayar",
+      "paid": "Lunas"
     },
     "shelf": {
+      "eyebrow": "Scrapbook",
+      "heading": "Ubah strip-mu jadi buku kecil.",
+      "intro": "Scrapbook berisi {{pages}} halaman untuk diisi dengan strip yang sudah kamu buka dan tulisanmu sendiri — disimpan sebagai PDF untuk disimpan atau dicetak.",
+      "sampleLabel": "Kamu akan dapat",
+      "sampleHint": "{{pages}} halaman, sampul sampai belakang, dalam satu PDF.",
+      "step1Title": "Pilih desain",
+      "step1Text": "Mulai dari template. Tiap halaman punya tempat untuk strip dan tulisan.",
+      "step2Title": "Isi halamannya",
+      "step2Text": "Pasang strip 4×1 dan 2×2 yang sudah kamu buka, lalu tambahkan judul, keterangan, dan catatan. Draf tersimpan otomatis.",
+      "step3Title": "Selesaikan dan buka",
+      "step3Text": "Scrapbook yang selesai masuk ke keranjang. Buka di sana untuk mengunduh PDF.",
       "title": "Scrapbook kamu",
       "subtitle_one": "{{count}} scrapbook",
       "subtitle_other": "{{count}} scrapbook",
-      "subtitleEmpty": "Isi halaman dengan strip-mu dan sedikit cerita",
       "new": "Scrapbook baru",
       "creating": "Menyiapkan…",
       "meter": "{{used}} dari {{limit}}",
@@ -1709,7 +1719,6 @@
       "limit": "Kamu sudah punya {{limit}} scrapbook. Hapus satu draf untuk mulai yang baru.",
       "createError": "Scrapbook tidak bisa dibuat. Coba lagi.",
       "emptyTitle": "Belum ada scrapbook",
-      "emptyText": "Scrapbook berisi {{pages}} halaman untuk diisi dengan strip yang sudah kamu buka dan tulisanmu sendiri.",
       "coverAlt": "Sampul {{title}}",
       "emptyCta": "Mulai scrapbook pertamamu"
     },
@@ -1754,7 +1763,26 @@
       "addStrip_4x1": "Tambah strip 4×1",
       "addStrip_2x2": "Tambah strip 2×2",
       "stripRemoved": "Foto sudah dihapus dari galeri",
-      "close": "Selesai"
+      "close": "Selesai",
+      "pageN": "Halaman {{n}}",
+      "meta": "{{template}} · {{pages}}",
+      "placed": "{{filled}} dari {{total}} strip terpasang",
+      "left_one": "{{count}} lagi",
+      "left_other": "{{count}} lagi",
+      "ready": "Siap",
+      "onThisPage": "Di halaman ini",
+      "stripPlace": "{{page}} · tempat strip",
+      "textPlace": "{{page}} · tulisan",
+      "stripName_4x1": "Strip 4×1",
+      "stripName_2x2": "Strip 2×2",
+      "empty": "Kosong",
+      "required": "Wajib",
+      "optional": "Opsional",
+      "checklistHint": "Ketuk tempat di halaman untuk menambah strip atau menulis. Strip wajib diisi untuk menyelesaikan; tulisan opsional.",
+      "more": "Aksi lainnya",
+      "placesLeftOnPage_one": "{{count}} tempat strip lagi di halaman ini",
+      "placesLeftOnPage_other": "{{count}} tempat strip lagi di halaman ini",
+      "pageDone": "Semua tempat strip di halaman ini sudah terisi"
     },
     "tray": {
       "title_4x1": "Strip 4×1 kamu",
@@ -1767,7 +1795,11 @@
       "toCart": "Buka strip di keranjang",
       "toBooth": "Ambil foto baru",
       "loading": "Memuat strip kamu…",
-      "stripAlt": "Strip dari {{date}}"
+      "stripAlt": "Strip dari {{date}}",
+      "all": "Semua",
+      "unused": "Belum dipakai",
+      "here": "Di sini",
+      "used": "Dipakai"
     },
     "text": {
       "label_coverTitle": "Judul",
@@ -1790,18 +1822,19 @@
     },
     "viewer": {
       "finished": "Sudah selesai — sekarang menunggu di keranjangmu. Buka di sana untuk mengunduh PDF-nya.",
-      "paid": "Scrapbook ini milikmu. Sekarang tidak bisa diubah — duplikat untuk membuat yang lain.",
+      "paid": "Scrapbook ini milikmu. Sekarang tidak bisa diubah — mulai scrapbook baru untuk membuat yang lain.",
       "goToCart": "Ke keranjang",
       "keepEditing": "Lanjut mengedit",
-      "duplicate": "Duplikat",
-      "duplicated": "Tersalin — ini draf barumu.",
       "delete": "Hapus",
       "remove": "Hapus",
       "reopenError": "Tidak bisa dibuka lagi. Coba lagi.",
       "paymentInProgress": "Masih ada pembayaran yang terbuka untuk scrapbook ini.",
       "download": "Unduh PDF",
       "downloading": "Menyiapkan…",
-      "downloadError": "PDF tidak bisa diunduh. Coba lagi."
+      "downloadError": "PDF tidak bisa diunduh. Coba lagi.",
+      "finishedHeading": "Menunggu di keranjang",
+      "paidHeading": "Scrapbook ini milikmu",
+      "downloadShort": "Unduh"
     },
     "discard": {
       "deleteTitle": "Hapus scrapbook ini?",
@@ -1845,7 +1878,23 @@
       "pagesLabel": "Halaman di template ini",
       "pages_one": "{{count}} halaman",
       "pages_other": "{{count}} halaman",
-      "use": "Pakai template ini"
+      "use": "Pakai template ini",
+      "eyebrow": "Scrapbook baru",
+      "count_one": "{{count}} template",
+      "count_other": "{{count}} template",
+      "scrollBack": "Template sebelumnya",
+      "scrollForward": "Template lainnya",
+      "selected": "Dipilih",
+      "meta_one": "{{pages}} · {{count}} strip",
+      "meta_other": "{{pages}} · {{count}} strip",
+      "prevPage": "Halaman sebelumnya",
+      "nextPage": "Halaman berikutnya",
+      "position": "{{page}} · {{n}} / {{total}}",
+      "toFill": "Untuk diisi",
+      "strips_4x1": "Strip 4×1",
+      "strips_2x2": "Strip 2×2",
+      "fillNote": "Hanya strip yang sudah dibuka yang bisa dipasang. Semua tempat strip harus terisi untuk menyelesaikan — tulisan opsional.",
+      "used": "{{used}} dari {{limit}} scrapbook terpakai"
     }
   }
 }

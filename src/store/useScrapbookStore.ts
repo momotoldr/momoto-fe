@@ -4,7 +4,6 @@ import ApiError from '@/api/apiError'
 import {
   createScrapbook,
   deleteScrapbook,
-  duplicateScrapbook,
   getScrapbook,
   listScrapbooks,
   removeScrapbook,
@@ -55,7 +54,6 @@ interface ScrapbookStoreState {
   shelfStatus: LoadStatus
   loadShelf: () => Promise<void>
   create: (templateId?: string) => Promise<CreateResult>
-  duplicate: (id: string) => Promise<CreateResult>
   /** Delete an unpaid scrapbook (`DELETE`) or take a paid one off the shelf (`remove`). */
   discard: (summary: ScrapbookSummary) => Promise<ShelfChangeResult>
 
@@ -230,20 +228,6 @@ export const useScrapbookStore = create<ScrapbookStoreState>((set, get) => {
     create: async (templateId = DEFAULT_SCRAPBOOK_TEMPLATE_ID) => {
       try {
         const scrapbook = await createScrapbook(templateId)
-        set((state) => ({
-          shelf: [scrapbook, ...state.shelf],
-          quota: state.quota ? { ...state.quota, used: state.quota.used + 1 } : state.quota,
-        }))
-        return { ok: true, scrapbook }
-      } catch (error) {
-        const limit = error instanceof ApiError && error.code === 'scrapbook_limit'
-        return { ok: false, reason: limit ? 'limit' : 'failed' }
-      }
-    },
-
-    duplicate: async (id) => {
-      try {
-        const scrapbook = await duplicateScrapbook(id)
         set((state) => ({
           shelf: [scrapbook, ...state.shelf],
           quota: state.quota ? { ...state.quota, used: state.quota.used + 1 } : state.quota,

@@ -1,16 +1,28 @@
-/* The template picker: templates on the left (a row on a phone), every page of the chosen
- * one on the right, and one action pinned at the bottom. Same header language as the shelf. */
+/* The template picker as a page-flipper ("Scrapbook New - redesign").
+ *
+ * Desktop: one page large on a paper-coloured stage with arrows, every page as a thumbnail
+ * below, and a side panel — the template choice, what there is to fill, the one button.
+ * Phone: the stage goes; the pages become a row to scroll, and the panel dissolves into the
+ * column (`display: contents`) so its parts can be ordered around that row. With many
+ * templates the choice moves from the panel into a rail of covers above everything. */
 
 .page {
-  @apply flex w-full flex-col pb-28;
+  @apply mx-auto flex w-full max-w-[80rem] flex-col gap-[1.125rem] px-5 pb-16 pt-5 md:px-10 md:pt-9 lg:gap-8 lg:px-20;
 }
 
+/* Mono caps over each group: "Templates", "To fill", "Pages in this template". */
+.label {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
 .head {
-  @apply mx-auto flex w-full max-w-[80rem] flex-col gap-1.5 border-b px-4 pb-5 pt-6 sm:gap-2.5 sm:px-14 sm:pb-7 sm:pt-9;
+  @apply flex flex-col gap-[1.375rem] lg:gap-5;
 }
 
 .back {
-  @apply mb-2 inline-flex items-center gap-1.5 self-start rounded-md text-sm font-medium text-muted-foreground transition-colors;
+  @apply inline-flex items-center gap-1.5 self-start rounded-md text-sm font-medium text-muted-foreground transition-colors;
 
   svg {
     @apply h-4 w-4;
@@ -25,29 +37,68 @@
   }
 }
 
+.intro {
+  @apply flex max-w-[40rem] flex-col gap-2.5 md:gap-3.5;
+}
+
+.eyebrow {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70 md:text-[0.6875rem];
+}
+
 .title {
-  @apply text-[1.875rem] font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-[2.5rem];
+  @apply text-pretty text-[2.125rem] font-extrabold leading-[1.05] tracking-[-0.03em] md:text-[3.25rem] md:leading-[1.02];
 }
 
 .subtitle {
-  @apply max-w-2xl text-[0.84375rem] leading-relaxed text-muted-foreground sm:text-[0.96875rem];
+  @apply max-w-[32.5rem] text-pretty text-sm leading-[1.55] text-muted-foreground md:text-base md:leading-relaxed;
 }
 
-.body {
-  @apply mx-auto grid w-full max-w-[80rem] grid-cols-1 gap-8 px-4 py-7 sm:px-14 sm:py-10 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-12;
+/* ── Shared bits ─────────────────────────────────────────────────────────── */
+
+.check {
+  @apply flex h-[1.375rem] w-[1.375rem] flex-none items-center justify-center rounded-full bg-primary text-primary-foreground;
+
+  svg {
+    @apply h-[0.8125rem] w-[0.8125rem] stroke-[3];
+  }
 }
 
-/* ── Templates ───────────────────────────────────────────────────────────── */
-
-.templates {
-  @apply flex gap-4 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible;
+.spin {
+  @apply animate-spin;
 }
 
-.card {
-  @apply flex w-36 shrink-0 flex-col gap-1.5 rounded-[0.625rem] p-2 text-left transition-colors lg:w-full;
+/* ── Many templates: the rail of covers ──────────────────────────────────── */
+
+.rail {
+  @apply flex flex-col gap-3.5;
+}
+
+/* A phone scrolls the row by hand; the heading and arrows are desktop-only. */
+.railHead {
+  @apply hidden items-center justify-between lg:flex;
+}
+
+.railTitle {
+  @apply flex items-baseline gap-2.5 text-[1.0625rem] font-bold;
+}
+
+.railCount {
+  @apply font-mono text-xs font-normal text-muted-foreground/70;
+}
+
+.railArrows {
+  @apply flex gap-2;
+}
+
+.railArrow {
+  @apply flex h-9 w-9 items-center justify-center rounded-full border transition-colors;
+
+  svg {
+    @apply h-4 w-4;
+  }
 
   &:hover {
-    @apply bg-muted/60;
+    @apply border-foreground;
   }
 
   &:focus-visible {
@@ -55,80 +106,311 @@
   }
 }
 
-.cardSelected {
-  @apply bg-muted;
+.railItems {
+  @apply -mx-5 flex gap-2.5 overflow-x-auto scroll-smooth px-5 pb-1.5 md:-mx-10 md:px-10 lg:mx-0 lg:gap-4 lg:px-0;
 
-  &:hover {
-    @apply bg-muted;
+  scrollbar-width: thin;
+}
+
+.cover {
+  @apply flex w-[5.5rem] flex-none flex-col gap-1.5 rounded-[0.625rem] text-left lg:w-[7.375rem] lg:gap-2;
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 }
 
-.cardCover {
-  @apply relative block w-full overflow-hidden rounded-[0.375rem] bg-[#d8bb8f] shadow-[0_1px_2px_rgba(0,0,0,0.08),0_8px_20px_-12px_rgba(0,0,0,0.35)];
+.coverFrame {
+  @apply relative block rounded-lg border-2 border-transparent p-0.5 transition-colors lg:rounded-[0.625rem] lg:p-[3px];
 
-  .cardSelected & {
-    @apply ring-2 ring-primary ring-offset-2 ring-offset-muted;
+  .cover:hover & {
+    @apply border-border;
+  }
+
+  .coverSelected &,
+  .coverSelected:hover & {
+    @apply border-primary;
   }
 }
 
-.cardImage {
-  @apply block h-full w-full object-cover;
+.coverImage {
+  @apply block w-full rounded-[0.3125rem] bg-[#d8bb8f] object-cover lg:rounded-md;
 }
 
-.cardCheck {
-  @apply absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground shadow;
+.coverCheck {
+  @apply absolute right-[0.5625rem] top-[0.5625rem] hidden lg:flex;
+}
+
+.coverName {
+  @apply truncate px-0.5 text-xs font-semibold lg:text-sm;
+}
+
+.coverMeta {
+  @apply hidden px-0.5 text-xs text-muted-foreground/70 lg:block;
+}
+
+/* ── Body ────────────────────────────────────────────────────────────────── */
+
+.body {
+  @apply flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_21.25rem] lg:items-start lg:gap-8;
+}
+
+/* ── Desktop: the stage and every page below it ──────────────────────────── */
+
+.viewer {
+  @apply hidden min-w-0 flex-col gap-4 lg:flex;
+}
+
+.stage {
+  @apply flex h-[32.5rem] items-center justify-between gap-4 rounded-[1.75rem] bg-[#f6f3ee] px-6;
+}
+
+.stageArrow {
+  @apply flex h-11 w-11 flex-none items-center justify-center rounded-full border bg-background transition-colors;
 
   svg {
-    @apply h-3.5 w-3.5;
+    @apply h-[1.125rem] w-[1.125rem];
+  }
+
+  &:hover {
+    @apply border-foreground;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 }
 
-.cardName {
-  @apply text-sm font-semibold;
+.stagePage {
+  @apply flex min-w-0 flex-col items-center gap-3.5;
 }
 
-.cardMeta {
+/* Height fixed, width from the template's aspect (inline style). */
+.stageFrame {
+  @apply h-[27.5rem] max-w-full;
+
+  > * {
+    @apply shadow-[0_1px_2px_rgba(15,23,42,0.08),0_12px_32px_rgba(15,23,42,0.12)];
+  }
+}
+
+.stageCaption {
+  @apply font-mono text-xs text-muted-foreground;
+}
+
+.thumbs {
+  @apply grid grid-cols-12 gap-2.5;
+}
+
+.thumb {
+  @apply flex w-full flex-col gap-1.5 rounded-lg;
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+.thumbFrame {
+  @apply block rounded-lg border-2 border-transparent p-[3px] transition-colors;
+
+  .thumb:hover & {
+    @apply border-border;
+  }
+
+  .thumbActive &,
+  .thumbActive:hover & {
+    @apply border-primary;
+  }
+}
+
+.thumbLabel {
+  @apply text-center text-xs leading-tight text-muted-foreground/70;
+
+  .thumbActive & {
+    @apply text-foreground;
+  }
+}
+
+/* ── Phone: the pages as a row ───────────────────────────────────────────── */
+
+.strip {
+  @apply order-2 -mx-5 flex flex-col gap-2.5 md:-mx-10 lg:hidden;
+
+  > .label {
+    @apply px-5 md:px-10;
+  }
+}
+
+.stripPages {
+  @apply flex gap-3 overflow-x-auto px-5 pb-2 pt-1 md:px-10;
+}
+
+.stripPage {
+  @apply flex w-[9.375rem] flex-none flex-col gap-1.5;
+
+  > :first-child {
+    @apply rounded-md shadow-[0_1px_2px_rgba(15,23,42,0.08),0_6px_16px_rgba(15,23,42,0.08)];
+  }
+}
+
+.stripLabel {
   @apply text-xs text-muted-foreground;
 }
 
-/* ── Every page of the chosen template ───────────────────────────────────── */
+/* ── The panel ───────────────────────────────────────────────────────────── */
 
-.preview {
-  @apply flex min-w-0 flex-col gap-4;
+.panel {
+  @apply contents lg:sticky lg:top-6 lg:flex lg:flex-col lg:gap-[1.375rem] lg:rounded-[1.75rem] lg:border lg:p-6;
 }
 
-.previewTitle {
-  @apply flex items-baseline gap-3 text-lg font-bold;
+.summary {
+  @apply hidden flex-col gap-1 lg:flex;
 }
 
-.previewCount {
-  @apply font-mono text-[0.625rem] font-normal uppercase tracking-[0.14em] text-muted-foreground;
+.summaryName {
+  @apply text-[1.375rem] font-bold tracking-[-0.02em];
 }
 
-.pages {
-  @apply grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4;
+.summaryMeta {
+  @apply text-[0.8125rem] text-muted-foreground/70;
 }
 
-.pageItem {
-  @apply flex flex-col items-center gap-1.5;
+/* Few templates: rows. A phone shows them as a scrolling row above the pages. */
+.list {
+  @apply order-1 flex flex-col gap-2.5 lg:order-none;
+
+  > .label {
+    @apply hidden lg:block;
+  }
 }
 
-.pageLabel {
-  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground;
+.listRows {
+  @apply -mx-5 flex gap-2.5 overflow-x-auto px-5 pt-0.5 md:-mx-10 md:px-10 lg:mx-0 lg:flex-col lg:gap-2 lg:overflow-visible lg:p-0;
 }
 
-/* ── The one action ──────────────────────────────────────────────────────── */
+.listItem {
+  @apply w-[16.25rem] flex-none lg:w-auto;
+}
 
-/* Kept clear of the support button, which floats bottom-right (`right-6`, 3rem wide) —
- * on a phone by sitting the action left of it, on wider screens by padding that side. */
+.listItemSingle {
+  @apply w-full;
+}
+
+.row {
+  @apply flex w-full items-center gap-3 rounded-[0.875rem] border-2 p-2.5 text-left transition-colors;
+
+  &:hover {
+    @apply border-foreground/40;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+.rowSelected,
+.rowSelected:hover {
+  @apply border-primary;
+}
+
+.rowCover {
+  @apply w-9 flex-none rounded-[0.1875rem] bg-[#d8bb8f] object-cover lg:w-10;
+}
+
+.rowText {
+  @apply flex min-w-0 flex-1 flex-col gap-0.5;
+}
+
+.rowName {
+  @apply truncate text-[0.9375rem] font-semibold;
+}
+
+.rowMeta {
+  @apply text-xs text-muted-foreground/70 lg:text-[0.8125rem];
+}
+
+.rowMetaWide {
+  @apply hidden lg:block;
+}
+
+.rowMetaNarrow {
+  @apply lg:hidden;
+}
+
+/* What the template asks for. Desktop-only: a phone's row carries the strip total. */
+.fill {
+  @apply hidden flex-col gap-2.5 lg:flex;
+}
+
+.fillRows {
+  @apply flex flex-col;
+}
+
+.fillRow {
+  @apply flex items-center justify-between border-b border-muted py-2.5;
+
+  &:last-child {
+    @apply border-b-0;
+  }
+}
+
+.fillName {
+  @apply flex items-center gap-2.5 text-sm;
+}
+
+/* Hatched like the photo stand-ins elsewhere: a ribbon, and a square card. */
+.fillSwatch {
+  @apply block rounded-[2px] border;
+}
+
+.fillSwatch_4x1 {
+  @apply h-[1.375rem] w-2;
+
+  background: repeating-linear-gradient(135deg, #e2e8f0 0 4px, #f8fafc 4px 8px);
+}
+
+.fillSwatch_2x2 {
+  @apply h-[1.125rem] w-[1.125rem];
+
+  background: repeating-linear-gradient(135deg, #ffe4ec 0 4px, #fff5f8 4px 8px);
+}
+
+.fillCount {
+  @apply font-mono text-[0.8125rem] font-semibold;
+}
+
+.fillNote {
+  @apply text-pretty text-xs leading-normal text-muted-foreground/70;
+}
+
 .actions {
-  @apply fixed inset-x-0 bottom-0 z-30 flex flex-col items-start gap-2 border-t bg-background/95 py-4 pl-4 pr-24 backdrop-blur sm:flex-row sm:items-center sm:justify-end sm:pl-14 sm:pr-28;
+  @apply order-3 -mx-5 flex flex-col gap-2 border-t px-5 pt-3.5 md:-mx-10 md:px-10 lg:order-none lg:mx-0 lg:gap-2.5 lg:px-0 lg:pt-5;
 }
 
-.full {
-  @apply text-sm text-destructive sm:mr-auto;
+.cta {
+  @apply inline-flex h-[3.25rem] w-full items-center justify-center gap-2.5 rounded-xl bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-colors;
+
+  svg {
+    @apply h-4 w-4;
+  }
+
+  &:hover:not(:disabled) {
+    @apply bg-primary/90;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  &:disabled {
+    @apply opacity-50;
+  }
 }
 
-.spin {
-  @apply animate-spin;
+.quota {
+  @apply text-center text-xs text-muted-foreground/70;
+}
+
+.quotaFull {
+  @apply text-destructive;
 }

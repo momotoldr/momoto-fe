@@ -1,10 +1,9 @@
-import { BookHeart, Loader2, Plus, TriangleAlert } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Loader2, Plus, TriangleAlert } from 'lucide-react'
+import { type ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { useTrackPageView } from '@/analytics'
-import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
 import { DEFAULT_SCRAPBOOK_TEMPLATE_ID, getScrapbookTemplate } from '@/constants/scrapbookTemplates'
 import { cn } from '@/lib/utils'
@@ -25,8 +24,12 @@ const editPath = (id: string) => ROUTES.scrapbookEdit.replace(':scrapbookId', id
  * there. (Until 2026-10-15 an empty shelf created a draft on arrival; the user changed
  * that, since merely looking left an empty draft saved to the account.)
  *
- * A finished, unpaid scrapbook stays on the shelf, taped "In cart": it's also a cart item,
+ * A finished, unpaid scrapbook stays on the shelf, tagged "Unpaid": it's also a cart item,
  * paid for there with everything else (user decisions, 2026-10-17).
+ *
+ * Layout from the "Scrapbook - redesign" mockup (2026-10-19): explain first, shelf second.
+ * The Photobooth page's masthead (eyebrow, headline, "You'll get"), then three steps —
+ * design → fill → unlock — then the shelf itself.
  */
 export function ScrapbookShelfPage() {
   useTrackPageView()
@@ -45,17 +48,23 @@ export function ScrapbookShelfPage() {
     void loadShelf().then(() => setLoaded(true))
   }, [loadShelf])
 
+  const used = quota?.used ?? shelf.length
+  const limit = quota?.limit ?? 0
+  const full = limit > 0 && used >= limit
+  const pages = getScrapbookTemplate(DEFAULT_SCRAPBOOK_TEMPLATE_ID)?.pages.length ?? 0
+
+  // Only the shelf waits on the load: the masthead and the steps explain the activity, and
+  // they read the same whether or not the list has arrived.
+  let shelfBody: ReactNode
   if (!loaded && shelf.length === 0) {
-    return (
+    shelfBody = (
       <div className={styles.state}>
         <Loader2 className={styles.stateSpinner} />
         <span className={styles.stateText}>{t('scrapbook.shelf.loading')}</span>
       </div>
     )
-  }
-
-  if (status === 'error' && shelf.length === 0) {
-    return (
+  } else if (status === 'error' && shelf.length === 0) {
+    shelfBody = (
       <div className={styles.state}>
         <TriangleAlert className={styles.stateIcon} />
         <span className={styles.stateText}>{t('scrapbook.shelf.loadError')}</span>
@@ -64,80 +73,128 @@ export function ScrapbookShelfPage() {
         </button>
       </div>
     )
+  } else if (shelf.length === 0) {
+    shelfBody = (
+      <div className={styles.empty}>
+        <span className={styles.emptyCover} aria-hidden="true" />
+        <p className={styles.emptyText}>{t('scrapbook.shelf.emptyTitle')}</p>
+        <Link to={ROUTES.scrapbookNew} className={styles.cta}>
+          <Plus />
+          {t('scrapbook.shelf.emptyCta')}
+        </Link>
+      </div>
+    )
+  } else {
+    shelfBody = (
+      <ul className={styles.covers}>
+        {shelf.map((scrapbook) => (
+          <li key={scrapbook.id}>
+            <ShelfCard scrapbook={scrapbook} language={i18n.language} />
+          </li>
+        ))}
+      </ul>
+    )
   }
 
-  const used = quota?.used ?? shelf.length
-  const limit = quota?.limit ?? 0
-  const full = limit > 0 && used >= limit
-  const pages = getScrapbookTemplate(DEFAULT_SCRAPBOOK_TEMPLATE_ID)?.pages.length ?? 0
+  const steps = [1, 2, 3] as const
 
   return (
     <div className={styles.page}>
-      <header className={styles.head}>
-        <div className={styles.headText}>
-          <h1 className={styles.title}>{t('scrapbook.shelf.title')}</h1>
-          <p className={styles.subtitle}>
-            {shelf.length === 0
-              ? t('scrapbook.shelf.subtitleEmpty')
-              : t('scrapbook.shelf.subtitle', { count: shelf.length })}
-          </p>
+      <div className={styles.masthead}>
+        <div className={styles.intro}>
+          <p className={styles.eyebrow}>{t('scrapbook.shelf.eyebrow')}</p>
+          <h1 className={styles.title}>{t('scrapbook.shelf.heading')}</h1>
+          <p className={styles.subtitle}>{t('scrapbook.shelf.intro', { pages })}</p>
         </div>
-        <div className={styles.headActions}>
-          {limit > 0 && (
-            <div className={styles.meter}>
-              <span className={cn(styles.meterLabel, full && styles.meterLabelFull)}>
-                {t(full ? 'scrapbook.shelf.meterFull' : 'scrapbook.shelf.meter', { used, limit })}
-              </span>
-              <span className={cn(styles.meterTrack, full && styles.meterTrackFull)}>
-                <span
-                  className={cn(styles.meterFill, full && styles.meterFillFull)}
-                  style={{ width: `${Math.min(100, (used / limit) * 100)}%` }}
-                />
-              </span>
+
+        {/* A shape-only sample of two pages, the Photobooth masthead's "You'll get". It's
+            decorative, so it stays out of the reading order; the caption says what it is. */}
+        <div className={styles.sample}>
+          <span className={styles.sampleLabel}>{t('scrapbook.shelf.sampleLabel')}</span>
+          <div className={styles.sampleBody}>
+            <div className={styles.sampleSpread} aria-hidden="true">
+              <div className={cn(styles.samplePage, styles.samplePageStrip)}>
+                <div className={styles.sampleStrip} />
+                <div className={styles.sampleLines}>
+                  <div className={styles.sampleLine} />
+                  <div className={styles.sampleLine} />
+                  <div className={cn(styles.sampleLine, styles.sampleLineShort)} />
+                </div>
+              </div>
+              <div className={styles.samplePage}>
+                <div className={styles.sampleCard} />
+                <div className={styles.sampleLine} />
+                <div className={cn(styles.sampleLine, styles.sampleLineShorter)} />
+              </div>
             </div>
-          )}
-          {/* A link styled as the button, so it can't be followed at the cap. */}
-          {full ? (
-            <Button disabled>
-              <Plus />
-              {t('scrapbook.shelf.new')}
-            </Button>
-          ) : (
-            shelf.length > 0 && (
-              <Button asChild>
-                <Link to={ROUTES.scrapbookNew}>
+            <span className={styles.sampleHint}>{t('scrapbook.shelf.sampleHint', { pages })}</span>
+          </div>
+        </div>
+      </div>
+
+      <ol className={styles.steps}>
+        {steps.map((step) => (
+          <li key={step} className={styles.step}>
+            <span className={styles.stepNumber}>{String(step).padStart(2, '0')}</span>
+            <div className={styles.stepText}>
+              <span className={styles.stepTitle}>{t(`scrapbook.shelf.step${step}Title`)}</span>
+              <span className={styles.stepBody}>{t(`scrapbook.shelf.step${step}Text`)}</span>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <section className={styles.shelf} aria-labelledby="scrapbook-shelf-title">
+        <div className={styles.shelfHead}>
+          <div className={styles.shelfHeading}>
+            <h2 id="scrapbook-shelf-title" className={styles.shelfTitle}>
+              {t('scrapbook.shelf.title')}
+            </h2>
+            {shelf.length > 0 && (
+              <span className={styles.shelfCount}>
+                {t('scrapbook.shelf.subtitle', { count: shelf.length })}
+              </span>
+            )}
+          </div>
+          <div className={styles.shelfActions}>
+            {limit > 0 && (
+              <div className={styles.meter}>
+                <span className={cn(styles.meterLabel, full && styles.meterLabelFull)}>
+                  {t(full ? 'scrapbook.shelf.meterFull' : 'scrapbook.shelf.meter', {
+                    used,
+                    limit,
+                  })}
+                </span>
+                {shelf.length > 0 && (
+                  <span className={cn(styles.meterTrack, full && styles.meterTrackFull)}>
+                    <span
+                      className={cn(styles.meterFill, full && styles.meterFillFull)}
+                      style={{ width: `${Math.min(100, (used / limit) * 100)}%` }}
+                    />
+                  </span>
+                )}
+              </div>
+            )}
+            {/* At the cap it's a disabled button, since a link can't be. The empty
+                shelf carries its own, bigger one. */}
+            {full ? (
+              <button type="button" disabled className={styles.cta}>
+                <Plus />
+                {t('scrapbook.shelf.new')}
+              </button>
+            ) : (
+              shelf.length > 0 && (
+                <Link to={ROUTES.scrapbookNew} className={styles.cta}>
                   <Plus />
                   {t('scrapbook.shelf.new')}
                 </Link>
-              </Button>
-            )
-          )}
+              )
+            )}
+          </div>
         </div>
-      </header>
 
-      {shelf.length === 0 ? (
-        <div className={styles.empty}>
-          <span className={styles.emptyIcon} aria-hidden="true">
-            <BookHeart />
-          </span>
-          <h2 className={styles.emptyTitle}>{t('scrapbook.shelf.emptyTitle')}</h2>
-          <p className={styles.emptyText}>{t('scrapbook.shelf.emptyText', { pages })}</p>
-          <Button asChild className={styles.emptyCta}>
-            <Link to={ROUTES.scrapbookNew}>
-              <Plus />
-              {t('scrapbook.shelf.emptyCta')}
-            </Link>
-          </Button>
-        </div>
-      ) : (
-        <ul className={styles.shelf}>
-          {shelf.map((scrapbook) => (
-            <li key={scrapbook.id}>
-              <ShelfCard scrapbook={scrapbook} language={i18n.language} />
-            </li>
-          ))}
-        </ul>
-      )}
+        {shelfBody}
+      </section>
     </div>
   )
 }
@@ -168,15 +225,17 @@ function ShelfCard({ scrapbook, language }: { scrapbook: ScrapbookSummary; langu
           {t(`scrapbook.states.${scrapbook.state}`)}
         </span>
       </span>
-      <span className={styles.cardTitle}>{title}</span>
-      <span className={styles.cardMeta}>
-        {t('scrapbook.shelf.edited', {
-          date: new Date(scrapbook.updatedAt).toLocaleDateString(language, {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-          }),
-        })}
+      <span className={styles.cardText}>
+        <span className={styles.cardTitle}>{title}</span>
+        <span className={styles.cardMeta}>
+          {t('scrapbook.shelf.edited', {
+            date: new Date(scrapbook.updatedAt).toLocaleDateString(language, {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric',
+            }),
+          })}
+        </span>
       </span>
     </Link>
   )

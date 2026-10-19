@@ -1,65 +1,108 @@
-/* The strip tray: the unlocked strips that fit the selected slot. Lives in the editor's
- * side column on desktop and in the bottom sheet on a phone. */
+/* The strip tray: the unlocked strips that fit the selected place. Lives in the editor's
+ * side panel on desktop and in the bottom sheet on a phone. */
 
 .tray {
-  @apply flex min-h-0 flex-col gap-3;
+  @apply flex flex-col gap-3.5;
 }
 
-.head {
-  @apply flex items-center justify-between gap-3;
+.chips {
+  @apply flex items-center gap-1.5;
 }
 
-.title {
-  @apply font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground;
-}
-
-.clear {
-  @apply inline-flex items-center gap-1 rounded-md px-2 py-1 text-[0.8125rem] font-semibold text-destructive transition-colors;
-
-  svg {
-    @apply h-3.5 w-3.5;
-  }
+.chip {
+  @apply flex h-[1.875rem] items-center gap-1.5 rounded-full border bg-background px-3 text-xs font-semibold transition-colors;
 
   &:hover {
-    @apply bg-destructive/10;
+    @apply border-foreground/40;
   }
 
   &:focus-visible {
-    @apply outline-none ring-2 ring-ring;
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 }
 
-/* Padded so the current strip's ring (which sits outside the tile) has room: the list
- * scrolls, and a scroll box clips anything past its edge. No negative margin to pull the
- * padding back — that made the list wider than the side column, and since the column
- * scrolls vertically, the extra width became a horizontal scrollbar under the tray. */
-.list {
-  @apply grid grid-cols-3 gap-2.5 overflow-y-auto p-1.5;
+.chipOn,
+.chipOn:hover {
+  @apply border-primary bg-primary text-primary-foreground;
 }
 
-/* 2x2 cards are wide; two across keeps each one big enough to recognise. */
-.listCards {
-  @apply grid-cols-2;
+.chipCount {
+  @apply font-medium opacity-70;
 }
 
+/* The phone's sheet holds the grid in a scroll box of its own, under the filters. */
+.traySheet .stripGrid {
+  @apply max-h-[min(27.5rem,45dvh)] overflow-y-auto;
+
+  scrollbar-width: thin;
+}
+
+.stripGrid {
+  @apply grid gap-2;
+}
+
+.grid_panel_4x1 {
+  @apply grid-cols-4;
+}
+
+.grid_panel_2x2,
+.grid_sheet_2x2 {
+  @apply grid-cols-3;
+}
+
+.grid_sheet_4x1 {
+  @apply grid-cols-5;
+}
+
+/* The ring sits inside the tile's own padding, so a scroll box never clips it. */
 .strip {
-  @apply block w-full overflow-hidden rounded-[0.375rem] bg-muted ring-offset-background transition-[box-shadow,transform];
+  @apply relative block w-full rounded-lg border-2 border-transparent p-0.5 transition-[border-color,opacity];
 
   &:hover {
-    @apply -translate-y-px shadow-md;
+    @apply border-border;
   }
 
   &:focus-visible {
-    @apply outline-none ring-2 ring-ring ring-offset-2;
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 }
 
-.stripCurrent {
-  @apply ring-2 ring-primary ring-offset-2;
+.stripHere,
+.stripHere:hover {
+  @apply border-rose-600;
+}
+
+/* Already in another place in this book: still pickable, but quieter. */
+.stripUsed {
+  @apply opacity-[0.55];
 }
 
 .image {
-  @apply block h-auto w-full object-contain;
+  @apply block h-auto w-full rounded-[0.25rem] border bg-muted object-contain;
+}
+
+.tag {
+  @apply absolute left-1.5 top-1.5 rounded-[0.25rem] bg-slate-500 px-[5px] py-0.5 text-[0.5625rem] font-semibold leading-none text-white;
+}
+
+.tagHere {
+  @apply bg-rose-600;
+}
+
+.hint {
+  @apply text-pretty text-xs leading-normal text-muted-foreground/70;
+}
+
+.takeOut {
+  @apply flex h-10 items-center justify-center rounded-[0.625rem] border text-sm font-semibold text-rose-700 transition-colors;
+
+  &:hover {
+    @apply bg-rose-50;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
 }
 
 .empty {
@@ -68,10 +111,6 @@
 
 .note {
   @apply flex items-center gap-2 text-sm text-muted-foreground;
-}
-
-.hint {
-  @apply text-[0.8125rem] leading-relaxed text-muted-foreground/80;
 }
 
 .spinner {

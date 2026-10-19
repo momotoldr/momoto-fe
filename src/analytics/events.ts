@@ -85,7 +85,7 @@ export type MomotoEvents = {
 
   // ── Scrapbook ─────────────────────────────────────────────────────────────────
   // No titles and no text, ever: those are what people wrote.
-  scrapbook_created: { from: 'new' | 'duplicate' }
+  scrapbook_created: { from: 'new' }
   scrapbook_strip_placed: { layout: '4x1' | '2x2' }
   scrapbook_finished: { pages: number; filledStrips: number; ms: number; bytes: number }
   /** `code`: why — `changed`, `unsaved`, `failed`, or `cancelled` by the user. */

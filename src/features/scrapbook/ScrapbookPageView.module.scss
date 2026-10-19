@@ -40,11 +40,16 @@
 }
 
 /* An empty (or emptied) slot in the editor: an invitation, not art — the PDF draws
- * nothing here. */
+ * nothing here. Drawn on the page itself, so what's left to fill is visible at a glance. */
 .stripSlotEmpty {
-  @apply flex items-center justify-center bg-white/25;
+  @apply flex items-center justify-center bg-white/55;
 
-  border: 0.35cqw dashed rgba(74, 56, 38, 0.45);
+  border: 0.45cqw dashed rgba(15, 23, 42, 0.35);
+  border-radius: 1.2cqw;
+
+  &:hover {
+    @apply bg-white/75;
+  }
 }
 
 .stripImage {
@@ -57,18 +62,33 @@
 
 .emptyNote,
 .removedNote {
-  @apply flex flex-col items-center gap-[0.8cqw] px-[1.5cqw] text-center font-semibold leading-tight text-[#4a3826];
+  @apply flex flex-col items-center gap-[1.6cqw] px-[1.5cqw] text-center font-semibold leading-tight text-[#0f172a];
 
-  font-size: 2.2cqw;
+  font-size: 2.6cqw;
 
   svg {
-    width: 3.4cqw;
-    height: 3.4cqw;
+    width: 3.6cqw;
+    height: 3.6cqw;
   }
+}
+
+/* The plus, in a dark disc. */
+.emptyNote svg {
+  @apply box-content rounded-full bg-[#0f172a] text-white;
+
+  padding: 1.6cqw;
+  stroke-width: 2.6;
 }
 
 .removedNote {
   @apply text-[#7a3b2c];
+}
+
+/* On a phone-sized page the words would be a few pixels tall; the plus says enough. */
+@container (max-width: 22rem) {
+  .emptyLabel {
+    @apply hidden;
+  }
 }
 
 /* ── Text slots ──────────────────────────────────────────────────────────── */
@@ -101,10 +121,15 @@
 
 .placeholder {
   @apply italic opacity-45;
+
+  /* An empty place to write shows its box, not only on hover. */
+  &.textSlotEdit {
+    outline-color: rgba(15, 23, 42, 0.45);
+  }
 }
 
 .selected {
   box-shadow:
     0 0 0 0.45cqw hsl(var(--background)),
-    0 0 0 0.9cqw hsl(var(--primary));
+    0 0 0 0.9cqw #e11d48;
 }

@@ -1,23 +1,81 @@
-/* A finished or paid scrapbook's actions, in the page's side column (and on a phone, under
- * the page — there's no selection to wait for). */
+/* A finished or paid scrapbook's actions, in the editor's side panel: what state it's in,
+ * the one thing to do next, and the rarer actions underneath. */
 
 .panel {
   @apply flex flex-col gap-4;
 }
 
-.text {
-  @apply text-sm leading-relaxed;
+.note {
+  @apply flex flex-col gap-1.5 rounded-2xl p-4;
 }
 
-.actions {
-  @apply flex flex-col gap-2;
+.noteFinished {
+  @apply bg-[#fff5f8];
 }
 
-.discard {
-  @apply text-destructive;
+.notePaid {
+  @apply bg-[#f2fff8];
+}
+
+.noteHeading {
+  @apply text-[0.9375rem] font-bold;
+}
+
+.noteText {
+  @apply text-pretty text-[0.8125rem] leading-[1.55] text-slate-600;
+}
+
+.primary,
+.secondary,
+.quiet {
+  @apply inline-flex items-center justify-center gap-2 rounded-[0.625rem] font-semibold transition-colors;
+
+  svg {
+    @apply h-4 w-4;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  &:disabled {
+    @apply pointer-events-none opacity-50;
+  }
+}
+
+.primary {
+  @apply h-12 bg-primary text-[0.9375rem] text-primary-foreground;
 
   &:hover {
-    @apply bg-destructive/10 text-destructive;
+    @apply bg-primary/90;
+  }
+}
+
+.secondary {
+  @apply h-11 border text-sm;
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+}
+
+.more {
+  @apply flex gap-2 border-t pt-3;
+}
+
+.quiet {
+  @apply h-10 flex-1 text-sm font-medium;
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+}
+
+.danger {
+  @apply text-rose-700;
+
+  &:hover {
+    @apply bg-rose-50;
   }
 }
 

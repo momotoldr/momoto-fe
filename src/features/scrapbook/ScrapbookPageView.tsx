@@ -176,7 +176,7 @@ function StripSlot({
       {mode === 'edit' && !stripId && (
         <span className={styles.emptyNote}>
           <Plus aria-hidden="true" />
-          {t(`scrapbook.editor.addStrip_${slot.layout}`)}
+          <span className={styles.emptyLabel}>{t(`scrapbook.editor.addStrip_${slot.layout}`)}</span>
         </span>
       )}
     </>

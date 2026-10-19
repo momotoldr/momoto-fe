@@ -16,22 +16,24 @@ import { ANALYTICS_EVENTS, trackEvents, useTrackPageView } from '@/analytics'
 import ApiError from '@/api/apiError'
 import { reopenScrapbook } from '@/api/services/scrapbooksService'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { ROUTES } from '@/constants/routes'
 import { env } from '@/env'
+import { EditorMenu, type EditorMenuItem } from '@/features/scrapbook/EditorMenu'
+import { EditorSheet } from '@/features/scrapbook/EditorSheet'
+import { PageChecklist } from '@/features/scrapbook/PageChecklist'
 import { PageRail } from '@/features/scrapbook/PageRail'
 import { pageLabel } from '@/features/scrapbook/pageLabel'
 import { ScrapbookPageView, type ScrapbookSelection } from '@/features/scrapbook/ScrapbookPageView'
-import { StripPickerModal } from '@/features/scrapbook/StripPickerModal'
 import { StripTray } from '@/features/scrapbook/StripTray'
 import { TextPanel } from '@/features/scrapbook/TextPanel'
 import { useDesktopLayout } from '@/features/scrapbook/useDesktopLayout'
 import { useScrapbookFinish, type FinishOutcome } from '@/features/scrapbook/useScrapbookFinish'
+import { useScrapbookDownload } from '@/features/scrapbook/useScrapbookDownload'
 import { ViewerPanel } from '@/features/scrapbook/ViewerPanel'
 import { cn } from '@/lib/utils'
 import { useCartStore } from '@/store/useCartStore'
 import { useScrapbookStore } from '@/store/useScrapbookStore'
+import type { Scrapbook } from '@/types/scrapbookType'
 import type { StoredStrip } from '@/types/stripType'
 
 import styles from './ScrapbookPage.module.scss'
@@ -44,9 +46,14 @@ const asName = (text: string) => text.replace(/\s+/g, ' ').trim().slice(0, TITLE
 
 /**
  * One scrapbook: the editor while it's a draft, a read-only viewer once it's finished or
- * paid (docs/PLAN-scrapbook.md §6). One route and one layout for all three states — the
- * page rail, the page, and a side column that holds the strip tray or the text field while
- * editing, and the scrapbook's actions otherwise.
+ * paid (docs/PLAN-scrapbook.md §6). One route and one layout for all three states.
+ *
+ * Layout from the "Scrapbook Editor - redesign" mockup (2026-10-19): the editor fills the
+ * screen under the app bar with no page scroll — the rail and the side panel scroll on their
+ * own. Finish waits for every strip place, so progress sits in the header beside it and each
+ * page in the rail says how many places it still needs. The side panel follows what's
+ * tapped: the page's checklist → the strip tray → the text field. On a phone the panel
+ * becomes a bottom sheet, and the pager and Finish move to a bar under the page.
  *
  * Finishing renders the PDF in this tab (`useScrapbookFinish`); unlocking, paying and
  * downloading live in `ViewerPanel`.
@@ -75,13 +82,12 @@ export function ScrapbookPage() {
   const setText = useScrapbookStore((state) => state.setText)
   const setTitle = useScrapbookStore((state) => state.setTitle)
   const replaceCurrent = useScrapbookStore((state) => state.replaceCurrent)
-  const duplicate = useScrapbookStore((state) => state.duplicate)
   const discard = useScrapbookStore((state) => state.discard)
   const frozen = useScrapbookStore((state) => state.frozen)
 
   const [pageIndex, setPageIndex] = useState(0)
   const [selection, setSelection] = useState<ScrapbookSelection | null>(null)
-  const [busy, setBusy] = useState<'reopen' | 'duplicate' | 'discard' | null>(null)
+  const [busy, setBusy] = useState<'reopen' | 'discard' | null>(null)
   const [confirmDiscard, setConfirmDiscard] = useState(false)
   const [confirmFinish, setConfirmFinish] = useState(false)
   const { finish, cancel, progress, otherTabFinishing } = useScrapbookFinish(scrapbookId)
@@ -130,24 +136,6 @@ export function ScrapbookPage() {
     }
   }, [scrapbook, replaceCurrent, t])
 
-  const duplicateThis = useCallback(async () => {
-    if (!scrapbook) return
-    setBusy('duplicate')
-    const result = await duplicate(scrapbook.id)
-    setBusy(null)
-    if (result.ok) {
-      trackEvents(ANALYTICS_EVENTS.SCRAPBOOK_CREATED, { from: 'duplicate' })
-      toast.success(t('scrapbook.viewer.duplicated'))
-      navigate(ROUTES.scrapbookEdit.replace(':scrapbookId', result.scrapbook.id))
-    } else {
-      toast.error(
-        result.reason === 'limit'
-          ? t('scrapbook.shelf.limit', { limit: useScrapbookStore.getState().quota?.limit ?? 0 })
-          : t('scrapbook.shelf.createError')
-      )
-    }
-  }, [scrapbook, duplicate, navigate, t])
-
   const confirmDiscardThis = useCallback(async () => {
     if (!scrapbook) return
     setBusy('discard')
@@ -178,6 +166,24 @@ export function ScrapbookPage() {
         return !stripId || missing.has(stripId)
       }).length
   }, [template, scrapbook, missing])
+
+  /** Empty strip places per page, for the rail's badges. */
+  const emptyByPage = useMemo(() => {
+    if (!template || !scrapbook) return []
+    return template.pages.map(
+      (item) =>
+        item.strips.filter((slot) => {
+          const stripId = scrapbook.content.strips[slot.id]
+          return !stripId || missing.has(stripId)
+        }).length
+    )
+  }, [template, scrapbook, missing])
+
+  /** Strips placed in some other place of this book — the tray marks them "Used". */
+  const usedElsewhere = useMemo(() => {
+    const placed = Object.entries(scrapbook?.content.strips ?? {})
+    return new Set(placed.filter(([slotId]) => slotId !== stripSlot?.id).map(([, id]) => id))
+  }, [scrapbook?.content.strips, stripSlot?.id])
 
   /**
    * Finishing puts the scrapbook in the cart, where it takes a slot like a strip (user
@@ -252,84 +258,247 @@ export function ScrapbookPage() {
 
   const paid = scrapbook.state === 'paid'
   const total = template.pages.length
-  // On a phone the side column is a sheet: open while a slot is picked, and while a finish
-  // runs so its progress (and Cancel) stays in view.
-  // A strip place on a phone opens the picker pop-up instead, so only text uses the sheet.
-  const sheetOpen = draft && (selection?.kind === 'text' || progress !== null || otherTabFinishing)
+  const label = pageLabel(page, pageIndex, t)
+  const placesTotal = template.pages.reduce((n, item) => n + item.strips.length, 0)
+  const placed = placesTotal - emptyPlaces
+  const ready = emptyPlaces === 0
+  const finishing = draft && (progress !== null || otherTabFinishing)
+  const canFinish = editing && ready && !cartFull
+  const saveLabel = t(
+    {
+      saved: 'scrapbook.editor.saved',
+      pending: 'scrapbook.editor.pending',
+      saving: 'scrapbook.editor.saving',
+      error: 'scrapbook.editor.saveError',
+    }[saveState]
+  )
+  const pickInPlace = (strip: StoredStrip) => stripSlot && pickStrip(stripSlot, strip)
+  const clearPlace = () => stripSlot && placeStrip(stripSlot.id, null)
+
+  /** Write into a text place. The scrapbook's name (shelf, PDF file name) follows its cover
+   * title until the user names it something else — otherwise a book whose cover reads "Our
+   * Bali Weekend" sits on the shelf as "Untitled". */
+  const writeText = (value: string) => {
+    if (!textSlot) return
+    if (textSlot.placeholder === 'coverTitle') {
+      const before = asName(scrapbook.content.texts[textSlot.id] ?? '')
+      if (!scrapbook.title || scrapbook.title === before) setTitle(asName(value))
+    }
+    setText(textSlot.id, value)
+  }
+
+  const titleField = (className: string) =>
+    editing ? (
+      <input
+        value={scrapbook.title}
+        maxLength={TITLE_MAX_LENGTH}
+        aria-label={t('scrapbook.editor.titleLabel')}
+        placeholder={t('scrapbook.editor.titlePlaceholder')}
+        className={className}
+        onChange={(event) => setTitle(event.target.value)}
+      />
+    ) : null
+
+  const progressLabel = (
+    <span className={styles.progressPlaced}>
+      {t('scrapbook.editor.placed', { filled: placed, total: placesTotal })}
+    </span>
+  )
+  const progressBar = (
+    <span className={styles.progressTrack}>
+      <span
+        className={cn(styles.progressFill, ready && styles.progressFillReady)}
+        style={{ width: `${placesTotal ? (placed / placesTotal) * 100 : 100}%` }}
+      />
+    </span>
+  )
+  // Ready but the cart has no room: the one thing still standing between here and Finish.
+  const cartFullLink = (
+    <Link to={ROUTES.cart} className={styles.cartFull}>
+      {t('scrapbook.finish.cartFullHint')}
+    </Link>
+  )
+
+  const progressText = (stage: NonNullable<typeof progress> | null) =>
+    !stage
+      ? t('scrapbook.finish.otherTab')
+      : stage.stage === 'rendering'
+        ? t('scrapbook.finish.rendering', { page: stage.page, total: stage.total })
+        : t(`scrapbook.finish.${stage.stage}`)
+
+  const finishProgress = (
+    <div className={styles.finishing} role="status">
+      <Loader2 className={styles.finishingSpinner} aria-hidden="true" />
+      <p className={styles.finishingText}>{progressText(progress)}</p>
+      {progress && progress.stage !== 'uploading' && (
+        <button type="button" className={styles.finishingStop} onClick={cancel}>
+          {t('scrapbook.finish.stop')}
+        </button>
+      )}
+    </div>
+  )
+
+  const menuItems: EditorMenuItem[] = draft
+    ? [
+        // The phone's Finish: off until every strip place is filled, as the progress row
+        // above the page says.
+        {
+          label: t('scrapbook.finish.button'),
+          disabled: !canFinish,
+          onSelect: () => setConfirmFinish(true),
+        },
+        {
+          label: t('scrapbook.viewer.delete'),
+          danger: true,
+          disabled: !editing,
+          onSelect: () => setConfirmDiscard(true),
+        },
+      ]
+    : [
+        ...(paid
+          ? []
+          : [
+              {
+                label: t('scrapbook.viewer.keepEditing'),
+                disabled: busy !== null,
+                onSelect: () => void keepEditing(),
+              },
+            ]),
+        {
+          label: t(paid ? 'scrapbook.viewer.remove' : 'scrapbook.viewer.delete'),
+          danger: true,
+          disabled: busy !== null,
+          onSelect: () => setConfirmDiscard(true),
+        },
+      ]
+
+  const panelHead = (eyebrow: string, title: string) => (
+    <div className={styles.panelHead}>
+      <div className={styles.panelHeading}>
+        <span className={styles.panelEyebrow}>{eyebrow}</span>
+        <h2 className={styles.panelTitle}>{title}</h2>
+      </div>
+      <button type="button" className={styles.panelDone} onClick={() => setSelection(null)}>
+        {t('scrapbook.editor.close')}
+      </button>
+    </div>
+  )
 
   return (
     <div className={styles.page}>
       <header className={styles.head}>
-        <Link to={ROUTES.scrapbook} className={styles.back}>
-          <ArrowLeft aria-hidden="true" />
-          <span>{t('scrapbook.editor.back')}</span>
-        </Link>
+        {/* Desktop: name and state on the left; progress, Delete and Finish on the right. */}
+        <div className={styles.headWide}>
+          <div className={styles.headStart}>
+            <Link
+              to={ROUTES.scrapbook}
+              className={styles.iconButton}
+              aria-label={t('scrapbook.editor.back')}
+              title={t('scrapbook.editor.back')}
+            >
+              <ArrowLeft />
+            </Link>
+            <div className={styles.headText}>
+              <div className={styles.titleRow}>
+                {titleField(styles.titleInput) ?? (
+                  <h1 className={styles.title}>
+                    {scrapbook.title || t('scrapbook.shelf.untitled')}
+                  </h1>
+                )}
+                <span className={cn(styles.tape, styles[`tape_${scrapbook.state}`])}>
+                  {t(`scrapbook.states.${scrapbook.state}`)}
+                </span>
+              </div>
+              <span className={styles.headMeta}>
+                {t('scrapbook.editor.meta', {
+                  template: t(`scrapbook.templates.${template.label}`),
+                  pages: t('scrapbook.picker.pages', { count: total }),
+                })}
+                {draft && (
+                  <>
+                    {' · '}
+                    <span className={cn(saveState === 'error' && styles.saveError)} role="status">
+                      {saveLabel}
+                    </span>
+                  </>
+                )}
+              </span>
+            </div>
+          </div>
 
-        <div className={styles.titleRow}>
-          {editing ? (
-            <Input
-              value={scrapbook.title}
-              maxLength={TITLE_MAX_LENGTH}
-              aria-label={t('scrapbook.editor.titleLabel')}
-              placeholder={t('scrapbook.editor.titlePlaceholder')}
-              className={styles.titleInput}
-              onChange={(event) => setTitle(event.target.value)}
-            />
-          ) : (
-            <h1 className={styles.title}>{scrapbook.title || t('scrapbook.shelf.untitled')}</h1>
+          {draft && (
+            <div className={styles.headEnd}>
+              <div className={styles.progress}>
+                <div className={styles.progressRow}>
+                  {progressLabel}
+                  {!ready ? (
+                    <span className={styles.progressLeft}>
+                      {t('scrapbook.editor.left', { count: emptyPlaces })}
+                    </span>
+                  ) : cartFull ? (
+                    cartFullLink
+                  ) : (
+                    <span className={styles.progressLeft}>{t('scrapbook.editor.ready')}</span>
+                  )}
+                </div>
+                {progressBar}
+              </div>
+              <button
+                type="button"
+                className={styles.deleteButton}
+                aria-label={t('scrapbook.viewer.delete')}
+                title={t('scrapbook.viewer.delete')}
+                disabled={!editing}
+                onClick={() => setConfirmDiscard(true)}
+              >
+                <Trash2 />
+              </button>
+              <button
+                type="button"
+                className={styles.finishButton}
+                disabled={!canFinish}
+                title={!ready ? t('scrapbook.finish.fillAll') : undefined}
+                onClick={() => setConfirmFinish(true)}
+              >
+                <BookCheck />
+                {t('scrapbook.finish.button')}
+              </button>
+            </div>
           )}
-          <span className={cn(styles.tape, styles[`tape_${scrapbook.state}`])}>
-            {t(`scrapbook.states.${scrapbook.state}`)}
-          </span>
         </div>
 
-        {draft && (
-          <div className={styles.headActions}>
-            <span
-              className={cn(styles.saveState, saveState === 'error' && styles.saveStateError)}
-              role="status"
-            >
-              {t(
-                {
-                  saved: 'scrapbook.editor.saved',
-                  pending: 'scrapbook.editor.pending',
-                  saving: 'scrapbook.editor.saving',
-                  error: 'scrapbook.editor.saveError',
-                }[saveState]
-              )}
-            </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={t('scrapbook.viewer.delete')}
-              disabled={!editing}
-              onClick={() => setConfirmDiscard(true)}
-            >
-              <Trash2 />
-            </Button>
-            {editing && emptyPlaces > 0 ? (
-              <span className={styles.placesLeft}>
-                {t('scrapbook.finish.placesLeft', { count: emptyPlaces })}
-              </span>
-            ) : (
-              editing &&
-              cartFull && (
-                <Link to={ROUTES.cart} className={styles.placesLeft}>
-                  {t('scrapbook.finish.cartFullHint')}
-                </Link>
-              )
+        {/* Phone: back, the name centred over its state, and the rest behind "…". */}
+        <div className={styles.headNarrow}>
+          <Link
+            to={ROUTES.scrapbook}
+            className={styles.iconButtonBare}
+            aria-label={t('scrapbook.editor.back')}
+          >
+            <ArrowLeft />
+          </Link>
+          <div className={styles.narrowText}>
+            {titleField(styles.narrowTitleInput) ?? (
+              <h1 className={styles.narrowTitle}>
+                {scrapbook.title || t('scrapbook.shelf.untitled')}
+              </h1>
             )}
-            <Button
-              disabled={!editing || emptyPlaces > 0 || cartFull}
-              title={emptyPlaces > 0 ? t('scrapbook.finish.fillAll') : undefined}
-              onClick={() => setConfirmFinish(true)}
+            <span
+              className={cn(styles.narrowMeta, saveState === 'error' && draft && styles.saveError)}
             >
-              <BookCheck />
-              {t('scrapbook.finish.button')}
-            </Button>
+              {t(`scrapbook.states.${scrapbook.state}`)}
+              {draft && ` · ${saveLabel}`}
+            </span>
           </div>
-        )}
+          <EditorMenu items={menuItems} />
+        </div>
       </header>
+
+      {draft && (
+        <div className={styles.narrowProgress}>
+          {progressBar}
+          {ready && cartFull ? cartFullLink : progressLabel}
+        </div>
+      )}
 
       <div className={styles.body}>
         <PageRail
@@ -339,137 +508,185 @@ export function ScrapbookPage() {
           missing={missing}
           current={pageIndex}
           onSelect={goToPage}
+          emptyByPage={editing ? emptyByPage : undefined}
         />
 
         <div className={styles.stage}>
-          <div className={styles.pageWrap} style={{ ['--page-aspect' as string]: template.aspect }}>
-            <ScrapbookPageView
-              template={template}
-              page={page}
-              content={scrapbook.content}
-              strips={current.strips}
-              missing={missing}
-              mode={editing ? 'edit' : 'view'}
-              selected={editing ? selection : null}
-              onSelect={editing ? setSelection : undefined}
-            />
-          </div>
-
-          <div className={styles.pager}>
-            <Button
-              variant="outline"
-              size="icon"
-              aria-label={t('scrapbook.editor.previous')}
-              disabled={pageIndex === 0}
-              onClick={() => goToPage(pageIndex - 1)}
+          <button
+            type="button"
+            className={cn(styles.arrow, styles.stageArrow)}
+            aria-label={t('scrapbook.editor.previous')}
+            disabled={pageIndex === 0}
+            onClick={() => goToPage(pageIndex - 1)}
+          >
+            <ChevronLeft />
+          </button>
+          <div className={styles.stageCenter}>
+            {/* A tap on the paper itself (not a place) puts the panel back to the checklist. */}
+            <div
+              className={styles.pageArea}
+              onClick={(event) => {
+                if (!(event.target as HTMLElement).closest('button')) setSelection(null)
+              }}
             >
-              <ChevronLeft />
-            </Button>
-            <span className={styles.pagerLabel}>
-              {pageLabel(page, pageIndex, t)}
-              <span className={styles.pagerCount}>
-                {t('scrapbook.editor.page', { n: pageIndex + 1, total })}
-              </span>
+              <div
+                className={styles.pageFit}
+                style={{ ['--page-aspect' as string]: template.aspect }}
+              >
+                <ScrapbookPageView
+                  template={template}
+                  page={page}
+                  content={scrapbook.content}
+                  strips={current.strips}
+                  missing={missing}
+                  mode={editing ? 'edit' : 'view'}
+                  selected={editing ? selection : null}
+                  onSelect={editing ? setSelection : undefined}
+                />
+              </div>
+            </div>
+            <span className={styles.caption}>
+              <strong>{label}</strong> · {t('scrapbook.editor.page', { n: pageIndex + 1, total })}
             </span>
-            <Button
-              variant="outline"
-              size="icon"
-              aria-label={t('scrapbook.editor.next')}
-              disabled={pageIndex === total - 1}
-              onClick={() => goToPage(pageIndex + 1)}
-            >
-              <ChevronRight />
-            </Button>
           </div>
+          <button
+            type="button"
+            className={cn(styles.arrow, styles.stageArrow)}
+            aria-label={t('scrapbook.editor.next')}
+            disabled={pageIndex === total - 1}
+            onClick={() => goToPage(pageIndex + 1)}
+          >
+            <ChevronRight />
+          </button>
         </div>
 
-        <aside
-          className={cn(styles.side, sheetOpen && styles.sideOpen, !draft && styles.sideViewer)}
-        >
-          {draft && (progress || otherTabFinishing) ? (
-            <div className={styles.progress} role="status">
-              <Loader2 className={styles.progressSpinner} aria-hidden="true" />
-              <p className={styles.progressText}>
-                {!progress
-                  ? t('scrapbook.finish.otherTab')
-                  : progress.stage === 'rendering'
-                    ? t('scrapbook.finish.rendering', {
-                        page: progress.page,
-                        total: progress.total,
-                      })
-                    : t(`scrapbook.finish.${progress.stage}`)}
-              </p>
-              {progress && progress.stage !== 'uploading' && (
-                <Button variant="outline" size="sm" onClick={cancel}>
-                  {t('scrapbook.finish.stop')}
-                </Button>
-              )}
-            </div>
-          ) : draft ? (
-            <>
-              {stripSlot && desktop ? (
+        {/* The side panel follows what's picked: the page's checklist, the strip tray, or
+            the text field; a finished or paid book's actions otherwise. Desktop only — a
+            phone opens the same pieces in `EditorSheet`, and mounting both would have two
+            text fields competing for focus. */}
+        {desktop && (
+          <aside className={styles.panel}>
+            {finishing ? (
+              finishProgress
+            ) : draft && stripSlot ? (
+              <div className={styles.panelSection}>
+                {panelHead(
+                  t('scrapbook.editor.stripPlace', { page: label }),
+                  t(`scrapbook.tray.title_${stripSlot.layout}`)
+                )}
                 <StripTray
                   layout={stripSlot.layout}
                   currentStripId={scrapbook.content.strips[stripSlot.id]}
-                  onPick={(strip) => pickStrip(stripSlot, strip)}
-                  onClear={() => placeStrip(stripSlot.id, null)}
+                  usedStripIds={usedElsewhere}
+                  onPick={pickInPlace}
+                  onClear={clearPlace}
+                  variant="panel"
                 />
-              ) : textSlot ? (
+              </div>
+            ) : draft && textSlot ? (
+              <div className={styles.panelSection}>
+                {panelHead(
+                  t('scrapbook.editor.textPlace', { page: label }),
+                  t(`scrapbook.text.label_${textSlot.placeholder}`)
+                )}
                 <TextPanel
                   slot={textSlot}
                   value={scrapbook.content.texts[textSlot.id] ?? ''}
-                  onChange={(value) => {
-                    // The scrapbook's name (shelf, PDF file name) follows its cover title
-                    // until the user names it something else — otherwise a book whose
-                    // cover reads "Our Bali Weekend" sits on the shelf as "Untitled".
-                    if (textSlot.placeholder === 'coverTitle') {
-                      const before = asName(scrapbook.content.texts[textSlot.id] ?? '')
-                      if (!scrapbook.title || scrapbook.title === before) setTitle(asName(value))
-                    }
-                    setText(textSlot.id, value)
-                  }}
+                  onChange={writeText}
                 />
-              ) : (
-                <p className={styles.hint}>{t('scrapbook.editor.hint')}</p>
-              )}
-              {selection && (
-                <Button
-                  variant="secondary"
-                  className={styles.done}
-                  onClick={() => setSelection(null)}
-                >
-                  {t('scrapbook.editor.close')}
-                </Button>
-              )}
-            </>
-          ) : (
-            <ViewerPanel
-              scrapbook={scrapbook}
-              busy={busy !== null}
-              onKeepEditing={() => void keepEditing()}
-              onDuplicate={() => void duplicateThis()}
-              onDiscard={() => setConfirmDiscard(true)}
-            />
-          )}
-        </aside>
+              </div>
+            ) : draft ? (
+              <PageChecklist
+                page={page}
+                label={label}
+                content={scrapbook.content}
+                strips={current.strips}
+                missing={missing}
+                onSelect={(next) => editing && setSelection(next)}
+              />
+            ) : (
+              <ViewerPanel
+                scrapbook={scrapbook}
+                busy={busy !== null}
+                onKeepEditing={() => void keepEditing()}
+                onDiscard={() => setConfirmDiscard(true)}
+              />
+            )}
+          </aside>
+        )}
       </div>
 
-      {stripSlot && (
-        <StripPickerModal
-          open={!desktop && editing}
-          layout={stripSlot.layout}
-          currentStripId={scrapbook.content.strips[stripSlot.id]}
-          onPick={(strip) => {
-            pickStrip(stripSlot, strip)
-            setSelection(null)
-          }}
-          onClear={() => {
-            placeStrip(stripSlot.id, null)
-            setSelection(null)
-          }}
-          onClose={() => setSelection(null)}
-        />
-      )}
+      {/* Phone: the pager, centred under the page. Finish lives in the header's "…"; a
+          finished or paid book keeps its one action at the side. */}
+      <div className={styles.bottomBar}>
+        <div className={styles.pager}>
+          <button
+            type="button"
+            className={styles.arrow}
+            aria-label={t('scrapbook.editor.previous')}
+            disabled={pageIndex === 0}
+            onClick={() => goToPage(pageIndex - 1)}
+          >
+            <ChevronLeft />
+          </button>
+          <span className={styles.pagerLabel}>
+            {label}
+            <span className={styles.pagerCount}>
+              {t('scrapbook.editor.page', { n: pageIndex + 1, total })}
+            </span>
+          </span>
+          <button
+            type="button"
+            className={styles.arrow}
+            aria-label={t('scrapbook.editor.next')}
+            disabled={pageIndex === total - 1}
+            onClick={() => goToPage(pageIndex + 1)}
+          >
+            <ChevronRight />
+          </button>
+        </div>
+        {!draft && (
+          <div className={styles.barEnd}>
+            <NarrowViewerAction scrapbook={scrapbook} />
+          </div>
+        )}
+      </div>
+
+      {!desktop &&
+        (finishing ? (
+          <EditorSheet title={t('scrapbook.finish.button')}>{finishProgress}</EditorSheet>
+        ) : editing && stripSlot ? (
+          <EditorSheet
+            title={t(`scrapbook.tray.title_${stripSlot.layout}`)}
+            onClose={() => setSelection(null)}
+          >
+            <StripTray
+              layout={stripSlot.layout}
+              currentStripId={scrapbook.content.strips[stripSlot.id]}
+              usedStripIds={usedElsewhere}
+              onPick={(strip) => {
+                pickInPlace(strip)
+                setSelection(null)
+              }}
+              onClear={() => {
+                clearPlace()
+                setSelection(null)
+              }}
+              variant="sheet"
+            />
+          </EditorSheet>
+        ) : editing && textSlot ? (
+          <EditorSheet
+            title={t(`scrapbook.text.label_${textSlot.placeholder}`)}
+            onClose={() => setSelection(null)}
+          >
+            <TextPanel
+              slot={textSlot}
+              value={scrapbook.content.texts[textSlot.id] ?? ''}
+              onChange={writeText}
+            />
+          </EditorSheet>
+        ) : null)}
 
       <ConfirmDialog
         open={confirmFinish}
@@ -499,5 +716,30 @@ export function ScrapbookPage() {
         onCancel={() => busy !== 'discard' && setConfirmDiscard(false)}
       />
     </div>
+  )
+}
+
+/** The phone bottom bar's action once a book is finished: the cart, or its PDF. */
+function NarrowViewerAction({ scrapbook }: { scrapbook: Scrapbook }) {
+  const { t } = useTranslation()
+  const { download, downloading } = useScrapbookDownload(scrapbook)
+
+  if (scrapbook.state !== 'paid') {
+    return (
+      <Link to={ROUTES.cart} className={styles.primaryNarrow}>
+        {t('scrapbook.viewer.goToCart')}
+      </Link>
+    )
+  }
+  return (
+    <button
+      type="button"
+      className={styles.primaryNarrow}
+      disabled={downloading}
+      onClick={() => void download()}
+    >
+      {downloading && <Loader2 className={styles.spin} />}
+      {t(downloading ? 'scrapbook.viewer.downloading' : 'scrapbook.viewer.downloadShort')}
+    </button>
   )
 }

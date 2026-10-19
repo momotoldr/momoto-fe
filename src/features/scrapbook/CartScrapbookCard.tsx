@@ -38,7 +38,7 @@ interface CartScrapbookCardProps {
  * A finished scrapbook waiting in the cart. It's an item like a strip (user decision,
  * 2026-10-17): it takes a cart slot, it can be ticked into the same checkout as strips,
  * and its own Unlock checks out just this one. The cart owns the checkout; this card only
- * shows its part of it. Paid, it's "Yours" on the shelf.
+ * shows its part of it. Paid, it's tagged "Paid" on the shelf.
  *
  * Remove takes it out of the cart without deleting it (user decision, 2026-10-17): it goes
  * back to being a draft — the same as Keep editing — its PDF discarded and re-rendered on

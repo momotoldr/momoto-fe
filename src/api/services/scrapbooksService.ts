@@ -95,11 +95,6 @@ export function unlockScrapbook(id: string): Promise<Scrapbook> {
   return postForScrapbook(API_ROUTES.SCRAPBOOKS.UNLOCK(id))
 }
 
-/** A new draft from any scrapbook — how a paid (final) one gets a different version. */
-export function duplicateScrapbook(id: string): Promise<Scrapbook> {
-  return postForScrapbook(API_ROUTES.SCRAPBOOKS.DUPLICATE(id))
-}
-
 /** Take a paid scrapbook off the shelf; its files are deleted for good. */
 export async function removeScrapbook(id: string): Promise<QuotaBucket> {
   const { data } = await client.postData<ScrapbookQuotaResponse>(API_ROUTES.SCRAPBOOKS.REMOVE(id))
