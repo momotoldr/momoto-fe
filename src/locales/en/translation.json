@@ -100,7 +100,7 @@
       "scrapbook": {
         "title": "Scrapbook",
         "desc": "Fill a little book with your unlocked strips and your own words, then keep it as a PDF.",
-        "open": "Open your scrapbooks"
+        "open": "Open the scrapbook"
       },
       "draw": {
         "title": "Draw Together",
@@ -457,10 +457,10 @@
           },
           "scrapbookFinal": {
             "q": "Can I edit my scrapbook after buying it?",
-            "a": "No — a paid scrapbook is final, so the PDF you bought always matches what you paid for. You can make a new version from it, though: Duplicate copies its pages and text into a new draft.",
+            "a": "No — a paid scrapbook is final, so the PDF you bought always matches what you paid for. To make a different one, start a new scrapbook.",
             "steps": [
               "Before paying, Keep editing takes a finished scrapbook back to a draft.",
-              "After paying, open it and choose Duplicate to start a new draft from it."
+              "After paying, it stays as it is — start a new scrapbook for a different version."
             ]
           }
         }
@@ -1696,14 +1696,24 @@
     },
     "states": {
       "draft": "Draft",
-      "finished": "In cart",
-      "paid": "Yours"
+      "finished": "Unpaid",
+      "paid": "Paid"
     },
     "shelf": {
+      "eyebrow": "Scrapbook",
+      "heading": "Turn your strips into a little book.",
+      "intro": "A scrapbook is {{pages}} pages to fill with your unlocked strips and your own words — saved as a PDF you can keep or print.",
+      "sampleLabel": "You'll get",
+      "sampleHint": "{{pages}} pages, cover to back, as one PDF.",
+      "step1Title": "Pick a design",
+      "step1Text": "Start from a template. Each page has spots for strips and text.",
+      "step2Title": "Fill the pages",
+      "step2Text": "Place your unlocked 4×1 and 2×2 strips, then add titles, captions and notes. Drafts save as you go.",
+      "step3Title": "Finish and unlock",
+      "step3Text": "A finished scrapbook goes to your cart. Unlock it there to download the PDF.",
       "title": "Your scrapbooks",
       "subtitle_one": "{{count}} scrapbook",
       "subtitle_other": "{{count}} scrapbooks",
-      "subtitleEmpty": "Fill pages with your strips and a few words",
       "new": "New scrapbook",
       "creating": "Starting…",
       "meter": "{{used}} of {{limit}}",
@@ -1716,7 +1726,6 @@
       "limit": "You have {{limit}} scrapbooks already. Delete a draft to start another.",
       "createError": "Couldn't start a scrapbook. Try again.",
       "emptyTitle": "No scrapbooks yet",
-      "emptyText": "A scrapbook is {{pages}} pages to fill with your unlocked strips and your own words.",
       "coverAlt": "Cover of {{title}}",
       "emptyCta": "Start your first scrapbook"
     },
@@ -1761,7 +1770,26 @@
       "addStrip_4x1": "Add a 4×1 strip",
       "addStrip_2x2": "Add a 2×2 strip",
       "stripRemoved": "Photo removed from your gallery",
-      "close": "Done"
+      "close": "Done",
+      "pageN": "Page {{n}}",
+      "meta": "{{template}} · {{pages}}",
+      "placed": "{{filled}} of {{total}} strips placed",
+      "left_one": "{{count}} left",
+      "left_other": "{{count}} left",
+      "ready": "Ready",
+      "onThisPage": "On this page",
+      "stripPlace": "{{page}} · strip place",
+      "textPlace": "{{page}} · text",
+      "stripName_4x1": "4×1 strip",
+      "stripName_2x2": "2×2 strip",
+      "empty": "Empty",
+      "required": "Required",
+      "optional": "Optional",
+      "checklistHint": "Tap a place on the page to add a strip or write. Strips are required to finish; text is optional.",
+      "more": "More actions",
+      "placesLeftOnPage_one": "{{count}} strip place left on this page",
+      "placesLeftOnPage_other": "{{count}} strip places left on this page",
+      "pageDone": "Every strip place on this page is filled"
     },
     "tray": {
       "title_4x1": "Your 4×1 strips",
@@ -1774,7 +1802,11 @@
       "toCart": "Unlock strips in your cart",
       "toBooth": "Take new photos",
       "loading": "Loading your strips…",
-      "stripAlt": "Strip from {{date}}"
+      "stripAlt": "Strip from {{date}}",
+      "all": "All",
+      "unused": "Not used yet",
+      "here": "Here",
+      "used": "Used"
     },
     "text": {
       "label_coverTitle": "Title",
@@ -1797,18 +1829,19 @@
     },
     "viewer": {
       "finished": "Finished — it's waiting in your cart. Unlock it there to download the PDF.",
-      "paid": "This scrapbook is yours. It can't be changed now — duplicate it to make another.",
+      "paid": "This scrapbook is yours. It can't be changed now — start a new one to make another.",
       "goToCart": "Go to cart",
       "keepEditing": "Keep editing",
-      "duplicate": "Duplicate",
-      "duplicated": "Copied — this is your new draft.",
       "delete": "Delete",
       "remove": "Remove",
       "reopenError": "Couldn't reopen it. Try again.",
       "paymentInProgress": "A payment for this scrapbook is still open.",
       "download": "Download PDF",
       "downloading": "Preparing…",
-      "downloadError": "Couldn't download the PDF. Try again."
+      "downloadError": "Couldn't download the PDF. Try again.",
+      "finishedHeading": "Waiting in your cart",
+      "paidHeading": "This scrapbook is yours",
+      "downloadShort": "Download"
     },
     "discard": {
       "deleteTitle": "Delete this scrapbook?",
@@ -1852,7 +1885,23 @@
       "pagesLabel": "Pages in this template",
       "pages_one": "{{count}} page",
       "pages_other": "{{count}} pages",
-      "use": "Use this template"
+      "use": "Use this template",
+      "eyebrow": "New scrapbook",
+      "count_one": "{{count}} template",
+      "count_other": "{{count}} templates",
+      "scrollBack": "Earlier templates",
+      "scrollForward": "More templates",
+      "selected": "Selected",
+      "meta_one": "{{pages}} · {{count}} strip",
+      "meta_other": "{{pages}} · {{count}} strips",
+      "prevPage": "Previous page",
+      "nextPage": "Next page",
+      "position": "{{page}} · {{n}} / {{total}}",
+      "toFill": "To fill",
+      "strips_4x1": "4×1 strips",
+      "strips_2x2": "2×2 strips",
+      "fillNote": "Only unlocked strips can be placed. Every strip spot needs one to finish — text is optional.",
+      "used": "{{used}} of {{limit}} scrapbooks used"
     }
   }
 }
