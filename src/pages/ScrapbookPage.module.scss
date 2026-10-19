@@ -1,31 +1,325 @@
-/* One scrapbook (plan §6): header, then rail / page / side column on desktop. On a phone
- * the page takes the width, the pager sits under it, and the side column becomes a bottom
- * sheet that opens while a slot is selected — the page stays in view above it, so what is
- * typed or placed shows at once. */
+/* One scrapbook ("Scrapbook Editor - redesign").
+ *
+ * The editor fills the screen under the app bar (h-16 + its border) and never scrolls the
+ * page: on desktop the rail and the side panel scroll on their own beside a stage that
+ * sizes the page to whatever height is left. On a phone the rail and panel go; the page
+ * takes the middle, a progress row sits above it and a pager bar below, and the panel's
+ * contents open as a bottom sheet (`EditorSheet`). */
 
 .page {
   @apply flex w-full flex-col;
+
+  height: calc(100dvh - 4.0625rem);
 }
 
 /* ── Header ──────────────────────────────────────────────────────────────── */
 
 .head {
-  @apply mx-auto flex w-full max-w-[84rem] flex-wrap items-center gap-x-4 gap-y-2 border-b px-4 py-3 sm:px-8 lg:px-10;
+  @apply flex-none border-b;
 }
 
-.back {
-  @apply inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-muted-foreground transition-colors;
+.headWide {
+  @apply hidden items-center justify-between gap-6 px-6 py-3 lg:flex;
+}
+
+.headStart {
+  @apply flex min-w-0 items-center gap-4;
+}
+
+.iconButton,
+.deleteButton {
+  @apply flex h-10 w-10 flex-none items-center justify-center rounded-[0.625rem] border text-foreground transition-colors;
+
+  svg {
+    @apply h-[1.125rem] w-[1.125rem];
+  }
+
+  &:hover:not(:disabled) {
+    @apply border-foreground/40 bg-muted/40;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  &:disabled {
+    @apply opacity-50;
+  }
+}
+
+.deleteButton {
+  @apply h-11 w-11 text-muted-foreground;
+
+  &:hover:not(:disabled) {
+    @apply text-rose-700;
+  }
+}
+
+.headText {
+  @apply flex min-w-0 flex-col gap-[3px];
+}
+
+.titleRow {
+  @apply flex min-w-0 items-center gap-2.5;
+}
+
+.title {
+  @apply truncate text-[1.375rem] font-bold tracking-[-0.02em];
+}
+
+/* Reads as the title, with a dashed rule saying it can be changed. */
+.titleInput {
+  @apply h-[2.125rem] w-[18.75rem] min-w-0 border-0 border-b border-dashed border-slate-300 bg-transparent py-0.5 text-[1.375rem] font-bold leading-[1.35] tracking-[-0.02em] outline-none transition-colors;
+
+  &::placeholder {
+    @apply text-muted-foreground/50;
+  }
+
+  &:hover,
+  &:focus-visible {
+    @apply border-foreground/50;
+  }
+}
+
+/* The state, as the shelf's tape shows it. */
+.tape {
+  @apply flex-none rounded-[0.25rem] border px-2.5 py-1 text-[0.6875rem] font-semibold leading-none;
+}
+
+.tape_draft {
+  @apply bg-background text-foreground;
+}
+
+.tape_finished {
+  @apply border-[#ffe4ec] bg-[#ffe4ec] text-rose-800;
+}
+
+.tape_paid {
+  @apply border-primary bg-primary text-primary-foreground;
+}
+
+.headMeta {
+  @apply truncate text-xs text-muted-foreground/70;
+}
+
+.saveError {
+  @apply text-destructive;
+}
+
+.headEnd {
+  @apply flex flex-none items-center gap-5;
+}
+
+/* "5 of 9 strips placed · 4 left", over a bar that turns green once every place is filled. */
+.progress {
+  @apply flex w-[12.5rem] flex-col gap-1.5;
+}
+
+.progressRow {
+  @apply flex items-baseline justify-between gap-2 text-xs;
+}
+
+.progressPlaced {
+  @apply whitespace-nowrap text-xs font-semibold;
+}
+
+.progressLeft {
+  @apply whitespace-nowrap text-muted-foreground/70;
+}
+
+.progressTrack {
+  @apply block h-1.5 overflow-hidden rounded-full bg-muted;
+}
+
+.progressFill {
+  @apply block h-full rounded-full bg-primary transition-[width] duration-300;
+}
+
+.progressFillReady {
+  @apply bg-green-600;
+}
+
+.cartFull {
+  @apply whitespace-nowrap text-xs font-medium text-destructive underline-offset-2;
+
+  &:hover {
+    @apply underline;
+  }
+}
+
+.finishButton {
+  @apply inline-flex h-11 flex-none items-center gap-2 rounded-[0.625rem] bg-primary px-5 text-[0.9375rem] font-semibold text-primary-foreground transition-colors;
 
   svg {
     @apply h-4 w-4;
   }
 
-  span {
-    @apply hidden sm:inline;
+  &:hover:not(:disabled) {
+    @apply bg-primary/90;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Off until every strip place is filled — quiet rather than faded, so it reads as
+   * "not yet" next to the progress that says why. */
+  &:disabled {
+    @apply cursor-not-allowed bg-muted text-muted-foreground/60;
+  }
+}
+
+/* Phone header: back · name over state · "…". */
+.headNarrow {
+  @apply flex h-14 items-center justify-between gap-2 px-3 lg:hidden;
+}
+
+.iconButtonBare {
+  @apply flex h-10 w-10 flex-none items-center justify-center rounded-[0.625rem] transition-colors;
+
+  svg {
+    @apply h-5 w-5;
   }
 
   &:hover {
-    @apply text-foreground;
+    @apply bg-muted/60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring;
+  }
+}
+
+.narrowText {
+  @apply flex min-w-0 flex-1 flex-col items-center gap-px;
+}
+
+.narrowTitle {
+  @apply max-w-full truncate text-[0.9375rem] font-bold;
+}
+
+.narrowTitleInput {
+  @apply w-full min-w-0 rounded-md border-0 bg-transparent px-1 text-center text-base font-bold outline-none;
+
+  &::placeholder {
+    @apply text-muted-foreground/50;
+  }
+
+  &:focus-visible {
+    @apply bg-muted/60;
+  }
+}
+
+.narrowMeta {
+  @apply text-[0.6875rem] text-muted-foreground/70;
+}
+
+.narrowProgress {
+  @apply flex flex-none items-center gap-3 border-b px-4 py-2.5 lg:hidden;
+
+  .progressTrack {
+    @apply flex-1;
+  }
+}
+
+/* ── Body ────────────────────────────────────────────────────────────────── */
+
+.body {
+  @apply flex min-h-0 flex-1 lg:grid lg:grid-cols-[7.5rem_minmax(0,1fr)_21.25rem];
+}
+
+.stage {
+  @apply flex min-h-0 min-w-0 flex-1 items-center justify-center gap-6 bg-[#f6f3ee] p-4 lg:px-5;
+}
+
+.arrow {
+  @apply flex h-11 w-11 flex-none items-center justify-center rounded-full border bg-background transition-[border-color,opacity];
+
+  svg {
+    @apply h-[1.125rem] w-[1.125rem];
+  }
+
+  &:hover:not(:disabled) {
+    @apply border-foreground;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  &:disabled {
+    @apply opacity-35;
+  }
+}
+
+/* Beside the page on desktop; a phone has them in the bottom bar. */
+.stageArrow {
+  @apply hidden h-10 w-10 lg:flex;
+}
+
+.stageCenter {
+  @apply flex h-full min-w-0 flex-1 flex-col items-center gap-2.5;
+}
+
+/* The page is as large as this box allows either way: `cq*` units measure the box, and the
+ * page takes whichever of its width or its height runs out first. */
+.pageArea {
+  @apply flex min-h-0 w-full flex-1 items-center justify-center;
+
+  container-type: size;
+}
+
+.pageFit {
+  width: min(100cqw, 100cqh * var(--page-aspect));
+
+  > * {
+    @apply shadow-[0_1px_2px_rgba(15,23,42,0.08),0_16px_40px_rgba(15,23,42,0.14)];
+  }
+}
+
+.caption {
+  @apply hidden flex-none text-xs text-muted-foreground lg:block;
+
+  strong {
+    @apply font-semibold text-foreground;
+  }
+}
+
+/* ── Side panel ──────────────────────────────────────────────────────────── */
+
+.panel {
+  @apply hidden min-h-0 flex-col gap-5 overflow-y-auto border-l px-6 py-5 lg:flex;
+
+  scrollbar-width: thin;
+}
+
+.panelSection {
+  @apply flex flex-col gap-3.5;
+}
+
+/* Stays put while the tray scrolls under it, Done always in reach. Pulled out over the
+ * panel's padding so the strips pass behind it edge to edge. */
+.panelHead {
+  @apply sticky -top-5 z-[2] -mx-6 -mt-5 flex items-start justify-between gap-3 bg-background px-6 pb-2.5 pt-5;
+}
+
+.panelHeading {
+  @apply flex flex-col gap-1;
+}
+
+.panelEyebrow {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70;
+}
+
+.panelTitle {
+  @apply text-xl font-bold tracking-[-0.02em];
+}
+
+.panelDone {
+  @apply flex h-8 flex-none items-center rounded-lg border px-3 text-[0.8125rem] font-semibold transition-colors;
+
+  &:hover {
+    @apply bg-muted/60;
   }
 
   &:focus-visible {
@@ -33,125 +327,73 @@
   }
 }
 
-.titleRow {
-  @apply flex min-w-0 flex-1 items-center gap-3;
-}
-
-.title {
-  @apply truncate text-lg font-extrabold tracking-[-0.02em] sm:text-xl;
-}
-
-.titleInput {
-  @apply h-9 max-w-[22rem] border-transparent bg-transparent px-2 text-base font-bold shadow-none sm:text-lg;
-
-  &:hover {
-    @apply border-input;
-  }
-}
-
-/* The state, as the shelf's tape shows it. */
-.tape {
-  @apply shrink-0 rounded-[0.25rem] px-2 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-[0.12em];
-}
-
-.tape_draft {
-  @apply bg-muted text-muted-foreground;
-}
-
-.tape_finished {
-  @apply bg-amber-100 text-amber-900;
-}
-
-.tape_paid {
-  @apply bg-emerald-100 text-emerald-900;
-}
-
-.headActions {
-  @apply ml-auto flex items-center gap-1;
-}
-
-.saveState {
-  @apply mr-1 text-[0.8125rem] text-muted-foreground;
-}
-
-.saveStateError {
-  @apply text-destructive;
-}
-
-/* ── Body ────────────────────────────────────────────────────────────────── */
-
-.body {
-  @apply mx-auto grid w-full max-w-[84rem] grid-cols-1 items-start gap-6 px-4 pb-32 pt-5 sm:px-8 lg:grid-cols-[8.5rem_minmax(0,1fr)_20rem] lg:gap-8 lg:px-10 lg:pb-10;
-}
-
-.stage {
-  @apply flex min-w-0 flex-col items-center gap-4;
-}
-
-/* The page is as wide as the column allows, but never taller than the viewport under the
- * header: past that the bottom of the page — often where its note is — falls off-screen. */
-.pageWrap {
-  @apply w-full;
-
-  max-width: calc((100dvh - 12rem) * var(--page-aspect));
-}
-
-.pager {
-  @apply flex items-center gap-3;
-}
-
-.pagerLabel {
-  @apply flex min-w-[8rem] flex-col items-center text-sm font-semibold;
-}
-
-.pagerCount {
-  @apply font-mono text-[0.625rem] font-normal uppercase tracking-[0.14em] text-muted-foreground;
-}
-
-/* ── Side column / bottom sheet ──────────────────────────────────────────── */
-
-.side {
-  @apply hidden flex-col gap-4 lg:sticky lg:top-24 lg:flex lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto;
-}
-
-/* Phone: a sheet over the bottom of the screen while a slot is selected. Above the
- * support button (z-40), which sits exactly where the sheet's Done button is — covered
- * only while the sheet is open, rather than hidden from the whole editor. Below dialogs
- * (z-50). */
-.sideOpen {
-  @apply fixed inset-x-0 bottom-0 z-[45] flex max-h-[55dvh] overflow-y-auto rounded-t-[1rem] border-t bg-background px-4 pb-6 pt-4 shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.3)] lg:sticky lg:z-auto lg:max-h-[calc(100dvh-8rem)] lg:rounded-none lg:border-0 lg:p-0 lg:shadow-none;
-}
-
-.hint {
-  @apply text-sm leading-relaxed text-muted-foreground;
-}
-
-.done {
-  @apply self-end lg:hidden;
-}
-
 /* A finish running — in this tab, or announced by another one. */
-.progress {
-  @apply flex flex-col items-start gap-3 rounded-[0.75rem] border bg-muted/40 p-4;
+.finishing {
+  @apply flex flex-col items-start gap-3 rounded-2xl border bg-muted/40 p-4;
 }
 
-.progressSpinner {
+.finishingSpinner {
   @apply h-5 w-5 animate-spin text-muted-foreground;
 }
 
-.progressText {
+.finishingText {
   @apply text-sm font-medium;
 }
 
-/* "N strip places left", beside the disabled Finish button — shown on phones too,
- * where there's no hover to explain why the button is off. */
-.placesLeft {
-  @apply inline-flex items-center gap-1.5 text-[0.8125rem] text-muted-foreground;
+.finishingStop {
+  @apply flex h-9 items-center rounded-lg border bg-background px-3 text-[0.8125rem] font-semibold transition-colors;
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
 }
 
-/* The finished/paid viewer has no selection to wait for, so its panel shows on a phone too. */
-.sideViewer {
-  @apply flex;
+/* ── Phone bottom bar ────────────────────────────────────────────────────── */
+
+/* Three columns so the pager sits dead centre whatever is beside it. */
+.bottomBar {
+  @apply grid flex-none grid-cols-[1fr_auto_1fr] items-center border-t px-4 py-3 lg:hidden;
+}
+
+.pager {
+  @apply col-start-2 flex items-center gap-3;
+}
+
+.pagerLabel {
+  @apply flex min-w-[7.5rem] flex-col items-center gap-px text-sm font-semibold;
+}
+
+.pagerCount {
+  @apply text-[0.6875rem] font-normal text-muted-foreground/70;
+}
+
+/* A finished book's action, kept clear of the support button (fixed `right-6`, 3rem wide). */
+.barEnd {
+  @apply col-start-3 mr-16 flex justify-end;
+}
+
+.primaryNarrow {
+  @apply inline-flex h-11 flex-none items-center gap-2 whitespace-nowrap rounded-[0.625rem] bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors;
+
+  &:hover:not(:disabled) {
+    @apply bg-primary/90;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  &:disabled {
+    @apply opacity-50;
+  }
+}
+
+.spin {
+  @apply h-4 w-4 animate-spin;
 }
 
 /* ── Loading / error ─────────────────────────────────────────────────────── */

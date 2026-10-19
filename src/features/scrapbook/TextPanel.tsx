@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Textarea } from '@/components/ui/textarea'
 import type { ScrapbookTextSlot } from '@/constants/scrapbookTemplates'
 import { cn } from '@/lib/utils'
 import { layoutScrapbookText } from '@/utils/scrapbook/layoutText'
@@ -44,7 +43,8 @@ interface TextPanelProps {
 }
 
 /**
- * Where a text slot is written. A regular-size field rather than typing on the page
+ * Where a text slot is written — the side panel's body, or the phone's sheet; the slot's
+ * name heads whichever holds it. A regular-size field rather than typing on the page
  * itself: on a phone a whole page is ~360px wide and a note's text is a few pixels tall,
  * so the page shows the result live while the writing happens here.
  *
@@ -87,35 +87,31 @@ export function TextPanel({ slot, value, onChange }: TextPanelProps) {
   }
 
   return (
-    <section className={styles.panel}>
-      <label className={styles.label} htmlFor={`scrapbook-text-${slot.id}`}>
-        {t(`scrapbook.text.label_${slot.placeholder}`)}
-      </label>
-      <Textarea
+    <div className={styles.panel}>
+      <textarea
         id={`scrapbook-text-${slot.id}`}
         ref={field}
         value={value}
         maxLength={slot.maxLength}
-        rows={single ? 1 : Math.min(slot.maxLines, 6)}
+        rows={single ? 1 : Math.min(Math.max(slot.maxLines, 2), 8)}
+        aria-label={t(`scrapbook.text.label_${slot.placeholder}`)}
         placeholder={t(`scrapbook.placeholders.${slot.placeholder}`)}
         className={styles.field}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
       <div className={styles.meta}>
-        <span className={cn(styles.full, !full && styles.fullHidden)} role="status">
-          {t('scrapbook.text.full')}
+        {/* Running out of room takes the line count's place until the next keystroke. */}
+        <span className={cn(full && styles.full)} role="status">
+          {full
+            ? t('scrapbook.text.full')
+            : !single &&
+              t('scrapbook.text.lines', { used: Math.max(1, lines), max: slot.maxLines })}
         </span>
         <span className={styles.counter}>
-          {!single && (
-            <>
-              {t('scrapbook.text.lines', { used: Math.max(1, lines), max: slot.maxLines })}
-              {' · '}
-            </>
-          )}
           {t('scrapbook.text.counter', { used: value.length, max: slot.maxLength })}
         </span>
       </div>
-    </section>
+    </div>
   )
 }

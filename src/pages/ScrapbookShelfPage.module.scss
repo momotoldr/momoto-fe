@@ -1,46 +1,190 @@
-/* The scrapbook shelf: covers on a grid, each with a tape naming its state. Same header,
- * meter and state language as the gallery, so the two read as siblings. */
+/* The scrapbook shelf — "explain first, shelf second".
+ *
+ * The masthead is the Photobooth page's (eyebrow, headline, "You'll get"), so the two
+ * activities open the same way. Three steps say what the activity is before the shelf
+ * asks you to start one; below `md` they stack into a list. Covers keep the gallery's
+ * meter and the tape that names each book's state. */
 
 .page {
-  @apply flex w-full flex-col;
+  @apply mx-auto flex w-full max-w-[80rem] flex-col gap-[1.625rem] px-5 pb-16 pt-7 md:gap-11 md:px-10 md:pt-14 lg:px-20;
 }
 
-.head {
-  @apply mx-auto flex w-full max-w-[80rem] flex-col gap-4 border-b px-4 pb-5 pt-6 sm:flex-row sm:items-end sm:justify-between sm:px-14 sm:pb-7 sm:pt-11;
+/* ── Masthead ────────────────────────────────────────────────────────────── */
+
+.masthead {
+  @apply flex items-end justify-between gap-12;
 }
 
-.headText {
-  @apply flex flex-col gap-1.5 sm:gap-2.5;
+.intro {
+  @apply flex max-w-[40rem] flex-col gap-2.5 md:gap-3.5;
+}
+
+.eyebrow {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70 md:text-[0.6875rem];
 }
 
 .title {
-  @apply text-[1.875rem] font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-[2.75rem] sm:leading-[1.02];
+  @apply text-pretty text-[2.125rem] font-extrabold leading-[1.05] tracking-[-0.03em] md:text-[3.625rem] md:leading-[1.02];
 }
 
 .subtitle {
-  @apply text-[0.84375rem] text-muted-foreground sm:text-[0.96875rem];
+  @apply max-w-[30rem] text-pretty text-sm leading-relaxed text-muted-foreground md:text-base;
 }
 
-.headActions {
-  @apply flex items-center gap-5;
+/* "You'll get" — two A5 pages side by side, a strip page and a card page. Too small to
+ * read on a phone, so it only appears beside the headline. */
+.sample {
+  @apply hidden shrink-0 flex-col gap-2 pb-2 lg:flex;
+}
+
+.sampleLabel {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70;
+}
+
+.sampleBody {
+  @apply flex items-start gap-2.5;
+}
+
+.sampleSpread {
+  @apply flex gap-0.5 rounded-md border bg-card p-[5px];
+}
+
+/* Kraft stock, the template's paper. */
+.samplePage {
+  @apply box-border flex w-[3.25rem] flex-col gap-[5px] rounded-[3px] bg-[#f4ede3] p-1.5;
+
+  aspect-ratio: 1748 / 2480;
+}
+
+.samplePageStrip {
+  @apply flex-row gap-1;
+}
+
+/* Hatching stands in for photos — a shape cue, not a preview. */
+.sampleStrip {
+  @apply h-full w-3 rounded-[2px];
+
+  background: repeating-linear-gradient(135deg, #e2e8f0 0 5px, #f8fafc 5px 10px);
+}
+
+.sampleCard {
+  @apply aspect-square rounded-[2px];
+
+  background: repeating-linear-gradient(135deg, #ffe4ec 0 5px, #fff5f8 5px 10px);
+}
+
+.sampleLines {
+  @apply flex flex-1 flex-col gap-[3px] pt-1;
+}
+
+.sampleLine {
+  @apply h-0.5 bg-[#cbbfae];
+}
+
+.sampleLineShort {
+  @apply w-[70%];
+}
+
+.sampleLineShorter {
+  @apply w-[60%];
+}
+
+.sampleHint {
+  @apply max-w-[7.5rem] text-pretty text-xs leading-normal text-muted-foreground/70;
+}
+
+/* ── Steps ───────────────────────────────────────────────────────────────── */
+
+.steps {
+  @apply grid divide-y rounded-[1.25rem] border md:grid-cols-3 md:divide-x md:divide-y-0 md:rounded-3xl;
+}
+
+.step {
+  @apply flex gap-3.5 p-4 md:flex-col md:gap-2 md:px-7 md:py-6;
+}
+
+.stepNumber {
+  @apply pt-0.5 font-mono text-[0.6875rem] font-semibold text-muted-foreground/70 md:pt-0;
+}
+
+.stepText {
+  @apply flex flex-col gap-[3px] md:gap-2;
+}
+
+.stepTitle {
+  @apply text-[0.9375rem] font-bold md:text-[1.0625rem] md:tracking-[-0.01em];
+}
+
+.stepBody {
+  @apply text-pretty text-[0.8125rem] leading-normal text-muted-foreground md:text-sm md:leading-[1.55];
+}
+
+/* ── Shelf ───────────────────────────────────────────────────────────────── */
+
+.shelf {
+  @apply flex flex-col gap-3.5 border-t pt-[1.375rem] md:gap-6 md:pt-8;
+}
+
+/* On a phone the title and the meter share a row and the button takes the next one,
+ * full width; from `sm` the actions sit together on the right. */
+.shelfHead {
+  @apply flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3 sm:flex-nowrap sm:items-end;
+}
+
+.shelfHeading {
+  @apply flex flex-col gap-1;
+}
+
+.shelfTitle {
+  @apply text-lg font-bold tracking-[-0.01em] md:text-2xl md:tracking-[-0.02em];
+}
+
+.shelfCount {
+  @apply text-[0.8125rem] text-muted-foreground/70 md:text-sm;
+}
+
+.shelfActions {
+  @apply contents sm:flex sm:items-center sm:gap-5;
+}
+
+/* The Photobooth's CTA, not shadcn's Button: its utilities would outrank these sizes. */
+.cta {
+  @apply order-last inline-flex h-12 w-full shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[0.625rem] bg-primary px-[1.375rem] text-[0.9375rem] font-semibold text-primary-foreground transition-colors sm:order-none sm:w-auto;
+
+  svg {
+    @apply h-4 w-4;
+  }
+
+  &:hover:not(:disabled) {
+    @apply bg-primary/90;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  &:disabled {
+    @apply opacity-50;
+  }
 }
 
 /* ── Capacity meter (the gallery's) ──────────────────────────────────────── */
 
 .meter {
-  @apply flex items-center gap-2.5;
+  @apply flex flex-col items-end gap-1.5;
 }
 
 .meterLabel {
-  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/80;
+  @apply font-mono text-xs text-muted-foreground/70 sm:text-muted-foreground;
 }
 
 .meterLabelFull {
-  @apply text-destructive;
+  @apply text-destructive sm:text-destructive;
 }
 
+/* Only from `sm`: on a phone the label alone says it. */
 .meterTrack {
-  @apply h-[0.3125rem] w-[5rem] overflow-hidden rounded-full bg-border;
+  @apply hidden h-1 w-[7.5rem] overflow-hidden rounded-full bg-muted sm:block;
 }
 
 .meterTrackFull {
@@ -55,14 +199,12 @@
   @apply bg-destructive;
 }
 
-/* ── Shelf ───────────────────────────────────────────────────────────────── */
-
-.shelf {
-  @apply mx-auto grid w-full max-w-[80rem] grid-cols-2 gap-x-4 gap-y-7 px-4 py-7 sm:grid-cols-3 sm:gap-x-8 sm:px-14 sm:py-10 lg:grid-cols-5;
+.covers {
+  @apply grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6;
 }
 
 .card {
-  @apply flex flex-col gap-1.5 rounded-[0.5rem];
+  @apply flex flex-col gap-2.5 rounded-[0.875rem];
 
   &:focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-4 ring-offset-background;
@@ -70,7 +212,9 @@
 }
 
 .cover {
-  @apply relative block w-full overflow-hidden rounded-[0.375rem] bg-[#d8bb8f] shadow-[0_1px_2px_rgba(0,0,0,0.08),0_8px_20px_-12px_rgba(0,0,0,0.35)] transition-transform;
+  @apply relative block w-full overflow-hidden rounded-[0.875rem] border bg-[#f4ede3] transition-transform;
+
+  aspect-ratio: 1748 / 2480;
 
   .card:hover & {
     @apply -translate-y-0.5;
@@ -83,61 +227,60 @@
 
 /* The template's art standing in for a cover not yet rendered: quieter than a real one. */
 .coverImageDraft {
-  @apply opacity-80;
+  @apply opacity-75;
 }
 
 .tape {
-  @apply absolute left-2 top-2 rounded-[0.25rem] px-2 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-[0.12em] shadow-sm;
+  @apply absolute left-2.5 top-2.5 rounded-[0.25rem] px-2.5 py-1 text-[0.6875rem] font-semibold leading-none sm:left-3 sm:top-3;
 }
 
 .tape_draft {
-  @apply bg-background/90 text-muted-foreground;
+  @apply border bg-background text-foreground;
 }
 
 .tape_finished {
-  @apply bg-amber-100 text-amber-900;
+  @apply bg-[#ffe4ec] text-rose-800;
 }
 
 .tape_paid {
-  @apply bg-emerald-100 text-emerald-900;
+  @apply bg-primary text-primary-foreground;
+}
+
+.cardText {
+  @apply flex min-w-0 flex-col gap-0.5;
 }
 
 .cardTitle {
-  @apply truncate text-sm font-semibold;
+  @apply truncate text-[0.9375rem] font-semibold;
 }
 
 .cardMeta {
-  @apply text-xs text-muted-foreground;
+  @apply text-[0.8125rem] text-muted-foreground/70;
 }
 
 /* ── Empty / loading / error ─────────────────────────────────────────────── */
 
 .empty {
-  @apply mx-auto flex w-full max-w-md flex-col items-center gap-2 px-4 py-20 text-center;
-}
+  @apply flex flex-col items-center gap-3.5 rounded-[1.25rem] border border-dashed border-slate-300 px-5 py-7 text-center sm:py-12;
 
-.emptyIcon {
-  @apply mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground;
-
-  svg {
-    @apply h-6 w-6;
+  .cta {
+    @apply sm:mt-1;
   }
 }
 
-.emptyTitle {
-  @apply text-lg font-bold;
+/* A blank cover in the template's stock: the shape of what you'd make. */
+.emptyCover {
+  @apply block w-16 rounded-md bg-[#f4ede3];
+
+  aspect-ratio: 1748 / 2480;
 }
 
 .emptyText {
-  @apply text-sm leading-relaxed text-muted-foreground;
-}
-
-.emptyCta {
-  @apply mt-4;
+  @apply text-sm leading-normal text-muted-foreground;
 }
 
 .state {
-  @apply mx-auto flex w-full max-w-[80rem] flex-col items-center gap-3 px-4 py-24 text-center sm:px-14;
+  @apply flex flex-col items-center gap-3 py-16 text-center;
 }
 
 .stateSpinner {

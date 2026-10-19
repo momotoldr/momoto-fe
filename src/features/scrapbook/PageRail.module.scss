@@ -1,35 +1,54 @@
-/* The desktop page rail: a narrow column of live thumbnails, scrolling on its own. */
+/* The desktop page rail: a narrow column of live thumbnails, scrolling on its own inside
+ * the editor's full-height body. */
 
 .rail {
-  @apply hidden flex-col gap-3 overflow-y-auto pb-6 pr-1 lg:flex;
+  @apply hidden min-h-0 flex-col gap-3.5 overflow-y-auto border-r bg-[#fbfbfc] px-3.5 py-4 lg:flex;
 
-  max-height: calc(100dvh - 9rem);
+  scrollbar-width: thin;
 }
 
 .item {
-  @apply flex flex-col items-center gap-1.5 rounded-[0.5rem] p-1.5 transition-colors;
-
-  &:hover {
-    @apply bg-muted/60;
-  }
+  @apply flex flex-col gap-[0.3125rem] rounded-lg;
 
   &:focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 }
 
-.itemActive {
-  @apply bg-muted;
+.frame {
+  @apply relative block rounded-lg border-2 border-transparent bg-background p-[3px] transition-colors;
 
-  &:hover {
-    @apply bg-muted;
+  .item:hover & {
+    @apply border-border;
+  }
+
+  .itemActive &,
+  .itemActive:hover & {
+    @apply border-primary;
   }
 }
 
+/* How many strip places the page still needs; a tick once it needs none. */
+.badge {
+  @apply absolute right-1.5 top-1.5 flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-rose-600 px-[5px] text-[0.625rem] font-bold text-white;
+
+  svg {
+    @apply h-2.5 w-2.5 stroke-[3.5];
+  }
+}
+
+.badgeDone {
+  @apply bg-green-600 px-0;
+}
+
+.srOnly {
+  @apply sr-only;
+}
+
 .label {
-  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground;
+  @apply text-center text-xs text-muted-foreground/70;
 
   .itemActive & {
-    @apply font-semibold text-foreground;
+    @apply text-foreground;
   }
 }

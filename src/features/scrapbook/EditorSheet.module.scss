@@ -1,0 +1,37 @@
+/* The phone's bottom sheet: a dimmed page above, the panel's contents below. */
+
+.layer {
+  @apply fixed inset-0 z-[55] lg:hidden;
+}
+
+.backdrop {
+  @apply absolute inset-0 bg-slate-900/35 animate-in fade-in-0;
+}
+
+.sheet {
+  @apply absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col gap-3.5 overflow-y-auto rounded-t-[1.25rem] bg-background px-4 pb-6 pt-2.5 shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.3)] animate-in slide-in-from-bottom-4;
+}
+
+.grabber {
+  @apply h-1 w-10 shrink-0 self-center rounded-full bg-border;
+}
+
+.head {
+  @apply flex items-center justify-between gap-3;
+}
+
+.title {
+  @apply text-[1.0625rem] font-bold;
+}
+
+.done {
+  @apply flex h-9 items-center rounded-lg border px-3.5 text-[0.8125rem] font-semibold transition-colors;
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}

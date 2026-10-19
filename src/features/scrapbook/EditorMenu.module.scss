@@ -1,0 +1,48 @@
+.root {
+  @apply relative;
+}
+
+/* Holds the header's balance when there's nothing to put in the menu. */
+.spacer {
+  @apply block h-10 w-10;
+}
+
+.trigger {
+  @apply flex h-10 w-10 items-center justify-center rounded-[0.625rem] text-muted-foreground transition-colors;
+
+  svg {
+    @apply h-5 w-5;
+  }
+
+  &:hover {
+    @apply bg-muted/60 text-foreground;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring;
+  }
+}
+
+.menu {
+  @apply absolute right-0 top-full z-40 mt-1 flex min-w-[11rem] flex-col rounded-xl border bg-background p-1 shadow-lg animate-in fade-in-0 zoom-in-95;
+}
+
+.item {
+  @apply flex h-10 w-full items-center rounded-lg px-3 text-left text-sm font-medium transition-colors;
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-inset ring-ring;
+  }
+
+  &:disabled {
+    @apply pointer-events-none opacity-50;
+  }
+}
+
+.itemDanger {
+  @apply text-rose-700;
+}

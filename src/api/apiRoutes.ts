@@ -170,11 +170,6 @@ export const API_ROUTES = {
       '/scrapbooks/:id/unlock',
       (id: string) => `/scrapbooks/${encodeURIComponent(id)}/unlock`
     ),
-    /** A new draft with the same template, title and content. `POST` → `{ scrapbook }`. */
-    DUPLICATE: route(
-      '/scrapbooks/:id/duplicate',
-      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/duplicate`
-    ),
     /** Soft remove of a paid scrapbook (files deleted, row kept). `POST` → `{ quota }`. */
     REMOVE: route(
       '/scrapbooks/:id/remove',
