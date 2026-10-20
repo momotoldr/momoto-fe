@@ -279,9 +279,7 @@
           "busy": {
             "q": "Muncul pesan booth sedang penuh",
             "a": "Saat ada sangat banyak sesi yang berjalan bersamaan, pembuatan ruangan baru dijeda sebentar. Ruangan yang sudah berjalan tidak terpengaruh.",
-            "steps": [
-              "Tunggu sebentar lalu coba lagi."
-            ]
+            "steps": ["Tunggu sebentar lalu coba lagi."]
           }
         }
       },

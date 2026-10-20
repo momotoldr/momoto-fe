@@ -280,9 +280,7 @@
           "busy": {
             "q": "It says the booth is full",
             "a": "When a very large number of sessions are running at once, new rooms are paused for a moment. Rooms that are already running aren't affected.",
-            "steps": [
-              "Wait a minute and try again."
-            ]
+            "steps": ["Wait a minute and try again."]
           }
         }
       },
