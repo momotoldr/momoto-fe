@@ -18,9 +18,6 @@ import styles from './LandingPage.module.scss'
 const ACTIVITY_STEPS: Record<string, string[]> = {
   photobooth: ['pick', 'pose', 'share'],
   scrapbook: ['fill', 'write', 'keep'],
-  draw: ['prompt', 'draw', 'save'],
-  lovematch: ['room', 'answer', 'score'],
-  spot: ['scenes', 'find', 'celebrate'],
 }
 
 /* ---- Hero collage ----
@@ -93,11 +90,6 @@ export function LandingPage() {
       document.removeEventListener('keydown', onKeyDown)
     }
   }, [menuOpen])
-
-  // The live card is whichever activity is actually shippable; the rest are teased.
-  // Reading both from ACTIVITIES keeps the page honest when the next one goes live.
-  const live = ACTIVITIES.filter((activity) => activity.available && activity.to)
-  const comingSoon = ACTIVITIES.filter((activity) => !activity.available)
 
   return (
     <div className={styles.page}>
@@ -252,7 +244,7 @@ export function LandingPage() {
               </h2>
               {/* "One booth today" stays true only while the booth is the one live activity. */}
               <p className={styles.sectionSubtitle}>
-                {t(live.length > 1 ? 'landing.menuSubtitleMany' : 'landing.menuSubtitle')}
+                {t(ACTIVITIES.length > 1 ? 'landing.menuSubtitleMany' : 'landing.menuSubtitle')}
               </p>
             </div>
             <Link to={ROUTES.activities} className={styles.quietLink}>
@@ -262,10 +254,10 @@ export function LandingPage() {
 
           {/* Every live activity gets its card — not just the first, or a second one is
               neither live nor coming soon here, and simply missing. */}
-          {live.map((activity, index) => (
+          {ACTIVITIES.map((activity, index) => (
             <Link
               key={activity.key}
-              to={activity.to!}
+              to={activity.to}
               className={`${styles.liveCard} ${index % 2 === 1 ? styles.liveCardAlt : ''}`}
             >
               <span className={styles.tapeGrey} aria-hidden="true" />
@@ -283,25 +275,18 @@ export function LandingPage() {
             </Link>
           ))}
 
-          {comingSoon.length > 0 && (
-            <div className={styles.soon}>
-              <span className={styles.soonLabel}>{t('activities.comingSoon')}</span>
-              <ul className={styles.soonGrid}>
-                {comingSoon.map(({ key, Icon }) => (
-                  <li key={key} className={styles.soonCard}>
-                    <span className={styles.soonTape} aria-hidden="true" />
-                    <span className={styles.soonIcon} aria-hidden="true">
-                      <Icon />
-                    </span>
-                    <div className={styles.soonBody}>
-                      <h3 className={styles.soonTitle}>{t(`activities.items.${key}.title`)}</h3>
-                      <p className={styles.soonText}>{t(`activities.items.${key}.desc`)}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+          {/* What's next is one generic note rather than named activities, so nothing is
+              promised before it ships. */}
+          <div className={styles.soonCard}>
+            <span className={styles.soonTape} aria-hidden="true" />
+            <span className={styles.soonIcon} aria-hidden="true">
+              <Sparkles />
+            </span>
+            <div className={styles.soonBody}>
+              <h3 className={styles.soonTitle}>{t('activities.more.title')}</h3>
+              <p className={styles.soonText}>{t('activities.more.desc')}</p>
             </div>
-          )}
+          </div>
         </section>
 
         <LandingStats />

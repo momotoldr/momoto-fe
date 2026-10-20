@@ -85,7 +85,6 @@
     "title": "Activities",
     "subtitle": "Pick something to do together — with more on the way.",
     "live": "Live",
-    "comingSoon": "Coming soon",
     "open": "Open the booth",
     "modes": {
       "solo": "Solo",
@@ -101,19 +100,11 @@
         "title": "Scrapbook",
         "desc": "Fill a little book with your unlocked strips and your own words, then keep it as a PDF.",
         "open": "Open the scrapbook"
-      },
-      "draw": {
-        "title": "Draw Together",
-        "desc": "Draw something connected to the two of you."
-      },
-      "lovematch": {
-        "title": "Love Match",
-        "desc": "Read the given questions and guess each other."
-      },
-      "spot": {
-        "title": "Spot It!",
-        "desc": "Look at both illustrations and find what's different."
       }
+    },
+    "more": {
+      "title": "More on the way",
+      "desc": "We're making more little dates for the two of you. Check back soon."
     }
   },
   "landing": {
@@ -161,48 +152,6 @@
         "keep": {
           "title": "Finish and keep",
           "desc": "Unlock your finished scrapbook and download it as a PDF."
-        }
-      },
-      "draw": {
-        "prompt": {
-          "title": "Pick a prompt",
-          "desc": "Choose something that connects the two of you."
-        },
-        "draw": {
-          "title": "Draw together",
-          "desc": "Sketch side by side on a shared canvas in real time."
-        },
-        "save": {
-          "title": "Keep it",
-          "desc": "Save your artwork or share it however you like."
-        }
-      },
-      "lovematch": {
-        "room": {
-          "title": "Start a room",
-          "desc": "Invite your partner with a room code."
-        },
-        "answer": {
-          "title": "Answer the questions",
-          "desc": "Read each prompt and guess each other's answers."
-        },
-        "score": {
-          "title": "See your match",
-          "desc": "Find out how well you really know each other."
-        }
-      },
-      "spot": {
-        "scenes": {
-          "title": "Open two scenes",
-          "desc": "You both see a pair of playful illustrations."
-        },
-        "find": {
-          "title": "Find the differences",
-          "desc": "Race to spot everything that's changed."
-        },
-        "celebrate": {
-          "title": "Tally the score",
-          "desc": "See who spotted the most."
         }
       }
     },
@@ -331,7 +280,9 @@
           "busy": {
             "q": "It says the booth is full",
             "a": "When a very large number of sessions are running at once, new rooms are paused for a moment. Rooms that are already running aren't affected.",
-            "steps": ["Wait a minute and try again."]
+            "steps": [
+              "Wait a minute and try again."
+            ]
           }
         }
       },

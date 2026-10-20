@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Sparkles } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -89,17 +89,11 @@ const PREVIEWS: Record<string, () => JSX.Element> = {
 
 /** Full listing of Momoto activities (menus), laid out as a pinboard in the same
  * language as the landing redesign: taped paper, tape as the labelling system, slate
- * ink. Each live activity is a full-width taped card carrying its own preview; the
- * rest are dashed notes pinned below. */
+ * ink. Each live activity is a full-width taped card carrying its own preview; a single
+ * dashed note pinned below says more are on the way. */
 export function ActivitiesPage() {
   useTrackPageView()
   const { t } = useTranslation()
-
-  // Which card is which is read from ACTIVITIES rather than fixed here, so the page
-  // stays honest when the next activity goes live.
-  const live = ACTIVITIES.filter((activity) => activity.available && activity.to)
-  const comingSoon = ACTIVITIES.filter((activity) => !activity.available)
-  const liveCount = live.length
 
   return (
     <div className={styles.page}>
@@ -112,26 +106,21 @@ export function ActivitiesPage() {
 
           <div className={styles.counts}>
             <span className={styles.count}>
-              <span className={styles.countNumber}>{liveCount}</span>
+              <span className={styles.countNumber}>{ACTIVITIES.length}</span>
               <span className={styles.countLabel}>{t('activities.live')}</span>
-            </span>
-            <span className={styles.countRule} aria-hidden="true" />
-            <span className={styles.count}>
-              <span className={styles.countNumber}>{comingSoon.length}</span>
-              <span className={styles.countLabel}>{t('activities.comingSoon')}</span>
             </span>
           </div>
         </div>
       </section>
 
       <div className={styles.body}>
-        {live.map((activity, index) => {
+        {ACTIVITIES.map((activity, index) => {
           const modes = ACTIVITY_MODES[activity.key] ?? []
           const Preview = PREVIEWS[activity.key]
           return (
             <Link
               key={activity.key}
-              to={activity.to!}
+              to={activity.to}
               className={`${styles.liveCard} ${index % 2 === 1 ? styles.liveCardAlt : ''}`}
             >
               <span className={styles.tapeGrey} aria-hidden="true" />
@@ -171,30 +160,16 @@ export function ActivitiesPage() {
           )
         })}
 
-        {comingSoon.length > 0 && (
-          <section className={styles.soon} aria-labelledby="soon-heading">
-            <h2 id="soon-heading" className={styles.soonLabel}>
-              {t('activities.comingSoon')}
-            </h2>
-            <ul className={styles.soonGrid}>
-              {comingSoon.map(({ key, Icon }) => (
-                <li key={key} className={styles.soonCard}>
-                  <span className={styles.soonTape} aria-hidden="true" />
-                  <span className={styles.soonIcon} aria-hidden="true">
-                    <Icon />
-                  </span>
-                  <h3 className={styles.soonTitle}>{t(`activities.items.${key}.title`)}</h3>
-                  <p className={styles.soonText}>{t(`activities.items.${key}.desc`)}</p>
-                  {/* Repeats the section heading on desktop, where the three notes sit
-                   * side by side and the heading is far from the last one. */}
-                  <span className={styles.soonNote} aria-hidden="true">
-                    {t('activities.comingSoon')}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+        <div className={styles.soonCard}>
+          <span className={styles.soonTape} aria-hidden="true" />
+          <span className={styles.soonIcon} aria-hidden="true">
+            <Sparkles />
+          </span>
+          <div className={styles.soonBody}>
+            <h2 className={styles.soonTitle}>{t('activities.more.title')}</h2>
+            <p className={styles.soonText}>{t('activities.more.desc')}</p>
+          </div>
+        </div>
       </div>
     </div>
   )
