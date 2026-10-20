@@ -49,7 +49,7 @@ $hero-gradient: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 46%, #d9ffea 100%);
   text-wrap: pretty;
 }
 
-/* Two tallies of the menu: what you can open today, and what is still on the way. */
+/* Tally of the menu: what you can open today. */
 .counts {
   @apply flex items-center gap-[1.125rem] pt-0.5 lg:items-end lg:gap-[1.375rem] lg:pb-[1.375rem] lg:pt-0;
 }
@@ -66,17 +66,6 @@ $hero-gradient: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 46%, #d9ffea 100%);
 .countLabel {
   @apply font-mono text-[10px] uppercase text-slate-600 lg:text-[0.65625rem];
   letter-spacing: 0.16em;
-}
-
-.countRule {
-  @apply block w-px bg-slate-900/15;
-
-  height: 20px;
-
-  @screen lg {
-    height: 44px;
-    margin-bottom: 12px;
-  }
 }
 
 /* ---- Page body ---- */
@@ -353,93 +342,42 @@ $hero-gradient: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 46%, #d9ffea 100%);
   filter: drop-shadow(0 3px 6px rgb(15 23 42 / 16%));
 }
 
-/* ---- Coming soon ---- */
-
-.soon {
-  @apply flex flex-col gap-4 lg:gap-[1.125rem];
-}
-
-.soonLabel {
-  @apply m-0 font-mono text-[10px] font-normal uppercase text-slate-500 lg:text-[0.65625rem];
-  letter-spacing: 0.18em;
-}
-
-.soonGrid {
-  @apply m-0 grid list-none grid-cols-1 gap-4 p-0 lg:grid-cols-3 lg:gap-6;
-}
+/* ---- More on the way ---- */
 
 /* Dashed paper, taped but blank: clearly not yet a thing you can open. */
 .soonCard {
-  @apply relative flex flex-col gap-2.5 border border-dashed border-slate-300 bg-slate-50 px-[1.125rem] py-5;
-  @apply lg:gap-3 lg:px-6 lg:py-[1.625rem];
+  @apply relative flex items-center gap-3.5 border border-dashed border-slate-300 bg-slate-50 px-[1.125rem] py-5;
+  @apply lg:gap-5 lg:px-6 lg:py-[1.625rem];
 
-  &:nth-child(1) {
-    transform: rotate(-1deg);
-
-    @screen lg {
-      transform: rotate(-1.1deg);
-    }
-  }
-
-  &:nth-child(2) {
-    transform: rotate(0.7deg);
-  }
-
-  &:nth-child(3) {
-    transform: rotate(-0.5deg);
-  }
+  transform: rotate(-0.6deg);
 }
 
 .soonTape {
   @include tape(64px, 22px);
 
   top: -11px;
+  left: 16px;
+  background: rgb(254 205 211 / 90%);
   box-shadow: 0 1px 2px rgb(15 23 42 / 10%);
+  transform: rotate(-6deg);
 
   @screen lg {
+    left: 22px;
     width: 72px;
-  }
-
-  /* Each note is taped with a different colour, in the order the landing footer band
-   * runs: paper white, pink, mint. */
-  .soonCard:nth-child(1) & {
-    left: 16px;
-    background: rgb(255 255 255 / 90%);
-    transform: rotate(-6deg);
-
-    @screen lg {
-      left: 22px;
-    }
-  }
-
-  .soonCard:nth-child(2) & {
-    right: 18px;
-    background: rgb(254 205 211 / 90%);
-    transform: rotate(5deg);
-
-    @screen lg {
-      right: 24px;
-    }
-  }
-
-  .soonCard:nth-child(3) & {
-    left: 28px;
-    background: rgb(217 255 234 / 92%);
-    transform: rotate(-3deg);
-
-    @screen lg {
-      left: 34px;
-    }
   }
 }
 
 .soonIcon {
-  @apply flex text-slate-600;
+  @apply flex flex-shrink-0 text-slate-600;
 
   svg {
     @apply h-[1.375rem] w-[1.375rem] lg:h-6 lg:w-6;
     stroke-width: 1.8;
   }
+}
+
+.soonBody {
+  @apply flex flex-col gap-1 lg:gap-1.5;
 }
 
 .soonTitle {
@@ -450,11 +388,4 @@ $hero-gradient: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 46%, #d9ffea 100%);
 .soonText {
   @apply m-0 text-[0.84375rem] leading-[1.55] text-slate-600 lg:text-sm;
   text-wrap: pretty;
-}
-
-/* Only earns its place on desktop, where the three notes sit side by side and the
- * section heading is a long way from the last of them. */
-.soonNote {
-  @apply mt-1 hidden font-mono text-[10px] uppercase text-slate-500 lg:block;
-  letter-spacing: 0.16em;
 }

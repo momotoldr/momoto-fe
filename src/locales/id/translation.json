@@ -85,7 +85,6 @@
     "title": "Aktivitas",
     "subtitle": "Pilih sesuatu untuk dilakukan bersama — lebih banyak menyusul.",
     "live": "Aktif",
-    "comingSoon": "Segera hadir",
     "open": "Buka booth",
     "modes": {
       "solo": "Solo",
@@ -101,19 +100,11 @@
         "title": "Scrapbook",
         "desc": "Isi buku kecil dengan strip yang sudah kamu buka dan tulisanmu sendiri, lalu simpan sebagai PDF.",
         "open": "Buka scrapbook"
-      },
-      "draw": {
-        "title": "Menggambar Bareng",
-        "desc": "Gambar sesuatu yang menghubungkan kalian berdua."
-      },
-      "lovematch": {
-        "title": "Love Match",
-        "desc": "Baca pertanyaan yang diberikan dan tebak satu sama lain."
-      },
-      "spot": {
-        "title": "Spot It!",
-        "desc": "Lihat kedua ilustrasi dan temukan perbedaannya."
       }
+    },
+    "more": {
+      "title": "Lebih banyak menyusul",
+      "desc": "Kami sedang menyiapkan lebih banyak kencan kecil untuk kalian berdua. Nantikan, ya."
     }
   },
   "landing": {
@@ -161,48 +152,6 @@
         "keep": {
           "title": "Selesaikan dan simpan",
           "desc": "Buka scrapbook yang sudah selesai dan unduh sebagai PDF."
-        }
-      },
-      "draw": {
-        "prompt": {
-          "title": "Pilih ide",
-          "desc": "Pilih sesuatu yang menghubungkan kalian berdua."
-        },
-        "draw": {
-          "title": "Menggambar bareng",
-          "desc": "Corat-coret berdampingan di kanvas bersama secara langsung."
-        },
-        "save": {
-          "title": "Simpan",
-          "desc": "Simpan karyamu atau bagikan sesukamu."
-        }
-      },
-      "lovematch": {
-        "room": {
-          "title": "Mulai ruangan",
-          "desc": "Undang pasanganmu dengan kode ruangan."
-        },
-        "answer": {
-          "title": "Jawab pertanyaan",
-          "desc": "Baca tiap pertanyaan dan tebak jawaban satu sama lain."
-        },
-        "score": {
-          "title": "Lihat kecocokan",
-          "desc": "Cari tahu seberapa kenal kalian satu sama lain."
-        }
-      },
-      "spot": {
-        "scenes": {
-          "title": "Buka dua gambar",
-          "desc": "Kalian berdua melihat sepasang ilustrasi seru."
-        },
-        "find": {
-          "title": "Cari perbedaan",
-          "desc": "Berlomba menemukan semua yang berbeda."
-        },
-        "celebrate": {
-          "title": "Hitung skor",
-          "desc": "Lihat siapa yang menemukan paling banyak."
         }
       }
     },
@@ -330,7 +279,9 @@
           "busy": {
             "q": "Muncul pesan booth sedang penuh",
             "a": "Saat ada sangat banyak sesi yang berjalan bersamaan, pembuatan ruangan baru dijeda sebentar. Ruangan yang sudah berjalan tidak terpengaruh.",
-            "steps": ["Tunggu sebentar lalu coba lagi."]
+            "steps": [
+              "Tunggu sebentar lalu coba lagi."
+            ]
           }
         }
       },
