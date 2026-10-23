@@ -1,6 +1,7 @@
 import { Heart, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { UserAvatar } from '@/components/common/UserAvatar'
 import { env } from '@/env'
 import { cn } from '@/lib/utils'
 import type { PublicPartner, User } from '@/types/authType'
@@ -22,12 +23,13 @@ function Portrait({
   person: Pick<User, 'displayName' | 'avatarUrl'> | PublicPartner
   className: string
 }) {
-  const src = avatarSrc(person.avatarUrl, env.apiUrl)
-  if (src) return <img className={className} src={src} alt="" />
   return (
-    <span className={className} aria-hidden="true">
-      {person.displayName.charAt(0).toUpperCase()}
-    </span>
+    <UserAvatar
+      src={avatarSrc(person.avatarUrl, env.apiUrl)}
+      name={person.displayName}
+      imageClassName={className}
+      fallbackClassName={className}
+    />
   )
 }
 

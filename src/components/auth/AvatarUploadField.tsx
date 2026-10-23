@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { removeAvatar, uploadAvatar } from '@/api/services/authService'
+import { UserAvatar } from '@/components/common/UserAvatar'
 import { Button } from '@/components/ui/button'
 import { env } from '@/env'
 import { notifyError } from '@/lib/notify'
@@ -137,13 +138,12 @@ export function AvatarUploadField() {
        * says what it does, so a third "Profile picture" heading is only noise. The file
        * input keeps its `aria-label` below, which is what the a11y tree reads. */}
       <div className={styles.row}>
-        {src ? (
-          <img className={styles.preview} src={src} alt="" />
-        ) : (
-          <span className={styles.previewFallback} aria-hidden="true">
-            {user.displayName.charAt(0).toUpperCase()}
-          </span>
-        )}
+        <UserAvatar
+          src={src}
+          name={user.displayName}
+          imageClassName={styles.preview}
+          fallbackClassName={styles.previewFallback}
+        />
 
         <div className={styles.controls}>
           <div className={styles.buttons}>

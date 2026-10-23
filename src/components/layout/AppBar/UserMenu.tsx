@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { LogOut, UserRound } from 'lucide-react'
 
 import { TRACK_IDS, trackClick } from '@/analytics'
+import { UserAvatar } from '@/components/common/UserAvatar'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
 import { env } from '@/env'
@@ -60,13 +61,12 @@ export function UserMenu() {
         aria-label={t('auth.profile.menuLabel')}
         onClick={() => setOpen((o) => !o)}
       >
-        {avatarSrc(user.avatarUrl, env.apiUrl) ? (
-          <img className={styles.avatar} src={avatarSrc(user.avatarUrl, env.apiUrl)!} alt="" />
-        ) : (
-          <span className={styles.avatarFallback} aria-hidden="true">
-            {user.displayName.charAt(0).toUpperCase()}
-          </span>
-        )}
+        <UserAvatar
+          src={avatarSrc(user.avatarUrl, env.apiUrl)}
+          name={user.displayName}
+          imageClassName={styles.avatar}
+          fallbackClassName={styles.avatarFallback}
+        />
       </button>
 
       {open && (

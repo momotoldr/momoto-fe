@@ -15,6 +15,8 @@ const KNOWN_CODES = new Set([
   'storage_unavailable',
   'google_not_configured',
   'invalid_google_token',
+  'google_email_in_use',
+  'google_other_account',
   'too_many_requests',
   'invalid_password',
   'email_unverified',

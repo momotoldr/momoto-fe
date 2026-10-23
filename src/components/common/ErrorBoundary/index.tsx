@@ -18,7 +18,7 @@ interface State {
 
 /**
  * Guards the **provider layer** — everything outside the router: `AuthProvider`,
- * `SuspenseWrapper`, `Toaster`, `GoogleOAuthProvider`.
+ * `SuspenseWrapper`, `Toaster`.
  *
  * It deliberately does *not* cover page crashes: `RouterProvider` catches those itself
  * and never rethrows, so they can't reach up here. Those are handled by
