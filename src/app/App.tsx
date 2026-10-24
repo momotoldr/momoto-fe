@@ -8,6 +8,7 @@ import { ActivitiesPage } from '@/pages/ActivitiesPage'
 import { CartPage } from '@/pages/CartPage'
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage'
 import { GalleryPage } from '@/pages/GalleryPage'
+import { GoogleCallbackPage } from '@/pages/GoogleCallbackPage'
 import { HelpCenterPage } from '@/pages/HelpCenterPage'
 import { LandingPage } from '@/pages/LandingPage'
 import { LoginPage } from '@/pages/LoginPage'
@@ -68,6 +69,8 @@ const router = createBrowserRouter([
       { path: '/forgot-password', element: <ForgotPasswordPage /> },
       { path: '/reset-password', element: <ResetPasswordPage /> },
       { path: '/verify-email', element: <VerifyEmailPage /> },
+      // Google sends the tab back here (lib/googleSignIn). Public: it's how you sign in.
+      { path: '/auth/google/callback', element: <GoogleCallbackPage /> },
       { path: '/server-unavailable', element: <ServerDownPage /> },
       { path: '/activities', element: <ActivitiesPage /> },
       // Public in normal operation, behind the wall during the closed beta — see

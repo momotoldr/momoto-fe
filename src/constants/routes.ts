@@ -16,6 +16,7 @@ export const ROUTES = {
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
   verifyEmail: '/verify-email',
+  googleCallback: '/auth/google/callback',
   profile: '/profile',
   serverUnavailable: '/server-unavailable',
 } as const

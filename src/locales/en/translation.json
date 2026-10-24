@@ -1301,6 +1301,10 @@
     "logout": "Log out",
     "logoutServerError": "You've been signed out on this device, but we couldn't reach the server to end your session everywhere.",
     "or": "or",
+    "google": "Continue with Google",
+    "googleCallback": {
+      "checking": "Signing you in with Google…"
+    },
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "fields": {
@@ -1451,6 +1455,8 @@
       "invalid_input": "Please check the details and try again.",
       "google_not_configured": "Google sign-in isn't available right now.",
       "invalid_google_token": "Could not verify your Google sign-in. Please try again.",
+      "google_email_in_use": "An account with this email already exists. Sign in with your username and password instead.",
+      "google_other_account": "This email's Momoto account is linked to a different Google account. Sign in with that one, or with your password.",
       "too_many_requests": "Too many attempts. Please wait a moment and try again.",
       "passwordTooShort": "Password must be at least 8 characters.",
       "emailRequired": "Please enter your email.",
@@ -1542,7 +1548,7 @@
       "failedTitle": "That link didn’t work",
       "failedBody": "Confirmation links last 24 hours and can only be used once. Open Profile and send yourself a fresh one.",
       "takenTitle": "That address is already taken",
-      "takenBody": "Another account has already confirmed this email. Use a different address, or sign in to the account that owns it.",
+      "takenBody": "Another account has already confirmed this email. If you've signed in with Google using this address, that's the account that has it — sign in with Google to reach it. Otherwise, use a different address.",
       "toProfile": "Go to Profile",
       "toLogin": "Sign in"
     },
