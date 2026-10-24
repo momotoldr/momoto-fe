@@ -38,8 +38,16 @@ export async function login(body: LoginRequest): Promise<User> {
   return data.user
 }
 
-export async function loginWithGoogle(idToken: string): Promise<User> {
-  const { data } = await authClient.postData<AuthResponse>(API_ROUTES.AUTH.GOOGLE, { idToken })
+/**
+ * Trades the code Google returned to `/auth/google/callback` for a Momoto session.
+ * `redirectUri` and `codeVerifier` must be the ones the sign-in started with.
+ */
+export async function loginWithGoogle(body: {
+  code: string
+  redirectUri: string
+  codeVerifier: string
+}): Promise<User> {
+  const { data } = await authClient.postData<AuthResponse>(API_ROUTES.AUTH.GOOGLE, body)
   setStoredToken(data.accessToken)
   return data.user
 }

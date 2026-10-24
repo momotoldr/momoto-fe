@@ -45,7 +45,7 @@ export const API_ROUTES = {
     REGISTER: '/auth/register',
     /** Email + password login. `POST /auth/login` → `{ user, accessToken }`. */
     LOGIN: '/auth/login',
-    /** Google sign-in — verifies a Google ID token. `POST /auth/google`. */
+    /** Google sign-in — redeems the redirect's authorization code. `POST /auth/google`. */
     GOOGLE: '/auth/google',
     /** Rotate the refresh cookie for a new access token. `POST /auth/refresh`. */
     REFRESH: '/auth/refresh',

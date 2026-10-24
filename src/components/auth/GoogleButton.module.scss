@@ -1,0 +1,9 @@
+/* Full width, so it lines up with the form's submit button above the divider. */
+.button {
+  @apply h-10 w-full;
+}
+
+/* Google's sign-in branding asks for the "G" at 18px, in its own colours. */
+.logo {
+  @apply size-[18px];
+}

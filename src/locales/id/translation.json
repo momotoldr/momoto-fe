@@ -1299,6 +1299,10 @@
     "logout": "Keluar",
     "logoutServerError": "Kamu telah keluar dari perangkat ini, tetapi kami tidak dapat menghubungi server untuk mengakhiri sesi di semua perangkat.",
     "or": "atau",
+    "google": "Lanjutkan dengan Google",
+    "googleCallback": {
+      "checking": "Sedang masuk dengan Google…"
+    },
     "showPassword": "Tampilkan kata sandi",
     "hidePassword": "Sembunyikan kata sandi",
     "fields": {
@@ -1446,6 +1450,8 @@
       "invalid_input": "Periksa kembali detailnya dan coba lagi.",
       "google_not_configured": "Masuk dengan Google belum tersedia saat ini.",
       "invalid_google_token": "Tidak dapat memverifikasi masuk Google-mu. Coba lagi.",
+      "google_email_in_use": "Sudah ada akun dengan email ini. Masuk dengan nama pengguna dan kata sandimu.",
+      "google_other_account": "Akun Momoto dengan email ini tertaut ke akun Google lain. Masuk dengan akun Google itu, atau dengan kata sandimu.",
       "too_many_requests": "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.",
       "passwordTooShort": "Kata sandi minimal 8 karakter.",
       "emailRequired": "Silakan masukkan emailmu.",
@@ -1535,7 +1541,7 @@
       "failedTitle": "Tautannya tidak berhasil",
       "failedBody": "Tautan konfirmasi berlaku 24 jam dan hanya bisa dipakai sekali. Buka Profil dan kirim yang baru.",
       "takenTitle": "Alamat itu sudah dipakai",
-      "takenBody": "Akun lain sudah mengonfirmasi email ini. Pakai alamat lain, atau masuk ke akun yang memilikinya.",
+      "takenBody": "Akun lain sudah mengonfirmasi email ini. Kalau kamu pernah masuk dengan Google memakai alamat ini, akun itulah yang memilikinya — masuk dengan Google untuk membukanya. Kalau bukan, pakai alamat lain.",
       "toProfile": "Buka Profil",
       "toLogin": "Masuk"
     },

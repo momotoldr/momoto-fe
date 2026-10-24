@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { acceptInvite, createInvite, unlinkPartner } from '@/api/services/partnerService'
+import { UserAvatar } from '@/components/common/UserAvatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { env } from '@/env'
@@ -100,13 +101,12 @@ export function PartnerPanel({ user }: PartnerPanelProps) {
     return (
       <ProfileCard title={t('auth.partner.title')} subtitle={t('auth.partner.linkedHint')}>
         <div className={styles.linked}>
-          {partnerAvatar ? (
-            <img className={styles.partnerAvatar} src={partnerAvatar} alt="" />
-          ) : (
-            <span className={styles.partnerAvatarFallback} aria-hidden="true">
-              {partner.displayName.charAt(0).toUpperCase()}
-            </span>
-          )}
+          <UserAvatar
+            src={partnerAvatar}
+            name={partner.displayName}
+            imageClassName={styles.partnerAvatar}
+            fallbackClassName={styles.partnerAvatarFallback}
+          />
           <div className={styles.linkedText}>
             <span className={styles.linkedLabel}>
               <Heart className={styles.linkedIcon} />
