@@ -1,4 +1,5 @@
 import { env } from '@/env'
+import i18n from '@/lib/i18n'
 import type { OrderHistory, PaymentAttempt, PaymentMethod } from '@/types/stripType'
 
 import ApiError from '../apiError'
@@ -45,6 +46,8 @@ export async function createCharge(
     const { data } = await client.postData<PaymentAttempt>(API_ROUTES.PAYMENTS.CHARGE, {
       ...target,
       method,
+      // The settlement receipt is mailed in this language.
+      lang: i18n.language,
     })
     return data
   } catch (error) {
