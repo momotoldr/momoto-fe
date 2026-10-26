@@ -4,6 +4,7 @@
     "width": 1748,
     "height": 2480
   },
+  "textColor": "#3b2f25",
   "decorations": {
     "tape-4x1-single": {
       "layout": "4x1",

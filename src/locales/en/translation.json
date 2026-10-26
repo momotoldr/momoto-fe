@@ -8,6 +8,8 @@
     "id": "ID"
   },
   "common": {
+    "all": "All",
+    "categories": "Categories",
     "loading": "Loading…",
     "tryAgain": "Try again",
     "backHome": "Back home",
@@ -779,7 +781,13 @@
     "kraft": "Kraft",
     "layoutLabel": "Grid",
     "layout4x1": "4×1",
-    "layout2x2": "2×2"
+    "layout2x2": "2×2",
+    "categories": {
+      "minimal": "Minimal",
+      "cute": "Cute",
+      "retro": "Retro",
+      "aesthetic": "Aesthetic"
+    }
   },
   "capture": {
     "takingPhotos": "Taking photos… {{taken}}/{{total}}",
@@ -978,12 +986,23 @@
     "confetti": "Confetti",
     "checker": "Checker",
     "sky": "Sky",
+    "blue": "Blue",
+    "curtain": "Curtain",
+    "beach": "Beach",
+    "lake": "Lake",
+    "villa": "Villa",
+    "nightSky": "Night sky",
     "downloading": "Getting the background remover ready… {{percent}}%",
     "working": "Removing backgrounds… {{done}} of {{total}}",
     "failed": "Couldn't remove the background on this device.",
     "retry": "Try again",
     "waitCreate": "Wait for the background to finish, or pick Original.",
-    "unsupported": "Background swap isn't available on this device — it needs a newer browser."
+    "unsupported": "Background swap isn't available on this device — it needs a newer browser.",
+    "categories": {
+      "colors": "Colors",
+      "patterns": "Patterns",
+      "scenery": "Scenery"
+    }
   },
   "filters": {
     "none": "Original",
@@ -1026,7 +1045,14 @@
     "bunnyYellow": "Yellow Bunny",
     "cat": "Cat",
     "snail": "Snail",
-    "tipShort": "Tap to drop, drag to place, corner to resize."
+    "tipShort": "Tap to drop, drag to place, corner to resize.",
+    "categories": {
+      "love": "Love",
+      "animals": "Animals",
+      "nature": "Nature",
+      "sparkle": "Sparkle",
+      "fun": "Fun"
+    }
   },
   "result": {
     "composing": "Composing your strip…",
@@ -1647,7 +1673,8 @@
   },
   "scrapbook": {
     "templates": {
-      "kraftNotes": "Kraft notes"
+      "kraftNotes": "Kraft notes",
+      "pinkGingham": "Pink gingham"
     },
     "states": {
       "draft": "Draft",

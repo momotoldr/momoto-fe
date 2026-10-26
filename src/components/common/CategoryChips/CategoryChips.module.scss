@@ -1,0 +1,15 @@
+/* One line at every size: on a phone it scrolls sideways like the option rows under it,
+ * so adding categories never pushes the options down. */
+.chips {
+  @apply -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5;
+}
+
+.chip {
+  @apply flex h-7 shrink-0 items-center rounded-full border border-border px-3 text-xs font-medium text-muted-foreground transition;
+  @apply hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background;
+  @apply disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:text-muted-foreground;
+}
+
+.chipActive {
+  @apply border-foreground bg-foreground text-background hover:text-background;
+}

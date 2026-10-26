@@ -3,11 +3,12 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { useTranslation } from 'react-i18next'
 
 import { TRACK_IDS, trackClick } from '@/analytics'
+import { CategoryChips } from '@/components/common/CategoryChips'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Button } from '@/components/ui/button'
-import { BACKDROPS, resolveBackdrop } from '@/constants/backdrops'
+import { BACKDROPS, BACKDROP_CATEGORIES, resolveBackdrop } from '@/constants/backdrops'
 import { PHOTO_FILTERS, PHOTO_FILTER_MAP } from '@/constants/filters'
-import { STICKERS } from '@/constants/stickers'
+import { STICKERS, STICKER_CATEGORIES } from '@/constants/stickers'
 import {
   STRIP_TEMPLATES,
   STRIP_TEMPLATE_MAP,
@@ -17,6 +18,7 @@ import {
 import { env } from '@/env'
 import { useBackdropFrames } from '@/hooks/useBackdropFrames'
 import { useBackdropSupport } from '@/hooks/useBackdropSupport'
+import { useCategoryFilter } from '@/hooks/useCategoryFilter'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import { usePhotosStore } from '@/store/usePhotosStore'
@@ -128,6 +130,10 @@ export function StripSelector({
   // backdrop is re-applied from them wherever the strip is composed.
   const shown = useBackdropFrames(frames, backdrop)
   const backdropPending = backdrop !== 'none' && !shown.done
+  // Category chips over the backdrop and sticker palettes. They only narrow what's in
+  // view; Original has no category, so it stays under every backdrop chip.
+  const backdropCategories = useCategoryFilter(BACKDROP_CATEGORIES, BACKDROPS)
+  const stickerCategories = useCategoryFilter(STICKER_CATEGORIES, STICKERS)
   const previewFrame = shown.frames[0]
 
   /** Why the backdrop isn't on every cut yet, or null once it is (or there isn't one). */
@@ -446,8 +452,15 @@ export function StripSelector({
                   <p className={styles.sectionTip}>{t('backdrops.unsupported')}</p>
                 )}
               </div>
+              <CategoryChips
+                categories={backdropCategories.categories}
+                active={backdropCategories.active}
+                onChange={backdropCategories.setActive}
+                labelPrefix="backdrops.categories"
+                disabled={backdropSupport === 'unsupported'}
+              />
               <div className={styles.filterList}>
-                {BACKDROPS.map((option) => (
+                {backdropCategories.visible.map((option) => (
                   <button
                     key={option.id}
                     type="button"
@@ -556,8 +569,14 @@ export function StripSelector({
             <p className={cn(styles.railLabel, styles.sectionLabel)}>{t('select.tabStickers')}</p>
             <p className={styles.sectionTip}>{t('stickers.tipShort')}</p>
           </div>
+          <CategoryChips
+            categories={stickerCategories.categories}
+            active={stickerCategories.active}
+            onChange={stickerCategories.setActive}
+            labelPrefix="stickers.categories"
+          />
           <div className={styles.stickerList}>
-            {STICKERS.map((option) => {
+            {stickerCategories.visible.map((option) => {
               const ready = stickerReady[option.id] === true
               const name = t(`stickers.${option.label}`)
               return (

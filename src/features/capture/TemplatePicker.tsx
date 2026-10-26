@@ -1,10 +1,17 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { StripLayout } from '@/constants/stripTemplates'
 
-import { STRIP_LAYOUTS, STRIP_TEMPLATE_MAP, templatesForLayout } from '@/constants/stripTemplates'
+import { CategoryChips } from '@/components/common/CategoryChips'
+import {
+  STRIP_LAYOUTS,
+  STRIP_TEMPLATE_MAP,
+  TEMPLATE_CATEGORIES,
+  templatesForLayout,
+} from '@/constants/stripTemplates'
 import { TemplatePreview } from '@/features/compose/TemplatePreview'
+import { useCategoryFilter } from '@/hooks/useCategoryFilter'
 import { cn } from '@/lib/utils'
 import { usePhotosStore } from '@/store/usePhotosStore'
 import { useStripStore } from '@/store/useStripStore'
@@ -71,7 +78,15 @@ export function TemplatePicker() {
   }
 
   const layouts = STRIP_LAYOUTS.filter((layout) => templatesForLayout(layout).length > 0)
-  const options = templatesForLayout(activeLayout)
+  // Category chips narrow the open grid's row. They only filter what's in view, so the
+  // pick can sit under another chip (the desktop header still names it).
+  const inLayout = useMemo(() => templatesForLayout(activeLayout), [activeLayout])
+  const {
+    categories,
+    active: category,
+    setActive: setCategory,
+    visible: options,
+  } = useCategoryFilter(TEMPLATE_CATEGORIES, inLayout)
 
   return (
     <div className={styles.picker}>
@@ -102,7 +117,15 @@ export function TemplatePicker() {
         role="tabpanel"
         id={`template-row-${activeLayout}`}
         aria-labelledby={`template-grid-${activeLayout}`}
+        className={styles.panel}
       >
+        <CategoryChips
+          categories={categories}
+          active={category}
+          onChange={setCategory}
+          labelPrefix="templates.categories"
+          disabled={!canEdit}
+        />
         <div className={styles.list} role="radiogroup" aria-label={t('templates.label')}>
           {options.map((option) => {
             const name = t(`templates.${option.label}`)

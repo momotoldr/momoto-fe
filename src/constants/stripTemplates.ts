@@ -41,6 +41,13 @@ export type StripLayout = '4x1' | '2x2'
 /** Layout groups in picker order — the ribbon leads, being what most people expect. */
 export const STRIP_LAYOUTS: StripLayout[] = ['4x1', '2x2']
 
+/**
+ * Style groups for the picker's category chips, in chip order. Every template has one;
+ * chips only show for categories with a template in the open grid.
+ */
+export const TEMPLATE_CATEGORIES = ['minimal', 'cute', 'retro', 'aesthetic'] as const
+export type TemplateCategory = (typeof TEMPLATE_CATEGORIES)[number]
+
 export interface StripTemplate {
   id: string
   /** i18n key suffix under `templates.*` for the label. */
@@ -51,6 +58,8 @@ export interface StripTemplate {
   aspect: number
   /** Which photo arrangement this template uses; the picker groups on it. */
   layout: StripLayout
+  /** Style group for the picker's category chips (`templates.categories.*`). */
+  category: TemplateCategory
   /**
    * Fixed photo slots, in slot order — top→bottom for a stacked strip, reading
    * order (TL, TR, BL, BR) for a grid one. Photos are cover-cropped into these and
@@ -214,6 +223,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: classic,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'minimal',
     slots: getStackedSlots('default'),
     footer: { y: 0.945, color: '#2b2b2b' },
   },
@@ -223,6 +233,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: film,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'minimal',
     slots: getStackedSlots('default'),
     footer: { y: 0.945, color: '#f4f4f5' },
   },
@@ -232,6 +243,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: hearts,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'cute',
     slots: getStackedSlots('default'),
     footer: { y: 0.945, color: '#d6488a' },
   },
@@ -241,6 +253,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: newspaper,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'retro',
     slots: getStackedSlots('newspaper'),
   },
   {
@@ -249,6 +262,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: orangeColorful,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'retro',
     slots: getStackedSlots('orange'),
   },
   {
@@ -257,6 +271,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: blueWhiteRetro,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'retro',
     slots: getStackedSlots('retro'),
   },
   {
@@ -265,6 +280,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: sageBotanical,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'aesthetic',
     slots: getStackedSlots('default'),
     footer: { y: 0.945, color: '#5a6b4e' },
   },
@@ -274,6 +290,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: holo,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'aesthetic',
     slots: getStackedSlots('default'),
     footer: { y: 0.945, color: '#ffffff' },
   },
@@ -283,6 +300,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: nordic,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'minimal',
     slots: getStackedSlots('default'),
     footer: { y: 0.945, color: '#52525b' },
   },
@@ -292,6 +310,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: birthday,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'cute',
     slots: getStackedSlots('birthday'),
     // Not the 0.945 the other ribbons use: down there the art has a pile of gift
     // boxes. 0.879 is the clear band between the last card and the presents.
@@ -303,6 +322,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: bestFriends,
     aspect: STRIP_ASPECT,
     layout: '4x1',
+    category: 'cute',
     slots: getStackedSlots('bestFriends'),
     // No footer, like newspaper and blueWhiteRetro: the art ends in its own
     // "@momoto.ldr" pill, and the 13.7 units left between the last frame and that
@@ -314,6 +334,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: greenRed,
     aspect: GREEN_RED_ASPECT,
     layout: '2x2',
+    category: 'retro',
     slots: GREEN_RED_SLOTS,
   },
   {
@@ -322,6 +343,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: terrazzo,
     aspect: TERRAZZO_ASPECT,
     layout: '2x2',
+    category: 'minimal',
     slots: TERRAZZO_SLOTS,
     footer: { y: 0.932, color: '#6b5a4a' },
   },
@@ -331,6 +353,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: midnightGold,
     aspect: MIDNIGHT_GOLD_ASPECT,
     layout: '2x2',
+    category: 'aesthetic',
     slots: MIDNIGHT_GOLD_SLOTS,
     footer: { y: 0.9163, color: '#e0c07a' },
   },
@@ -340,6 +363,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: sunset,
     aspect: SUNSET_ASPECT,
     layout: '2x2',
+    category: 'aesthetic',
     slots: SUNSET_SLOTS,
     footer: { y: 0.9234, color: '#7c3a5e' },
   },
@@ -349,6 +373,7 @@ export const STRIP_TEMPLATES: StripTemplate[] = [
     src: kraft,
     aspect: KRAFT_ASPECT,
     layout: '2x2',
+    category: 'minimal',
     slots: KRAFT_SLOTS,
     footer: { y: 0.9222, color: '#4a3a2a' },
   },
