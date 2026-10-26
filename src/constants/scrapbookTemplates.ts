@@ -1,4 +1,5 @@
 import kraftNotesLayout from '@/constants/scrapbook/kraft-notes.layout.json'
+import pinkGinghamLayout from '@/constants/scrapbook/pink-gingham.layout.json'
 import type { StripLayout } from '@/constants/stripTemplates'
 
 /**
@@ -78,9 +79,6 @@ export interface ScrapbookTemplate {
   pages: ScrapbookPage[]
 }
 
-/** The ink every template writes in. */
-const TEXT_COLOR = '#3b2f25'
-
 // ── Building a template from its layout file ─────────────────────────────────
 
 interface RawRect {
@@ -94,6 +92,8 @@ interface RawRect {
 interface RawLayout {
   id: string
   page: { width: number; height: number }
+  /** The ink this template writes in — chosen to read on its own paper. */
+  textColor: string
   decorations: Record<string, { layout: string; width: number; height: number; margin: number }>
   pages: {
     id: string
@@ -155,7 +155,7 @@ function buildTemplate(raw: RawLayout, label: string): ScrapbookTemplate {
         weight: slot.weight as 400 | 700 | 900,
         lineHeight: slot.lineHeight,
         align: slot.align as 'left' | 'center' | 'right',
-        color: TEXT_COLOR,
+        color: raw.textColor,
         maxLength: slot.maxLength,
         maxLines: slot.maxLines,
         placeholder: slot.placeholder,
@@ -166,9 +166,10 @@ function buildTemplate(raw: RawLayout, label: string): ScrapbookTemplate {
 
 export const SCRAPBOOK_TEMPLATES: ScrapbookTemplate[] = [
   buildTemplate(kraftNotesLayout as RawLayout, 'kraftNotes'),
+  buildTemplate(pinkGinghamLayout as RawLayout, 'pinkGingham'),
 ]
 
-/** What a new scrapbook starts on while there is only one template to choose. */
+/** The template the picker opens on. */
 export const DEFAULT_SCRAPBOOK_TEMPLATE_ID = 'kraft-notes'
 
 /**

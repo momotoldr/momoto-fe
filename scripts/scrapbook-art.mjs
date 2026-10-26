@@ -6,6 +6,9 @@
 //
 //   node scripts/scrapbook-art.mjs [template]      (default: kraft-notes)
 //
+// The look of each template (paper, cards, tape, doodles) is its entry in THEMES below;
+// a new template needs a layout file and a theme.
+//
 // Rules this keeps (plan §4, §7a):
 // - Flat vector only — fills, strokes, simple shapes. No per-pixel texture: grain costs
 //   more PDF bytes than every photo on the page combined (measured 54 KB vs 323–1190 KB a
@@ -30,15 +33,6 @@ mkdirSync(outDir, { recursive: true })
 
 const SEED = 20261015
 const { width: W, height: H } = layout.page
-
-const KRAFT = '#d8bb8f'
-const KRAFT_DARK = '#cfae7f'
-const KRAFT_LIGHT = '#e0c79f'
-const STITCH = '#a8875c'
-const CARD = '#f7f0e2'
-const CARD_SHADOW = '#b89466'
-const RULE = '#dccbae'
-const INK = '#4a3826'
 
 /** mulberry32 — small, fast, good enough for placing doodles. */
 function rng(seed) {
@@ -97,8 +91,32 @@ function star(cx, cy, r, fill) {
   return `<polygon points="${pts.join(' ')}" fill="${fill}"/>`
 }
 
+/** A four-point twinkle — thinner waist than `star`, reads as a sparkle. */
+function sparkle(cx, cy, r, fill) {
+  const pts = []
+  for (let i = 0; i < 8; i++) {
+    const a = (Math.PI / 4) * i - Math.PI / 2
+    const rr = i % 2 === 0 ? r : r * 0.22
+    pts.push(`${r1(cx + rr * Math.cos(a))},${r1(cy + rr * Math.sin(a))}`)
+  }
+  return `<polygon points="${pts.join(' ')}" fill="${fill}"/>`
+}
+
 function heart(cx, cy, s, fill) {
   return `<path transform="translate(${r1(cx)} ${r1(cy)}) scale(${r1(s / 20)})" d="M0 6C-4-4-18-2-18 8c0 9 12 15 18 21C6 23 18 17 18 8 18-2 4-4 0 6Z" fill="${fill}"/>`
+}
+
+/** Five round petals around a centre. */
+function flower(cx, cy, r, petal, centre) {
+  const parts = []
+  for (let i = 0; i < 5; i++) {
+    const a = ((Math.PI * 2) / 5) * i - Math.PI / 2
+    parts.push(
+      `<circle cx="${r1(cx + r * 0.55 * Math.cos(a))}" cy="${r1(cy + r * 0.55 * Math.sin(a))}" r="${r1(r * 0.42)}" fill="${petal}"/>`
+    )
+  }
+  parts.push(`<circle cx="${r1(cx)}" cy="${r1(cy)}" r="${r1(r * 0.3)}" fill="${centre}"/>`)
+  return parts.join('')
 }
 
 function squiggle(x, y, len, stroke) {
@@ -131,24 +149,190 @@ function cardRect(text) {
   }
 }
 
+/** A strip of washi tape: a tinted band with pale stripes across it. */
+function washi(cx, cy, tw, th, rot, fill) {
+  const x = cx - tw / 2
+  const y = cy - th / 2
+  const stripes = []
+  for (let sx = x + 22; sx < x + tw - 10; sx += 40) {
+    stripes.push(
+      `<rect x="${r1(sx)}" y="${r1(y)}" width="14" height="${th}" fill="#ffffff" opacity="0.45"/>`
+    )
+  }
+  return (
+    `<g transform="rotate(${rot} ${r1(cx)} ${r1(cy)})">` +
+    `<rect x="${r1(x)}" y="${r1(y)}" width="${r1(tw)}" height="${th}" fill="${fill}" opacity="0.88"/>` +
+    stripes.join('') +
+    `</g>`
+  )
+}
+
+// ── Themes ───────────────────────────────────────────────────────────────────
+// Everything that makes one template look like itself. Layout (where slots sit) lives in
+// the layout file; this is only paint. Each theme is drawn with the same seeded `rand`
+// stream, in the same order, so a re-run stays byte for byte.
+
+const KRAFT_INK = '#4a3826'
+
+const kraftNotes = {
+  card: '#f7f0e2',
+  cardShadow: '#b89466',
+  rule: '#dccbae',
+  paper(rand) {
+    const parts = [`<rect width="${W}" height="${H}" fill="#d8bb8f"/>`]
+    // Large flat tone patches: paper that isn't one flat colour, at almost no byte cost.
+    for (let i = 0; i < 7; i++) {
+      const fill = i % 2 ? '#cfae7f' : '#e0c79f'
+      parts.push(
+        `<ellipse cx="${r1(rand() * W)}" cy="${r1(rand() * H)}" rx="${r1(260 + rand() * 420)}" ry="${r1(180 + rand() * 320)}" fill="${fill}" opacity="0.55"/>`
+      )
+    }
+    // Stitched border.
+    parts.push(
+      `<rect x="64" y="64" width="${W - 128}" height="${H - 128}" rx="18" fill="none" stroke="#a8875c" stroke-width="5" stroke-dasharray="22 16" stroke-linecap="round"/>`
+    )
+    return parts
+  },
+  label({ x, y, w, h }, accent) {
+    return (
+      `<rect x="${x + 10}" y="${y + 14}" width="${w}" height="${h}" rx="14" fill="${this.cardShadow}"/>` +
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="${this.card}"/>` +
+      `<rect x="${x}" y="${y + h - 46}" width="${w}" height="22" fill="${accent}"/>`
+    )
+  },
+  cardTape(card, accent, rand) {
+    return `<rect x="${r1(card.x + card.w / 2 - 110)}" y="${card.y - 34}" width="220" height="72" fill="${accent}" opacity="0.8" transform="rotate(${r1((rand() - 0.5) * 8)} ${r1(card.x + card.w / 2)} ${card.y})"/>`
+  },
+  /** One doodle at (x, y), or null to skip this spot without placing anything. */
+  doodle(x, y, size, rand, accent, blocked) {
+    const kind = Math.floor(rand() * 4)
+    const fill = rand() < 0.6 ? accent : KRAFT_INK
+    if (kind === 0) return star(x, y, size, fill)
+    if (kind === 1) return heart(x, y, size, fill)
+    if (kind === 2)
+      return `<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(size * 0.35)}" fill="${fill}"/>`
+    const len = size * 3
+    const wide = { x: x - 10, y: y - 40, w: len + 20, h: 80 }
+    if (blocked.some((b) => overlaps(b, wide)) || x + len > W - 110) return null
+    return squiggle(x, y, len, fill)
+  },
+  decorations: {
+    tape(w, h, m) {
+      const tape = (cx, cy, rot) => {
+        const tw = Math.min(260, w * 0.5)
+        const th = 92
+        return (
+          `<g transform="rotate(${rot} ${cx} ${cy})">` +
+          `<rect x="${r1(cx - tw / 2)}" y="${r1(cy - th / 2)}" width="${r1(tw)}" height="${th}" fill="#f4ead2" opacity="0.88"/>` +
+          `<rect x="${r1(cx - tw / 2)}" y="${r1(cy - th / 2 + 18)}" width="${r1(tw)}" height="8" fill="#e6d6b4" opacity="0.9"/>` +
+          `<rect x="${r1(cx - tw / 2)}" y="${r1(cy + th / 2 - 26)}" width="${r1(tw)}" height="8" fill="#e6d6b4" opacity="0.9"/>` +
+          `</g>`
+        )
+      }
+      return [tape(m + w / 2, m + 8, -4), tape(m + w / 2, m + h - 8, 3)]
+    },
+    corners(w, h, m) {
+      const c = 120
+      const corner = (x, y, sx, sy) =>
+        `<path d="M${x} ${y} l${sx * c} 0 l${-sx * c} ${sy * c} Z" fill="${KRAFT_INK}" transform="translate(${-sx * 18} ${-sy * 18})"/>`
+      return [
+        corner(m, m, 1, 1),
+        corner(m + w, m, -1, 1),
+        corner(m, m + h, 1, -1),
+        corner(m + w, m + h, -1, -1),
+      ]
+    },
+  },
+}
+
+const GINGHAM_FRAME = 110
+const GINGHAM_RED = '#e46a6f'
+const GINGHAM_TAPE = '#f4a9ba'
+
+const pinkGingham = {
+  card: '#ffffff',
+  cardShadow: '#f1c3cd',
+  rule: '#f5d6dd',
+  paper() {
+    // Gingham is two sets of translucent bands crossing: where they meet the colour
+    // doubles up into the darker check. ~36 rects a page — flat vector, no pattern fill.
+    const band = 60
+    const parts = [`<rect width="${W}" height="${H}" fill="#fdf0f2"/>`]
+    for (let x = 0; x < W; x += band * 2) {
+      parts.push(`<rect x="${x}" width="${band}" height="${H}" fill="#f19fb2" opacity="0.4"/>`)
+    }
+    for (let y = 0; y < H; y += band * 2) {
+      parts.push(`<rect y="${y}" width="${W}" height="${band}" fill="#f19fb2" opacity="0.4"/>`)
+    }
+    // The writing paper, framed by the check, with a running stitch just inside.
+    const f = GINGHAM_FRAME
+    parts.push(
+      `<rect x="${f}" y="${f}" width="${W - 2 * f}" height="${H - 2 * f}" rx="30" fill="#fffaf6"/>`,
+      `<rect x="${f + 26}" y="${f + 26}" width="${W - 2 * f - 52}" height="${H - 2 * f - 52}" rx="20" fill="none" stroke="#f3b4c2" stroke-width="5" stroke-dasharray="18 14" stroke-linecap="round"/>`
+    )
+    return parts
+  },
+  label({ x, y, w, h }, accent) {
+    // A white card with a gingham-red ribbon and a heart at each top corner.
+    return (
+      `<rect x="${x + 10}" y="${y + 14}" width="${w}" height="${h}" rx="22" fill="${this.cardShadow}"/>` +
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="22" fill="${this.card}"/>` +
+      `<rect x="${x}" y="${y + h - 50}" width="${w}" height="14" fill="${accent}"/>` +
+      `<rect x="${x}" y="${y + h - 30}" width="${w}" height="6" fill="${accent}" opacity="0.5"/>` +
+      heart(x + 70, y + 64, 30, accent) +
+      heart(x + w - 70, y + 64, 30, accent)
+    )
+  },
+  cardTape(card, accent, rand) {
+    return washi(card.x + card.w / 2, card.y, 220, 72, r1((rand() - 0.5) * 8), accent)
+  },
+  doodle(x, y, size, rand, accent) {
+    const kind = Math.floor(rand() * 4)
+    const fill = rand() < 0.65 ? accent : GINGHAM_RED
+    if (kind === 0) return heart(x, y, size, fill)
+    if (kind === 1) return flower(x, y, size * 0.8, fill, '#f2cf6b')
+    if (kind === 2) return sparkle(x, y, size * 0.9, fill)
+    return `<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(size * 0.3)}" fill="${fill}"/>`
+  },
+  decorations: {
+    washi(w, h, m) {
+      const tw = Math.min(260, w * 0.5)
+      return [
+        washi(m + w / 2, m + 8, tw, 92, -4, GINGHAM_TAPE),
+        washi(m + w / 2, m + h - 8, tw, 92, 3, GINGHAM_TAPE),
+      ]
+    },
+    'washi-corners'(w, h, m) {
+      // Kept inside the margin: a 200×70 strip at 45° reaches ~95 from its centre.
+      const inset = 28
+      return [
+        washi(m + inset, m + inset, 200, 70, -45, GINGHAM_TAPE),
+        washi(m + w - inset, m + inset, 200, 70, 45, GINGHAM_TAPE),
+        washi(m + inset, m + h - inset, 200, 70, 45, GINGHAM_TAPE),
+        washi(m + w - inset, m + h - inset, 200, 70, -45, GINGHAM_TAPE),
+      ]
+    },
+  },
+}
+
+const THEMES = { 'kraft-notes': kraftNotes, 'pink-gingham': pinkGingham }
+const theme = THEMES[templateId]
+if (!theme) {
+  console.error(`scrapbook-art: no theme for ${templateId} — add one to THEMES`)
+  process.exit(1)
+}
+for (const [name, deco] of Object.entries(layout.decorations)) {
+  if (!theme.decorations[deco.style]) {
+    console.error(`scrapbook-art: ${templateId} has no "${deco.style}" decoration (${name})`)
+    process.exit(1)
+  }
+}
+
 // ── Pages ────────────────────────────────────────────────────────────────────
 
 function pageSvg(page, index) {
   const rand = rng(SEED + index * 101)
-  const parts = []
-
-  parts.push(`<rect width="${W}" height="${H}" fill="${KRAFT}"/>`)
-  // Large flat tone patches: paper that isn't one flat colour, at almost no byte cost.
-  for (let i = 0; i < 7; i++) {
-    const fill = i % 2 ? KRAFT_DARK : KRAFT_LIGHT
-    parts.push(
-      `<ellipse cx="${r1(rand() * W)}" cy="${r1(rand() * H)}" rx="${r1(260 + rand() * 420)}" ry="${r1(180 + rand() * 320)}" fill="${fill}" opacity="0.55"/>`
-    )
-  }
-  // Stitched border.
-  parts.push(
-    `<rect x="64" y="64" width="${W - 128}" height="${H - 128}" rx="18" fill="none" stroke="${STITCH}" stroke-width="5" stroke-dasharray="22 16" stroke-linecap="round"/>`
-  )
+  const parts = [...theme.paper(rand)]
 
   const blocked = page.strips.map((strip) => keepOut(strip, 110))
 
@@ -159,9 +343,7 @@ function pageSvg(page, index) {
     const cy = y + h / 2
     parts.push(
       `<g transform="rotate(${rotate} ${cx} ${cy})">` +
-        `<rect x="${x + 10}" y="${y + 14}" width="${w}" height="${h}" rx="14" fill="${CARD_SHADOW}"/>` +
-        `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="${CARD}"/>` +
-        `<rect x="${x}" y="${y + h - 46}" width="${w}" height="22" fill="${page.accent}"/>` +
+        theme.label({ x, y, w, h }, page.accent) +
         `</g>`
     )
     blocked.push(keepOut(page.label, 60))
@@ -171,8 +353,8 @@ function pageSvg(page, index) {
     if (text.card) {
       const card = cardRect(text)
       parts.push(
-        `<rect x="${card.x + 10}" y="${card.y + 14}" width="${card.w}" height="${card.h}" rx="12" fill="${CARD_SHADOW}"/>`,
-        `<rect x="${card.x}" y="${card.y}" width="${card.w}" height="${card.h}" rx="12" fill="${CARD}"/>`
+        `<rect x="${card.x + 10}" y="${card.y + 14}" width="${card.w}" height="${card.h}" rx="12" fill="${theme.cardShadow}"/>`,
+        `<rect x="${card.x}" y="${card.y}" width="${card.w}" height="${card.h}" rx="12" fill="${theme.card}"/>`
       )
       // Ruled lines sit under each line box the text layout will fill, so written text
       // lands on them — the same line height the app draws with.
@@ -180,13 +362,11 @@ function pageSvg(page, index) {
       for (let i = 1; i <= text.maxLines; i++) {
         const y = r1(text.y + i * lineH - lineH * 0.14)
         parts.push(
-          `<line x1="${text.x}" y1="${y}" x2="${text.x + text.w}" y2="${y}" stroke="${RULE}" stroke-width="3"/>`
+          `<line x1="${text.x}" y1="${y}" x2="${text.x + text.w}" y2="${y}" stroke="${theme.rule}" stroke-width="3"/>`
         )
       }
       // A strip of tape holding the card down.
-      parts.push(
-        `<rect x="${r1(card.x + card.w / 2 - 110)}" y="${card.y - 34}" width="220" height="72" fill="${page.accent}" opacity="0.8" transform="rotate(${r1((rand() - 0.5) * 8)} ${r1(card.x + card.w / 2)} ${card.y})"/>`
-      )
+      parts.push(theme.cardTape(card, page.accent, rand))
       blocked.push(keepOut(card, 70))
     } else {
       blocked.push(keepOut(text, 50))
@@ -209,18 +389,9 @@ function pageSvg(page, index) {
     const y = 110 + rand() * (H - 220)
     const box = { x: x - size, y: y - size, w: size * 2, h: size * 2 }
     if (blocked.some((b) => overlaps(b, box))) continue
-    const kind = Math.floor(rand() * 4)
-    const fill = rand() < 0.6 ? page.accent : INK
-    if (kind === 0) parts.push(star(x, y, size, fill))
-    else if (kind === 1) parts.push(heart(x, y, size, fill))
-    else if (kind === 2)
-      parts.push(`<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(size * 0.35)}" fill="${fill}"/>`)
-    else {
-      const len = size * 3
-      const wide = { x: x - 10, y: y - 40, w: len + 20, h: 80 }
-      if (blocked.some((b) => overlaps(b, wide)) || x + len > W - 110) continue
-      parts.push(squiggle(x, y, len, fill))
-    }
+    const doodle = theme.doodle(x, y, size, rand, page.accent, blocked)
+    if (doodle === null) continue
+    parts.push(doodle)
     blocked.push(box)
     placed++
   }
@@ -232,34 +403,7 @@ function pageSvg(page, index) {
 
 function decorationSvg(deco) {
   const { width: w, height: h, margin: m, style } = deco
-  const vw = w + 2 * m
-  const vh = h + 2 * m
-  const parts = []
-  if (style === 'tape') {
-    const tape = (cx, cy, rot) => {
-      const tw = Math.min(260, w * 0.5)
-      const th = 92
-      return (
-        `<g transform="rotate(${rot} ${cx} ${cy})">` +
-        `<rect x="${r1(cx - tw / 2)}" y="${r1(cy - th / 2)}" width="${r1(tw)}" height="${th}" fill="#f4ead2" opacity="0.88"/>` +
-        `<rect x="${r1(cx - tw / 2)}" y="${r1(cy - th / 2 + 18)}" width="${r1(tw)}" height="8" fill="#e6d6b4" opacity="0.9"/>` +
-        `<rect x="${r1(cx - tw / 2)}" y="${r1(cy + th / 2 - 26)}" width="${r1(tw)}" height="8" fill="#e6d6b4" opacity="0.9"/>` +
-        `</g>`
-      )
-    }
-    parts.push(tape(m + w / 2, m + 8, -4), tape(m + w / 2, m + h - 8, 3))
-  } else {
-    const c = 120
-    const corner = (x, y, sx, sy) =>
-      `<path d="M${x} ${y} l${sx * c} 0 l${-sx * c} ${sy * c} Z" fill="${INK}" transform="translate(${-sx * 18} ${-sy * 18})"/>`
-    parts.push(
-      corner(m, m, 1, 1),
-      corner(m + w, m, -1, 1),
-      corner(m, m + h, 1, -1),
-      corner(m + w, m + h, -1, -1)
-    )
-  }
-  return svg(vw, vh, parts)
+  return svg(w + 2 * m, h + 2 * m, theme.decorations[style](w, h, m))
 }
 
 function svg(w, h, parts) {

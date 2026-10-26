@@ -8,6 +8,8 @@
     "id": "ID"
   },
   "common": {
+    "all": "Semua",
+    "categories": "Kategori",
     "loading": "Memuat…",
     "tryAgain": "Coba lagi",
     "backHome": "Kembali ke beranda",
@@ -777,7 +779,13 @@
     "kraft": "Kraft",
     "layoutLabel": "Kisi",
     "layout4x1": "4×1",
-    "layout2x2": "2×2"
+    "layout2x2": "2×2",
+    "categories": {
+      "minimal": "Minimalis",
+      "cute": "Imut",
+      "retro": "Retro",
+      "aesthetic": "Estetik"
+    }
   },
   "capture": {
     "takingPhotos": "Mengambil foto… {{taken}}/{{total}}",
@@ -976,12 +984,23 @@
     "confetti": "Konfeti",
     "checker": "Kotak-kotak",
     "sky": "Langit",
+    "blue": "Biru",
+    "curtain": "Gorden",
+    "beach": "Pantai",
+    "lake": "Danau",
+    "villa": "Vila",
+    "nightSky": "Langit malam",
     "downloading": "Menyiapkan penghapus latar… {{percent}}%",
     "working": "Menghapus latar… {{done}} dari {{total}}",
     "failed": "Latar tidak bisa dihapus di perangkat ini.",
     "retry": "Coba lagi",
     "waitCreate": "Tunggu latar selesai, atau pilih Asli.",
-    "unsupported": "Ganti latar tidak tersedia di perangkat ini — perlu browser yang lebih baru."
+    "unsupported": "Ganti latar tidak tersedia di perangkat ini — perlu browser yang lebih baru.",
+    "categories": {
+      "colors": "Warna",
+      "patterns": "Motif",
+      "scenery": "Pemandangan"
+    }
   },
   "filters": {
     "none": "Asli",
@@ -1024,7 +1043,14 @@
     "bunnyYellow": "Kelinci Kuning",
     "cat": "Kucing",
     "snail": "Siput",
-    "tipShort": "Ketuk untuk menaruh, seret untuk memindah, sudutnya untuk mengubah ukuran."
+    "tipShort": "Ketuk untuk menaruh, seret untuk memindah, sudutnya untuk mengubah ukuran.",
+    "categories": {
+      "love": "Cinta",
+      "animals": "Hewan",
+      "nature": "Alam",
+      "sparkle": "Kilau",
+      "fun": "Seru"
+    }
   },
   "result": {
     "composing": "Menyusun strip kamu…",
@@ -1640,7 +1666,8 @@
   },
   "scrapbook": {
     "templates": {
-      "kraftNotes": "Kraft notes"
+      "kraftNotes": "Kraft notes",
+      "pinkGingham": "Gingham pink"
     },
     "states": {
       "draft": "Draf",
