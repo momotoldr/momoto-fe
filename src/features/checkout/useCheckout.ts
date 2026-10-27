@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 import { ANALYTICS_EVENTS, trackEvents } from '@/analytics'
 import ApiError from '@/api/apiError'
@@ -11,6 +12,7 @@ import {
   PaymentInProgressError,
 } from '@/api/services/paymentsService'
 import { env } from '@/env'
+import i18n from '@/lib/i18n'
 import type { PaymentAttempt, PaymentMethod } from '@/types/stripType'
 
 /**
@@ -147,10 +149,16 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
           resume(error.payment)
           return
         }
-        trackEvents(ANALYTICS_EVENTS.PAYMENT_FAILED, {
-          code: error instanceof ApiError && error.code ? error.code : 'charge_failed',
-          item,
-        })
+        const code = error instanceof ApiError && error.code ? error.code : 'charge_failed'
+        trackEvents(ANALYTICS_EVENTS.PAYMENT_FAILED, { code, item })
+        // The price moved during the seconds the charge took (a promo spent or lost in
+        // between, docs/PLAN-promos.md §8a). Nothing was charged; the cart re-prices, so
+        // say what happened and let them look again rather than call it a failed payment.
+        if (code === 'price_changed') {
+          toast.error(i18n.t('checkout.priceChanged'))
+          setPhase('closed')
+          return
+        }
         setPhase('failed')
       }
     },

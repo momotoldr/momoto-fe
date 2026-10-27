@@ -1662,7 +1662,8 @@
     "saveQr": "Simpan QR",
     "qrSaveError": "Gagal menyimpan kode QR.",
     "successScrapbook": "Pembayaran selesai — scrapbook-mu sudah terbuka!",
-    "successMixed": "Pembayaran selesai — semua yang kamu pilih sudah terbuka!"
+    "successMixed": "Pembayaran selesai — semua yang kamu pilih sudah terbuka!",
+    "priceChanged": "Harganya berubah saat pembayaran dibuka. Belum ada yang ditagih — cek keranjangmu lalu coba lagi."
   },
   "scrapbook": {
     "templates": {
@@ -1877,6 +1878,48 @@
       "strips_2x2": "Strip 2×2",
       "fillNote": "Hanya strip yang sudah dibuka yang bisa dipasang. Semua tempat strip harus terisi untuk menyelesaikan — tulisan opsional.",
       "used": "{{used}} dari {{limit}} scrapbook terpakai"
+    }
+  },
+  "promos": {
+    "partner": {
+      "tag": "Hubungkan pasanganmu",
+      "lead": "Beli 1 Gratis 1",
+      "headline": "strip untuk kalian berdua"
+    },
+    "ready": {
+      "tag": "Beli 1 Gratis 1 siap",
+      "headline": "2 strip cuma {{price}}"
+    },
+    "bundle": {
+      "tag": "Penawaran terbatas",
+      "headline_one": "Scrapbook + {{count}} strip cuma {{price}}",
+      "headline_other": "Scrapbook + {{count}} strip cuma {{price}}"
+    },
+    "dismiss": "Sembunyikan 7 hari",
+    "partnerLine": "strip untuk kalian berdua setelah terhubung.",
+    "earned": "Terhubung! Kalian berdua dapat Beli 1 Gratis 1 untuk strip.",
+    "tagBogo": "Beli 1 Gratis 1",
+    "tagBundle": "Paket",
+    "checkout": {
+      "bundleTag": "Paket Scrapbook",
+      "applied": "Diterapkan",
+      "selectScrapbook": "Pilih scrapbook",
+      "selectStrips_one": "Pilih {{count}} strip lagi",
+      "selectStrips_other": "Pilih {{count}} strip lagi"
+    },
+    "chip": "Promo · {{name}}",
+    "chipBundle": "Diskon scrapbook {{percent}}%",
+    "modal": {
+      "bundleTag": "Penawaran terbatas · diskon {{percent}}%",
+      "bundleText": "Checkout scrapbook bareng {{count}} strip fotomu dan nikmati potongan harga untuk semua item!",
+      "readyText": "Intip hadiahmu sekarang: buka 2 strip, 1-nya Momo yang traktir!",
+      "partnerText": "Tautkan akunmu bareng doi, langsung dapet promo Buy 1 Get 1 buat kalian berdua!",
+      "later": "Nanti saja",
+      "goToCart": "Ke keranjang",
+      "startScrapbook": "Mulai scrapbook",
+      "startStrip": "Ambil strip",
+      "invite": "Undang pasanganmu",
+      "signInToInvite": "Masuk untuk mengundang"
     }
   }
 }

@@ -34,6 +34,8 @@ interface ImportMetaEnv {
   readonly VITE_SCRAPBOOK_ENABLED?: string
   /** Display-only scrapbook price; unset shows a placeholder. The server charges its own. */
   readonly VITE_SCRAPBOOK_PRICE_IDR?: string
+  readonly VITE_PARTNER_PROMO_ENABLED?: string
+  readonly VITE_BUNDLE_PROMO_ENABLED?: string
   /** Set to "true" to send tracking events to momoto-analytics (needs the URL below). */
   readonly VITE_ANALYTICS_ENABLED?: string
   /** momoto-analytics, e.g. https://e-staging.momotoldr.com. */

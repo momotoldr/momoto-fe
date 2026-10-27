@@ -65,6 +65,10 @@ export interface PaymentAttempt {
   scrapbookIds: string[]
   /** How many strips (scrapbooks not included). */
   count: number
+  /** Priced with the partner buy 1 get 1 (docs/PLAN-promos.md). */
+  bogo: boolean
+  /** How many scrapbook bundles (one scrapbook + 3 strips each) priced it. */
+  bundled: number
 }
 
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled'
@@ -90,6 +94,10 @@ export interface PaymentOrder {
   scrapbooks: { id: string; title: string; coverUrl: string | null }[]
   createdAt: string
   paidAt: string | null
+  /** Priced with the partner buy 1 get 1. */
+  bogo: boolean
+  /** How many scrapbook bundles (one scrapbook + 3 strips each) priced it. */
+  bundled: number
 }
 
 /** What `GET /payments` hands back. */
