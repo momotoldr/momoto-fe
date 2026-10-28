@@ -85,3 +85,19 @@
 .linkedIcon {
   @apply h-4 w-4 shrink-0 text-rose-600;
 }
+
+/* The partner promo, said once above the two boxes (docs/PLAN-promos.md §5b). Rose, like
+ * the promo's card on the page above. */
+.promoLine {
+  @apply mb-4 flex items-center gap-2 rounded-xl px-3 py-2.5 text-[0.8125rem] leading-[1.45];
+  background: #fff1f2;
+  color: #9f1239;
+}
+
+.promoIcon {
+  @apply h-4 w-4 shrink-0;
+}
+
+.promoLead {
+  @apply font-extrabold;
+}

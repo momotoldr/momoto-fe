@@ -24,13 +24,16 @@ import { ROUTES } from '@/constants/routes'
 import { cartItems } from '@/features/gallery/selectors'
 import { env } from '@/env'
 import { CheckoutModal } from '@/features/checkout/CheckoutModal'
+import { CheckoutPromos } from '@/features/checkout/CheckoutPromos'
 import { useCheckout } from '@/features/checkout/useCheckout'
+import { useQuote } from '@/features/checkout/useQuote'
 import { useCountdown } from '@/features/checkout/useCountdown'
 import { formatIdr } from '@/features/profile/profileData'
 import { CartScrapbookCard } from '@/features/scrapbook/CartScrapbookCard'
 import { cn } from '@/lib/utils'
 import { reopenScrapbook, unlockScrapbook } from '@/api/services/scrapbooksService'
 import { useCartStore } from '@/store/useCartStore'
+import { usePromoStore } from '@/store/usePromoStore'
 import { useScrapbookStore } from '@/store/useScrapbookStore'
 import type { ScrapbookSummary } from '@/types/scrapbookType'
 import type { StoredStrip } from '@/types/stripType'
@@ -121,6 +124,14 @@ export function CartPage() {
     void load()
   }, [load])
 
+  // The soft-launch promos (docs/PLAN-promos.md): their tags and struck-through prices.
+  // The amounts themselves always come from the server's quote.
+  const promos = usePromoStore((state) => state.promos)
+  const loadPromos = usePromoStore((state) => state.load)
+  useEffect(() => {
+    void loadPromos()
+  }, [loadPromos])
+
   // Finished scrapbooks wait here until they're paid for (user decision, 2026-10-17): the
   // cart is where every payment happens. They leave the shelf while they're here, and go
   // back to it once paid. Each is a cart item like a strip — it takes a slot, and it can
@@ -174,8 +185,9 @@ export function CartPage() {
     choose: chooseMethod,
   } = useCheckout(async (wasVisible) => {
     setSelected(new Set())
-    // Paid strips leave for the gallery, paid scrapbooks for the shelf.
-    await Promise.all([load(), env.scrapbookEnabled ? loadShelf() : undefined])
+    // Paid strips leave for the gallery, paid scrapbooks for the shelf; a promo it used
+    // is spent.
+    await Promise.all([load(), env.scrapbookEnabled ? loadShelf() : undefined, loadPromos()])
     // The modal says this itself when it is open; a toast as well would say it twice.
     if (!wasVisible) {
       const { stripIds, scrapbookIds } = checkoutSelection
@@ -193,6 +205,9 @@ export function CartPage() {
       })
     }
   })
+
+  // The open checkout's own price — it can be one card's Unlock, not what's ticked.
+  const checkoutQuote = useQuote(checkoutPhase === 'closed' ? null : checkoutSelection)
 
   // Same clock the modal shows, so the banner and the QR never disagree.
   const liveCountdown = useCountdown(liveAttempt?.expiresAt ?? null)
@@ -243,8 +258,29 @@ export function CartPage() {
     if (scrapbookPrice === null) return null
     return env.stripPrintPriceIdr * strips + scrapbookPrice * scrapbookCount
   }
-  const selectedTotal = totalOf(selectedStrips.length, selectedScrapbooks.length)
+  // The server's price for what's ticked, promos applied; list prices until it answers.
+  const selectedQuote = useQuote(
+    payEnabled && selectedCount > 0
+      ? {
+          stripIds: selectedStrips.map((strip) => strip.id),
+          scrapbookIds: selectedScrapbooks.map((scrapbook) => scrapbook.id),
+        }
+      : null
+  )
+  const selectedTotal =
+    selectedQuote?.grossAmount ?? totalOf(selectedStrips.length, selectedScrapbooks.length)
   const totalLabel = selectedTotal === null ? '' : formatIdr(selectedTotal)
+  // Whether to strike the list total: only when a promo its own UI flag shows priced it.
+  // With one off, the total is still the server's, just not dressed as a deal.
+  const selectedBogo = env.partnerPromoEnabled && selectedQuote?.bogo === true
+  const selectedBundled = env.bundlePromoEnabled && (selectedQuote?.bundles ?? 0) > 0
+  const selectedList =
+    (selectedBogo || selectedBundled) &&
+    selectedQuote?.listAmount != null &&
+    selectedQuote.grossAmount != null &&
+    selectedQuote.listAmount > selectedQuote.grossAmount
+      ? formatIdr(selectedQuote.listAmount)
+      : null
 
   const dateFmt = useMemo(
     () =>
@@ -538,6 +574,9 @@ export function CartPage() {
         <div className={styles.cardBody}>
           <figcaption className={styles.meta}>
             {dateFmt.format(new Date(strip.createdAt))}
+            {/* The list price, as the scrapbook card shows its own; promos are priced in
+                the checkout bar. Only while there's checkout to price it in. */}
+            {payEnabled && ` · ${formatIdr(env.stripPrintPriceIdr)}`}
           </figcaption>
 
           {awaitingPayment && (
@@ -886,6 +925,16 @@ export function CartPage() {
 
       {payEnabled && selectedCount > 0 && (
         <div className={styles.checkoutBar}>
+          {/* The promos this checkout could use: applied, or what to tick for them. */}
+          <div className={styles.checkoutPromos}>
+            <CheckoutPromos
+              promos={promos}
+              strips={selectedStrips.length}
+              scrapbooks={selectedScrapbooks.length}
+              cartHasScrapbook={scrapbooks.length > 0}
+              quote={selectedQuote}
+            />
+          </div>
           <div className={styles.checkoutBarInner}>
             <div className={styles.checkoutInfo}>
               <div className={styles.checkoutFigures}>
@@ -894,7 +943,10 @@ export function CartPage() {
                     ? t('cart.selectedCount', { count: selectedCount })
                     : t('cart.selectedItems', { count: selectedCount })}
                 </span>
-                <span className={styles.checkoutTotal}>{totalLabel}</span>
+                <span className={styles.checkoutTotal}>
+                  {totalLabel}
+                  {selectedList && <s className={styles.checkoutList}>{selectedList}</s>}
+                </span>
               </div>
               <span className={styles.checkoutDivider} aria-hidden="true" />
               <button
@@ -972,10 +1024,14 @@ export function CartPage() {
         attempt={attempt}
         strips={checkoutSelection.stripIds.length}
         scrapbooks={checkoutSelection.scrapbookIds.length}
-        grossAmount={totalOf(
-          checkoutSelection.stripIds.length,
-          checkoutSelection.scrapbookIds.length
-        )}
+        grossAmount={
+          checkoutQuote?.grossAmount ??
+          totalOf(checkoutSelection.stripIds.length, checkoutSelection.scrapbookIds.length)
+        }
+        promo={{
+          bogo: env.partnerPromoEnabled && (attempt?.bogo ?? checkoutQuote?.bogo ?? false),
+          bundled: env.bundlePromoEnabled ? (attempt?.bundled ?? checkoutQuote?.bundles ?? 0) : 0,
+        }}
         onChoose={(method) => void chooseMethod(method)}
         onClose={closeCheckout}
       />

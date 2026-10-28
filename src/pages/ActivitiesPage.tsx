@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 
 import { useTrackPageView } from '@/analytics'
 import { ACTIVITIES } from '@/constants/activities'
+import { PromoChip } from '@/features/promos/PromoChip'
+import { type PromoCardKind, useActivityPromos } from '@/features/promos/promoState'
 
 import styles from './ActivitiesPage.module.scss'
 
@@ -95,6 +97,9 @@ export function ActivitiesPage() {
   useTrackPageView()
   const { t } = useTranslation()
 
+  // The promo chip on each activity card (docs/PLAN-promos.md).
+  const activityPromo = useActivityPromos()
+
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
@@ -137,13 +142,19 @@ export function ActivitiesPage() {
                 </div>
                 <p className={styles.liveDesc}>{t(`activities.items.${activity.key}.desc`)}</p>
 
-                {modes.length > 0 && (
+                {(modes.length > 0 || activityPromo[activity.key]) && (
                   <div className={styles.modes}>
                     {modes.map((mode) => (
                       <span key={mode} className={styles.mode}>
                         {t(`activities.modes.${mode}`)}
                       </span>
                     ))}
+                    {activityPromo[activity.key] && (
+                      <PromoChip
+                        kind={activityPromo[activity.key] as PromoCardKind}
+                        placement="activities"
+                      />
+                    )}
                   </div>
                 )}
 

@@ -30,6 +30,11 @@ interface CheckoutModalProps {
    * charge returns the real one.
    */
   grossAmount: number | null
+  /**
+   * The promos that priced it (docs/PLAN-promos.md), each already gated on its UI flag:
+   * shown as tags under the total.
+   */
+  promo: { bogo: boolean; bundled: number }
   onChoose: (method: PaymentMethod) => void
   onClose: () => void
 }
@@ -48,6 +53,7 @@ export function CheckoutModal({
   strips,
   scrapbooks,
   grossAmount,
+  promo,
   onChoose,
   onClose,
 }: CheckoutModalProps) {
@@ -128,6 +134,14 @@ export function CheckoutModal({
             <p className={styles.subtitle}>
               {total === null ? items : t('checkout.summary', { items, total: formatIdr(total) })}
             </p>
+            {(promo.bogo || promo.bundled > 0) && (
+              <p className={styles.promoTags}>
+                {promo.bogo && <span className={styles.promoTagRose}>{t('promos.tagBogo')}</span>}
+                {promo.bundled > 0 && (
+                  <span className={styles.promoTagMint}>{t('promos.tagBundle')}</span>
+                )}
+              </p>
+            )}
           </div>
           <button
             type="button"

@@ -79,10 +79,13 @@ export const API_ROUTES = {
     RESET_PASSWORD: '/auth/reset-password',
   },
 
+  /** The soft-launch promos and where the caller stands. `GET /promos` → `Promos`. */
+  PROMOS: '/promos',
+
   PARTNER: {
     /** Mint an invite code to share. `POST /partner/invite` → `{ code, expiresAt }`. */
     INVITE: '/partner/invite',
-    /** Link accounts with a code. `POST /partner/accept` → `{ user }`. */
+    /** Link accounts with a code. `POST /partner/accept` → `{ user, promo }`. */
     ACCEPT: '/partner/accept',
     /** Unlink the partner. `DELETE /partner` → `{ user }`. */
     ROOT: '/partner',
@@ -189,6 +192,11 @@ export const API_ROUTES = {
     ROOT: '/payments',
     /** Open a payment on one channel. `POST /payments/charge`. */
     CHARGE: '/payments/charge',
+    /**
+     * What a selection would cost with the promos applied, nothing charged.
+     * `POST /payments/quote` `{ stripIds, scrapbookIds }` → `PaymentQuote`.
+     */
+    QUOTE: '/payments/quote',
     /** The live attempt to resume, if any. `GET /payments/pending`. */
     PENDING: '/payments/pending',
     /** Save the attempt's QR image. `GET /payments/:orderId/qr`. */
