@@ -11,8 +11,11 @@ import { resolveBackdrop } from '@/constants/backdrops'
 import { SHOT_COUNT } from '@/constants/capture'
 import { ROUTES } from '@/constants/routes'
 import { env } from '@/env'
+import { PromoCard } from '@/features/promos/PromoCard'
+import { resultCard, type PromoCardKind } from '@/features/promos/promoState'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useCartStore } from '@/store/useCartStore'
+import { usePromoStore } from '@/store/usePromoStore'
 import { useScrapbookStore } from '@/store/useScrapbookStore'
 import { usePhotosStore } from '@/store/usePhotosStore'
 import { useRoomStore } from '@/store/useRoomStore'
@@ -61,6 +64,21 @@ function withSlotsLeft(t: TFunction, message: string, held: number): string {
   return left > LOW_SLOTS ? message : `${message} — ${t('cart.slotsLeft', { count: left })}`
 }
 
+/**
+ * Where the result screen's promo card leads. The partner invite goes to the Partner tab
+ * (through sign-in for a guest); a ready reward to the cart, where this strip just landed;
+ * the bundle to the scrapbook shelf.
+ */
+function promoTarget(kind: PromoCardKind, isAuthenticated: boolean): string {
+  const partnerTab = `${ROUTES.profile}?tab=partner`
+  if (kind === 'partnerInvite') {
+    return isAuthenticated
+      ? partnerTab
+      : `${ROUTES.login}?redirect=${encodeURIComponent(partnerTab)}`
+  }
+  return kind === 'partnerReady' ? ROUTES.cart : ROUTES.scrapbook
+}
+
 /** Composes the captured frames into a strip and offers share / download / retake. */
 export function StripResult({ onRetake, retakeBlockedReason }: StripResultProps) {
   const { t } = useTranslation()
@@ -83,6 +101,15 @@ export function StripResult({ onRetake, retakeBlockedReason }: StripResultProps)
   // Signed-out users can run the whole booth; their strips are cached in the browser and
   // sync to the server cart once they sign in.
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const linked = useAuthStore((state) => Boolean(state.user?.partner))
+  // The soft-launch promo card (docs/PLAN-promos.md §5a): fetched fresh, since this
+  // strip may be the one that makes the reward worth using.
+  const promos = usePromoStore((state) => state.promos)
+  const loadPromos = usePromoStore((state) => state.load)
+  useEffect(() => {
+    void loadPromos()
+  }, [loadPromos, isAuthenticated])
+  const promoCard = resultCard(promos, { isAuthenticated, linked })
   // Read the frozen design snapshot (taken when Create was pressed), not the live
   // store — so a later host filter change can't alter a strip already created.
   const resultConfig = usePhotosStore((state) => state.resultConfig)
@@ -586,6 +613,16 @@ export function StripResult({ onRetake, retakeBlockedReason }: StripResultProps)
                 <p className={styles.noteText}>{t('result.printText')}</p>
               </div>
             </div>
+          )}
+
+          {/* One promo at most, after the watermark note: share first, then why you'd pay,
+           * then how to pay less. */}
+          {promoCard && (
+            <PromoCard
+              kind={promoCard}
+              to={promoTarget(promoCard, isAuthenticated)}
+              placement="result"
+            />
           )}
 
           {/* Asked here rather than from the floating button: this is the moment the

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight, ChevronRight } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -12,6 +12,11 @@ import { Button } from '@/components/ui/button'
 import { notifyMessage } from '@/lib/notify'
 import { cn } from '@/lib/utils'
 import { env } from '@/env'
+import { PromoModal } from '@/features/promos/PromoModal'
+import { partnerCard } from '@/features/promos/promoState'
+import { ROUTES } from '@/constants/routes'
+import { useAuthStore } from '@/store/useAuthStore'
+import { usePromoStore } from '@/store/usePromoStore'
 import {
   GROUP_CAPACITY,
   localRoomCode,
@@ -28,6 +33,19 @@ export function PhotoboothPage() {
   useTrackPageView()
   const { t } = useTranslation()
   const navigate = useNavigate()
+
+  // The partner buy 1 get 1 (docs/PLAN-promos.md), as a pop-up when the booth opens — once
+  // per visit (user, 2026-10-27). An invite leads to the Partner tab (through sign-in for a
+  // guest); a ready reward just closes, since they're about to take the strips it covers.
+  const promos = usePromoStore((s) => s.promos)
+  const loadPromos = usePromoStore((s) => s.load)
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const linked = useAuthStore((s) => Boolean(s.user?.partner))
+  useEffect(() => {
+    void loadPromos()
+  }, [loadPromos, isAuthenticated])
+  const partnerPromo = partnerCard(promos, { isAuthenticated, linked })
+  const partnerTab = `${ROUTES.profile}?tab=partner`
   const [creating, setCreating] = useState(false)
 
   const methods = useForm<JoinRoomValues>({
@@ -252,6 +270,21 @@ export function PhotoboothPage() {
           </form>
         </FormProvider>
       </div>
+
+      <PromoModal
+        kind={partnerPromo}
+        placement="photobooth"
+        action={
+          partnerPromo === 'partnerReady'
+            ? { label: t('promos.modal.startStrip') }
+            : isAuthenticated
+              ? { label: t('promos.modal.invite'), to: partnerTab }
+              : {
+                  label: t('promos.modal.signInToInvite'),
+                  to: `${ROUTES.login}?redirect=${encodeURIComponent(partnerTab)}`,
+                }
+        }
+      />
     </main>
   )
 }

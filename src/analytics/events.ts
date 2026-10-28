@@ -16,6 +16,9 @@
 export type BoothMode = 'solo' | 'date' | 'group'
 export type CommerceItem = 'strips' | 'scrapbook' | 'mixed'
 export type BoothStageName = 'lobby' | 'booth' | 'arrange' | 'result'
+export type PromoName = 'partner' | 'bundle'
+export type PromoPlacement =
+  'result' | 'profile' | 'shelf' | 'activities' | 'landing' | 'photobooth'
 
 /** Every booth event says which booth run it belongs to (a hash of room + start, never the code). */
 type Booth = { boothSessionId: string; mode: BoothMode }
@@ -92,6 +95,13 @@ export type MomotoEvents = {
   scrapbook_finish_failed: { code: string }
   scrapbook_downloaded: Record<string, never>
 
+  // ── Promos (docs/PLAN-promos.md) ──────────────────────────────────────────────
+  /** `promo`: which offer; `state`: the card shown; `placement`: where it was. */
+  promo_card_shown: { promo: PromoName; state: string; placement: PromoPlacement }
+  promo_card_clicked: { promo: PromoName; state: string; placement: PromoPlacement }
+  /** This account just earned the partner buy 1 get 1 by linking. */
+  partner_promo_earned: Record<string, never>
+
   // ── Health ────────────────────────────────────────────────────────────────────
   client_error: { source: string; name: string; messageHash: string; route: string }
   api_failed: { route: string; method: string; status: number; code: string }
@@ -162,6 +172,10 @@ export const ANALYTICS_EVENTS = {
   SCRAPBOOK_FINISHED: 'scrapbook_finished',
   SCRAPBOOK_FINISH_FAILED: 'scrapbook_finish_failed',
   SCRAPBOOK_DOWNLOADED: 'scrapbook_downloaded',
+  // Promos
+  PROMO_CARD_SHOWN: 'promo_card_shown',
+  PROMO_CARD_CLICKED: 'promo_card_clicked',
+  PARTNER_PROMO_EARNED: 'partner_promo_earned',
   // Health
   CLIENT_ERROR: 'client_error',
   API_FAILED: 'api_failed',

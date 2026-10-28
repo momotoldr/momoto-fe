@@ -1,15 +1,18 @@
-import { Check, Copy, Heart, Loader2, Plus } from 'lucide-react'
+import { Check, Copy, Gift, Heart, Loader2, Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { ANALYTICS_EVENTS, trackEvents } from '@/analytics'
 import { acceptInvite, createInvite, unlinkPartner } from '@/api/services/partnerService'
 import { UserAvatar } from '@/components/common/UserAvatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { env } from '@/env'
+import { partnerCard } from '@/features/promos/promoState'
 import { notifyError } from '@/lib/notify'
 import { useAuthStore } from '@/store/useAuthStore'
+import { usePromoStore } from '@/store/usePromoStore'
 import type { User } from '@/types/authType'
 import { avatarSrc } from '@/utils/common'
 
@@ -36,6 +39,12 @@ interface PartnerPanelProps {
 export function PartnerPanel({ user }: PartnerPanelProps) {
   const { t } = useTranslation()
   const setUser = useAuthStore((s) => s.setUser)
+  const promos = usePromoStore((s) => s.promos)
+  const loadPromos = usePromoStore((s) => s.load)
+  // The partner promo's line (docs/PLAN-promos.md §5b), only while a link could earn it.
+  const showPromo =
+    partnerCard(promos, { isAuthenticated: true, linked: Boolean(user.partner) }) ===
+    'partnerInvite'
 
   const [inviteCode, setInviteCode] = useState<string | null>(null)
   const [enteredCode, setEnteredCode] = useState('')
@@ -69,9 +78,16 @@ export function PartnerPanel({ user }: PartnerPanelProps) {
 
   const onAccept = () =>
     run('accept', async () => {
-      setUser(await acceptInvite(enteredCode.trim().toUpperCase()))
+      const { user: linkedUser, promo } = await acceptInvite(enteredCode.trim().toUpperCase())
+      setUser(linkedUser)
       setEnteredCode('')
-      toast.success(t('auth.partner.linked'))
+      if (promo?.partnerBogo === 'earned') {
+        trackEvents(ANALYTICS_EVENTS.PARTNER_PROMO_EARNED, {})
+        toast.success(t('promos.earned'))
+      } else {
+        toast.success(t('auth.partner.linked'))
+      }
+      void loadPromos()
     })
 
   const onUnlink = () =>
@@ -125,6 +141,15 @@ export function PartnerPanel({ user }: PartnerPanelProps) {
 
   return (
     <ProfileCard title={t('auth.partner.title')} subtitle={t('auth.partner.none')}>
+      {showPromo && (
+        <p className={styles.promoLine}>
+          <Gift className={styles.promoIcon} aria-hidden="true" />
+          <span>
+            <strong className={styles.promoLead}>{t('promos.partner.lead')}</strong>{' '}
+            {t('promos.partnerLine')}
+          </span>
+        </p>
+      )}
       <div className={styles.split}>
         <div className={styles.boxAccent}>
           <span className={styles.boxLabel}>{t('auth.partner.inviteTitle')}</span>

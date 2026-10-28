@@ -1669,7 +1669,8 @@
     "saveQr": "Save QR",
     "qrSaveError": "Couldn't save that QR code.",
     "successScrapbook": "Payment complete — your scrapbook is unlocked!",
-    "successMixed": "Payment complete — everything you picked is unlocked!"
+    "successMixed": "Payment complete — everything you picked is unlocked!",
+    "priceChanged": "The price changed while checkout was opening. Nothing was charged — check your cart and try again."
   },
   "scrapbook": {
     "templates": {
@@ -1884,6 +1885,48 @@
       "strips_2x2": "2×2 strips",
       "fillNote": "Only unlocked strips can be placed. Every strip spot needs one to finish — text is optional.",
       "used": "{{used}} of {{limit}} scrapbooks used"
+    }
+  },
+  "promos": {
+    "partner": {
+      "tag": "Link your partner",
+      "lead": "Buy 1 Get 1",
+      "headline": "strips for you both"
+    },
+    "ready": {
+      "tag": "Buy 1 Get 1 ready",
+      "headline": "2 strips for {{price}}"
+    },
+    "bundle": {
+      "tag": "Limited offer",
+      "headline_one": "Scrapbook + {{count}} strip only {{price}}",
+      "headline_other": "Scrapbook + {{count}} strips only {{price}}"
+    },
+    "dismiss": "Hide for 7 days",
+    "partnerLine": "strips for you both once you're linked.",
+    "earned": "Linked! You both got Buy 1 Get 1 on strips.",
+    "tagBogo": "Buy 1 Get 1",
+    "tagBundle": "Bundle",
+    "checkout": {
+      "bundleTag": "Scrapbook bundle",
+      "applied": "Applied",
+      "selectScrapbook": "Select a scrapbook",
+      "selectStrips_one": "Select {{count}} more strip",
+      "selectStrips_other": "Select {{count}} more strips"
+    },
+    "chip": "Promo · {{name}}",
+    "chipBundle": "Scrapbook disc {{percent}}%",
+    "modal": {
+      "bundleTag": "Limited offer · {{percent}}% off",
+      "bundleText": "Check out your scrapbook together with {{count}} photo strips and get a discount on all items!",
+      "readyText": "Peek at your gift now: unlock 2 strips, and Momo covers the second one!",
+      "partnerText": "Link accounts with your partner and instantly score a Buy 1 Get 1 deal for both of you!",
+      "later": "Maybe later",
+      "goToCart": "Go to cart",
+      "startScrapbook": "Start a scrapbook",
+      "startStrip": "Take a strip",
+      "invite": "Invite your partner",
+      "signInToInvite": "Sign in to invite"
     }
   }
 }

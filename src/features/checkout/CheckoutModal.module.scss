@@ -101,3 +101,25 @@
 .saveQrIcon {
   @apply h-3.5 w-3.5;
 }
+
+/* The promos that priced this order (docs/PLAN-promos.md), in their cards' colours. */
+.promoTags {
+  @apply mt-1.5 flex flex-wrap gap-1.5;
+}
+
+.promoTagRose,
+.promoTagMint {
+  @apply rounded-full border px-2 py-0.5 font-mono text-[0.625rem] uppercase tracking-[0.1em];
+}
+
+.promoTagRose {
+  border-color: #fecdd3;
+  background: #fff1f2;
+  color: #be123c;
+}
+
+.promoTagMint {
+  border-color: #a7f3d0;
+  background: #ecfdf5;
+  color: #047857;
+}

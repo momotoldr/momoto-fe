@@ -8,6 +8,8 @@ import { LandingStats } from '@/components/landing/LandingStats'
 import { LandingTestimonials } from '@/components/landing/LandingTestimonials'
 import { ACTIVITIES } from '@/constants/activities'
 import { ROUTES } from '@/constants/routes'
+import { PromoChip } from '@/features/promos/PromoChip'
+import { useActivityPromos } from '@/features/promos/promoState'
 
 import styles from './LandingPage.module.scss'
 
@@ -67,6 +69,8 @@ export function LandingPage() {
   const { t } = useTranslation()
   const [activeHow, setActiveHow] = useState(ACTIVITIES[0].key)
   const steps = ACTIVITY_STEPS[activeHow] ?? []
+  // The promo chip on each activity card (docs/PLAN-promos.md), as on /activities.
+  const activityPromo = useActivityPromos()
 
   /** The activity picker is a tab row on desktop and a dropdown on phones, where four
    * tabs would either wrap or scroll out of sight. Both render; CSS shows one. */
@@ -265,6 +269,9 @@ export function LandingPage() {
               <div className={styles.liveText}>
                 <h3 className={styles.liveTitle}>{t(`activities.items.${activity.key}.title`)}</h3>
                 <p className={styles.liveDesc}>{t(`activities.items.${activity.key}.desc`)}</p>
+                {activityPromo[activity.key] && (
+                  <PromoChip kind={activityPromo[activity.key]!} placement="landing" />
+                )}
               </div>
               <span className={styles.pillDark}>
                 {t(`activities.items.${activity.key}.open`, {

@@ -172,7 +172,7 @@ $hero-gradient: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 46%, #d9ffea 100%);
 /* How the booth can be played — the same three words the landing strips are taped
  * with, here as chips under the description. */
 .modes {
-  @apply flex items-center gap-2 lg:gap-2.5 lg:pt-0.5;
+  @apply flex flex-wrap items-center gap-2 lg:gap-2.5 lg:pt-0.5;
 }
 
 .mode {

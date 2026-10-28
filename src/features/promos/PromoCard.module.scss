@@ -1,0 +1,72 @@
+/* A soft-launch promo as a one-glance banner (mockup "Momoto promo cards"): tag and one
+ * bold line on the left, an illustration bleeding off the right and bottom edges. The
+ * colours are fixed rather than themed: the art is drawn for a light tint, and the card
+ * reads as a printed sticker on either theme. */
+
+.card {
+  @apply relative h-[6.5rem] w-full overflow-hidden rounded-[1.25rem] border;
+  color: #0f172a;
+}
+
+.rose {
+  border-color: #fecdd3;
+  background: #fff1f2;
+  --promo-accent: #be123c;
+}
+
+.mint {
+  border-color: #a7f3d0;
+  background: #ecfdf5;
+  --promo-accent: #047857;
+}
+
+/* The whole card is the link. */
+.link {
+  @apply absolute inset-0 flex items-center no-underline outline-none;
+  color: inherit;
+
+  &:focus-visible {
+    @apply rounded-[1.25rem] ring-2 ring-offset-2;
+    --tw-ring-color: var(--promo-accent);
+  }
+}
+
+.text {
+  @apply flex min-w-0 flex-1 flex-col gap-1 py-0 pl-[1.125rem] pr-2;
+}
+
+.tag {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em];
+  color: var(--promo-accent);
+}
+
+.headline {
+  @apply text-base font-bold leading-[1.25] tracking-[-0.01em];
+  text-wrap: pretty;
+}
+
+/* "Buy 1 Get 1" leads the partner line in the promo's colour: it's the hook. */
+.lead {
+  @apply font-extrabold;
+  color: var(--promo-accent);
+}
+
+.art {
+  @apply h-[6.5rem] w-[8.75rem] shrink-0;
+}
+
+/* The profile's "hide for 7 days": a 44px target, drawn as a small disc over the art. */
+.dismiss {
+  @apply absolute right-0 top-0 flex h-11 w-11 items-center justify-center border-0 bg-transparent p-0;
+}
+
+.dismissDisc {
+  @apply flex h-[1.625rem] w-[1.625rem] items-center justify-center rounded-full;
+  background: rgb(255 255 255 / 90%);
+  color: #475569;
+  box-shadow: 0 1px 3px rgb(15 23 42 / 15%);
+
+  svg {
+    @apply h-3.5 w-3.5;
+  }
+}

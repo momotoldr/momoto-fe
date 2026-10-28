@@ -6,7 +6,11 @@ import { Link } from 'react-router-dom'
 import { useTrackPageView } from '@/analytics'
 import { ROUTES } from '@/constants/routes'
 import { DEFAULT_SCRAPBOOK_TEMPLATE_ID, getScrapbookTemplate } from '@/constants/scrapbookTemplates'
+import { env } from '@/env'
+import { PromoModal } from '@/features/promos/PromoModal'
+import { bundleOn } from '@/features/promos/promoState'
 import { cn } from '@/lib/utils'
+import { usePromoStore } from '@/store/usePromoStore'
 import { useScrapbookStore } from '@/store/useScrapbookStore'
 import type { ScrapbookSummary } from '@/types/scrapbookType'
 
@@ -97,6 +101,18 @@ export function ScrapbookShelfPage() {
   }
 
   const steps = [1, 2, 3] as const
+
+  // The scrapbook bundle (docs/PLAN-promos.md), as a pop-up when the shelf opens — once
+  // per visit (user, 2026-10-27; it replaced a card on the page). A finished book is
+  // already waiting in the cart, so it leads there; otherwise to starting one. Only with
+  // payments on — dark, everything unlocks free.
+  const promos = usePromoStore((s) => s.promos)
+  const loadPromos = usePromoStore((s) => s.load)
+  useEffect(() => {
+    void loadPromos()
+  }, [loadPromos])
+  const showBundle = env.paymentsEnabled && bundleOn(promos)
+  const bundleToCart = full || shelf.some((scrapbook) => scrapbook.state === 'finished')
 
   return (
     <div className={styles.page}>
@@ -195,6 +211,16 @@ export function ScrapbookShelfPage() {
 
         {shelfBody}
       </section>
+
+      <PromoModal
+        kind={showBundle ? 'bundle' : null}
+        placement="shelf"
+        action={
+          bundleToCart
+            ? { label: t('promos.modal.goToCart'), to: ROUTES.cart }
+            : { label: t('promos.modal.startScrapbook'), to: ROUTES.scrapbookNew }
+        }
+      />
     </div>
   )
 }
