@@ -87,8 +87,6 @@ export const API_ROUTES = {
     INVITE: '/partner/invite',
     /** Link accounts with a code. `POST /partner/accept` → `{ user, promo }`. */
     ACCEPT: '/partner/accept',
-    /** Unlink the partner. `DELETE /partner` → `{ user }`. */
-    ROOT: '/partner',
   },
 
   ROOMS: {
