@@ -25,9 +25,3 @@ export async function acceptInvite(
   )
   return { user: data.user, promo: data.promo ?? null }
 }
-
-/** Unlink the current partner; returns the updated user. */
-export async function unlinkPartner(): Promise<User> {
-  const { data } = await partnerClient.deleteData<MeResponse>(API_ROUTES.PARTNER.ROOT)
-  return data.user
-}

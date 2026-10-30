@@ -450,7 +450,7 @@
           },
           "partner": {
             "q": "How do I link with my partner?",
-            "a": "Linking connects two accounts as a couple. Each account can be linked with one partner at a time, and either of you can unlink whenever you like.",
+            "a": "Linking connects two accounts as a couple. Each account can be linked with one partner, and the link is permanent — it can't be undone once made.",
             "steps": [
               "Go to Profile → Partner and generate an invite code.",
               "Send the code to your partner — it expires 24 hours after you make it.",
@@ -585,7 +585,7 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: September 14, 2026",
+    "lastUpdated": "Last updated: October 29, 2026",
     "intro": "Your privacy matters to us. This Privacy Policy explains what little information Momoto handles when you use our playful date experiences at momoto, and how we keep your photos and moments yours. Momoto is designed to be privacy-conscious: your photos are made right in your browser, and we keep what we store to the minimum needed to run your account, save the strips you choose to keep, and handle any prints you buy.",
     "sections": {
       "collect": {
@@ -622,7 +622,7 @@
         "title": "Who We Share Data With",
         "body": [
           "In a session, the only \"sharing\" is the live camera and audio you send directly to the friend you invited during a Date session — you choose who that is.",
-          "If you're signed in and leave a comment with a 4 or 5-star rating beside a strip, we may feature it on our website as a testimonial, together with your display name, your city or country, your uploaded profile picture and your rating. If your account is linked to a partner at the time, their display name, city or country and uploaded profile picture may appear alongside yours. To have a testimonial removed, contact us using the details below — unlinking also removes your partner from it.",
+          "If you're signed in and leave a comment with a 4 or 5-star rating beside a strip, we may feature it on our website as a testimonial, together with your display name, your city or country, your uploaded profile picture and your rating. If your account is linked to a partner at the time, their display name, city or country and uploaded profile picture may appear alongside yours. To have a testimonial removed, contact us using the details below.",
           "Behind the scenes we rely on standard infrastructure providers (for hosting and for the connection-relay servers that WebRTC needs), and — when you buy a print — a payment provider (Midtrans) to process the transaction, purely to deliver the service. We don't sell or rent your information to anyone."
         ]
       },
@@ -655,7 +655,7 @@
         "title": "Your Account",
         "body": [
           "Your account holds your email, a hashed password (or a linked Google identity), your display name, an optional avatar, and an optional city (or country, if you live outside Indonesia). You can update these any time on your profile page.",
-          "You may link your account with a partner using a one-time invite code; either of you can unlink at any time. To delete your account and its data, contact us using the details below."
+          "You may link your account with a partner using a one-time invite code; a link is permanent and can't be undone, though it ends if either account is deleted. To delete your account and its data, contact us using the details below."
         ]
       }
     }
@@ -1455,8 +1455,6 @@
       "title": "Your partner",
       "none": "Link with your partner to share moments as a couple.",
       "linkedWith": "Linked with {{name}}",
-      "unlink": "Unlink",
-      "unlinked": "Partner unlinked.",
       "inviteTitle": "Invite your partner",
       "generate": "Generate invite code",
       "codeHint": "Share this code with your partner. It expires in 24 hours.",
@@ -1465,10 +1463,9 @@
       "accept": "Link partner",
       "linked": "You're now linked!",
       "linkedHint": "Your strips are shared as a couple and Date sessions are unlocked.",
-      "unlinkHint": "Unlinking stops sharing new strips. Nothing already saved is deleted.",
       "generating": "Generating…",
-      "generateHint": "We make a code you can send to your partner. It expires 24 hours after you generate it.",
-      "acceptHint": "Linking shares your strips as a couple and unlocks Date sessions.",
+      "generateHint": "We make a code you can send to your partner. It expires 24 hours after you generate it. Once linked, it can't be undone.",
+      "acceptHint": "Linking shares your strips as a couple and unlocks Date sessions. A link is permanent.",
       "copy": "Copy",
       "copied": "Copied",
       "copyFailed": "Couldn't copy — select the code and copy it yourself."
