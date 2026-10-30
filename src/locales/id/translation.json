@@ -449,7 +449,7 @@
           },
           "partner": {
             "q": "Bagaimana cara menautkan akun dengan pasangan?",
-            "a": "Menautkan menghubungkan dua akun sebagai pasangan. Setiap akun hanya bisa ditautkan dengan satu pasangan dalam satu waktu, dan kalian berdua bisa memutus tautan kapan saja.",
+            "a": "Menautkan menghubungkan dua akun sebagai pasangan. Setiap akun hanya bisa ditautkan dengan satu pasangan, dan tautannya permanen — tidak bisa dibatalkan setelah dibuat.",
             "steps": [
               "Buka Profil → Pasangan dan buat kode undangan.",
               "Kirim kodenya ke pasanganmu — kode kedaluwarsa 24 jam setelah dibuat.",
@@ -584,7 +584,7 @@
   },
   "privacy": {
     "title": "Kebijakan Privasi",
-    "lastUpdated": "Terakhir diperbarui: 14 September 2026",
+    "lastUpdated": "Terakhir diperbarui: 29 Oktober 2026",
     "intro": "Privasi kamu penting bagi kami. Kebijakan Privasi ini menjelaskan sedikit informasi yang ditangani Momoto saat kamu menggunakan pengalaman kencan seru kami di momoto, dan bagaimana kami menjaga foto serta momenmu tetap menjadi milikmu. Momoto dirancang dengan mengutamakan privasi: fotomu dibuat langsung di peramban kamu, dan kami menyimpan seminimum mungkin — hanya yang dibutuhkan untuk menjalankan akunmu, menyimpan strip yang kamu pilih untuk disimpan, dan menangani cetakan yang kamu beli.",
     "sections": {
       "collect": {
@@ -621,7 +621,7 @@
         "title": "Dengan Siapa Kami Membagikan Data",
         "body": [
           "Dalam sesi, satu-satunya \"pembagian\" adalah kamera langsung dan audio yang kamu kirim langsung ke teman yang kamu undang selama sesi Date — kamu yang memilih siapa itu.",
-          "Jika kamu masuk dan meninggalkan komentar dengan rating 4 atau 5 bintang di samping strip, kami dapat menampilkannya di situs kami sebagai testimoni, bersama nama tampilan, kota atau negaramu, foto profil yang kamu unggah, dan ratingmu. Jika saat itu akunmu tertaut dengan pasangan, nama tampilan, kota atau negara, dan foto profil yang diunggah pasanganmu dapat tampil di sampingmu. Untuk menghapus testimoni, hubungi kami melalui detail di bawah — melepas tautan juga menghapus pasanganmu dari testimoni tersebut.",
+          "Jika kamu masuk dan meninggalkan komentar dengan rating 4 atau 5 bintang di samping strip, kami dapat menampilkannya di situs kami sebagai testimoni, bersama nama tampilan, kota atau negaramu, foto profil yang kamu unggah, dan ratingmu. Jika saat itu akunmu tertaut dengan pasangan, nama tampilan, kota atau negara, dan foto profil yang diunggah pasanganmu dapat tampil di sampingmu. Untuk menghapus testimoni, hubungi kami melalui detail di bawah.",
           "Di balik layar, kami mengandalkan penyedia infrastruktur standar (untuk hosting dan server relai koneksi yang dibutuhkan WebRTC), dan — saat kamu membeli cetakan — penyedia pembayaran (Midtrans) untuk memproses transaksi, semata-mata untuk menyampaikan layanan. Kami tidak menjual atau menyewakan informasimu kepada siapa pun."
         ]
       },
@@ -654,7 +654,7 @@
         "title": "Akunmu",
         "body": [
           "Akunmu menyimpan email, kata sandi yang di-hash (atau identitas Google yang tertaut), nama tampilan, avatar opsional, dan kota opsional (atau negara, jika kamu tinggal di luar Indonesia). Kamu bisa memperbarui ini kapan saja di halaman profil.",
-          "Kamu dapat menautkan akunmu dengan pasangan menggunakan kode undangan sekali pakai; salah satu dari kalian bisa melepas tautan kapan saja. Untuk menghapus akun dan datanya, hubungi kami melalui detail di bawah."
+          "Kamu dapat menautkan akunmu dengan pasangan menggunakan kode undangan sekali pakai; tautan bersifat permanen dan tidak bisa dibatalkan, kecuali salah satu akun dihapus. Untuk menghapus akun dan datanya, hubungi kami melalui detail di bawah."
         ]
       }
     }
@@ -1450,8 +1450,6 @@
       "title": "Pasanganmu",
       "none": "Tautkan dengan pasanganmu untuk berbagi momen berdua.",
       "linkedWith": "Tertaut dengan {{name}}",
-      "unlink": "Lepaskan",
-      "unlinked": "Tautan pasangan dilepas.",
       "inviteTitle": "Undang pasanganmu",
       "generate": "Buat kode undangan",
       "codeHint": "Bagikan kode ini ke pasanganmu. Berlaku 24 jam.",
@@ -1460,10 +1458,9 @@
       "accept": "Tautkan pasangan",
       "linked": "Kalian kini tertaut!",
       "linkedHint": "Strip kalian dibagikan sebagai pasangan dan sesi Kencan terbuka.",
-      "unlinkHint": "Melepas tautan menghentikan berbagi strip baru. Yang sudah tersimpan tidak dihapus.",
       "generating": "Membuat…",
-      "generateHint": "Kami membuat kode yang bisa kamu kirim ke pasanganmu. Berlaku 24 jam sejak dibuat.",
-      "acceptHint": "Menautkan akan membagikan strip kalian sebagai pasangan dan membuka sesi Kencan.",
+      "generateHint": "Kami membuat kode yang bisa kamu kirim ke pasanganmu. Berlaku 24 jam sejak dibuat. Setelah tertaut, tidak bisa dibatalkan.",
+      "acceptHint": "Menautkan akan membagikan strip kalian sebagai pasangan dan membuka sesi Kencan. Tautan bersifat permanen.",
       "copy": "Salin",
       "copied": "Tersalin",
       "copyFailed": "Tidak dapat menyalin — pilih kodenya dan salin sendiri."

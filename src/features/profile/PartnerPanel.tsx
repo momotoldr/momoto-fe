@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { ANALYTICS_EVENTS, trackEvents } from '@/analytics'
-import { acceptInvite, createInvite, unlinkPartner } from '@/api/services/partnerService'
+import { acceptInvite, createInvite } from '@/api/services/partnerService'
 import { UserAvatar } from '@/components/common/UserAvatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -30,11 +30,12 @@ interface PartnerPanelProps {
 }
 
 /**
- * The Partner tab: link with someone, or manage the link you have.
+ * The Partner tab: link with someone, or see who you're linked with.
  *
  * Unlinked, it's two boxes side by side — mint a code, or redeem one — because those are
  * genuinely the two halves of the same job and stacking them makes the second look like
- * a fallback for the first. Linked, all of that collapses to the pair and one way out.
+ * a fallback for the first. Linked, all of that collapses to the pair — a link is permanent,
+ * so there is no way out of it here (user, 2026-10-29).
  */
 export function PartnerPanel({ user }: PartnerPanelProps) {
   const { t } = useTranslation()
@@ -50,7 +51,7 @@ export function PartnerPanel({ user }: PartnerPanelProps) {
   const [enteredCode, setEnteredCode] = useState('')
   const [copied, setCopied] = useState(false)
   // Which action is in flight, so only its own control shows the spinner.
-  const [busy, setBusy] = useState<'generate' | 'accept' | 'unlink' | null>(null)
+  const [busy, setBusy] = useState<'generate' | 'accept' | null>(null)
 
   useEffect(() => {
     if (!copied) return
@@ -90,13 +91,6 @@ export function PartnerPanel({ user }: PartnerPanelProps) {
       void loadPromos()
     })
 
-  const onUnlink = () =>
-    run('unlink', async () => {
-      setUser(await unlinkPartner())
-      setInviteCode(null)
-      toast.success(t('auth.partner.unlinked'))
-    })
-
   const onCopy = async () => {
     if (!inviteCode) return
     try {
@@ -128,12 +122,7 @@ export function PartnerPanel({ user }: PartnerPanelProps) {
               <Heart className={styles.linkedIcon} />
               {t('auth.partner.linkedWith', { name: partner.displayName })}
             </span>
-            <span className={styles.hint}>{t('auth.partner.unlinkHint')}</span>
           </div>
-          <Button variant="outline" disabled={busy !== null} onClick={() => void onUnlink()}>
-            {busy === 'unlink' && <Loader2 className={styles.spinner} />}
-            {t('auth.partner.unlink')}
-          </Button>
         </div>
       </ProfileCard>
     )
