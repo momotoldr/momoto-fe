@@ -71,7 +71,7 @@ export interface PaymentAttempt {
   bundled: number
 }
 
-export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled'
+export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled' | 'refunded'
 
 /** One row of the profile's purchase history. */
 export interface PaymentOrder {
