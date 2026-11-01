@@ -38,7 +38,7 @@ import styles from './SupportFab.module.scss'
  * button someone has to go looking for.
  */
 export function SupportFab() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const location = useLocation()
   const userEmail = useAuthStore((state) => state.user?.email)
   const inRoom = location.pathname.startsWith('/room/')
@@ -113,6 +113,8 @@ export function SupportFab() {
         message: values.message,
         email: values.email,
         context: location.pathname,
+        // Which language they wrote in, so the reply from the portal comes back in it.
+        lang: i18n.language.toLowerCase().startsWith('id') ? 'id' : 'en',
       })
       toast.success(t('support.success'))
       setOpen(false)
