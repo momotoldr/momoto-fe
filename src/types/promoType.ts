@@ -1,3 +1,5 @@
+import type { PaymentMethod } from '@/types/stripType'
+
 /**
  * The soft-launch promos (docs/PLAN-promos.md), as `GET /promos` reports them.
  *
@@ -36,7 +38,10 @@ export interface Promos {
 
 /** `POST /payments/quote`: what a selection would cost, promos applied. */
 export interface PaymentQuote {
-  /** Null when a scrapbook is in it and its list price isn't set. */
+  /**
+   * The items alone, before any admin fee (no method is picked yet). Null when a
+   * scrapbook is in it and its list price isn't set.
+   */
   grossAmount: number | null
   /** The same items at list price. */
   listAmount: number | null
@@ -44,6 +49,13 @@ export interface PaymentQuote {
   bogo: boolean
   /** Scrapbook bundles in it: each one finished scrapbook + 3 of its unpaid strips. */
   bundles: number
+  /** The channels switched on in core, in display order. Absent from an older core. */
+  methods?: PaymentMethod[]
+  /**
+   * What each switched-on method adds on top of `grossAmount` as its admin fee (0 for
+   * none). Null when `grossAmount` is; absent from a core that predates the fee.
+   */
+  adminFees?: Partial<Record<PaymentMethod, number>> | null
 }
 
 /** What `POST /partner/accept` says about the promo: whether the accepter just earned it. */

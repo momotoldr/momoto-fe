@@ -199,6 +199,22 @@ export const API_ROUTES = {
     PENDING: '/payments/pending',
     /** Save the attempt's QR image. `GET /payments/:orderId/qr`. */
     QR: route('/payments/:orderId/qr', (id: string) => `/payments/${encodeURIComponent(id)}/qr`),
+    /**
+     * Payment-status check: core asks Midtrans and settles the order if the money is there.
+     * `POST /payments/:orderId/check` → `{ payment, seen }`.
+     */
+    CHECK: route(
+      '/payments/:orderId/check',
+      (id: string) => `/payments/${encodeURIComponent(id)}/check`
+    ),
+    /**
+     * Cancel a pending attempt now. Midtrans decides: an order it already settled comes
+     * back paid instead. `POST /payments/:orderId/cancel` → `{ payment }`.
+     */
+    CANCEL: route(
+      '/payments/:orderId/cancel',
+      (id: string) => `/payments/${encodeURIComponent(id)}/cancel`
+    ),
     /** Poll one attempt. `GET /payments/:orderId`. */
     BY_ID: route('/payments/:orderId', (id: string) => `/payments/${encodeURIComponent(id)}`),
   },

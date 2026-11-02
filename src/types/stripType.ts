@@ -34,9 +34,16 @@ export interface StoredStrip {
   createdAt: string
 }
 
-/** The channels checkout offers. Mirrors the backend's `PAYMENT_METHODS`. */
+/** Every channel checkout supports. Mirrors the backend's `PAYMENT_METHODS`. */
 export const PAYMENT_METHODS = ['gopay', 'shopeepay', 'qris'] as const
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
+
+/**
+ * The channels offered until the quote says which are on (`PaymentQuote.methods`, from
+ * core's `MIDTRANS_ENABLED_PAYMENTS`). ShopeePay is off for now (user, 2026-11-02);
+ * switching it back on is core's env alone — this only covers a quote that hasn't come.
+ */
+export const DEFAULT_PAYMENT_METHODS: readonly PaymentMethod[] = ['gopay', 'qris']
 
 /**
  * A payment attempt as the checkout modal renders it. `qrImageUrl` and `deeplinkUrl`
@@ -69,6 +76,8 @@ export interface PaymentAttempt {
   bogo: boolean
   /** How many scrapbook bundles (one scrapbook + 3 strips each) priced it. */
   bundled: number
+  /** The method's admin fee, already inside `grossAmount`; 0 for none. */
+  adminFee: number
 }
 
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled' | 'refunded'
