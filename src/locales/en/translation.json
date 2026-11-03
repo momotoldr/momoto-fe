@@ -1147,6 +1147,7 @@
     "selectedItems_other": "{{count}} items selected",
     "checkout": "Checkout",
     "checkoutNote": "Paid strips download clean, without the watermark.",
+    "adminFeeNote": "+ admin fee",
     "deleteTitle": "Remove strip?",
     "deleteDescription": "This removes the strip from your cart. This cannot be undone.",
     "deleteConfirm": "Remove",
@@ -1667,7 +1668,24 @@
     "qrSaveError": "Couldn't save that QR code.",
     "successScrapbook": "Payment complete — your scrapbook is unlocked!",
     "successMixed": "Payment complete — everything you picked is unlocked!",
-    "priceChanged": "The price changed while checkout was opening. Nothing was charged — check your cart and try again."
+    "priceChanged": "The price changed while checkout was opening. Nothing was charged — check your cart and try again.",
+    "adminFee": "+ {{fee}} admin fee",
+    "noAdminFee": "No admin fee",
+    "paidCheckNote": "Paid, but the status hasn't changed? Tap Check payment status and we'll check with the payment provider right away.",
+    "paidCheckButton": "Check payment status",
+    "paidChecking": "Checking…",
+    "paidCheckUnpaid": "We haven't received this payment yet. If the money has already left your account, report it below — your order number is filled in for you.",
+    "paidCheckRetry": "Check again",
+    "paidCheckError": "Couldn't check right now. Try again in a moment.",
+    "cancelButton": "Cancel payment",
+    "cancelConfirm": "Cancel this payment? Its QR code will stop working.",
+    "cancelYes": "Yes, cancel",
+    "cancelNo": "Keep paying",
+    "cancelling": "Cancelling…",
+    "cancelled": "Payment cancelled. Pick a method to start again.",
+    "cancelError": "Couldn't cancel right now. Try again in a moment.",
+    "reportButton": "Report a problem",
+    "reportMessage": "Order: {{orderId}}\n\nI paid, but the status hasn't changed."
   },
   "scrapbook": {
     "templates": {

@@ -68,6 +68,33 @@ export async function getPayment(orderId: string): Promise<PaymentAttempt> {
 }
 
 /**
+ * The buyer says they've paid: have core ask Midtrans directly, settling the order if
+ * the money is there (a late or lost notification). `seen` is whether Midtrans knows the
+ * transaction at all.
+ */
+export async function checkPayment(
+  orderId: string
+): Promise<{ payment: PaymentAttempt; seen: boolean }> {
+  const { data } = await client.postData<{ payment: PaymentAttempt; seen: boolean }>(
+    API_ROUTES.PAYMENTS.CHECK(orderId),
+    {}
+  )
+  return data
+}
+
+/**
+ * Cancel the attempt instead of waiting for it to expire. Answers the order as it now
+ * stands — `paid` if Midtrans had already taken the money, which wins over the cancel.
+ */
+export async function cancelPayment(orderId: string): Promise<PaymentAttempt> {
+  const { data } = await client.postData<{ payment: PaymentAttempt }>(
+    API_ROUTES.PAYMENTS.CANCEL(orderId),
+    {}
+  )
+  return data.payment
+}
+
+/**
  * The attempt the user walked away from, if it is still payable. Called on cart load so
  * a half-finished payment reopens rather than blocking a fresh one with a 409 the user
  * has no way to interpret.
