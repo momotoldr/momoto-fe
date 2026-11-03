@@ -1,15 +1,24 @@
-import { CheckCircle2, Download, ExternalLink, Loader2, QrCode, TimerOff, X } from 'lucide-react'
+import {
+  AlertCircle,
+  CheckCircle2,
+  Download,
+  ExternalLink,
+  Loader2,
+  QrCode,
+  TimerOff,
+  X,
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { fetchQrBlob } from '@/api/services/paymentsService'
+import { openSupportDialog } from '@/components/common/SupportFab/openSupport'
 import { Button } from '@/components/ui/button'
 import { extensionForBlob, saveImageBlob } from '@/utils/download'
 import { formatIdr } from '@/features/profile/profileData'
 import type { PaymentAttempt, PaymentMethod } from '@/types/stripType'
-import { PAYMENT_METHODS } from '@/types/stripType'
 
 import type { CheckoutPhase } from './useCheckout'
 import { useCountdown } from './useCountdown'
@@ -31,13 +40,36 @@ interface CheckoutModalProps {
    */
   grossAmount: number | null
   /**
+   * What each method adds as its admin fee, shown on its button. Null while unknown —
+   * the buttons then show none, and the charge's total includes it anyway.
+   */
+  adminFees: Partial<Record<PaymentMethod, number>> | null
+  /** The channels to offer, in order — the ones switched on in core. */
+  methods: readonly PaymentMethod[]
+  /**
    * The promos that priced it (docs/PLAN-promos.md), each already gated on its UI flag:
    * shown as tags under the total.
    */
   promo: { bogo: boolean; bundled: number }
   onChoose: (method: PaymentMethod) => void
+  /**
+   * "Check payment status": ask the server to check with Midtrans (settling the order if the money
+   * is there). Resolves whether it's paid now; rejects if the check failed.
+   */
+  onCheckPaid: () => Promise<boolean>
+  /**
+   * Cancel the running attempt. The hook takes the checkout back to the method picker
+   * (or to paid, if Midtrans already had the money); rejects if the cancel failed.
+   */
+  onCancel: () => Promise<void>
   onClose: () => void
 }
+
+/** Where the payment-status check is, for one attempt. */
+type PaidCheck = 'idle' | 'checking' | 'unpaid'
+
+/** Where cancelling is, for one attempt: asked once inline before anything is sent. */
+type Cancelling = 'idle' | 'confirm' | 'cancelling'
 
 /**
  * Our own checkout, replacing the hosted Midtrans popup.
@@ -53,13 +85,61 @@ export function CheckoutModal({
   strips,
   scrapbooks,
   grossAmount,
+  adminFees,
+  methods,
   promo,
   onChoose,
+  onCheckPaid,
+  onCancel,
   onClose,
 }: CheckoutModalProps) {
   const { t } = useTranslation()
   const countdown = useCountdown(attempt?.expiresAt ?? null)
   const [savingQr, setSavingQr] = useState(false)
+  // Keyed by order, so a new attempt starts back at the status check without an effect.
+  const [paidCheckFor, setPaidCheckFor] = useState<{ orderId: string; state: PaidCheck }>({
+    orderId: '',
+    state: 'idle',
+  })
+  const paidCheck: PaidCheck =
+    attempt && paidCheckFor.orderId === attempt.orderId ? paidCheckFor.state : 'idle'
+  const [cancelFor, setCancelFor] = useState<{ orderId: string; state: Cancelling }>({
+    orderId: '',
+    state: 'idle',
+  })
+  const cancelling: Cancelling =
+    attempt && cancelFor.orderId === attempt.orderId ? cancelFor.state : 'idle'
+
+  /** Cancel once confirmed. On success the hook moves the checkout on by itself. */
+  const confirmCancel = async () => {
+    if (!attempt) return
+    const orderId = attempt.orderId
+    setCancelFor({ orderId, state: 'cancelling' })
+    try {
+      await onCancel()
+    } catch {
+      toast.error(t('checkout.cancelError'))
+      setCancelFor({ orderId, state: 'idle' })
+    }
+  }
+
+  /**
+   * Ask the server to check with Midtrans. Paid → the checkout moves on by itself (the
+   * hook takes in the settled order). Not paid → only now is reporting offered: a report
+   * is for money that left the buyer but hasn't reached us (user, 2026-11-02).
+   */
+  const checkPaid = async () => {
+    if (!attempt) return
+    const orderId = attempt.orderId
+    setPaidCheckFor({ orderId, state: 'checking' })
+    try {
+      const paid = await onCheckPaid()
+      if (!paid) setPaidCheckFor({ orderId, state: 'unpaid' })
+    } catch {
+      toast.error(t('checkout.paidCheckError'))
+      setPaidCheckFor({ orderId, state: 'idle' })
+    }
+  }
 
   /**
    * Hand the QR over as a file — for paying from another device, or passing it to
@@ -100,6 +180,93 @@ export function CheckoutModal({
   }, [phase, onClose])
 
   if (phase === 'closed') return null
+
+  /**
+   * Hand a payment problem to support, on the payment topic with the order number
+   * already in the message — the one thing an admin needs to find it. The checkout
+   * closes first so the two dialogs never stack; that doesn't abandon the payment (the
+   * QR stays payable and the cart banner reopens it).
+   */
+  const reportProblem = () => {
+    onClose()
+    openSupportDialog(
+      'payment',
+      attempt ? t('checkout.reportMessage', { orderId: attempt.orderId }) : undefined
+    )
+  }
+
+  const report = (
+    <div className={styles.report}>
+      <p className={styles.reportNote}>
+        <AlertCircle className={styles.reportIcon} />
+        <span>
+          {t(paidCheck === 'unpaid' ? 'checkout.paidCheckUnpaid' : 'checkout.paidCheckNote')}
+        </span>
+      </p>
+      {/* One row, two equal halves: keep the payment going (check, or report once the
+       * check says unpaid) | give it up. Labels may wrap inside, so it holds on phones. */}
+      <div className={styles.reportActions}>
+        {paidCheck === 'unpaid' ? (
+          <Button size="sm" className={styles.actionButton} onClick={reportProblem}>
+            {t('checkout.reportButton')}
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            className={styles.actionButton}
+            onClick={() => void checkPaid()}
+            disabled={paidCheck === 'checking'}
+          >
+            {paidCheck === 'checking' && <Loader2 className={styles.spinnerSmall} />}
+            {t(paidCheck === 'checking' ? 'checkout.paidChecking' : 'checkout.paidCheckButton')}
+          </Button>
+        )}
+        <Button
+          variant="outline"
+          size="sm"
+          className={styles.cancelAction}
+          onClick={() => attempt && setCancelFor({ orderId: attempt.orderId, state: 'confirm' })}
+          disabled={cancelling !== 'idle'}
+        >
+          {t('checkout.cancelButton')}
+        </Button>
+      </div>
+      {paidCheck === 'unpaid' && (
+        <button type="button" className={styles.recheckButton} onClick={() => void checkPaid()}>
+          {t('checkout.paidCheckRetry')}
+        </button>
+      )}
+      {cancelling !== 'idle' && (
+        <div className={styles.cancelConfirm}>
+          <p className={styles.cancelConfirmText}>{t('checkout.cancelConfirm')}</p>
+          <div className={styles.confirmActions}>
+            <button
+              type="button"
+              className={styles.cancelButton}
+              onClick={() => void confirmCancel()}
+              disabled={cancelling === 'cancelling'}
+            >
+              {cancelling === 'cancelling' && <Loader2 className={styles.spinnerSmall} />}
+              {t(cancelling === 'cancelling' ? 'checkout.cancelling' : 'checkout.cancelYes')}
+            </button>
+            {cancelling === 'confirm' && (
+              <button
+                type="button"
+                className={styles.recheckButton}
+                onClick={() => attempt && setCancelFor({ orderId: attempt.orderId, state: 'idle' })}
+              >
+                {t('checkout.cancelNo')}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+
+  // Whether some offered method charges an admin fee — only then is "no fee" news.
+  const anyFee = methods.some((method) => (adminFees?.[method] ?? 0) > 0)
 
   const touchFirst = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
   const total = attempt?.grossAmount ?? grossAmount
@@ -155,7 +322,7 @@ export function CheckoutModal({
 
         {phase === 'method' && (
           <div className={styles.methods}>
-            {PAYMENT_METHODS.map((method) => (
+            {methods.map((method) => (
               <button
                 key={method}
                 type="button"
@@ -164,6 +331,17 @@ export function CheckoutModal({
               >
                 <QrCode className={styles.methodIcon} />
                 <span className={styles.methodName}>{t(`checkout.method.${method}`)}</span>
+                {(adminFees?.[method] ?? 0) > 0 ? (
+                  <span className={styles.methodFee}>
+                    {t('checkout.adminFee', { fee: formatIdr(adminFees?.[method] ?? 0) })}
+                  </span>
+                ) : (
+                  // A known zero beside a method that does charge one: worth saying.
+                  anyFee &&
+                  adminFees?.[method] === 0 && (
+                    <span className={styles.methodFeeFree}>{t('checkout.noAdminFee')}</span>
+                  )
+                )}
               </button>
             ))}
           </div>
@@ -226,6 +404,8 @@ export function CheckoutModal({
             {countdown && (
               <p className={styles.countdown}>{t('checkout.expiresIn', { countdown })}</p>
             )}
+
+            {report}
           </div>
         )}
 

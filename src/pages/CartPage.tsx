@@ -36,7 +36,7 @@ import { useCartStore } from '@/store/useCartStore'
 import { usePromoStore } from '@/store/usePromoStore'
 import { useScrapbookStore } from '@/store/useScrapbookStore'
 import type { ScrapbookSummary } from '@/types/scrapbookType'
-import type { StoredStrip } from '@/types/stripType'
+import { DEFAULT_PAYMENT_METHODS, type StoredStrip } from '@/types/stripType'
 
 import styles from './CartPage.module.scss'
 
@@ -183,6 +183,8 @@ export function CartPage() {
     reopen: reopenCheckout,
     close: closeCheckout,
     choose: chooseMethod,
+    checkPaid,
+    cancel: cancelCheckout,
   } = useCheckout(async (wasVisible) => {
     setSelected(new Set())
     // Paid strips leave for the gallery, paid scrapbooks for the shelf; a promo it used
@@ -270,6 +272,9 @@ export function CartPage() {
   const selectedTotal =
     selectedQuote?.grossAmount ?? totalOf(selectedStrips.length, selectedScrapbooks.length)
   const totalLabel = selectedTotal === null ? '' : formatIdr(selectedTotal)
+  // The total is the items alone: the admin fee depends on the method, picked next (each
+  // method card names its amount). Said only when some method here charges one.
+  const selectedHasFee = Object.values(selectedQuote?.adminFees ?? {}).some((fee) => (fee ?? 0) > 0)
   // Whether to strike the list total: only when a promo its own UI flag shows priced it.
   // With one off, the total is still the server's, just not dressed as a deal.
   const selectedBogo = env.partnerPromoEnabled && selectedQuote?.bogo === true
@@ -943,9 +948,14 @@ export function CartPage() {
                     ? t('cart.selectedCount', { count: selectedCount })
                     : t('cart.selectedItems', { count: selectedCount })}
                 </span>
-                <span className={styles.checkoutTotal}>
-                  {totalLabel}
-                  {selectedList && <s className={styles.checkoutList}>{selectedList}</s>}
+                <span className={styles.checkoutTotalWrap}>
+                  <span className={styles.checkoutTotal}>
+                    {totalLabel}
+                    {selectedList && <s className={styles.checkoutList}>{selectedList}</s>}
+                  </span>
+                  {selectedHasFee && (
+                    <span className={styles.checkoutFee}>{t('cart.adminFeeNote')}</span>
+                  )}
                 </span>
               </div>
               <span className={styles.checkoutDivider} aria-hidden="true" />
@@ -1028,11 +1038,15 @@ export function CartPage() {
           checkoutQuote?.grossAmount ??
           totalOf(checkoutSelection.stripIds.length, checkoutSelection.scrapbookIds.length)
         }
+        adminFees={checkoutQuote?.adminFees ?? null}
+        methods={checkoutQuote?.methods ?? DEFAULT_PAYMENT_METHODS}
         promo={{
           bogo: env.partnerPromoEnabled && (attempt?.bogo ?? checkoutQuote?.bogo ?? false),
           bundled: env.bundlePromoEnabled ? (attempt?.bundled ?? checkoutQuote?.bundles ?? 0) : 0,
         }}
         onChoose={(method) => void chooseMethod(method)}
+        onCheckPaid={checkPaid}
+        onCancel={cancelCheckout}
         onClose={closeCheckout}
       />
     </main>

@@ -10,16 +10,20 @@ import type { SupportTopic } from '@/types/feedbackType'
  */
 export const OPEN_SUPPORT_EVENT = 'momoto:support-open'
 
-/** The event's payload: a topic to skip straight to, if the caller already knows it. */
-export type OpenSupportDetail = { topic?: SupportTopic }
+/**
+ * The event's payload: a topic to skip straight to, if the caller already knows it, and
+ * a message to start from (a payment report starts with its order number).
+ */
+export type OpenSupportDetail = { topic?: SupportTopic; message?: string }
 
 /**
  * Open the support dialog from anywhere (a no-op if the FAB isn't mounted). With a
  * `topic`, it opens on the message step for that topic instead of the topic picker —
- * for a caller that already knows what the trouble is about (a failed checkout).
+ * for a caller that already knows what the trouble is about (a failed checkout). With a
+ * `message`, the message box starts with it.
  */
-export function openSupportDialog(topic?: SupportTopic): void {
+export function openSupportDialog(topic?: SupportTopic, message?: string): void {
   window.dispatchEvent(
-    new CustomEvent<OpenSupportDetail>(OPEN_SUPPORT_EVENT, { detail: { topic } })
+    new CustomEvent<OpenSupportDetail>(OPEN_SUPPORT_EVENT, { detail: { topic, message } })
   )
 }

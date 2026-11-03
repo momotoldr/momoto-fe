@@ -396,6 +396,16 @@
   @apply text-sm font-semibold sm:font-mono sm:text-[0.625rem] sm:font-normal sm:uppercase sm:tracking-[0.14em] sm:text-muted-foreground;
 }
 
+/* The total and, under it, the admin fee note: right-aligned beside the count on
+ * phones, stacked under it from sm up. */
+.checkoutTotalWrap {
+  @apply flex flex-col items-end gap-0.5 sm:items-start;
+}
+
+.checkoutFee {
+  @apply whitespace-nowrap text-[0.6875rem] text-muted-foreground;
+}
+
 .checkoutTotal {
   @apply font-mono text-sm text-muted-foreground sm:font-sans sm:text-2xl sm:font-bold sm:tracking-[-0.02em] sm:text-foreground;
 }

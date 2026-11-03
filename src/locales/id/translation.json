@@ -1145,6 +1145,7 @@
     "selectedItems_other": "{{count}} item dipilih",
     "checkout": "Bayar",
     "checkoutNote": "Strip berbayar diunduh bersih, tanpa watermark.",
+    "adminFeeNote": "+ biaya admin",
     "deleteTitle": "Hapus strip?",
     "deleteDescription": "Strip ini akan dihapus dari keranjang. Tindakan ini tidak bisa dibatalkan.",
     "deleteConfirm": "Hapus",
@@ -1660,7 +1661,24 @@
     "qrSaveError": "Gagal menyimpan kode QR.",
     "successScrapbook": "Pembayaran selesai — scrapbook-mu sudah terbuka!",
     "successMixed": "Pembayaran selesai — semua yang kamu pilih sudah terbuka!",
-    "priceChanged": "Harganya berubah saat pembayaran dibuka. Belum ada yang ditagih — cek keranjangmu lalu coba lagi."
+    "priceChanged": "Harganya berubah saat pembayaran dibuka. Belum ada yang ditagih — cek keranjangmu lalu coba lagi.",
+    "adminFee": "+ {{fee}} biaya admin",
+    "noAdminFee": "Tanpa biaya admin",
+    "paidCheckNote": "Sudah bayar tapi status belum berubah? Klik \"Cek Status Pembayaran\" dan kami akan langsung mengeceknya.",
+    "paidCheckButton": "Cek Status Pembayaran",
+    "paidChecking": "Mengecek…",
+    "paidCheckUnpaid": "Pembayaran ini belum kami terima. Apabila saldomu sudah terpotong, silakan klik \"Laporkan Masalah\" di bawah — nomor pesananmu akan terisi otomatis.",
+    "paidCheckRetry": "Cek lagi",
+    "paidCheckError": "Gagal mengecek saat ini. Coba lagi sebentar lagi.",
+    "cancelButton": "Batalkan Pembayaran",
+    "cancelConfirm": "Batalkan pembayaran ini? Kode QR-nya tidak bisa dipakai lagi.",
+    "cancelYes": "Ya, batalkan",
+    "cancelNo": "Tidak",
+    "cancelling": "Membatalkan…",
+    "cancelled": "Pembayaran dibatalkan. Pilih metode untuk memulai lagi.",
+    "cancelError": "Gagal membatalkan saat ini. Coba lagi sebentar lagi.",
+    "reportButton": "Laporkan Masalah",
+    "reportMessage": "Pesanan: {{orderId}}\n\nSaya sudah membayar, tapi statusnya tidak berubah."
   },
   "scrapbook": {
     "templates": {
