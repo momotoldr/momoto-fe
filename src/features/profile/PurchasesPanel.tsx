@@ -129,7 +129,7 @@ export function PurchasesPanel({ galleryCount }: PurchasesPanelProps) {
           ) : (
             <div className={styles.table}>
               <div className={cn(styles.row, styles.headRow)} aria-hidden="true">
-                <span className={styles.colStrips}>{t('auth.profile.purchases.colStrips')}</span>
+                <span className={styles.colItems}>{t('auth.profile.purchases.colItems')}</span>
                 <span className={styles.colOrder}>{t('auth.profile.purchases.colOrder')}</span>
                 <span className={styles.colDate}>{t('auth.profile.purchases.colDate')}</span>
                 <span className={styles.colAmount}>{t('auth.profile.purchases.colAmount')}</span>
@@ -144,7 +144,7 @@ export function PurchasesPanel({ galleryCount }: PurchasesPanelProps) {
                 const scrapbook = order.scrapbooks?.[0]
                 return (
                   <div key={order.orderId} className={styles.row}>
-                    <div className={styles.colStrips}>
+                    <div className={styles.colItems}>
                       {scrapbook &&
                         (scrapbook.coverUrl ? (
                           <img className={styles.thumbCover} src={scrapbook.coverUrl} alt="" />

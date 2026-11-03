@@ -1433,7 +1433,7 @@
         "unlocked": "Cetakan terbuka",
         "stripCount_other": "{{count}} strip",
         "perStrip": "{{price}} per strip",
-        "colStrips": "Strip",
+        "colItems": "Item",
         "colOrder": "Pesanan",
         "colDate": "Tanggal",
         "colAmount": "Jumlah",
