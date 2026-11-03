@@ -58,6 +58,7 @@ export const HELP_CATEGORIES: Record<SupportTopic, readonly HelpIssue[]> = {
     { key: 'partner' },
     { key: 'signup', shown: env.betaMode },
     { key: 'delete' },
+    { key: 'inactive' },
   ],
   other: [{ key: 'bug' }, { key: 'connection' }, { key: 'idea' }, { key: 'data' }],
 }
