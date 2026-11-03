@@ -386,7 +386,7 @@
           },
           "galleryFull": {
             "q": "Muncul pesan galeri saya penuh",
-            "a": "Galeri menampung strip yang sudah dibuka dalam jumlah terbatas. Saat penuh, pembukaan strip baru dijeda sampai kamu memberi ruang. Isi galeri tidak pernah dihapus otomatis.",
+            "a": "Galeri menampung strip yang sudah dibuka dalam jumlah terbatas. Saat penuh, pembukaan strip baru dijeda sampai kamu memberi ruang. Isi galeri tidak pernah dihapus otomatis, kecuali seluruh akunmu dihapus setelah 90 hari tidak masuk.",
             "steps": [
               "Unduh strip yang ingin kamu simpan.",
               "Di galeri, pilih Hapus pada strip itu. Strip dihapus permanen dan slotnya jadi kosong.",
@@ -467,6 +467,15 @@
               "Unduh dulu strip yang ingin kamu simpan.",
               "Buka Profil → Akun dan pilih Hapus akun."
             ]
+          },
+          "inactive": {
+            "q": "Apakah akunku akan dihapus jika tidak dipakai?",
+            "a": "Ya, setelah 90 hari tidak masuk. Semua isinya ikut terhapus, termasuk strip dan scrapbook yang sudah kamu beli, dan pembelian tidak dikembalikan dananya.",
+            "steps": [
+              "Jika alamat emailmu sudah dikonfirmasi, kami mengirim email 14 hari dan 3 hari sebelumnya. Cukup masuk sekali untuk membatalkan penghapusan.",
+              "Akun tanpa alamat email yang dikonfirmasi dihapus setelah 180 hari, tanpa pemberitahuan. Konfirmasi emailmu di halaman profil agar mendapat peringatannya.",
+              "Unduh dulu apa pun yang ingin kamu simpan."
+            ]
           }
         }
       },
@@ -505,7 +514,7 @@
   },
   "terms": {
     "title": "Syarat & Ketentuan",
-    "lastUpdated": "Terakhir diperbarui: 10 Agustus 2026",
+    "lastUpdated": "Terakhir diperbarui: 3 November 2026",
     "intro": "Selamat datang di Momoto. Syarat & Ketentuan ini mengatur penggunaan pengalaman kencan seru kami — termasuk Photobooth Virtual dan aktivitas lainnya — yang tersedia di peramban web di momoto serta aplikasi terkait. Dengan menggunakan Momoto, kamu menyetujui ketentuan ini. Jika kamu tidak setuju, mohon jangan gunakan layanan ini.",
     "sections": {
       "service": {
@@ -536,7 +545,8 @@
           "Membuat strip, menyimpannya ke keranjang, dan membagikannya itu gratis. Salinan strip yang bersih dan beresolusi tinggi tanpa watermark adalah unduhan berbayar yang bersifat opsional. Harga ditampilkan di halaman checkout sebelum kamu mengonfirmasi, dan kamu bisa membeli beberapa strip dalam satu pesanan.",
           "Pembayaran ditangani oleh penyedia pembayaran pihak ketiga kami, Midtrans. Dengan membayar, kamu juga menyetujui ketentuan penyedia tersebut. Kami menerima konfirmasi bahwa pembayaran berhasil beserta nomor referensi pesanan, tetapi kami tidak mengumpulkan atau menyimpan detail lengkap kartu atau rekening bankmu.",
           "Karena pembelian langsung membuka file digital untuk diunduh, strip berbayar umumnya tidak dapat dikembalikan setelah dibuka — kecuali bila pengembalian dana diwajibkan oleh hukum, atau bila ada gangguan teknis dari pihak kami yang membuat kamu tidak bisa mengunduh strip yang sudah kamu bayar. Jika itu terjadi, hubungi kami dan akan kami perbaiki.",
-          "Kamu bisa menghapus strip yang sudah dibuka dari galerimu kapan saja. Menghapusnya akan menghapus filenya secara permanen, jadi strip yang sudah dihapus tidak bisa dipulihkan, diunduh lagi, atau dikembalikan dananya. Catatan pembelianmu tetap tersimpan."
+          "Kamu bisa menghapus strip yang sudah dibuka dari galerimu kapan saja. Menghapusnya akan menghapus filenya secara permanen, jadi strip yang sudah dihapus tidak bisa dipulihkan, diunduh lagi, atau dikembalikan dananya. Catatan pembelianmu tetap tersimpan.",
+          "Jika akunmu dihapus karena tidak aktif, semua yang dibeli dengan akun itu, termasuk strip yang sudah dibuka dan scrapbook berbayar, ikut terhapus dan tidak dikembalikan dananya."
         ],
         "scrapbook": "Scrapbook berlaku dengan cara yang sama. Setelah kamu menyelesaikan scrapbook dan membayarnya, scrapbook itu bersifat final: tidak bisa diubah, dan tidak dapat dikembalikan dananya dengan ketentuan yang sama seperti strip. Sebelum membayar, kamu masih bisa kembali dan lanjut mengedit. Menghapus scrapbook berbayar akan menghapus PDF-nya secara permanen; catatan pembelianmu tetap tersimpan."
       },
@@ -577,6 +587,7 @@
         "title": "Akunmu",
         "body": [
           "Kamu bertanggung jawab atas aktivitas di akunmu dan menjaga kerahasiaan kata sandimu. Berikan informasi yang akurat, dan jangan meniru orang lain atau membuat akun untuk seseorang tanpa izinnya.",
+          "Jika kamu tidak masuk selama 90 hari, kami menghapus akunmu, seperti dijelaskan di Kebijakan Privasi kami. Jika akunmu punya alamat email yang sudah dikonfirmasi, kami mengirim email sebelum melakukannya.",
           "Kamu bisa menghapus akunmu kapan saja dengan menghubungi kami. Kami dapat menangguhkan atau menutup akun yang melanggar ketentuan ini."
         ]
       }
@@ -584,7 +595,7 @@
   },
   "privacy": {
     "title": "Kebijakan Privasi",
-    "lastUpdated": "Terakhir diperbarui: 29 Oktober 2026",
+    "lastUpdated": "Terakhir diperbarui: 3 November 2026",
     "intro": "Privasi kamu penting bagi kami. Kebijakan Privasi ini menjelaskan sedikit informasi yang ditangani Momoto saat kamu menggunakan pengalaman kencan seru kami di momoto, dan bagaimana kami menjaga foto serta momenmu tetap menjadi milikmu. Momoto dirancang dengan mengutamakan privasi: fotomu dibuat langsung di peramban kamu, dan kami menyimpan seminimum mungkin — hanya yang dibutuhkan untuk menjalankan akunmu, menyimpan strip yang kamu pilih untuk disimpan, dan menangani cetakan yang kamu beli.",
     "sections": {
       "collect": {
@@ -629,6 +640,7 @@
         "title": "Penyimpanan & Penghapusan Data",
         "body": [
           "Strip yang kamu simpan disimpan bersama akunmu sampai kamu menghapusnya dari keranjang atau galeri, atau menghapus akunmu, dan saat itu gambarnya dihapus dari server kami. Untuk strip yang kamu bayar, kami menyimpan catatan bahwa strip itu pernah ada — kapan dibuat dan pesanan mana yang mencakupnya, tidak pernah fotonya — sebagai bagian dari catatan pembayaran kami. Foto yang tidak kamu simpan tetap hanya berada di perangkatmu — menutup tab atau membersihkan penyimpanan peramban akan menghapus data sesi lokal. Kode ruang bersifat sementara dan berakhir saat sesi selesai.",
+          "Jika kamu tidak masuk selama 90 hari, kami menghapus akunmu beserta seluruh isinya, termasuk strip dan scrapbook yang sudah kamu bayar, dan pembelian itu tidak dikembalikan dananya. Jika akunmu punya alamat email yang sudah dikonfirmasi, kami mengirim email 14 hari dan 3 hari sebelumnya, dan cukup masuk sekali untuk membatalkan penghapusan. Akun tanpa alamat email yang dikonfirmasi dihapus setelah 180 hari, tanpa pemberitahuan. Seperti pada setiap penghapusan akun, catatan pembayaranmu tetap disimpan.",
           "Data log teknis dasar yang disimpan hosting kami hanya dipertahankan untuk waktu singkat demi keamanan lalu dihapus."
         ]
       },
