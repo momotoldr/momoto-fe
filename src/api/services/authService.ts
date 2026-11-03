@@ -33,7 +33,10 @@ export async function register(body: RegisterRequest): Promise<User> {
 }
 
 export async function login(body: LoginRequest): Promise<User> {
-  const { data } = await authClient.postData<AuthResponse>(API_ROUTES.AUTH.LOGIN, body)
+  const { data } = await authClient.postData<AuthResponse>(API_ROUTES.AUTH.LOGIN, {
+    lang: i18n.language,
+    ...body,
+  })
   setStoredToken(data.accessToken)
   return data.user
 }
@@ -47,7 +50,10 @@ export async function loginWithGoogle(body: {
   redirectUri: string
   codeVerifier: string
 }): Promise<User> {
-  const { data } = await authClient.postData<AuthResponse>(API_ROUTES.AUTH.GOOGLE, body)
+  const { data } = await authClient.postData<AuthResponse>(API_ROUTES.AUTH.GOOGLE, {
+    lang: i18n.language,
+    ...body,
+  })
   setStoredToken(data.accessToken)
   return data.user
 }

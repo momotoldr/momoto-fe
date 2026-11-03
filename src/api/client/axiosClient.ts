@@ -7,6 +7,7 @@ import axios, {
 
 import { clearStoredToken, getStoredToken, setStoredToken } from '@/constants/auth'
 import { env } from '@/env'
+import i18n from '@/lib/i18n'
 import { useNetworkStore } from '@/store/useNetworkStore'
 import { useServerStore } from '@/store/useServerStore'
 
@@ -70,7 +71,9 @@ let refreshInFlight: Promise<string | null> | null = null
 export function refreshAccessToken(): Promise<string | null> {
   refreshInFlight ??= (async (): Promise<string | null> => {
     try {
-      const { data } = await refreshClient.post(API_ROUTES.AUTH.REFRESH)
+      // `lang` keeps the account's stored language current, for mail sent with no
+      // request behind it (the inactivity warning).
+      const { data } = await refreshClient.post(API_ROUTES.AUTH.REFRESH, { lang: i18n.language })
       const token = (data as { accessToken?: unknown })?.accessToken
       if (typeof token === 'string' && token) {
         setStoredToken(token)

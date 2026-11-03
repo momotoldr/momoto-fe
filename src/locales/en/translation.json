@@ -387,7 +387,7 @@
           },
           "galleryFull": {
             "q": "It says my gallery is full",
-            "a": "Your gallery holds a limited number of unlocked strips. When it's full, new unlocks are paused until you make room. Nothing in it is ever deleted automatically.",
+            "a": "Your gallery holds a limited number of unlocked strips. When it's full, new unlocks are paused until you make room. Nothing in it is deleted automatically, unless your whole account is deleted after 90 days without signing in.",
             "steps": [
               "Download any strip you want to keep.",
               "In your gallery, choose Remove on that strip. It's deleted for good, and its slot is freed.",
@@ -468,6 +468,15 @@
               "Download any strips you want to keep first.",
               "Go to Profile → Account and choose Delete account."
             ]
+          },
+          "inactive": {
+            "q": "Will my account be deleted if I don't use it?",
+            "a": "Yes, after 90 days without signing in. Everything goes with it, including strips and scrapbooks you bought, and purchases aren't refunded.",
+            "steps": [
+              "If your email address is confirmed, we email you 14 days and again 3 days before. Signing in once cancels the deletion.",
+              "Accounts without a confirmed email address are deleted after 180 days, without notice. Confirm yours on your profile to get the warnings.",
+              "Download anything you want to keep."
+            ]
           }
         }
       },
@@ -506,7 +515,7 @@
   },
   "terms": {
     "title": "Terms & Conditions",
-    "lastUpdated": "Last updated: August 10, 2026",
+    "lastUpdated": "Last updated: November 3, 2026",
     "intro": "Welcome to Momoto. These Terms & Conditions govern your use of our playful date experiences — including the Virtual Photobooth and other activities — available in your web browser at momoto and any related apps. By using Momoto, you agree to these terms. If you don't agree, please don't use the service.",
     "sections": {
       "service": {
@@ -537,7 +546,8 @@
           "Creating strips, saving them to your cart, and sharing them are free. A clean, high-resolution copy of a strip without the watermark is an optional paid download. Prices are shown at checkout before you confirm, and you can buy several strips in a single order.",
           "Payments are handled by our third-party payment provider, Midtrans. By paying, you also agree to the provider's terms. We receive confirmation that a payment succeeded and an order reference, but we don't collect or store your full card or bank details.",
           "Because a purchase immediately unlocks a digital file for download, paid strips are generally non-refundable once unlocked — except where a refund is required by law, or where a technical fault on our side stops you from downloading a strip you paid for. If that happens, contact us and we'll put it right.",
-          "You can remove an unlocked strip from your gallery at any time. Removing it permanently deletes its files, so a removed strip can't be restored, downloaded again or refunded. The record of your purchase stays."
+          "You can remove an unlocked strip from your gallery at any time. Removing it permanently deletes its files, so a removed strip can't be restored, downloaded again or refunded. The record of your purchase stays.",
+          "If your account is deleted for inactivity, everything bought with it, including unlocked strips and paid scrapbooks, is deleted too and is not refunded."
         ],
         "scrapbook": "Scrapbooks work the same way. Once you finish a scrapbook and pay for it, it's final: it can't be edited, and it's non-refundable on the same terms as strips. Before you pay, you can still go back and keep editing. Removing a paid scrapbook permanently deletes its PDF; the record of your purchase stays."
       },
@@ -578,6 +588,7 @@
         "title": "Your Account",
         "body": [
           "You're responsible for activity under your account and for keeping your password confidential. Provide accurate information, and don't impersonate others or create an account for someone without their permission.",
+          "If you don't sign in for 90 days, we delete your account, as described in our Privacy Policy. If it has a confirmed email address, we email you before we do.",
           "You may delete your account at any time by contacting us. We may suspend or terminate accounts that violate these terms."
         ]
       }
@@ -585,7 +596,7 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: October 29, 2026",
+    "lastUpdated": "Last updated: November 3, 2026",
     "intro": "Your privacy matters to us. This Privacy Policy explains what little information Momoto handles when you use our playful date experiences at momoto, and how we keep your photos and moments yours. Momoto is designed to be privacy-conscious: your photos are made right in your browser, and we keep what we store to the minimum needed to run your account, save the strips you choose to keep, and handle any prints you buy.",
     "sections": {
       "collect": {
@@ -630,6 +641,7 @@
         "title": "Data Retention & Deletion",
         "body": [
           "The strips you save are stored with your account until you remove them from your cart or gallery or delete your account, at which point their images are deleted from our servers. For a strip you paid for, we keep a record that it existed — when it was made and the order it belonged to, never the photo — as part of our payment records. Photos you don't save stay only on your device — closing the tab or clearing your browser storage removes any local session data. Room codes are temporary and expire when a session ends.",
+          "If you don't sign in for 90 days, we delete your account and everything in it, including strips and scrapbooks you paid for, which are not refunded. If your account has a confirmed email address, we email you 14 days and again 3 days before, and signing in once cancels the deletion. Accounts without a confirmed email address are deleted after 180 days, without notice. As with any account deletion, the record of your payments is kept.",
           "Any basic technical log data our hosting keeps is retained only for a short period for security and then discarded."
         ]
       },
