@@ -1437,7 +1437,7 @@
         "stripCount_one": "{{count}} strip",
         "stripCount_other": "{{count}} strips",
         "perStrip": "{{price}} per strip",
-        "colStrips": "Strips",
+        "colItems": "Items",
         "colOrder": "Order",
         "colDate": "Date",
         "colAmount": "Amount",
