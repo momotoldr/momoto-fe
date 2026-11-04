@@ -55,11 +55,35 @@ export const notifySessionExpired = (): void => {
 }
 
 /**
+ * `momoto-core` wraps every JSON body as `{ statusCode, result }`; callers only ever see
+ * the `result`. Matched on exactly those two keys, so a body without the envelope —
+ * `momoto-realtime`'s, or core's before the envelope shipped — passes through untouched.
+ */
+const unwrapEnvelope = (data: unknown): unknown => {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return data
+  if (Object.keys(data).length !== 2 || !('statusCode' in data) || !('result' in data)) {
+    return data
+  }
+  return typeof data.statusCode === 'number' ? data.result : data
+}
+
+const unwrapResponse = (response: AxiosResponse): AxiosResponse => {
+  response.data = unwrapEnvelope(response.data)
+  return response
+}
+
+/**
  * A bare client for the refresh call so it doesn't recurse through the response
  * interceptor below. The refresh token travels as an httpOnly cookie
- * (`withCredentials`), so no body/token is needed here.
+ * (`withCredentials`), so no body/token is needed here. It still unwraps the envelope:
+ * besides the refresh itself, it replays the request a 401 interrupted, and that
+ * replay's body goes straight back to the original caller.
  */
 const refreshClient = axios.create({ baseURL: BASE_URL, withCredentials: true })
+refreshClient.interceptors.response.use(unwrapResponse, (error: unknown) => {
+  if (axios.isAxiosError(error) && error.response) unwrapResponse(error.response)
+  return Promise.reject(error)
+})
 
 let refreshInFlight: Promise<string | null> | null = null
 
@@ -113,12 +137,12 @@ const interceptSuccessResponse = (response: AxiosResponse): AxiosResponse | Prom
   // We got a response, so the server answered (even a `success: false` envelope).
   useServerStore.getState().setStatus('up')
 
-  const { data, config } = response
-
   // Binary downloads (`responseType: 'blob'`) are not JSON envelopes.
-  if (typeof Blob !== 'undefined' && data instanceof Blob) {
+  if (typeof Blob !== 'undefined' && response.data instanceof Blob) {
     return response
   }
+
+  const { data, config } = unwrapResponse(response)
 
   let parsedData: Record<string, unknown> = {}
   if (typeof data === 'string') {
@@ -200,7 +224,7 @@ const interceptErrorResponse = async (error: unknown): Promise<AxiosResponse> =>
   // endpoint erroring is not an outage, and `down` is the probe's verdict to make.
   useServerStore.getState().setStatus('up')
 
-  const { status, data, config } = error.response
+  const { status, data, config } = unwrapResponse(error.response)
 
   let parsedData: Record<string, unknown> = {}
   if (typeof data === 'string') {
