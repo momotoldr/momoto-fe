@@ -96,28 +96,28 @@
     "items": {
       "photobooth": {
         "title": "Virtual Photobooth",
-        "desc": "Snap a synced four-cut strip solo or with a friend, add filters and stickers, then download or share."
+        "desc": "Take four synced shots on your own, with your date or with the whole group, then style your strip with filters, stickers and new backgrounds."
       },
       "scrapbook": {
         "title": "Scrapbook",
-        "desc": "Fill a little book with your unlocked strips and your own words, then keep it as a PDF.",
+        "desc": "Fill a little book with strips from your gallery and your own words, then keep it as a PDF.",
         "open": "Open the scrapbook"
       }
     },
     "more": {
       "title": "More on the way",
-      "desc": "We're making more little dates for the two of you. Check back soon."
+      "desc": "We're working on more things to do together, just the two of you or the whole gang. Check back soon."
     }
   },
   "landing": {
     "badge": "Say cheese",
-    "heroTitle": "Fun Dates for Long Distance Relationships",
-    "heroSubtitle": "Momoto is a little studio of playful date experiences for long-distance relationships that kept us together through the distance. We hope you'll enjoy them too!",
+    "heroTitle": "Get in the Same Frame, Even Miles Apart",
+    "heroSubtitle": "Momoto is a little online studio for couples and friends who live apart. Step into a live photobooth together, then gather your strips into a scrapbook. It's how we stayed close across the distance, and we hope it does the same for you.",
     "ctaPrimary": "Pick an activity",
     "ctaSecondary": "Open the Photobooth",
-    "menuTitle": "What you can do",
+    "menuTitle": "Things to do together",
     "menuSubtitle": "One booth today, more moments on the way.",
-    "menuSubtitleMany": "A few things to do together today, more moments on the way.",
+    "menuSubtitleMany": "Pick one and make a memory together. More are on the way.",
     "browseActivities": "Browse all activities",
     "howTitle": "How it works",
     "ctaBannerTitle": "Ready for your close-up?",
@@ -130,30 +130,30 @@
     "steps": {
       "photobooth": {
         "pick": {
-          "title": "Pick a mode",
-          "desc": "Go solo, or invite a friend with a room code."
+          "title": "Choose who's in",
+          "desc": "Shoot solo, or share a room code so your date, or your whole group, can join live."
         },
         "pose": {
-          "title": "Strike a pose",
-          "desc": "A synced 3-2-1 countdown snaps your four-cut strip."
+          "title": "Pick a template, then pose",
+          "desc": "Choose your strip's look, then one shared 3-2-1 countdown snaps four shots for everyone at once."
         },
         "share": {
-          "title": "Make it yours",
-          "desc": "Add filters and stickers, then download or share."
+          "title": "Design your own copy",
+          "desc": "Everyone styles their own strip with filters, stickers and a new background. Save the free watermarked copy, or unlock a clean one ready to print."
         }
       },
       "scrapbook": {
         "fill": {
           "title": "Fill the pages",
-          "desc": "Place your unlocked strips in the spots each page saves for them."
+          "desc": "Drop strips from your gallery into the frames on each page."
         },
         "write": {
           "title": "Add your words",
-          "desc": "Give it a title, then write captions and little notes beside your photos."
+          "desc": "Give it a title, then write captions or little notes next to your photos."
         },
         "keep": {
-          "title": "Finish and keep",
-          "desc": "Unlock your finished scrapbook and download it as a PDF."
+          "title": "Check out and keep",
+          "desc": "Add the finished scrapbook to your cart, check out, and download it as a PDF."
         }
       }
     },

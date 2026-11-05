@@ -96,28 +96,28 @@
     "items": {
       "photobooth": {
         "title": "Photobooth Virtual",
-        "desc": "Ambil foto 4-strip sendiri atau bareng teman, hias dengan filter dan stiker, lalu simpan atau bagikan."
+        "desc": "Ambil empat foto tersinkron sendiri, bareng pasangan, atau ramai-ramai, lalu hias stripmu dengan filter, stiker, dan latar baru."
       },
       "scrapbook": {
         "title": "Scrapbook",
-        "desc": "Isi buku kecil dengan strip yang sudah kamu buka dan tulisanmu sendiri, lalu simpan sebagai PDF.",
+        "desc": "Isi buku kecil dengan strip dari galerimu dan tulisanmu sendiri, lalu simpan sebagai PDF.",
         "open": "Buka scrapbook"
       }
     },
     "more": {
       "title": "Lebih banyak menyusul",
-      "desc": "Kami sedang menyiapkan lebih banyak kencan kecil untuk kalian berdua. Nantikan, ya."
+      "desc": "Kami sedang menyiapkan lebih banyak hal seru untuk dilakukan bareng, berdua atau ramai-ramai. Nantikan, ya."
     }
   },
   "landing": {
     "badge": "Bilang cheese",
-    "heroTitle": "Kencan Seru untuk Pasangan LDR",
-    "heroSubtitle": "Momoto adalah studio kecil berisi pengalaman kencan yang menyenangkan untuk hubungan jarak jauh, yang menjaga kami tetap bersama melewati jarak tersebut.",
+    "heroTitle": "Jarak Jauh, Tetap Satu Momen",
+    "heroSubtitle": "Momoto adalah studio online kecil untuk pasangan dan teman yang tinggal berjauhan. Masuk ke photobooth bareng secara langsung, lalu kumpulkan strip kalian jadi scrapbook. Begitulah cara kami tetap dekat meski terpisah jarak, semoga berhasil juga buat kalian.",
     "ctaPrimary": "Pilih aktivitas",
     "ctaSecondary": "Buka Photobooth",
-    "menuTitle": "Yang bisa kamu lakukan",
+    "menuTitle": "Yang bisa dilakukan bareng",
     "menuSubtitle": "Satu booth hari ini, lebih banyak momen menyusul.",
-    "menuSubtitleMany": "Beberapa hal untuk dilakukan bersama hari ini, lebih banyak momen menyusul.",
+    "menuSubtitleMany": "Pilih satu dan bikin kenangan bareng. Yang lain segera menyusul.",
     "browseActivities": "Lihat semua aktivitas",
     "howTitle": "Cara kerjanya",
     "ctaBannerTitle": "Siap tampil di depan kamera?",
@@ -130,30 +130,30 @@
     "steps": {
       "photobooth": {
         "pick": {
-          "title": "Pilih mode",
-          "desc": "Sendiri, atau undang teman dengan kode ruangan."
+          "title": "Pilih siapa yang ikut",
+          "desc": "Foto sendiri, atau bagikan kode ruangan supaya pasangan, atau satu geng, bisa gabung langsung."
         },
         "pose": {
-          "title": "Bergaya",
-          "desc": "Hitungan mundur 3-2-1 tersinkron mengambil strip empat potonganmu."
+          "title": "Pilih template, lalu bergaya",
+          "desc": "Tentukan tampilan stripmu, lalu satu hitungan mundur 3-2-1 memotret empat foto untuk semua orang sekaligus."
         },
         "share": {
-          "title": "Sesuaikan gayamu",
-          "desc": "Tambahkan filter dan stiker, lalu unduh atau bagikan."
+          "title": "Hias versimu sendiri",
+          "desc": "Tiap orang menghias stripnya sendiri dengan filter, stiker, dan latar baru. Simpan salinan gratis yang ber-watermark, atau buka salinan bersih yang siap cetak."
         }
       },
       "scrapbook": {
         "fill": {
           "title": "Isi halamannya",
-          "desc": "Letakkan strip yang sudah kamu buka di tempat yang disediakan tiap halaman."
+          "desc": "Taruh strip dari galerimu ke bingkai di tiap halaman."
         },
         "write": {
           "title": "Tambahkan tulisanmu",
-          "desc": "Beri judul, lalu tulis keterangan dan catatan kecil di samping fotomu."
+          "desc": "Beri judul, lalu tulis keterangan atau catatan kecil di samping fotomu."
         },
         "keep": {
-          "title": "Selesaikan dan simpan",
-          "desc": "Buka scrapbook yang sudah selesai dan unduh sebagai PDF."
+          "title": "Checkout dan simpan",
+          "desc": "Masukkan scrapbook yang sudah jadi ke keranjang, checkout, lalu unduh sebagai PDF."
         }
       }
     },
