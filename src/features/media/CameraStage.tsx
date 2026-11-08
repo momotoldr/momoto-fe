@@ -473,7 +473,7 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
    * moment the work moves off the camera. Shrunk to a rail on desktop; a single
    * line of chrome above the strip on a phone.
    */
-  const cameraRail = (note: string) => (
+  const cameraRail = () => (
     <div className={styles.arrangeCamera}>
       {allCamerasLive && <span className={styles.railLabel}>{t('select.stillLive')}</span>}
       {/* The rail is a 13.25rem column on desktop, so four stacked tiles would run off
@@ -511,7 +511,6 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
         <span className={styles.arrangeInlineNote}>{line('select.camerasLive')}</span>
       )}
       <MediaControls mode={mode} compact cameraLocked={cameraLocked} />
-      <p className={styles.arrangeNote}>{note}</p>
     </div>
   )
 
@@ -545,7 +544,7 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
     return (
       <div className={styles.stage}>
         <div className={styles.arrange}>
-          {cameraRail(line('result.stillLiveNote'))}
+          {cameraRail()}
           <div className={styles.arrangePanel}>
             <StripResult onRetake={retakeAll} retakeBlockedReason={retakeCameraReason} />
           </div>
@@ -562,7 +561,7 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
     return (
       <div className={styles.stage}>
         <div className={styles.arrange}>
-          {cameraRail(line('select.stillLiveNote'))}
+          {cameraRail()}
 
           <div className={styles.arrangePanel}>
             <StripSelector
