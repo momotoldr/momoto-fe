@@ -12,7 +12,7 @@
     "categories": "Categories",
     "loading": "Loading…",
     "tryAgain": "Try again",
-    "backHome": "Back home",
+    "backHome": "Back to home",
     "close": "Close",
     "copyright": "All Rights Reserved",
     "cancel": "Cancel",
@@ -46,7 +46,7 @@
       },
       "account": {
         "label": "Account & sign-in",
-        "hint": "Login, email, password, partner link",
+        "hint": "Sign-in, email, password, partner link",
         "placeholder": "What's going wrong with your account? Your username helps us find it…"
       },
       "other": {
@@ -56,7 +56,7 @@
       }
     },
     "messageLabel": "Your message",
-    "emailLabel": "Email",
+    "emailLabel": "Email address",
     "emailPlaceholder": "you@example.com",
     "emailHint": "We'll use this to reply to you.",
     "submit": "Send",
@@ -78,81 +78,81 @@
     "activities": "Activities",
     "help": "Help Center",
     "menu": "Menu",
-    "tnc": "Terms and Condition",
+    "tnc": "Terms & Conditions",
     "policy": "Privacy Policy",
     "cart": "Cart",
     "gallery": "Gallery"
   },
   "activities": {
     "title": "Activities",
-    "subtitle": "Pick something to do together — with more on the way.",
-    "live": "Live",
-    "open": "Open the booth",
+    "subtitle": "Choose an activity to do together — more coming soon.",
+    "live": "Available",
+    "open": "Enter booth",
     "modes": {
       "solo": "Solo",
-      "date": "Date",
+      "date": "Couple",
       "group": "Group"
     },
     "items": {
       "photobooth": {
         "title": "Virtual Photobooth",
-        "desc": "Take four synced shots on your own, with your date or with the whole group, then style your strip with filters, stickers and new backgrounds."
+        "desc": "Take four synced shots solo, with your partner, or in a group. Then style your strip with filters, stickers, and custom backgrounds."
       },
       "scrapbook": {
         "title": "Scrapbook",
-        "desc": "Fill a little book with strips from your gallery and your own words, then keep it as a PDF.",
-        "open": "Open the scrapbook"
+        "desc": "Curate a digital booklet with photo strips from your gallery and personal notes, then save it as a PDF.",
+        "open": "Create scrapbook"
       }
     },
     "more": {
-      "title": "More on the way",
-      "desc": "We're working on more things to do together, just the two of you or the whole gang. Check back soon."
+      "title": "Coming Soon",
+      "desc": "We are crafting more interactive experiences for you and your favorite people. Stay tuned!"
     }
   },
   "landing": {
-    "badge": "Say cheese",
-    "heroTitle": "Get in the Same Frame, Even Miles Apart",
-    "heroSubtitle": "Momoto is a little online studio for couples and friends who live apart. Step into a live photobooth together, then gather your strips into a scrapbook. It's how we stayed close across the distance, and we hope it does the same for you.",
-    "ctaPrimary": "Pick an activity",
-    "ctaSecondary": "Open the Photobooth",
-    "menuTitle": "Things to do together",
+    "badge": "Say Cheese!",
+    "heroTitle": "One Frame, Even Miles Apart",
+    "heroSubtitle": "Momoto is an online photobooth studio for long-distance couples and friends. Hop into a live booth together, style your photo strips, and save them in a shared scrapbook.",
+    "ctaPrimary": "Explore Activities",
+    "ctaSecondary": "Enter the Photobooth",
+    "menuTitle": "Activities to do together",
     "menuSubtitle": "One booth today, more moments on the way.",
-    "menuSubtitleMany": "Pick one and make a memory together. More are on the way.",
-    "browseActivities": "Browse all activities",
-    "howTitle": "How it works",
-    "ctaBannerTitle": "Ready for your close-up?",
+    "menuSubtitleMany": "Pick an activity and create lasting memories together. More experiences coming soon.",
+    "browseActivities": "Explore all activities",
+    "howTitle": "How It Works",
+    "ctaBannerTitle": "Ready to capture the moment?",
     "footerTag": "Snap, strip, share.",
     "strips": {
       "solo": "Solo",
-      "date": "Date",
+      "date": "Couple",
       "group": "Group"
     },
     "steps": {
       "photobooth": {
         "pick": {
-          "title": "Choose who's in",
+          "title": "Invite your people",
           "desc": "Shoot solo, or share a room code so your date, or your whole group, can join live."
         },
         "pose": {
-          "title": "Pick a template, then pose",
+          "title": "Pick a template & pose",
           "desc": "Choose your strip's look, then one shared 3-2-1 countdown snaps four shots for everyone at once."
         },
         "share": {
-          "title": "Design your own copy",
+          "title": "Customize your photo strip",
           "desc": "Everyone styles their own strip with filters, stickers and a new background. Save the free watermarked copy, or unlock a clean one ready to print."
         }
       },
       "scrapbook": {
         "fill": {
-          "title": "Fill the pages",
+          "title": "Arrange your strips",
           "desc": "Drop strips from your gallery into the frames on each page."
         },
         "write": {
-          "title": "Add your words",
+          "title": "Add notes & stories",
           "desc": "Give it a title, then write captions or little notes next to your photos."
         },
         "keep": {
-          "title": "Check out and keep",
+          "title": "Download & keep forever",
           "desc": "Add the finished scrapbook to your cart, check out, and download it as a PDF."
         }
       }
@@ -170,7 +170,7 @@
       "title": "What people say",
       "subtitle": "Little moments from couples and friends who've stepped into the booth.",
       "features": {
-        "date": "Date mode",
+        "date": "Couple mode",
         "group": "Group",
         "solo": "Solo",
         "templates": "Templates",
@@ -185,7 +185,7 @@
     "badge": "Help Center",
     "title": "How can we help?",
     "intro": "Pick a category to see the problems people run into most and how to fix them. Still stuck? Send us a message and we'll reply by email.",
-    "categoriesTitle": "Browse by category",
+    "categoriesTitle": "Explore by category",
     "commonIssues_one": "{{count}} common issue",
     "commonIssues_other": "{{count}} common issues",
     "panelContact": "Didn't find your answer? Tell us about it — we'll know which category it's in.",
@@ -208,11 +208,11 @@
       },
       "friend": {
         "q": "Can I use it with a friend?",
-        "a": "Absolutely. Pick Date mode and share your room code — you'll each see the other's live camera and take the strip together."
+        "a": "Absolutely. Pick Couple mode and share your room code — you'll each see the other's live camera and take the strip together."
       },
       "privacy": {
         "q": "Where do my photos go?",
-        "a": "Your photos are captured and composed right in your browser. When you create a strip it's saved to your account so it appears in your cart across your devices; in Date mode the live video is streamed peer-to-peer and never recorded."
+        "a": "Your photos are captured and composed right in your browser. When you create a strip it's saved to your account so it appears in your cart across your devices; in Couple mode the live video is streamed peer-to-peer and never recorded."
       },
       "need": {
         "q": "What do I need to get started?",
@@ -244,7 +244,7 @@
           },
           "peer": {
             "q": "I can't see or hear my friend",
-            "a": "In a Date session your video travels straight between your two devices. Some networks — office, campus or public wifi — make that connection harder.",
+            "a": "In a Couple session your video travels straight between your two devices. Some networks — office, campus or public wifi — make that connection harder.",
             "steps": [
               "Make sure both of you allowed the camera and the microphone.",
               "Check that neither of you is muted in the camera controls.",
@@ -258,7 +258,7 @@
             "steps": [
               "Wait a few seconds; the booth reconnects on its own.",
               "If it doesn't, reopen the room with the same code before time runs out — you'll pick up where you left off.",
-              "While someone is away, the camera is put on hold so no cut is taken alone. The host can start again once everyone is back."
+              "While someone is away, the camera is put on hold so no shot is taken alone. The host can start again once everyone is back."
             ]
           },
           "start": {
@@ -515,13 +515,13 @@
   },
   "terms": {
     "title": "Terms & Conditions",
-    "lastUpdated": "Last updated: November 3, 2026",
-    "intro": "Welcome to Momoto. These Terms & Conditions govern your use of our playful date experiences — including the Virtual Photobooth and other activities — available in your web browser at momoto and any related apps. By using Momoto, you agree to these terms. If you don't agree, please don't use the service.",
+    "lastUpdated": "Last updated: November 8, 2026",
+    "intro": "Welcome to Momoto. These Terms & Conditions govern your use of our online photobooth studio — including the Virtual Photobooth, Scrapbook and other activities — available in your web browser at momoto and any related apps. By using Momoto, you agree to these terms. If you don't agree, please don't use the service.",
     "sections": {
       "service": {
         "title": "The Service",
         "body": [
-          "Momoto is a little studio of playful date experiences built for long-distance relationships. It lets two people in different places share a moment together in real time — snapping a synced photo strip, or playing other activities as we add them.",
+          "Momoto is an online photobooth studio for long-distance couples and friends. It lets people in different places capture moments together in real time — taking a synced photo strip, saving strips in a scrapbook, or trying other activities as we add them.",
           "The service is provided for personal, non-commercial entertainment. Features may change, launch, or be retired over time as we keep improving Momoto."
         ]
       },
@@ -536,7 +536,7 @@
         "title": "Your Content & Photos",
         "body": [
           "Your photos are yours. Photo strips are captured and composed within your own browser. When you save a strip to your cart, the composed image is uploaded to our servers and stored with your account so you can reach it across your devices; you can remove it at any time. We use your strips only to provide the service to you.",
-          "In a shared \"Date\" session, your live camera is streamed peer-to-peer to the friend you invited, so you can pose together. Momoto only relays the connection — it doesn't record or keep that video. What each of you chooses to download or share afterward is up to you.",
+          "In a shared \"Couple\" session, your live camera is streamed peer-to-peer to the friend you invited, so you can pose together. Momoto only relays the connection — it doesn't record or keep that video. What each of you chooses to download or share afterward is up to you.",
           "You are responsible for the content you capture and share, and for respecting the privacy and consent of anyone who appears in it."
         ]
       },
@@ -596,15 +596,15 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: November 3, 2026",
-    "intro": "Your privacy matters to us. This Privacy Policy explains what little information Momoto handles when you use our playful date experiences at momoto, and how we keep your photos and moments yours. Momoto is designed to be privacy-conscious: your photos are made right in your browser, and we keep what we store to the minimum needed to run your account, save the strips you choose to keep, and handle any prints you buy.",
+    "lastUpdated": "Last updated: November 8, 2026",
+    "intro": "Your privacy matters to us. This Privacy Policy explains what little information Momoto handles when you use our online photobooth and scrapbook at momoto, and how we keep your photos and moments yours. Momoto is designed to be privacy-conscious: your photos are made right in your browser, and we keep what we store to the minimum needed to run your account, save the strips you choose to keep, and handle any prints you buy.",
     "sections": {
       "collect": {
         "title": "Information We Collect",
         "body": [
           "To use Momoto's activities you create an account, so we collect the details you provide: your email address, a securely hashed password (we never store it in plain text), your display name, an optional avatar, and — if you add it — the city or regency you live in (or your country and city if you live outside Indonesia). If you sign in with Google, we receive your basic Google profile (email, name, and picture).",
           "When you save a strip, we store the finished image with your account: a watermarked preview and, if you purchase a print, a clean unwatermarked copy. If you buy a print, our payment provider (Midtrans) processes the payment; we receive a confirmation and an order reference tied to your account, but not your full card or bank details.",
-          "To run a shared \"Date\" session, our server briefly handles a temporary room code and the connection details needed to link you and your partner's browsers — the video and audio themselves are relayed peer-to-peer and never recorded.",
+          "To run a shared \"Couple\" session, our server briefly handles a temporary room code and the connection details needed to link you and your partner's browsers — the video and audio themselves are relayed peer-to-peer and never recorded.",
           "Like most websites, our hosting may process basic technical data (such as IP address and browser type) in server logs for security and reliability."
         ]
       },
@@ -612,7 +612,7 @@
         "title": "Photos, Video & Audio",
         "body": [
           "Your photos are captured and composed entirely inside your own browser. The raw camera frames are never uploaded — only the finished strip you choose to save is. When you save a strip to your cart, that composed image is uploaded and stored with your account so you can find it across your devices (a free version carries a watermark; a purchased copy is clean). You can remove a saved strip from your cart at any time, which deletes it from our servers.",
-          "In a Date session, your live camera and microphone are streamed directly to the friend you invited, peer-to-peer. Our server only helps the two browsers find each other (and may relay the stream if a direct connection isn't possible); we do not record, view, or store that video or audio."
+          "In a Couple session, your live camera and microphone are streamed directly to the friend you invited, peer-to-peer. Our server only helps the two browsers find each other (and may relay the stream if a direct connection isn't possible); we do not record, view, or store that video or audio."
         ]
       },
       "storage": {
@@ -625,14 +625,14 @@
       "usage": {
         "title": "How We Use Information",
         "body": [
-          "We use the limited information described above only to provide the service: to connect you with your friend in a Date session, to save the strips you choose to keep and make them available across your devices, to fulfill and confirm any prints you buy, to keep sessions running smoothly, and to protect the service against abuse.",
+          "We use the limited information described above only to provide the service: to connect you with your friend in a Couple session, to save the strips you choose to keep and make them available across your devices, to fulfill and confirm any prints you buy, to keep sessions running smoothly, and to protect the service against abuse.",
           "We do not sell your data, and we don't use it for advertising or profiling."
         ]
       },
       "sharing": {
         "title": "Who We Share Data With",
         "body": [
-          "In a session, the only \"sharing\" is the live camera and audio you send directly to the friend you invited during a Date session — you choose who that is.",
+          "In a session, the only \"sharing\" is the live camera and audio you send directly to the friend you invited during a Couple session — you choose who that is.",
           "If you're signed in and leave a comment with a 4 or 5-star rating beside a strip, we may feature it on our website as a testimonial, together with your display name, your city or country, your uploaded profile picture and your rating. If your account is linked to a partner at the time, their display name, city or country and uploaded profile picture may appear alongside yours. To have a testimonial removed, contact us using the details below.",
           "Behind the scenes we rely on standard infrastructure providers (for hosting and for the connection-relay servers that WebRTC needs), and — when you buy a print — a payment provider (Midtrans) to process the transaction, purely to deliver the service. We don't sell or rent your information to anyone."
         ]
@@ -675,16 +675,16 @@
   "photobooth": {
     "title": "Virtual Photobooth",
     "heading": "How are you shooting today?",
-    "subtitle": "Take a four-cut photo strip — on your own, or synced live with a friend.",
+    "subtitle": "Take four shots for one photo strip, solo or live with your people.",
     "sampleLabel": "You'll get",
-    "sampleHint": "Four cuts, printable, watermark optional.",
+    "sampleHint": "Four shots, ready to print, watermark optional.",
     "frameYou": "You",
     "frameFriend": "Friend",
     "solo": "Solo",
-    "soloHint": "Just you — no code needed",
+    "soloHint": "Just you, no code needed",
     "soloCta": "Start",
-    "date": "Date",
-    "dateHint": "Invite a friend with a code",
+    "date": "Couple",
+    "dateHint": "Invite your partner or a friend with a code",
     "dateCta": "Create room",
     "joinTitle": "Already have a code?",
     "joinHint": "Someone invited you to their booth.",
@@ -693,13 +693,13 @@
     "join": "Join",
     "codeInvalid": "Enter a valid room code (letters and numbers).",
     "codeRequired": "Please enter a room code.",
-    "createFailed": "Couldn't start a date room — the server is unreachable. Please try again.",
+    "createFailed": "Couldn't start a couple room. The server is unreachable. Please try again.",
     "joining": "Joining…",
     "join_not_found": "No room with that code — double-check it and try again.",
     "join_full": "That room is already full. Try a different code.",
     "join_ended": "That room's session has already ended.",
     "joinCheckFailed": "Couldn't reach the server. Check your connection and try again.",
-    "cameraDisabled": "Please turn on your camera first",
+    "cameraDisabled": "Please turn on your camera first.",
     "frameFriends": "Friends",
     "group": "Group",
     "groupHint": "Up to {{count}} of you in one booth",
@@ -722,7 +722,7 @@
     "roomClosedTitle": "This room has closed",
     "roomClosedMessage": "Its photo session already ended, so the code no longer works. Start a fresh booth from the photobooth.",
     "connectFailedTitle": "Can't reach the server",
-    "connectFailedMessage": "A date room needs a connection so your friend can join. Check your network and try again.",
+    "connectFailedMessage": "A couple room needs a connection so the other person can join. Check your network and try again.",
     "notFoundTitle": "Room not found",
     "notFoundMessage": "No room has that code. Check the code, or start a fresh booth from the photobooth.",
     "leaveDialog": {
@@ -770,8 +770,8 @@
     "friendJoinedGroup": "Someone joined",
     "friendLeftGroup": "Someone dropped out — keep going, your photos are safe. They can rejoin with the same code.",
     "friendLeftCapturingGroup": "Someone dropped out, so the capture stopped. Start again once everyone is back.",
-    "friendJoinedCapturing": "Your friend joined, so the capture stopped. Start again so they’re in the strip too.",
-    "friendJoinedCapturingGroup": "Someone joined, so the capture stopped. Start again so they’re in the strip too."
+    "friendJoinedCapturing": "Your friend joined, so the capture stopped. Start again so they're in the strip too.",
+    "friendJoinedCapturingGroup": "Someone joined, so the capture stopped. Start again so they're in the strip too."
   },
   "templates": {
     "label": "Template",
@@ -803,7 +803,7 @@
   },
   "capture": {
     "takingPhotos": "Taking photos… {{taken}}/{{total}}",
-    "startSession": "Start Session",
+    "startSession": "Start session",
     "starting": "Starting…",
     "waitingForHost": "Waiting for your host to start…",
     "waitingForFriend": "You can start once your friend is back in the room.",
@@ -820,7 +820,7 @@
     "waitingCamOffGroupGuest": "Waiting for the last camera to come on — someone has theirs off.",
     "stoppedOffline": "You went offline, so the capture stopped. Start again once you're back on.",
     "stoppedOfflineGuest": "You went offline, so the capture stopped. Your host can start again once you're both back.",
-    "friendAlreadyShot": "Waiting for your friend to retake — they already have this round’s shots, so a new round is what puts you in the strip.",
+    "friendAlreadyShot": "Waiting for your friend to retake — they already have this round's shots, so a new round is what puts you in the strip.",
     "leftBooth": "You left the booth — some shots may have run without you.",
     "draftRestored_one": "Picked up where you left off — {{count}} shot recovered.",
     "draftRestored_other": "Picked up where you left off — {{count}} shots recovered.",
@@ -828,17 +828,17 @@
     "shotAlt": "Shot {{index}}",
     "headlineTop": "Four shots,",
     "headlineBottom": "one strip.",
+    "headlineNoteSolo": "A short countdown runs before each shot, so you have time to pose.",
     "headlineNote": "Both cameras fire on the same count, so you land on the same shot.",
-    "liveNote": "Both cameras are live — you're only on the strip once it starts.",
+    "startNoteSolo": "3-2-1 before every shot.",
     "startNote": "3-2-1 on both screens at once.",
     "stripLabel": "Your strip",
     "stripProgress": "{{taken}} of {{total}}",
     "capturing": "Capturing…",
     "waitingForGroup": "You can start once at least three of you are in the room.",
     "headlineNoteGroup": "Every camera fires on the same count, so you all land on the same shot.",
-    "liveNoteGroup": "Everyone's camera is live — you're only on the strip once it starts.",
-    "startNoteGroup": "3-2-1 on everyone’s screen at once.",
-    "friendAlreadyShotGroup": "Waiting for your host to retake — the others already have this round’s shots, so a new round is what puts you in the strip.",
+    "startNoteGroup": "3-2-1 on everyone's screen at once.",
+    "friendAlreadyShotGroup": "Waiting for your host to retake — the others already have this round's shots, so a new round is what puts you in the strip.",
     "stoppedOfflineGuestGroup": "You went offline, so the capture stopped. Your host can start again once everyone is back.",
     "waitingForGroupGuest": "Waiting for more people — a group session needs at least three in the room.",
     "waitingForFriendGuest": "Waiting for your friend to come back to the room."
@@ -865,12 +865,14 @@
     "confirmCreate": "Yes, create it",
     "confirmCancel": "Keep editing",
     "stillLive": "Still live",
+    "stillLiveNoteSolo": "Take your time designing. Your shots are already taken.",
     "stillLiveNote": "Keep talking while you design. Your shots are already taken.",
     "stripLabel": "Your strip",
     "createNote": "Creating is final — arrangement, filter and stickers lock.",
     "createNoteBackdrop": "Creating is final — arrangement, background, filter and stickers lock.",
     "tabFilter": "Filter",
     "tabStickers": "Stickers",
+    "camerasLiveSolo": "Camera still on.",
     "camerasLive": "Cameras still live — keep talking.",
     "retakeWaitingGroup": "Retakes are paused until enough of you are back in the room.",
     "retakeShortHanded": "Retakes are paused — this strip was shot with more people than are in the room now. They can rejoin with the same code.",
@@ -918,7 +920,7 @@
       "items": {
         "template": {
           "title": "Pick a template first",
-          "text": "It decides how your four cuts are framed, and the live preview reshapes to match it."
+          "text": "It decides how your four shots are framed, and the live preview reshapes to match it."
         },
         "preview": {
           "title": "Watch the strip preview",
@@ -928,7 +930,7 @@
           "title": "The host starts the session",
           "title_solo": "Start when you're ready",
           "text": "Both cameras fire on the same 3-2-1 count — four shots, one after another.",
-          "text_solo": "Press Start Session and the countdown takes over — four shots, one after another.",
+          "text_solo": "Press Start session and the countdown takes over — four shots, one after another.",
           "text_group": "Every camera fires on the same 3-2-1 count — four shots, one after another."
         },
         "pose": {
@@ -942,7 +944,7 @@
       "lead": "This is the last stop before the strip is built — take your time here.",
       "items": {
         "reorder": {
-          "title": "Reorder your cuts",
+          "title": "Reorder your shots",
           "text": "Tap a photo, then tap the one it should trade places with."
         },
         "retake": {
@@ -950,10 +952,10 @@
           "text": "Tap the retake icon on a single shot, or retake all four and run the session again."
         },
         "style": {
-          "title": "Filter and stickers",
+          "title": "Filter & stickers",
           "text": "A filter sets the look of the whole strip; stickers go on top, wherever you drop them.",
-          "title_backdrop": "Background, filter and stickers",
-          "text_backdrop": "Swap the background behind everyone, set the look of the whole strip with a filter, then drop stickers on top."
+          "title_backdrop": "Background, filter & stickers",
+          "text_backdrop": "Swap the background, set the look of the whole strip with a filter, then drop stickers on top."
         },
         "final": {
           "title": "Creating is final",
@@ -1047,9 +1049,9 @@
     "cuteRainbow": "Pink Rainbow",
     "faceBear": "Bear Face",
     "faceHeart": "Heart Face",
-    "flowers": "Flower",
+    "flowers": "Flowers",
     "smileFlower": "Smiley Flower",
-    "heartColorful": "Heart Colorful",
+    "heartColorful": "Colorful Heart",
     "smiling": "Smiling",
     "sun": "Sun",
     "stars": "Stars",
@@ -1067,9 +1069,9 @@
     }
   },
   "result": {
-    "composing": "Composing your strip…",
+    "composing": "Creating your strip…",
     "saving": "Saving your strip…",
-    "composeError": "Could not compose the strip.",
+    "composeError": "Couldn't create your strip.",
     "retake": "Retake",
     "download": "Download PNG",
     "choosePhotos": "Choose photos",
@@ -1079,7 +1081,8 @@
     "headline": "That's your strip.",
     "leadSignedIn": "Share it anywhere — the free copy carries a small {{brand}} watermark. A clean, print-ready copy waits in your cart.",
     "leadGuest": "Kept in this browser for now. Sign in and it moves to your cart, where a clean, print-ready copy can be unlocked.",
-    "stripMeta": "{{template}} · {{cuts}} cuts · watermarked",
+    "stripMeta": "{{template}} · {{cuts}} shots · watermarked",
+    "stillLiveNoteSolo": "Still in the booth until time's up.",
     "stillLiveNote": "Still in the room until time's up — keep talking while you share.",
     "printTitle": "Want it without the watermark?",
     "printText": "Unlock a clean copy from your cart to download and print.",
@@ -1099,18 +1102,18 @@
     "ratingTitle": "How was your session?",
     "ratingText": "One tap tells us how the booth is doing — it shapes what we fix next.",
     "ratingStar": "Rate {{count}} of 5",
-    "ratingNotePlaceholder": "Anything you’d like to add? (optional)",
+    "ratingNotePlaceholder": "Anything you'd like to add? (optional)",
     "ratingSubmit": "Send rating",
     "ratingSending": "Sending…",
     "ratingThanksTitle": "Thanks for the rating!",
     "ratingThanksText": "Something not working? The support button is in the bottom-right corner of every page.",
-    "ratingError": "Couldn’t send your rating. Please try again.",
+    "ratingError": "Couldn't send your rating. Please try again.",
     "notSaved": "Not saved",
     "retrySave": "Try again",
     "downloadStrip": "Download"
   },
   "cart": {
-    "title": "Your cart",
+    "title": "Your Cart",
     "subtitle_one": "{{count}} strip saved.",
     "subtitle_other": "{{count}} strips saved.",
     "subtitleEmpty": "Everything you make waits here until you unlock it.",
@@ -1125,10 +1128,10 @@
     "loadError": "Couldn't load your cart.",
     "retry": "Try again",
     "empty": "Your cart is empty. Whatever you make in an activity waits here until you unlock it.",
-    "emptyCta": "Browse activities",
+    "emptyCta": "Explore activities",
     "clearAll": "Clear all",
     "soloGroup": "Solo sessions",
-    "dateGroup": "Date sessions",
+    "dateGroup": "Couple sessions",
     "unknownSession": "Saved strips",
     "stripCount_one": "{{count}} strip",
     "stripCount_other": "{{count}} strips",
@@ -1171,17 +1174,17 @@
     "clearConfirm": "Clear all",
     "tipTitle_one": "1 item in your cart",
     "tipTitle_other": "{{count}} items in your cart",
-    "tipText": "Open your cart to unlock and download them.",
-    "tipCta": "Go to cart",
+    "tipText": "Open your cart to review and download them.",
+    "tipCta": "View cart",
     "tipDismiss": "Dismiss",
     "galleryFull": "Your gallery is full. Remove a strip there to make room.",
     "viewGallery": "View gallery",
     "unlock": "Unlock",
     "unlockBusy": "Unlocking…",
-    "unlocked": "Unlocked — it’s in your gallery.",
-    "unlockError": "Couldn’t unlock that strip.",
+    "unlocked": "Unlocked — it's in your gallery.",
+    "unlockError": "Couldn't unlock that strip.",
     "newStripSolo": "New solo strip",
-    "newStripDate": "New date strip",
+    "newStripDate": "New couple strip",
     "slotsLeft_one": "{{count}} slot left",
     "slotsLeft_other": "{{count}} slots left",
     "groupGroup": "Group sessions",
@@ -1202,7 +1205,7 @@
     "clearKeptPaying_other": "Kept the {{count}} items your payment covers."
   },
   "gallery": {
-    "title": "Your gallery",
+    "title": "Your Gallery",
     "subtitle_one": "{{count}} paid strip",
     "subtitle_other": "{{count}} paid strips",
     "subtitleEmpty": "Nothing purchased yet",
@@ -1224,26 +1227,26 @@
     "downloadStrip": "Download this strip",
     "badgeToday": "TODAY",
     "stripAlt": "Photo strip from {{date}}",
-    "fullBanner": "Your gallery is full — {{used}} of {{limit}} paid strips — so the strip waiting in your cart couldn’t be added. Remove one you’ve already downloaded to make room.",
+    "fullBanner": "Your gallery is full — {{used}} of {{limit}} paid strips — so the strip waiting in your cart couldn't be added. Remove one you've already downloaded to make room.",
     "notAdded": "Not added",
     "notAddedReason": "Gallery full",
     "emptyTitle": "No strips in your gallery",
     "emptyText": "Strips land here once you've paid for them, grouped by the month you took them. Download one for the clean, watermark-free file. You can keep up to {{limit}} at a time.",
-    "emptyCta": "Open the photobooth",
-    "emptyCtaAlt": "Browse activities",
+    "emptyCta": "Enter the Photobooth",
+    "emptyCtaAlt": "Explore activities",
     "downloadError": "Couldn't download that strip.",
     "tileActions": "Show actions for this strip",
     "filterEmptyTitle": "No {{mode}} strips yet",
     "filterEmptyText": "Nothing in your gallery came from a {{mode}} session.",
-    "filterEmptyCta": "Show all {{count}}",
-    "filter_all": "All {{count}}",
-    "filter_solo": "Solo {{count}}",
-    "filter_date": "Date {{count}}",
+    "filterEmptyCta": "Show all ({{count}})",
+    "filter_all": "All ({{count}})",
+    "filter_solo": "Solo ({{count}})",
+    "filter_date": "Couple ({{count}})",
     "badge_solo": "SOLO",
-    "badge_date": "DATE",
+    "badge_date": "COUPLE",
     "mode_solo": "Solo",
-    "mode_date": "Date",
-    "filter_group": "Group {{count}}",
+    "mode_date": "Couple",
+    "filter_group": "Group ({{count}})",
     "badge_group": "GROUP",
     "mode_group": "Group",
     "removeStrip": "Remove this strip",
@@ -1298,21 +1301,21 @@
     "backHome": "Back to home",
     "api": {
       "generic": "Something went wrong. Please try again.",
-      "register": "Could not create your account right now. Please try again.",
-      "login": "Could not sign you in right now. Please try again.",
-      "google": "Could not sign you in with Google right now. Please try again.",
-      "loadAccount": "Could not load your account right now. Please try again.",
-      "saveProfile": "Could not save your profile right now. Please try again.",
-      "createRoom": "Could not create a room right now. Please try again.",
-      "checkRoom": "Could not check that room right now. Please try again.",
-      "videoSetup": "Could not set up the video connection. Please try again.",
+      "register": "Couldn't create your account right now. Please try again.",
+      "login": "Couldn't sign you in right now. Please try again.",
+      "google": "Couldn't sign you in with Google right now. Please try again.",
+      "loadAccount": "Couldn't load your account right now. Please try again.",
+      "saveProfile": "Couldn't save your profile right now. Please try again.",
+      "createRoom": "Couldn't create a room right now. Please try again.",
+      "checkRoom": "Couldn't check that room right now. Please try again.",
+      "videoSetup": "Couldn't set up the video connection. Please try again.",
       "setEmail": "We couldn't save that email address. Try again in a moment.",
       "verifyEmail": "We couldn't confirm that link. Try again in a moment.",
       "changePassword": "We couldn't change your password. Try again in a moment.",
       "forgotPassword": "We couldn't send the reset link. Try again in a moment.",
       "resetPassword": "We couldn't reset your password. Try again in a moment."
     },
-    "offline": "You’re offline. Check your connection and try again."
+    "offline": "You're offline. Check your connection and try again."
   },
   "mediaError": {
     "denied": {
@@ -1333,7 +1336,7 @@
     },
     "unknown": {
       "title": "Something went wrong",
-      "message": "We could not access your camera. Please try again."
+      "message": "We couldn't access your camera. Please try again."
     }
   },
   "auth": {
@@ -1348,11 +1351,11 @@
     "hidePassword": "Hide password",
     "fields": {
       "username": "Username",
-      "email": "Email",
+      "email": "Email address",
       "password": "Password",
       "displayName": "Display name",
       "avatar": "Profile picture",
-      "identifier": "Username or email",
+      "identifier": "Username or email address",
       "currentPassword": "Current password",
       "newPassword": "New password",
       "confirmPassword": "Confirm new password",
@@ -1363,23 +1366,23 @@
       "regency": "City or regency"
     },
     "login": {
-      "title": "Welcome back",
-      "subtitle": "Sign in to pick an activity.",
-      "panelTagline": "Playful date experiences for long-distance relationships.",
-      "submit": "Log in",
-      "submitting": "Logging in…",
-      "noAccount": "New here?",
-      "registerLink": "Create an account",
+      "title": "Welcome back!",
+      "subtitle": "Sign in to pick an activity and start making memories.",
+      "panelTagline": "Playful photobooth experiences for long-distance couples & friends.",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Sign up",
       "forgotPassword": "Forgot password?"
     },
     "register": {
       "title": "Create your account",
-      "subtitle": "Sign up to start making moments together.",
-      "submit": "Sign up",
+      "subtitle": "Sign up to start capturing special moments together.",
+      "submit": "Create account",
       "submitting": "Creating…",
       "consent": "By signing up, you agree to our <terms>Terms & Conditions</terms> and <privacy>Privacy Policy</privacy>.",
       "haveAccount": "Already have an account?",
-      "loginLink": "Log in"
+      "loginLink": "Sign in"
     },
     "profile": {
       "title": "Profile",
@@ -1411,8 +1414,8 @@
       "stats": {
         "strips": "Strips in gallery",
         "stripsShort": "Strips",
-        "date": "Date strips",
-        "dateShort": "Date",
+        "date": "Couple strips",
+        "dateShort": "Couple",
         "months_one": "{{count}} month",
         "months_other": "{{count}} months",
         "thisMonth": "This month",
@@ -1446,7 +1449,7 @@
         "scrapbookLine": "Scrapbook · {{title}}",
         "emptyTitle": "No purchases yet",
         "emptyBody": "Paying for a strip unlocks the clean, watermark-free copy and moves it into your gallery. Orders show up here once you do.",
-        "openCart": "Open your cart",
+        "openCart": "View cart",
         "loadError": "Couldn't load your orders. Please try again."
       },
       "cropTitle": "Position your picture",
@@ -1475,10 +1478,10 @@
       "codePlaceholder": "Enter partner code",
       "accept": "Link partner",
       "linked": "You're now linked!",
-      "linkedHint": "Your strips are shared as a couple and Date sessions are unlocked.",
+      "linkedHint": "Your strips are shared as a couple and Couple sessions are unlocked.",
       "generating": "Generating…",
       "generateHint": "We make a code you can send to your partner. It expires 24 hours after you generate it. Once linked, it can't be undone.",
-      "acceptHint": "Linking shares your strips as a couple and unlocks Date sessions. A link is permanent.",
+      "acceptHint": "Linking shares your strips as a couple and unlocks Couple sessions. A link is permanent.",
       "copy": "Copy",
       "copied": "Copied",
       "copyFailed": "Couldn't copy — select the code and copy it yourself."
@@ -1490,7 +1493,7 @@
       "email_taken": "An account with that email already exists.",
       "invalid_input": "Please check the details and try again.",
       "google_not_configured": "Google sign-in isn't available right now.",
-      "invalid_google_token": "Could not verify your Google sign-in. Please try again.",
+      "invalid_google_token": "Couldn't verify your Google sign-in. Please try again.",
       "google_email_in_use": "An account with this email already exists. Sign in with your username and password instead.",
       "google_other_account": "This email's Momoto account is linked to a different Google account. Sign in with that one, or with your password.",
       "too_many_requests": "Too many attempts. Please wait a moment and try again.",
@@ -1532,7 +1535,7 @@
     },
     "logoutConfirm": {
       "title": "Log out?",
-      "description": "You'll need to log in again to use activities.",
+      "description": "You'll need to sign in again to use activities.",
       "descriptionRoom": "You're in a live session. Logging out will leave it.",
       "confirm": "Log out",
       "cancel": "Cancel"
@@ -1555,20 +1558,20 @@
     },
     "forgot": {
       "title": "Forgot your password?",
-      "subtitle": "Tell us who you are and we'll email you a link to set a new one.",
-      "submit": "Send the link",
+      "subtitle": "Enter your username or email and we'll send you a link to reset your password.",
+      "submit": "Send reset link",
       "submitting": "Sending…",
       "sentTitle": "Check your inbox",
       "sentBody": "If that account has a confirmed email address, a reset link is on its way. It's good for 30 minutes.",
       "backToLogin": "Back to sign in",
-      "rememberIt": "Remembered it? <login>Sign in</login>",
+      "rememberIt": "Remember your password? <login>Sign in</login>",
       "resend": "Send it again",
       "resendIn": "Send again in {{seconds}}s",
       "sentAgain": "Another link is on its way."
     },
     "reset": {
       "title": "Choose a new password",
-      "subtitle": "Pick something you haven’t used here before.",
+      "subtitle": "Pick something you haven't used here before.",
       "checking": "Checking your link…",
       "submit": "Save new password",
       "submitting": "Saving…",
@@ -1581,7 +1584,7 @@
       "checking": "Confirming your email…",
       "doneTitle": "Email confirmed",
       "doneBody": "This address is now on your account. If you ever forget your password, this is how you get back in.",
-      "failedTitle": "That link didn’t work",
+      "failedTitle": "That link didn't work",
       "failedBody": "Confirmation links last 24 hours and can only be used once. Open Profile and send yourself a fresh one.",
       "takenTitle": "That address is already taken",
       "takenBody": "Another account has already confirmed this email. If you've signed in with Google using this address, that's the account that has it — sign in with Google to reach it. Otherwise, use a different address.",
@@ -1619,17 +1622,17 @@
       "rowSet": "Set",
       "rowNone": "No password on this account",
       "otherDevicesOut": "Every other device was signed out.",
-      "needsVerifiedEmail": "Confirm your email first — without one, a forgotten password can’t be reset."
+      "needsVerifiedEmail": "Confirm your email first — without one, a forgotten password can't be reset."
     }
   },
   "network": {
-    "offlineTitle": "You’re offline",
-    "offlineBody": "No connection right now — we’ll reconnect on our own. Anything you’ve already shot is safe.",
-    "offlinePage": "This device isn’t connected to the internet. Check your wifi or mobile data — this page comes back by itself the moment you’re online.",
+    "offlineTitle": "You're offline",
+    "offlineBody": "No connection right now — we'll reconnect on our own. Anything you've already shot is safe.",
+    "offlinePage": "This device isn't connected to the internet. Check your wifi or mobile data — this page comes back by itself the moment you're online.",
     "serverTitle": "Momoto is having trouble",
-    "serverBody": "Our server isn’t responding properly — this one’s on us. Anything you’ve already shot is safe.",
+    "serverBody": "Our server isn't responding properly — this one's on us. Anything you've already shot is safe.",
     "unknownTitle": "Trouble connecting",
-    "unknownBody": "We can’t reach Momoto. It could be our server or your connection — either way, anything you’ve already shot is safe.",
+    "unknownBody": "We can't reach Momoto. It could be our server or your connection — either way, anything you've already shot is safe.",
     "retry": "Retry",
     "checking": "Checking…",
     "restored": "Back online",
@@ -1638,8 +1641,8 @@
   },
   "serverDown": {
     "title": "Momoto is having trouble",
-    "message": "Our server isn’t responding right now. This one’s on us — hang tight and try again in a moment.",
-    "unknownTitle": "Can’t reach Momoto",
+    "message": "Our server isn't responding right now. This one's on us — hang tight and try again in a moment.",
+    "unknownTitle": "Can't reach Momoto",
     "unknownMessage": "Nothing is getting through at the moment. It could be our server, or something between you and it — worth checking your connection before you try again.",
     "retry": "Try again",
     "retrying": "Checking…",
@@ -1647,10 +1650,10 @@
   },
   "notFound": {
     "code": "Error 404",
-    "title": "This page doesn’t exist",
-    "message": "The link may be broken, or the page may have moved. Let’s get you back to something that works.",
+    "title": "This page doesn't exist",
+    "message": "The link may be broken, or the page may have moved. Let's get you back to something that works.",
     "backHome": "Back to home",
-    "browseActivities": "Browse activities"
+    "browseActivities": "Explore activities"
   },
   "beta": {
     "badge": "Closed beta",
@@ -1674,7 +1677,7 @@
     "openApp": "Open payment app",
     "waiting": "Waiting for payment…",
     "expiresIn": "Expires in {{countdown}}",
-    "expired": "This payment expired. Start a new one when you’re ready.",
+    "expired": "This payment expired. Start a new one when you're ready.",
     "resumed": "You have a payment in progress.",
     "saveQr": "Save QR",
     "qrSaveError": "Couldn't save that QR code.",
@@ -1711,17 +1714,17 @@
     },
     "shelf": {
       "eyebrow": "Scrapbook",
-      "heading": "Turn your strips into a little book.",
-      "intro": "A scrapbook is {{pages}} pages to fill with your unlocked strips and your own words — saved as a PDF you can keep or print.",
+      "heading": "Turn your strips into a digital booklet.",
+      "intro": "A scrapbook is {{pages}} pages to fill with your unlocked strips and personal notes, saved as a PDF you can keep or print.",
       "sampleLabel": "You'll get",
       "sampleHint": "{{pages}} pages, cover to back, as one PDF.",
       "step1Title": "Pick a design",
       "step1Text": "Start from a template. Each page has spots for strips and text.",
-      "step2Title": "Fill the pages",
+      "step2Title": "Arrange your strips",
       "step2Text": "Place your unlocked 4×1 and 2×2 strips, then add titles, captions and notes. Drafts save as you go.",
-      "step3Title": "Finish and unlock",
+      "step3Title": "Finish & unlock",
       "step3Text": "A finished scrapbook goes to your cart. Unlock it there to download the PDF.",
-      "title": "Your scrapbooks",
+      "title": "Your Scrapbooks",
       "subtitle_one": "{{count}} scrapbook",
       "subtitle_other": "{{count}} scrapbooks",
       "new": "New scrapbook",
@@ -1734,7 +1737,7 @@
       "untitled": "Untitled scrapbook",
       "edited": "Edited {{date}}",
       "limit": "You have {{limit}} scrapbooks already. Delete a draft to start another.",
-      "createError": "Couldn't start a scrapbook. Try again.",
+      "createError": "Couldn't start a scrapbook. Please try again.",
       "emptyTitle": "No scrapbooks yet",
       "coverAlt": "Cover of {{title}}",
       "emptyCta": "Start your first scrapbook"
@@ -1747,12 +1750,12 @@
       "removeDescription": "It goes back to your drafts — its pages and text are kept. Its PDF is discarded, so you'll finish it again before you can unlock it.",
       "removeConfirm": "Remove",
       "removed": "Removed from your cart — it's a draft again. Finish it when you're ready.",
-      "removeError": "Couldn't remove it. Try again.",
+      "removeError": "Couldn't remove it. Please try again.",
       "edit": "Edit",
       "open": "Open",
       "unlock": "Unlock",
       "unlocking": "Unlocking…",
-      "unlockError": "Couldn't unlock it. Try again.",
+      "unlockError": "Couldn't unlock it. Please try again.",
       "unlocked": "Unlocked — your scrapbook is yours to download.",
       "paid": "Payment received — your scrapbook is yours to download.",
       "select": "Select this scrapbook",
@@ -1840,15 +1843,15 @@
     "viewer": {
       "finished": "Finished — it's waiting in your cart. Unlock it there to download the PDF.",
       "paid": "This scrapbook is yours. It can't be changed now — start a new one to make another.",
-      "goToCart": "Go to cart",
+      "goToCart": "View cart",
       "keepEditing": "Keep editing",
       "delete": "Delete",
       "remove": "Remove",
-      "reopenError": "Couldn't reopen it. Try again.",
+      "reopenError": "Couldn't reopen it. Please try again.",
       "paymentInProgress": "A payment for this scrapbook is still open.",
       "download": "Download PDF",
       "downloading": "Preparing…",
-      "downloadError": "Couldn't download the PDF. Try again.",
+      "downloadError": "Couldn't download the PDF. Please try again.",
       "finishedHeading": "Waiting in your cart",
       "paidHeading": "This scrapbook is yours",
       "downloadShort": "Download"
@@ -1864,7 +1867,7 @@
       "cancel": "Cancel",
       "done": "Scrapbook deleted.",
       "stale": "That scrapbook changed in the meantime — the list has been refreshed.",
-      "error": "Couldn't do that. Try again."
+      "error": "Couldn't do that. Please try again."
     },
     "finish": {
       "button": "Finish",
@@ -1880,8 +1883,8 @@
       "done": "Finished — it's waiting in your cart.",
       "cancelled": "Finish cancelled — nothing was changed.",
       "changed": "This scrapbook was changed somewhere else. Check it and finish again.",
-      "unsaved": "Couldn't save your latest changes. Try again.",
-      "failed": "Couldn't finish it. Try again.",
+      "unsaved": "Couldn't save your latest changes. Please try again.",
+      "failed": "Couldn't finish it. Please try again.",
       "cartFull": "Your cart is full, so it wasn't finished. Free a slot in your cart, then finish again.",
       "cartFullHint": "Cart full — free a slot to finish",
       "placesLeft_one": "{{count}} strip place left",
@@ -1890,7 +1893,7 @@
     },
     "picker": {
       "title": "Choose a template",
-      "subtitle": "Each template is a fixed set of pages to fill with your strips and words. A scrapbook keeps its template — to try another, start a new scrapbook.",
+      "subtitle": "Each template is a fixed set of pages to fill with your strips and notes. A scrapbook keeps its template. To try another, start a new scrapbook.",
       "templates": "Templates",
       "pagesLabel": "Pages in this template",
       "pages_one": "{{count}} page",
@@ -1941,15 +1944,15 @@
       "selectStrips_one": "Select {{count}} more strip",
       "selectStrips_other": "Select {{count}} more strips"
     },
-    "chip": "Promo · {{name}}",
-    "chipBundle": "Scrapbook disc {{percent}}%",
+    "chip": "Promo: {{name}}",
+    "chipBundle": "{{percent}}% Off Scrapbook",
     "modal": {
       "bundleTag": "Limited offer · {{percent}}% off",
       "bundleText": "Check out your scrapbook together with {{count}} photo strips and get a discount on all items!",
       "readyText": "Peek at your gift now: unlock 2 strips, and Momo covers the second one!",
       "partnerText": "Link accounts with your partner and instantly score a Buy 1 Get 1 deal for both of you!",
       "later": "Maybe later",
-      "goToCart": "Go to cart",
+      "goToCart": "View cart",
       "startScrapbook": "Start a scrapbook",
       "startStrip": "Take a strip",
       "invite": "Invite your partner",

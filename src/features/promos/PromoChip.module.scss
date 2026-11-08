@@ -1,7 +1,7 @@
 /* A promo on an activity, as a chip shaped like the activity cards' mode chips, in the
  * promo's fixed colour — rose for the partner buy 1 get 1, mint for the scrapbook bundle. */
 .chip {
-  @apply inline-flex h-7 items-center gap-1.5 self-start rounded-full border px-3 font-mono text-[9.5px] font-bold uppercase lg:text-[10px];
+  @apply inline-flex h-7 items-center gap-1.5 self-start rounded-full border px-3 font-mono text-[9.5px] font-bold lg:text-[10px];
   letter-spacing: 0.14em;
 }
 
