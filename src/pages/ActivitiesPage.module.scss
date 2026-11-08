@@ -64,7 +64,7 @@ $hero-gradient: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 46%, #d9ffea 100%);
 }
 
 .countLabel {
-  @apply font-mono text-[10px] uppercase text-slate-600 lg:text-[0.65625rem];
+  @apply font-mono text-[10px] text-slate-600 lg:text-[0.65625rem];
   letter-spacing: 0.16em;
 }
 
@@ -176,7 +176,7 @@ $hero-gradient: linear-gradient(160deg, #ffe3ec 0%, #fcf7f0 46%, #d9ffea 100%);
 }
 
 .mode {
-  @apply inline-flex h-7 items-center rounded-full border border-slate-200 px-3 font-mono text-[9.5px] uppercase text-slate-600 lg:text-[10px];
+  @apply inline-flex h-7 items-center rounded-full border border-slate-200 px-3 font-mono text-[9.5px] text-slate-600 lg:text-[10px];
   letter-spacing: 0.14em;
 }
 

@@ -129,13 +129,17 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
   // ignore a retake now rather than being pulled out of it — so retaking here would
   // only walk the two strips out of step. It lifts when a fresh capture starts.
   //
-  // Copy written for two people reads wrong in a room of four ("both cameras", "both
-  // screens"). Rather than a ternary at each use, the group booth reaches for a parallel
-  // key — so a string with no group variant simply keeps the one it has.
+  // Copy written for two people reads wrong in a room of four, or alone ("both cameras",
+  // "both screens"). Rather than a ternary at each use, the group and solo booths reach
+  // for a parallel key — so a string with no variant simply keeps the one it has.
   // Memoised: the offline-stop effect below depends on it, and a fresh function each
   // render would restart that effect's grace timer on every tick.
   const line = useCallback(
-    (key: string) => (mode === 'group' ? t([`${key}Group`, key]) : t(key)),
+    (key: string) => {
+      if (mode === 'group') return t([`${key}Group`, key])
+      if (mode === 'solo') return t([`${key}Solo`, key])
+      return t(key)
+    },
     [mode, t]
   )
 
@@ -182,6 +186,9 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
    * cut is blank.
    */
   const peerCamOff = mode !== 'solo' && livePeerIds.some((id) => peers[id]?.camEnabled === false)
+  // The "cameras are on" notes only say so when it's true. The start note already names
+  // whichever of these is holding things up, so they drop out rather than swap wording.
+  const allCamerasLive = camEnabled && !peerAway && !offline && !camerasConnecting && !peerCamOff
 
   // The start button's camera holds apply to a retake too — it re-runs the same
   // countdown. A camera still connecting would leave this device laying out a smaller
@@ -468,7 +475,7 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
    */
   const cameraRail = (note: string) => (
     <div className={styles.arrangeCamera}>
-      <span className={styles.railLabel}>{t('select.stillLive')}</span>
+      {allCamerasLive && <span className={styles.railLabel}>{t('select.stillLive')}</span>}
       {/* The rail is a 13.25rem column on desktop, so four stacked tiles would run off
        * the bottom — from three cameras up it wraps into two columns instead. */}
       <div
@@ -500,7 +507,9 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
       </div>
       {/* Phone-only gloss: on the narrow layout the rail collapses into a
        * single strip of chrome, and the label above is hidden. */}
-      <span className={styles.arrangeInlineNote}>{t('select.camerasLive')}</span>
+      {allCamerasLive && (
+        <span className={styles.arrangeInlineNote}>{line('select.camerasLive')}</span>
+      )}
       <MediaControls mode={mode} compact cameraLocked={cameraLocked} />
       <p className={styles.arrangeNote}>{note}</p>
     </div>
@@ -536,7 +545,7 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
     return (
       <div className={styles.stage}>
         <div className={styles.arrange}>
-          {cameraRail(t('result.stillLiveNote'))}
+          {cameraRail(line('result.stillLiveNote'))}
           <div className={styles.arrangePanel}>
             <StripResult onRetake={retakeAll} retakeBlockedReason={retakeCameraReason} />
           </div>
@@ -553,7 +562,7 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
     return (
       <div className={styles.stage}>
         <div className={styles.arrange}>
-          {cameraRail(t('select.stillLiveNote'))}
+          {cameraRail(line('select.stillLiveNote'))}
 
           <div className={styles.arrangePanel}>
             <StripSelector
@@ -621,7 +630,6 @@ export function CameraStage({ mode }: { mode: SessionMode }) {
            * the action bar at the bottom of the screen instead. */}
           <div className={styles.stageControls}>
             <MediaControls mode={mode} cameraLocked={cameraLocked} />
-            <span className={styles.liveNote}>{line('capture.liveNote')}</span>
           </div>
         </div>
 

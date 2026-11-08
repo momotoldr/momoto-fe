@@ -74,10 +74,6 @@
   @apply hidden items-center gap-3 lg:flex;
 }
 
-.liveNote {
-  @apply ml-1 text-[0.78125rem] text-muted-foreground;
-}
-
 /* The strip preview stands beside the stage on desktop and sits centred at the foot
  * of the stack on a phone, under the pickers that decide what it shows — vertical
  * either way, since it is a preview of the paper. */
