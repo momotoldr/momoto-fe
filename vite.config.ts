@@ -15,10 +15,10 @@ export default defineConfig(({ mode }) => ({
     __APP_VERSION__: JSON.stringify(process.env.APP_VERSION || 'dev'),
     __APP_COMMIT__: JSON.stringify(process.env.GITHUB_SHA?.slice(0, 7) || 'dev'),
   },
-  // Staging ships source maps so a crash on a real phone points at a line of source
-  // instead of `index-8wBdRz6U.js:53`. Production does not: the maps publish readable
-  // source to anyone who opens devtools, and staging is where debugging happens.
-  build: { sourcemap: mode === 'staging' },
+  // Staging still builds source maps, for decoding a stack trace from a real phone, but
+  // `hidden` and `public/.assetsignore` keep them out of what is served: staging is on a
+  // public URL, and a served map publishes the whole frontend with its comments.
+  build: { sourcemap: mode === 'staging' ? 'hidden' : false },
   plugins: [react(), cloudflare()],
   resolve: {
     alias: {
