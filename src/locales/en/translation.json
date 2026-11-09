@@ -1493,6 +1493,7 @@
       "google_email_in_use": "An account with this email already exists. Sign in with your username and password instead.",
       "google_other_account": "This email's Momoto account is linked to a different Google account. Sign in with that one, or with your password.",
       "too_many_requests": "Too many attempts. Please wait a moment and try again.",
+      "server_busy": "We're a bit busy right now. Please try again in a moment.",
       "passwordTooShort": "Password must be at least 8 characters.",
       "emailRequired": "Please enter your email.",
       "emailInvalid": "Please enter a valid email address.",

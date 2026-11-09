@@ -1488,6 +1488,7 @@
       "google_email_in_use": "Sudah ada akun dengan email ini. Masuk dengan nama pengguna dan kata sandimu.",
       "google_other_account": "Akun Momoto dengan email ini tertaut ke akun Google lain. Masuk dengan akun Google itu, atau dengan kata sandimu.",
       "too_many_requests": "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.",
+      "server_busy": "Server sedang sibuk. Coba lagi sebentar.",
       "passwordTooShort": "Kata sandi minimal 8 karakter.",
       "emailRequired": "Masukkan emailmu.",
       "emailInvalid": "Masukkan alamat email yang valid.",
