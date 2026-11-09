@@ -42,7 +42,9 @@ const API_ERROR_MESSAGES: Record<string, EndpointMessages> = {
     POST: 'errors.api.forgotPassword',
   },
   [API_ROUTES.AUTH.RESET_PASSWORD]: {
-    GET: 'errors.api.resetPassword',
+    POST: 'errors.api.resetPassword',
+  },
+  [API_ROUTES.AUTH.RESET_PASSWORD_CHECK]: {
     POST: 'errors.api.resetPassword',
   },
 

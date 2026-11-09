@@ -72,11 +72,13 @@ export const API_ROUTES = {
     PASSWORD: '/auth/me/password',
     /** Ask for a reset link. `POST /auth/forgot-password` → always 202. */
     FORGOT_PASSWORD: '/auth/forgot-password',
-    /**
-     * Reset-link handling. `GET` pre-checks a token (`{ valid }`) so an expired link
-     * can say so before the user types a password twice; `POST` redeems it (204).
-     */
+    /** Redeems a reset link (204). */
     RESET_PASSWORD: '/auth/reset-password',
+    /**
+     * Pre-checks a token (`{ valid }`) so an expired link can say so before the user types
+     * a password twice. A POST, so the token stays out of access logs.
+     */
+    RESET_PASSWORD_CHECK: '/auth/reset-password/check',
   },
 
   /** The soft-launch promos and where the caller stands. `GET /promos` → `Promos`. */
