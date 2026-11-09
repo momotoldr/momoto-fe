@@ -199,9 +199,10 @@ export async function requestPasswordReset(identifier: string): Promise<void> {
 
 /** Is a reset link still good? Lets the page say "expired" before asking for a password. */
 export async function checkResetToken(token: string): Promise<boolean> {
-  const { data } = await authClient.getData<{ valid: boolean }>(API_ROUTES.AUTH.RESET_PASSWORD, {
-    token,
-  })
+  const { data } = await authClient.postData<{ valid: boolean }>(
+    API_ROUTES.AUTH.RESET_PASSWORD_CHECK,
+    { token }
+  )
   return data.valid
 }
 
