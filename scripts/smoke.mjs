@@ -56,6 +56,32 @@ async function get(path) {
   return { status: res.status, headers: res.headers, body: await res.text() }
 }
 
+/**
+ * True when robots.txt shuts out every crawler: a `Disallow: /` inside a group that
+ * applies to `User-agent: *`. A bare line match is not enough — Cloudflare's managed
+ * robots.txt (AI Crawl Control) prepends a `Disallow: /` group per AI crawler on both
+ * hosts, and those only block the bots they name.
+ */
+function blocksEveryone(body) {
+  let agents = []
+  let inRules = false
+  for (const raw of body.split(/\r?\n/)) {
+    const field = raw.replace(/#.*/, '').match(/^\s*([A-Za-z-]+)\s*:\s*(.*?)\s*$/)
+    if (!field) continue
+    const key = field[1].toLowerCase()
+    if (key === 'user-agent') {
+      // A user-agent line after rules starts a new group.
+      if (inRules) agents = []
+      inRules = false
+      agents.push(field[2])
+    } else {
+      inRules = true
+      if (key === 'disallow' && field[2] === '/' && agents.includes('*')) return true
+    }
+  }
+  return false
+}
+
 async function checks() {
   const failures = []
 
@@ -73,7 +99,7 @@ async function checks() {
   if (!connectSrc.includes(apiOrigin)) failures.push(`connect-src does not allow ${apiOrigin}`)
 
   const robots = await get('/robots.txt')
-  const blocksAll = /^Disallow: \/\s*$/m.test(robots.body)
+  const blocksAll = blocksEveryone(robots.body)
   if (robots.status !== 200) failures.push(`/robots.txt returned ${robots.status}`)
   else if (name === 'staging' && !blocksAll) failures.push('staging robots.txt does not block all')
   else if (name === 'production' && blocksAll) failures.push('production robots.txt blocks all')
