@@ -105,7 +105,7 @@ export async function withDirectRetry<T>(attempt: () => Promise<T>): Promise<T> 
  * budget on this link, and trying the same bytes again the same way doubles the wait
  * before the fallback gets its turn.
  */
-function shouldRetryDirect(error: unknown): boolean {
+export function shouldRetryDirect(error: unknown): boolean {
   if (!shouldFallBack(error)) return false
   if (error instanceof ApiError) {
     if (error.status === 404 || error.code === 'direct_upload_unavailable') return false

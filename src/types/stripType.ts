@@ -34,9 +34,16 @@ export interface StoredStrip {
   createdAt: string
 }
 
-/** The channels checkout offers. Mirrors the backend's `PAYMENT_METHODS`. */
+/** Every channel checkout supports. Mirrors the backend's `PAYMENT_METHODS`. */
 export const PAYMENT_METHODS = ['gopay', 'shopeepay', 'qris'] as const
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
+
+/**
+ * The channels offered until the quote says which are on (`PaymentQuote.methods`, from
+ * core's `MIDTRANS_ENABLED_PAYMENTS`). ShopeePay is off for now (user, 2026-11-02);
+ * switching it back on is core's env alone — this only covers a quote that hasn't come.
+ */
+export const DEFAULT_PAYMENT_METHODS: readonly PaymentMethod[] = ['gopay', 'qris']
 
 /**
  * A payment attempt as the checkout modal renders it. `qrImageUrl` and `deeplinkUrl`
@@ -45,6 +52,8 @@ export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
  * than from the method name.
  */
 export interface PaymentAttempt {
+  /** What the payment is for: since 2026-10-17 one cart checkout can hold both kinds. */
+  kind: 'strips' | 'scrapbook' | 'mixed'
   /** Our order id, to poll `GET /payments/:orderId`. */
   orderId: string
   status: PaymentStatus
@@ -59,10 +68,19 @@ export interface PaymentAttempt {
   expiresAt: string | null
   /** The strips this attempt unlocks. */
   stripIds: string[]
+  /** The scrapbooks this attempt unlocks. */
+  scrapbookIds: string[]
+  /** How many strips (scrapbooks not included). */
   count: number
+  /** Priced with the partner buy 1 get 1 (docs/PLAN-promos.md). */
+  bogo: boolean
+  /** How many scrapbook bundles (one scrapbook + 3 strips each) priced it. */
+  bundled: number
+  /** The method's admin fee, already inside `grossAmount`; 0 for none. */
+  adminFee: number
 }
 
-export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled'
+export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled' | 'refunded'
 
 /** One row of the profile's purchase history. */
 export interface PaymentOrder {
@@ -78,8 +96,17 @@ export interface PaymentOrder {
    * row's thumbnails, so a purged strip simply falls out of the row.
    */
   stripIds: string[]
+  /**
+   * The scrapbook a scrapbook order bought, with what its row shows — the client keeps no
+   * store of scrapbooks to resolve an id against. `coverUrl` is null once it was removed.
+   */
+  scrapbooks: { id: string; title: string; coverUrl: string | null }[]
   createdAt: string
   paidAt: string | null
+  /** Priced with the partner buy 1 get 1. */
+  bogo: boolean
+  /** How many scrapbook bundles (one scrapbook + 3 strips each) priced it. */
+  bundled: number
 }
 
 /** What `GET /payments` hands back. */

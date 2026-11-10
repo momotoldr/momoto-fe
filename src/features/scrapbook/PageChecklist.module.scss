@@ -1,0 +1,70 @@
+/* The side panel's resting state: what the current page holds and still needs. */
+
+.checklist {
+  @apply flex flex-col gap-3.5;
+}
+
+.heading {
+  @apply flex flex-col gap-1;
+}
+
+.eyebrow {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70;
+}
+
+.title {
+  @apply text-xl font-bold tracking-[-0.02em];
+}
+
+.rows {
+  @apply flex flex-col divide-y overflow-hidden rounded-2xl border;
+}
+
+.row {
+  @apply flex w-full items-center gap-3 px-3.5 py-3 text-left transition-colors;
+
+  &:hover {
+    @apply bg-slate-50;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-inset ring-ring;
+  }
+}
+
+/* Dashed while empty; a green tick once filled. */
+.dot {
+  @apply flex h-[1.375rem] w-[1.375rem] flex-none items-center justify-center rounded-full border-[1.5px] border-dashed border-slate-300 text-white;
+
+  svg {
+    @apply h-3 w-3 stroke-[3];
+  }
+}
+
+.dotDone {
+  @apply border-0 bg-green-600;
+}
+
+.text {
+  @apply flex min-w-0 flex-1 flex-col gap-px;
+}
+
+.name {
+  @apply text-sm font-semibold;
+}
+
+.sub {
+  @apply truncate text-xs text-muted-foreground/70;
+}
+
+.tag {
+  @apply flex-none text-[0.6875rem] font-semibold text-muted-foreground/70;
+}
+
+.tagRequired {
+  @apply text-rose-600;
+}
+
+.hint {
+  @apply text-pretty text-xs leading-normal text-muted-foreground/70;
+}

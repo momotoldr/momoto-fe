@@ -1,12 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
+import { ANALYTICS_EVENTS, trackEvents } from '@/analytics'
+import ApiError from '@/api/apiError'
+import { type CommerceItem } from '@/analytics/events'
 import {
+  type CheckoutTarget,
+  cancelPayment,
+  checkPayment,
   createCharge,
   getPayment,
   getPendingPayment,
   PaymentInProgressError,
 } from '@/api/services/paymentsService'
 import { env } from '@/env'
+import i18n from '@/lib/i18n'
 import type { PaymentAttempt, PaymentMethod } from '@/types/stripType'
 
 /**
@@ -17,6 +25,17 @@ import type { PaymentAttempt, PaymentMethod } from '@/types/stripType'
  */
 export type CheckoutPhase =
   'closed' | 'method' | 'charging' | 'awaiting' | 'paid' | 'failed' | 'expired'
+
+/** What a checkout covers — the cart's selection, or what a resumed attempt pays for. */
+export type CheckoutSelection = CheckoutTarget
+
+const NOTHING: CheckoutSelection = { stripIds: [], scrapbookIds: [] }
+
+/** Which kind of thing a checkout sells, for analytics. */
+function commerceItem(selection: CheckoutSelection): CommerceItem {
+  if (selection.scrapbookIds.length === 0) return 'strips'
+  return selection.stripIds.length === 0 ? 'scrapbook' : 'mixed'
+}
 
 /** How often to re-ask the server while a payment is outstanding. */
 const POLL_INTERVAL_MS = 3000
@@ -39,8 +58,13 @@ function isLive(attempt: PaymentAttempt | null): attempt is PaymentAttempt {
  */
 export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void>) {
   const [phase, setPhase] = useState<CheckoutPhase>('closed')
+  // The phase as it is right now, for code that must decide something synchronously. A
+  // state updater can't do that: React runs it later, at render, so a value assigned inside
+  // one is still unset on the next line.
+  const phaseRef = useRef<CheckoutPhase>('closed')
+  phaseRef.current = phase
   const [attempt, setAttempt] = useState<PaymentAttempt | null>(null)
-  const [stripIds, setStripIds] = useState<string[]>([])
+  const [selection, setSelection] = useState<CheckoutSelection>(NOTHING)
 
   // Kept in a ref so the polling effect can read the latest callback without being
   // re-created on every status change — restarting the interval would drift the cadence.
@@ -48,11 +72,10 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
   useEffect(() => {
     onPaidRef.current = onPaid
   }, [onPaid])
-
   /** Take ownership of an attempt without deciding whether to show it. */
   const adopt = useCallback((existing: PaymentAttempt) => {
     setAttempt(existing)
-    setStripIds(existing.stripIds)
+    setSelection({ stripIds: existing.stripIds, scrapbookIds: existing.scrapbookIds ?? [] })
   }, [])
 
   /** Adopt an attempt *and* show it — used when the user just asked to pay. */
@@ -89,14 +112,14 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
   }, [adopt])
 
   const open = useCallback(
-    (ids: string[]) => {
+    (next: CheckoutSelection) => {
       // A payment already running wins over a fresh channel choice — the server would
       // refuse a second charge anyway.
       if (isLive(attempt)) {
         setPhase('awaiting')
         return
       }
-      setStripIds(ids)
+      setSelection(next)
       setAttempt(null)
       setPhase('method')
     },
@@ -117,19 +140,96 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
   const choose = useCallback(
     async (method: PaymentMethod) => {
       setPhase('charging')
+      const item = commerceItem(selection)
+      trackEvents(ANALYTICS_EVENTS.CHECKOUT_STARTED, { item })
       try {
-        const created = await createCharge(stripIds, method)
-        resume(created)
+        resume(await createCharge(selection, method))
       } catch (error) {
+        // The account's one live payment — opened in another tab, say. It's the cart's
+        // whatever it covers, so resume it rather than fail.
         if (error instanceof PaymentInProgressError) {
           resume(error.payment)
+          return
+        }
+        const code = error instanceof ApiError && error.code ? error.code : 'charge_failed'
+        trackEvents(ANALYTICS_EVENTS.PAYMENT_FAILED, { code, item })
+        // The price moved during the seconds the charge took (a promo spent or lost in
+        // between, docs/PLAN-promos.md §8a). Nothing was charged; the cart re-prices, so
+        // say what happened and let them look again rather than call it a failed payment.
+        if (code === 'price_changed') {
+          toast.error(i18n.t('checkout.priceChanged'))
+          setPhase('closed')
           return
         }
         setPhase('failed')
       }
     },
-    [stripIds, resume]
+    [selection, resume]
   )
+
+  // The order a settlement was already handled for: a poll in flight and a payment-status
+  // check can both come back paid, and the payer should hear about it once.
+  const settledRef = useRef<string | null>(null)
+
+  /** Take in the server's latest view of the attempt — from a poll or a check. */
+  const applyLatest = useCallback(async (latest: PaymentAttempt) => {
+    setAttempt(latest)
+    if (latest.status === 'paid') {
+      if (settledRef.current === latest.orderId) return
+      settledRef.current = latest.orderId
+      trackEvents(ANALYTICS_EVENTS.PAYMENT_SUCCEEDED, {
+        amountIdr: latest.grossAmount,
+        item: commerceItem(latest),
+      })
+      // Only take over the screen if the user is watching; otherwise let the banner
+      // go and refresh the cart under them. `wasVisible` tells the caller which
+      // happened, so settlement behind a closed modal can be announced instead of
+      // silently rearranging the page.
+      const wasVisible = phaseRef.current === 'awaiting'
+      setPhase(wasVisible ? 'paid' : 'closed')
+      await onPaidRef.current(wasVisible)
+      return
+    }
+    if (latest.status !== 'pending') {
+      trackEvents(ANALYTICS_EVENTS.PAYMENT_FAILED, {
+        code: latest.status,
+        item: commerceItem(latest),
+      })
+      setPhase((current) => (current === 'awaiting' ? 'failed' : 'closed'))
+    }
+  }, [])
+
+  /**
+   * "Check payment status": have core ask Midtrans, which settles the order if the money is there.
+   * Resolves whether it's paid now; throws if the check itself failed.
+   */
+  const checkPaid = useCallback(async (): Promise<boolean> => {
+    if (!attempt) return false
+    const { payment } = await checkPayment(attempt.orderId)
+    await applyLatest(payment)
+    return payment.status === 'paid'
+  }, [attempt, applyLatest])
+
+  /**
+   * Cancel the running attempt (user, 2026-11-02) and go back to picking a method for the
+   * same items. If Midtrans had already taken the money, the order comes back paid and
+   * settles instead. Throws if the cancel itself failed.
+   */
+  const cancel = useCallback(async (): Promise<void> => {
+    if (!attempt) return
+    const latest = await cancelPayment(attempt.orderId)
+    if (latest.status === 'paid') {
+      await applyLatest(latest)
+      return
+    }
+    trackEvents(ANALYTICS_EVENTS.PAYMENT_FAILED, {
+      code: 'cancelled_by_user',
+      item: commerceItem(latest),
+    })
+    toast.info(i18n.t('checkout.cancelled'))
+    setAttempt(null)
+    setPhase('method')
+  }, [attempt, applyLatest])
 
   // Poll while an attempt is live, whether or not the modal is showing — otherwise a
   // payment that settles behind a closed modal would leave the banner claiming to be
@@ -143,23 +243,7 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
       try {
         const latest = await getPayment(orderId)
         if (stopped) return
-        setAttempt(latest)
-        if (latest.status === 'paid') {
-          // Only take over the screen if the user is watching; otherwise let the banner
-          // go and refresh the cart under them. `wasVisible` tells the caller which
-          // happened, so settlement behind a closed modal can be announced instead of
-          // silently rearranging the page.
-          let wasVisible = false
-          setPhase((current) => {
-            wasVisible = current === 'awaiting'
-            return wasVisible ? 'paid' : 'closed'
-          })
-          await onPaidRef.current(wasVisible)
-          return
-        }
-        if (latest.status !== 'pending') {
-          setPhase((current) => (current === 'awaiting' ? 'failed' : 'closed'))
-        }
+        await applyLatest(latest)
       } catch {
         // Transient — keep polling. A truly dead order resolves via expiry.
       }
@@ -170,7 +254,7 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
       stopped = true
       clearInterval(id)
     }
-  }, [attempt])
+  }, [attempt, applyLatest])
 
   // Expiry is a client-side deadline as well as a server status: the `expire`
   // notification can lag by minutes, and a QR visibly counting down to zero should stop
@@ -196,12 +280,15 @@ export function useCheckout(onPaid: (wasVisible: boolean) => void | Promise<void
   return {
     phase,
     attempt,
-    stripIds,
+    /** What the open checkout covers. */
+    selection,
     /** A payment is outstanding — drives the cart's resume banner. */
     liveAttempt: isLive(attempt) ? attempt : null,
     open,
     reopen,
     close,
     choose,
+    checkPaid,
+    cancel,
   }
 }

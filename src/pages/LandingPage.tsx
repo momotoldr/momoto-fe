@@ -8,6 +8,8 @@ import { LandingStats } from '@/components/landing/LandingStats'
 import { LandingTestimonials } from '@/components/landing/LandingTestimonials'
 import { ACTIVITIES } from '@/constants/activities'
 import { ROUTES } from '@/constants/routes'
+import { PromoChip } from '@/features/promos/PromoChip'
+import { useActivityPromos } from '@/features/promos/promoState'
 
 import styles from './LandingPage.module.scss'
 
@@ -17,9 +19,7 @@ import styles from './LandingPage.module.scss'
  * activity `key` from `ACTIVITIES`, so the tabs and their steps stay in sync. */
 const ACTIVITY_STEPS: Record<string, string[]> = {
   photobooth: ['pick', 'pose', 'share'],
-  draw: ['prompt', 'draw', 'save'],
-  lovematch: ['room', 'answer', 'score'],
-  spot: ['scenes', 'find', 'celebrate'],
+  scrapbook: ['fill', 'write', 'keep'],
 }
 
 /* ---- Hero collage ----
@@ -69,6 +69,8 @@ export function LandingPage() {
   const { t } = useTranslation()
   const [activeHow, setActiveHow] = useState(ACTIVITIES[0].key)
   const steps = ACTIVITY_STEPS[activeHow] ?? []
+  // The promo chip on each activity card (docs/PLAN-promos.md), as on /activities.
+  const activityPromo = useActivityPromos()
 
   /** The activity picker is a tab row on desktop and a dropdown on phones, where four
    * tabs would either wrap or scroll out of sight. Both render; CSS shows one. */
@@ -92,11 +94,6 @@ export function LandingPage() {
       document.removeEventListener('keydown', onKeyDown)
     }
   }, [menuOpen])
-
-  // The live card is whichever activity is actually shippable; the rest are teased.
-  // Reading both from ACTIVITIES keeps the page honest when the next one goes live.
-  const live = ACTIVITIES.find((activity) => activity.available && activity.to)
-  const comingSoon = ACTIVITIES.filter((activity) => !activity.available)
 
   return (
     <div className={styles.page}>
@@ -249,47 +246,54 @@ export function LandingPage() {
               <h2 id="menu-heading" className={styles.sectionTitle}>
                 {t('landing.menuTitle')}
               </h2>
-              <p className={styles.sectionSubtitle}>{t('landing.menuSubtitle')}</p>
+              {/* "One booth today" stays true only while the booth is the one live activity. */}
+              <p className={styles.sectionSubtitle}>
+                {t(ACTIVITIES.length > 1 ? 'landing.menuSubtitleMany' : 'landing.menuSubtitle')}
+              </p>
             </div>
             <Link to={ROUTES.activities} className={styles.quietLink}>
               {t('landing.browseActivities')}
             </Link>
           </div>
 
-          {live?.to && (
-            <Link to={live.to} className={styles.liveCard}>
+          {/* Every live activity gets its card — not just the first, or a second one is
+              neither live nor coming soon here, and simply missing. */}
+          {ACTIVITIES.map((activity, index) => (
+            <Link
+              key={activity.key}
+              to={activity.to}
+              className={`${styles.liveCard} ${index % 2 === 1 ? styles.liveCardAlt : ''}`}
+            >
               <span className={styles.tapeGrey} aria-hidden="true" />
               <span className={styles.tapeLive}>{t('activities.live')}</span>
               <div className={styles.liveText}>
-                <h3 className={styles.liveTitle}>{t(`activities.items.${live.key}.title`)}</h3>
-                <p className={styles.liveDesc}>{t(`activities.items.${live.key}.desc`)}</p>
+                <h3 className={styles.liveTitle}>{t(`activities.items.${activity.key}.title`)}</h3>
+                <p className={styles.liveDesc}>{t(`activities.items.${activity.key}.desc`)}</p>
+                {activityPromo[activity.key] && (
+                  <PromoChip kind={activityPromo[activity.key]!} placement="landing" />
+                )}
               </div>
               <span className={styles.pillDark}>
-                {t('activities.open')}
+                {t(`activities.items.${activity.key}.open`, {
+                  defaultValue: t('activities.open'),
+                })}
                 <ArrowRight className={styles.pillIcon} />
               </span>
             </Link>
-          )}
+          ))}
 
-          {comingSoon.length > 0 && (
-            <div className={styles.soon}>
-              <span className={styles.soonLabel}>{t('activities.comingSoon')}</span>
-              <ul className={styles.soonGrid}>
-                {comingSoon.map(({ key, Icon }) => (
-                  <li key={key} className={styles.soonCard}>
-                    <span className={styles.soonTape} aria-hidden="true" />
-                    <span className={styles.soonIcon} aria-hidden="true">
-                      <Icon />
-                    </span>
-                    <div className={styles.soonBody}>
-                      <h3 className={styles.soonTitle}>{t(`activities.items.${key}.title`)}</h3>
-                      <p className={styles.soonText}>{t(`activities.items.${key}.desc`)}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+          {/* What's next is one generic note rather than named activities, so nothing is
+              promised before it ships. */}
+          <div className={styles.soonCard}>
+            <span className={styles.soonTape} aria-hidden="true" />
+            <span className={styles.soonIcon} aria-hidden="true">
+              <Sparkles />
+            </span>
+            <div className={styles.soonBody}>
+              <h3 className={styles.soonTitle}>{t('activities.more.title')}</h3>
+              <p className={styles.soonText}>{t('activities.more.desc')}</p>
             </div>
-          )}
+          </div>
         </section>
 
         <LandingStats />

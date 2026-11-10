@@ -33,13 +33,27 @@ export async function register(body: RegisterRequest): Promise<User> {
 }
 
 export async function login(body: LoginRequest): Promise<User> {
-  const { data } = await authClient.postData<AuthResponse>(API_ROUTES.AUTH.LOGIN, body)
+  const { data } = await authClient.postData<AuthResponse>(API_ROUTES.AUTH.LOGIN, {
+    lang: i18n.language,
+    ...body,
+  })
   setStoredToken(data.accessToken)
   return data.user
 }
 
-export async function loginWithGoogle(idToken: string): Promise<User> {
-  const { data } = await authClient.postData<AuthResponse>(API_ROUTES.AUTH.GOOGLE, { idToken })
+/**
+ * Trades the code Google returned to `/auth/google/callback` for a Momoto session.
+ * `redirectUri` and `codeVerifier` must be the ones the sign-in started with.
+ */
+export async function loginWithGoogle(body: {
+  code: string
+  redirectUri: string
+  codeVerifier: string
+}): Promise<User> {
+  const { data } = await authClient.postData<AuthResponse>(API_ROUTES.AUTH.GOOGLE, {
+    lang: i18n.language,
+    ...body,
+  })
   setStoredToken(data.accessToken)
   return data.user
 }
@@ -185,9 +199,10 @@ export async function requestPasswordReset(identifier: string): Promise<void> {
 
 /** Is a reset link still good? Lets the page say "expired" before asking for a password. */
 export async function checkResetToken(token: string): Promise<boolean> {
-  const { data } = await authClient.getData<{ valid: boolean }>(API_ROUTES.AUTH.RESET_PASSWORD, {
-    token,
-  })
+  const { data } = await authClient.postData<{ valid: boolean }>(
+    API_ROUTES.AUTH.RESET_PASSWORD_CHECK,
+    { token }
+  )
   return data.valid
 }
 

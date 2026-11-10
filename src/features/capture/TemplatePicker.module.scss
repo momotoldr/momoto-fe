@@ -34,6 +34,11 @@
   @apply bg-background text-foreground shadow-sm;
 }
 
+/* Category chips over the design row. */
+.panel {
+  @apply flex flex-col gap-2.5;
+}
+
 /* Step two: which design, within the chosen grid. A scroll row at every size — a 4x1
  * thumbnail is 1:3, so a wrapped grid of six would make this card twice as tall as it
  * needs to be. The row keeps the thumbnails legible and the rail balanced, and the

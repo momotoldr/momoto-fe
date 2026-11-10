@@ -7,6 +7,7 @@ import axios, {
 
 import { clearStoredToken, getStoredToken, setStoredToken } from '@/constants/auth'
 import { env } from '@/env'
+import i18n from '@/lib/i18n'
 import { useNetworkStore } from '@/store/useNetworkStore'
 import { useServerStore } from '@/store/useServerStore'
 
@@ -54,29 +55,105 @@ export const notifySessionExpired = (): void => {
 }
 
 /**
+ * `momoto-core` wraps every JSON body as `{ statusCode, result }`; callers only ever see
+ * the `result`. Matched on exactly those two keys, so a body without the envelope —
+ * `momoto-realtime`'s, or core's before the envelope shipped — passes through untouched.
+ */
+const unwrapEnvelope = (data: unknown): unknown => {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return data
+  if (Object.keys(data).length !== 2 || !('statusCode' in data) || !('result' in data)) {
+    return data
+  }
+  return typeof data.statusCode === 'number' ? data.result : data
+}
+
+const unwrapResponse = (response: AxiosResponse): AxiosResponse => {
+  response.data = unwrapEnvelope(response.data)
+  return response
+}
+
+/**
  * A bare client for the refresh call so it doesn't recurse through the response
  * interceptor below. The refresh token travels as an httpOnly cookie
- * (`withCredentials`), so no body/token is needed here.
+ * (`withCredentials`), so no body/token is needed here. It still unwraps the envelope:
+ * besides the refresh itself, it replays the request a 401 interrupted, and that
+ * replay's body goes straight back to the original caller.
  */
 const refreshClient = axios.create({ baseURL: BASE_URL, withCredentials: true })
+refreshClient.interceptors.response.use(unwrapResponse, (error: unknown) => {
+  if (axios.isAxiosError(error) && error.response) unwrapResponse(error.response)
+  return Promise.reject(error)
+})
 
 let refreshInFlight: Promise<string | null> | null = null
 
+const REFRESH_LOCK = 'momoto:auth-refresh'
+/** A tab stuck holding the lock mustn't strand the others; past this they go without it. */
+const REFRESH_LOCK_WAIT_MS = 15_000
+/** Long enough for the winning tab's response, carrying the new cookie, to land. */
+const REFRESH_RACE_RETRY_MS = 500
+
+/** Spends the refresh cookie for a new access token, and stores it. */
+async function rotateSession(retryOnRace = true): Promise<string | null> {
+  try {
+    // `lang` keeps the account's stored language current, for mail sent with no
+    // request behind it (the inactivity warning).
+    const { data } = await refreshClient.post(API_ROUTES.AUTH.REFRESH, { lang: i18n.language })
+    const token = (data as { accessToken?: unknown })?.accessToken
+    if (typeof token === 'string' && token) {
+      setStoredToken(token)
+      return token
+    }
+    return null
+  } catch (error) {
+    // Another tab or device spent this cookie a moment ago and the browser now holds its
+    // replacement, so asking again works. Not a signed-out session.
+    if (retryOnRace && axios.isAxiosError(error) && error.response?.status === 409) {
+      await new Promise((resolve) => setTimeout(resolve, REFRESH_RACE_RETRY_MS))
+      return rotateSession(false)
+    }
+    return null
+  }
+}
+
+/**
+ * Runs `work` while no other tab of this browser is refreshing. Tabs share one cookie, and
+ * one access token that expires for all of them at once, so without this they all spend
+ * the same single-use cookie together.
+ */
+async function withRefreshLock<T>(work: () => Promise<T>): Promise<T> {
+  // Absent on insecure origins and older browsers; the 409 retry above still covers those.
+  if (typeof navigator === 'undefined' || !navigator.locks) return work()
+  const waiting = new AbortController()
+  const timer = setTimeout(() => waiting.abort(), REFRESH_LOCK_WAIT_MS)
+  try {
+    return await navigator.locks.request(REFRESH_LOCK, { signal: waiting.signal }, async () => {
+      clearTimeout(timer)
+      return work()
+    })
+  } catch (error) {
+    if (waiting.signal.aborted) return work()
+    throw error
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 /**
  * Rotate the refresh cookie → a new access token, storing it. Deduped across
- * concurrent callers (HTTP 401 retries *and* the socket handshake share one call).
+ * concurrent callers (HTTP 401 retries *and* the socket handshake share one call) and,
+ * through the lock, across tabs.
  * Returns the new token, or null if the session can't be refreshed.
  */
 export function refreshAccessToken(): Promise<string | null> {
   refreshInFlight ??= (async (): Promise<string | null> => {
+    const expired = getStoredToken()
     try {
-      const { data } = await refreshClient.post(API_ROUTES.AUTH.REFRESH)
-      const token = (data as { accessToken?: unknown })?.accessToken
-      if (typeof token === 'string' && token) {
-        setStoredToken(token)
-        return token
-      }
-      return null
+      return await withRefreshLock(() => {
+        // Another tab refreshed while this one waited: its token is ours too.
+        const current = getStoredToken()
+        return current && current !== expired ? Promise.resolve(current) : rotateSession()
+      })
     } catch {
       return null
     } finally {
@@ -110,12 +187,12 @@ const interceptSuccessResponse = (response: AxiosResponse): AxiosResponse | Prom
   // We got a response, so the server answered (even a `success: false` envelope).
   useServerStore.getState().setStatus('up')
 
-  const { data, config } = response
-
   // Binary downloads (`responseType: 'blob'`) are not JSON envelopes.
-  if (typeof Blob !== 'undefined' && data instanceof Blob) {
+  if (typeof Blob !== 'undefined' && response.data instanceof Blob) {
     return response
   }
+
+  const { data, config } = unwrapResponse(response)
 
   let parsedData: Record<string, unknown> = {}
   if (typeof data === 'string') {
@@ -197,7 +274,7 @@ const interceptErrorResponse = async (error: unknown): Promise<AxiosResponse> =>
   // endpoint erroring is not an outage, and `down` is the probe's verdict to make.
   useServerStore.getState().setStatus('up')
 
-  const { status, data, config } = error.response
+  const { status, data, config } = unwrapResponse(error.response)
 
   let parsedData: Record<string, unknown> = {}
   if (typeof data === 'string') {

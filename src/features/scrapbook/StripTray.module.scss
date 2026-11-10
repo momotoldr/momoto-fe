@@ -1,0 +1,134 @@
+/* The strip tray: the unlocked strips that fit the selected place. Lives in the editor's
+ * side panel on desktop and in the bottom sheet on a phone. */
+
+.tray {
+  @apply flex flex-col gap-3.5;
+}
+
+.chips {
+  @apply flex items-center gap-1.5;
+}
+
+.chip {
+  @apply flex h-[1.875rem] items-center gap-1.5 rounded-full border bg-background px-3 text-xs font-semibold transition-colors;
+
+  &:hover {
+    @apply border-foreground/40;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+.chipOn,
+.chipOn:hover {
+  @apply border-primary bg-primary text-primary-foreground;
+}
+
+.chipCount {
+  @apply font-medium opacity-70;
+}
+
+/* The phone's sheet holds the grid in a scroll box of its own, under the filters. */
+.traySheet .stripGrid {
+  @apply max-h-[min(27.5rem,45dvh)] overflow-y-auto;
+
+  scrollbar-width: thin;
+}
+
+.stripGrid {
+  @apply grid gap-2;
+}
+
+.grid_panel_4x1 {
+  @apply grid-cols-4;
+}
+
+.grid_panel_2x2,
+.grid_sheet_2x2 {
+  @apply grid-cols-3;
+}
+
+.grid_sheet_4x1 {
+  @apply grid-cols-5;
+}
+
+/* The ring sits inside the tile's own padding, so a scroll box never clips it. */
+.strip {
+  @apply relative block w-full rounded-lg border-2 border-transparent p-0.5 transition-[border-color,opacity];
+
+  &:hover {
+    @apply border-border;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+.stripHere,
+.stripHere:hover {
+  @apply border-rose-600;
+}
+
+/* Already in another place in this book: still pickable, but quieter. */
+.stripUsed {
+  @apply opacity-[0.55];
+}
+
+.image {
+  @apply block h-auto w-full rounded-[0.25rem] border bg-muted object-contain;
+}
+
+.tag {
+  @apply absolute left-1.5 top-1.5 rounded-[0.25rem] bg-slate-500 px-[5px] py-0.5 text-[0.5625rem] font-semibold leading-none text-white;
+}
+
+.tagHere {
+  @apply bg-rose-600;
+}
+
+.hint {
+  @apply text-pretty text-xs leading-normal text-muted-foreground/70;
+}
+
+.takeOut {
+  @apply flex h-10 items-center justify-center rounded-[0.625rem] border text-sm font-semibold text-rose-700 transition-colors;
+
+  &:hover {
+    @apply bg-rose-50;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+.empty {
+  @apply flex flex-col gap-2;
+}
+
+.note {
+  @apply flex items-center gap-2 text-sm text-muted-foreground;
+}
+
+.spinner {
+  @apply h-4 w-4 animate-spin;
+}
+
+.links {
+  @apply mt-1 flex flex-wrap gap-2;
+}
+
+.link {
+  @apply inline-flex h-9 items-center rounded-[0.5rem] border px-3 text-[0.8125rem] font-semibold transition-colors;
+
+  &:hover {
+    @apply bg-muted/60;
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}

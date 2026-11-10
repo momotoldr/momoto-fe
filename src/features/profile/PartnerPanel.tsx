@@ -1,14 +1,18 @@
-import { Check, Copy, Heart, Loader2, Plus } from 'lucide-react'
+import { Check, Copy, Gift, Heart, Loader2, Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-import { acceptInvite, createInvite, unlinkPartner } from '@/api/services/partnerService'
+import { ANALYTICS_EVENTS, trackEvents } from '@/analytics'
+import { acceptInvite, createInvite } from '@/api/services/partnerService'
+import { UserAvatar } from '@/components/common/UserAvatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { env } from '@/env'
+import { partnerCard } from '@/features/promos/promoState'
 import { notifyError } from '@/lib/notify'
 import { useAuthStore } from '@/store/useAuthStore'
+import { usePromoStore } from '@/store/usePromoStore'
 import type { User } from '@/types/authType'
 import { avatarSrc } from '@/utils/common'
 
@@ -26,21 +30,28 @@ interface PartnerPanelProps {
 }
 
 /**
- * The Partner tab: link with someone, or manage the link you have.
+ * The Partner tab: link with someone, or see who you're linked with.
  *
  * Unlinked, it's two boxes side by side — mint a code, or redeem one — because those are
  * genuinely the two halves of the same job and stacking them makes the second look like
- * a fallback for the first. Linked, all of that collapses to the pair and one way out.
+ * a fallback for the first. Linked, all of that collapses to the pair — a link is permanent,
+ * so there is no way out of it here (user, 2026-10-29).
  */
 export function PartnerPanel({ user }: PartnerPanelProps) {
   const { t } = useTranslation()
   const setUser = useAuthStore((s) => s.setUser)
+  const promos = usePromoStore((s) => s.promos)
+  const loadPromos = usePromoStore((s) => s.load)
+  // The partner promo's line (docs/PLAN-promos.md §5b), only while a link could earn it.
+  const showPromo =
+    partnerCard(promos, { isAuthenticated: true, linked: Boolean(user.partner) }) ===
+    'partnerInvite'
 
   const [inviteCode, setInviteCode] = useState<string | null>(null)
   const [enteredCode, setEnteredCode] = useState('')
   const [copied, setCopied] = useState(false)
   // Which action is in flight, so only its own control shows the spinner.
-  const [busy, setBusy] = useState<'generate' | 'accept' | 'unlink' | null>(null)
+  const [busy, setBusy] = useState<'generate' | 'accept' | null>(null)
 
   useEffect(() => {
     if (!copied) return
@@ -68,16 +79,16 @@ export function PartnerPanel({ user }: PartnerPanelProps) {
 
   const onAccept = () =>
     run('accept', async () => {
-      setUser(await acceptInvite(enteredCode.trim().toUpperCase()))
+      const { user: linkedUser, promo } = await acceptInvite(enteredCode.trim().toUpperCase())
+      setUser(linkedUser)
       setEnteredCode('')
-      toast.success(t('auth.partner.linked'))
-    })
-
-  const onUnlink = () =>
-    run('unlink', async () => {
-      setUser(await unlinkPartner())
-      setInviteCode(null)
-      toast.success(t('auth.partner.unlinked'))
+      if (promo?.partnerBogo === 'earned') {
+        trackEvents(ANALYTICS_EVENTS.PARTNER_PROMO_EARNED, {})
+        toast.success(t('promos.earned'))
+      } else {
+        toast.success(t('auth.partner.linked'))
+      }
+      void loadPromos()
     })
 
   const onCopy = async () => {
@@ -100,24 +111,18 @@ export function PartnerPanel({ user }: PartnerPanelProps) {
     return (
       <ProfileCard title={t('auth.partner.title')} subtitle={t('auth.partner.linkedHint')}>
         <div className={styles.linked}>
-          {partnerAvatar ? (
-            <img className={styles.partnerAvatar} src={partnerAvatar} alt="" />
-          ) : (
-            <span className={styles.partnerAvatarFallback} aria-hidden="true">
-              {partner.displayName.charAt(0).toUpperCase()}
-            </span>
-          )}
+          <UserAvatar
+            src={partnerAvatar}
+            name={partner.displayName}
+            imageClassName={styles.partnerAvatar}
+            fallbackClassName={styles.partnerAvatarFallback}
+          />
           <div className={styles.linkedText}>
             <span className={styles.linkedLabel}>
               <Heart className={styles.linkedIcon} />
               {t('auth.partner.linkedWith', { name: partner.displayName })}
             </span>
-            <span className={styles.hint}>{t('auth.partner.unlinkHint')}</span>
           </div>
-          <Button variant="outline" disabled={busy !== null} onClick={() => void onUnlink()}>
-            {busy === 'unlink' && <Loader2 className={styles.spinner} />}
-            {t('auth.partner.unlink')}
-          </Button>
         </div>
       </ProfileCard>
     )
@@ -125,6 +130,15 @@ export function PartnerPanel({ user }: PartnerPanelProps) {
 
   return (
     <ProfileCard title={t('auth.partner.title')} subtitle={t('auth.partner.none')}>
+      {showPromo && (
+        <p className={styles.promoLine}>
+          <Gift className={styles.promoIcon} aria-hidden="true" />
+          <span>
+            <strong className={styles.promoLead}>{t('promos.partner.lead')}</strong>{' '}
+            {t('promos.partnerLine')}
+          </span>
+        </p>
+      )}
       <div className={styles.split}>
         <div className={styles.boxAccent}>
           <span className={styles.boxLabel}>{t('auth.partner.inviteTitle')}</span>

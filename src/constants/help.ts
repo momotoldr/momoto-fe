@@ -40,6 +40,7 @@ export const HELP_CATEGORIES: Record<SupportTopic, readonly HelpIssue[]> = {
     { key: 'retake' },
     { key: 'remove' },
     { key: 'backdrop', shown: env.backdropsEnabled },
+    { key: 'scrapbookStrips', shown: env.scrapbookEnabled },
   ],
   payment: [
     { key: 'unlock' },
@@ -48,6 +49,7 @@ export const HELP_CATEGORIES: Record<SupportTopic, readonly HelpIssue[]> = {
     { key: 'galleryFull' },
     { key: 'noPrintable' },
     { key: 'refund', shown: env.paymentsEnabled },
+    { key: 'scrapbookFinal', shown: env.scrapbookEnabled },
   ],
   account: [
     { key: 'signIn' },
@@ -56,6 +58,7 @@ export const HELP_CATEGORIES: Record<SupportTopic, readonly HelpIssue[]> = {
     { key: 'partner' },
     { key: 'signup', shown: env.betaMode },
     { key: 'delete' },
+    { key: 'inactive' },
   ],
   other: [{ key: 'bug' }, { key: 'connection' }, { key: 'idea' }, { key: 'data' }],
 }

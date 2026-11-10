@@ -45,7 +45,7 @@ export const API_ROUTES = {
     REGISTER: '/auth/register',
     /** Email + password login. `POST /auth/login` → `{ user, accessToken }`. */
     LOGIN: '/auth/login',
-    /** Google sign-in — verifies a Google ID token. `POST /auth/google`. */
+    /** Google sign-in — redeems the redirect's authorization code. `POST /auth/google`. */
     GOOGLE: '/auth/google',
     /** Rotate the refresh cookie for a new access token. `POST /auth/refresh`. */
     REFRESH: '/auth/refresh',
@@ -72,20 +72,23 @@ export const API_ROUTES = {
     PASSWORD: '/auth/me/password',
     /** Ask for a reset link. `POST /auth/forgot-password` → always 202. */
     FORGOT_PASSWORD: '/auth/forgot-password',
-    /**
-     * Reset-link handling. `GET` pre-checks a token (`{ valid }`) so an expired link
-     * can say so before the user types a password twice; `POST` redeems it (204).
-     */
+    /** Redeems a reset link (204). */
     RESET_PASSWORD: '/auth/reset-password',
+    /**
+     * Pre-checks a token (`{ valid }`) so an expired link can say so before the user types
+     * a password twice. A POST, so the token stays out of access logs.
+     */
+    RESET_PASSWORD_CHECK: '/auth/reset-password/check',
   },
+
+  /** The soft-launch promos and where the caller stands. `GET /promos` → `Promos`. */
+  PROMOS: '/promos',
 
   PARTNER: {
     /** Mint an invite code to share. `POST /partner/invite` → `{ code, expiresAt }`. */
     INVITE: '/partner/invite',
-    /** Link accounts with a code. `POST /partner/accept` → `{ user }`. */
+    /** Link accounts with a code. `POST /partner/accept` → `{ user, promo }`. */
     ACCEPT: '/partner/accept',
-    /** Unlink the partner. `DELETE /partner` → `{ user }`. */
-    ROOT: '/partner',
   },
 
   ROOMS: {
@@ -136,15 +139,84 @@ export const API_ROUTES = {
     ),
   },
 
+  /** Scrapbooks (docs/PLAN-scrapbook.md §2). Every route needs a signed-in user. */
+  SCRAPBOOKS: {
+    /** The shelf (GET) / start a new draft (POST `{ templateId }`). `/scrapbooks`. */
+    ROOT: '/scrapbooks',
+    /** One scrapbook (GET), autosave its layout (PUT), delete an unpaid one (DELETE). */
+    BY_ID: route('/scrapbooks/:id', (id: string) => `/scrapbooks/${encodeURIComponent(id)}`),
+    /**
+     * Start a direct-to-R2 finish. `POST` with the PDF's and cover's types and sizes and the
+     * page count → `{ upload }` (presigned PUTs + token).
+     */
+    FINISH_UPLOADS: route(
+      '/scrapbooks/:id/finish/uploads',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/finish/uploads`
+    ),
+    /** Complete one. `POST` `{ token }` → `{ scrapbook }`. */
+    FINISH_UPLOADS_COMPLETE: route(
+      '/scrapbooks/:id/finish/uploads/complete',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/finish/uploads/complete`
+    ),
+    /** The fallback finish, bytes through the API. `POST` raw `MOMS` body → `{ scrapbook }`. */
+    FINISH: route(
+      '/scrapbooks/:id/finish',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/finish`
+    ),
+    /** Back to a draft (finished, unpaid only). `POST` → `{ scrapbook }`. */
+    REOPEN: route(
+      '/scrapbooks/:id/reopen',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/reopen`
+    ),
+    /** Free unlock while payments are dark; `403 payments_enabled` otherwise. */
+    UNLOCK: route(
+      '/scrapbooks/:id/unlock',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/unlock`
+    ),
+    /** Soft remove of a paid scrapbook (files deleted, row kept). `POST` → `{ quota }`. */
+    REMOVE: route(
+      '/scrapbooks/:id/remove',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/remove`
+    ),
+    /** A presigned, ~60 s R2 URL for the paid PDF. `GET` → `{ url, expiresAt }`. */
+    PDF_URL: route(
+      '/scrapbooks/:id/pdf-url',
+      (id: string) => `/scrapbooks/${encodeURIComponent(id)}/pdf-url`
+    ),
+    /** The paid PDF streamed through the API — the fallback for `PDF_URL`. */
+    PDF: route('/scrapbooks/:id/pdf', (id: string) => `/scrapbooks/${encodeURIComponent(id)}/pdf`),
+  },
+
   PAYMENTS: {
     /** The account's recent orders + lifetime spend. `GET /payments` → `{ orders, spent }`. */
     ROOT: '/payments',
     /** Open a payment on one channel. `POST /payments/charge`. */
     CHARGE: '/payments/charge',
+    /**
+     * What a selection would cost with the promos applied, nothing charged.
+     * `POST /payments/quote` `{ stripIds, scrapbookIds }` → `PaymentQuote`.
+     */
+    QUOTE: '/payments/quote',
     /** The live attempt to resume, if any. `GET /payments/pending`. */
     PENDING: '/payments/pending',
     /** Save the attempt's QR image. `GET /payments/:orderId/qr`. */
     QR: route('/payments/:orderId/qr', (id: string) => `/payments/${encodeURIComponent(id)}/qr`),
+    /**
+     * Payment-status check: core asks Midtrans and settles the order if the money is there.
+     * `POST /payments/:orderId/check` → `{ payment, seen }`.
+     */
+    CHECK: route(
+      '/payments/:orderId/check',
+      (id: string) => `/payments/${encodeURIComponent(id)}/check`
+    ),
+    /**
+     * Cancel a pending attempt now. Midtrans decides: an order it already settled comes
+     * back paid instead. `POST /payments/:orderId/cancel` → `{ payment }`.
+     */
+    CANCEL: route(
+      '/payments/:orderId/cancel',
+      (id: string) => `/payments/${encodeURIComponent(id)}/cancel`
+    ),
     /** Poll one attempt. `GET /payments/:orderId`. */
     BY_ID: route('/payments/:orderId', (id: string) => `/payments/${encodeURIComponent(id)}`),
   },

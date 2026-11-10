@@ -30,40 +30,46 @@ import sun from '@/assets/stickers/sun.svg'
  * DOM preview and via `drawImage` in the composed PNG. Same-origin assets don't
  * taint the canvas, so the strip stays downloadable (`toDataURL`).
  */
+/** Groups for the palette's category chips, in chip order. */
+export const STICKER_CATEGORIES = ['love', 'animals', 'nature', 'sparkle', 'fun'] as const
+export type StickerCategory = (typeof STICKER_CATEGORIES)[number]
+
 export interface StickerOption {
   id: string
   /** Bundled asset URL for the sticker image. */
   src: string
   /** i18n key suffix under `stickers.*` for the accessible label. */
   label: string
+  /** Group for the palette's category chips (`stickers.categories.*`). */
+  category: StickerCategory
 }
 
 export const STICKERS: StickerOption[] = [
-  { id: 'heart', src: heart, label: 'heart' },
-  { id: 'star', src: star, label: 'star' },
-  { id: 'sparkle', src: sparkle, label: 'sparkle' },
-  { id: 'crown', src: crown, label: 'crown' },
-  { id: 'flower', src: flower, label: 'flower' },
-  { id: 'rainbow', src: rainbow, label: 'rainbow' },
-  { id: 'bolt', src: bolt, label: 'bolt' },
-  { id: 'speech', src: speech, label: 'speech' },
-  { id: 'smiley', src: smiley, label: 'smiley' },
-  { id: 'cloud', src: cloud, label: 'cloud' },
-  { id: 'bunny', src: bunny, label: 'bunny' },
-  { id: 'clip', src: clip, label: 'clip' },
-  { id: 'cuteRainbow', src: cuteRainbow, label: 'cuteRainbow' },
-  { id: 'faceBear', src: faceBear, label: 'faceBear' },
-  { id: 'faceHeart', src: faceHeart, label: 'faceHeart' },
-  { id: 'flowers', src: flowers, label: 'flowers' },
-  { id: 'smileFlower', src: smileFlower, label: 'smileFlower' },
-  { id: 'heartColorful', src: heartColorful, label: 'heartColorful' },
-  { id: 'smiling', src: smiling, label: 'smiling' },
-  { id: 'sun', src: sun, label: 'sun' },
-  { id: 'stars', src: stars, label: 'stars' },
-  { id: 'frog', src: frog, label: 'frog' },
-  { id: 'bunnyYellow', src: bunnyYellow, label: 'bunnyYellow' },
-  { id: 'cat', src: cat, label: 'cat' },
-  { id: 'snail', src: snail, label: 'snail' },
+  { id: 'heart', src: heart, label: 'heart', category: 'love' },
+  { id: 'star', src: star, label: 'star', category: 'sparkle' },
+  { id: 'sparkle', src: sparkle, label: 'sparkle', category: 'sparkle' },
+  { id: 'crown', src: crown, label: 'crown', category: 'sparkle' },
+  { id: 'flower', src: flower, label: 'flower', category: 'nature' },
+  { id: 'rainbow', src: rainbow, label: 'rainbow', category: 'nature' },
+  { id: 'bolt', src: bolt, label: 'bolt', category: 'sparkle' },
+  { id: 'speech', src: speech, label: 'speech', category: 'fun' },
+  { id: 'smiley', src: smiley, label: 'smiley', category: 'fun' },
+  { id: 'cloud', src: cloud, label: 'cloud', category: 'nature' },
+  { id: 'bunny', src: bunny, label: 'bunny', category: 'animals' },
+  { id: 'clip', src: clip, label: 'clip', category: 'fun' },
+  { id: 'cuteRainbow', src: cuteRainbow, label: 'cuteRainbow', category: 'nature' },
+  { id: 'faceBear', src: faceBear, label: 'faceBear', category: 'animals' },
+  { id: 'faceHeart', src: faceHeart, label: 'faceHeart', category: 'love' },
+  { id: 'flowers', src: flowers, label: 'flowers', category: 'nature' },
+  { id: 'smileFlower', src: smileFlower, label: 'smileFlower', category: 'nature' },
+  { id: 'heartColorful', src: heartColorful, label: 'heartColorful', category: 'love' },
+  { id: 'smiling', src: smiling, label: 'smiling', category: 'fun' },
+  { id: 'sun', src: sun, label: 'sun', category: 'nature' },
+  { id: 'stars', src: stars, label: 'stars', category: 'sparkle' },
+  { id: 'frog', src: frog, label: 'frog', category: 'animals' },
+  { id: 'bunnyYellow', src: bunnyYellow, label: 'bunnyYellow', category: 'animals' },
+  { id: 'cat', src: cat, label: 'cat', category: 'animals' },
+  { id: 'snail', src: snail, label: 'snail', category: 'animals' },
 ]
 
 /** A sticker placed on the strip. Position/size are fractions of the photo-grid

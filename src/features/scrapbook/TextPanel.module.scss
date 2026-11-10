@@ -1,0 +1,30 @@
+/* The writing field for one text slot, in the side panel (desktop) or the sheet (phone). */
+
+.panel {
+  @apply flex flex-col gap-2.5;
+}
+
+/* 16px on a phone, so iOS doesn't zoom in on focus. */
+.field {
+  @apply w-full resize-none rounded-xl border border-slate-300 bg-background px-3.5 py-3 text-base leading-normal outline-none transition-colors lg:text-[0.9375rem];
+
+  &::placeholder {
+    @apply text-muted-foreground/70;
+  }
+
+  &:focus-visible {
+    @apply border-foreground;
+  }
+}
+
+.meta {
+  @apply flex items-start justify-between gap-3 font-mono text-xs text-muted-foreground/70;
+}
+
+.full {
+  @apply font-sans font-medium text-destructive;
+}
+
+.counter {
+  @apply ml-auto shrink-0 tabular-nums;
+}

@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 
 import { useTrackPageView } from '@/analytics'
+import { ROUTES } from '@/constants/routes'
 import { galleryItems } from '@/features/gallery/selectors'
 import { AccountPanel } from '@/features/profile/AccountPanel'
 import {
@@ -16,10 +17,13 @@ import { ProfileStats } from '@/features/profile/ProfileStats'
 import { ProfileTabs } from '@/features/profile/ProfileTabs'
 import { PartnerPanel } from '@/features/profile/PartnerPanel'
 import { PurchasesPanel } from '@/features/profile/PurchasesPanel'
+import { PromoCard } from '@/features/promos/PromoCard'
+import { hidePartnerInvite, partnerCard, partnerInviteHidden } from '@/features/promos/promoState'
 import { useDeleteAccount } from '@/hooks/useDeleteAccount'
 import { useLogout } from '@/hooks/useLogout'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useCartStore } from '@/store/useCartStore'
+import { usePromoStore } from '@/store/usePromoStore'
 
 import styles from './ProfilePage.module.scss'
 
@@ -65,6 +69,17 @@ export function ProfilePage() {
 
   const openPartner = useCallback(() => setTab('partner'), [setTab])
 
+  // The partner promo's card (docs/PLAN-promos.md §5b): above the tabs, so it's seen
+  // whichever one is open — the partner link is what this page leads with.
+  const promos = usePromoStore((s) => s.promos)
+  const loadPromos = usePromoStore((s) => s.load)
+  useEffect(() => {
+    void loadPromos()
+  }, [loadPromos])
+  const [inviteHidden, setInviteHidden] = useState(partnerInviteHidden)
+  const promoCard = partnerCard(promos, { isAuthenticated: true, linked: Boolean(user?.partner) })
+  const hasUnpaid = items.some((item) => !item.paid)
+
   const unlocked = useMemo(() => galleryItems(items), [items])
   const dateCount = useMemo(() => countDateStrips(unlocked), [unlocked])
   const months = useMemo(() => (user ? monthsSince(user.createdAt) : 0), [user])
@@ -90,6 +105,26 @@ export function ProfilePage() {
         months={months}
         since={since}
       />
+
+      {promoCard === 'partnerReady' && (
+        // Not dismissible: it's a discount already earned and not yet used.
+        <PromoCard
+          kind="partnerReady"
+          to={hasUnpaid ? ROUTES.cart : ROUTES.photobooth}
+          placement="profile"
+        />
+      )}
+      {promoCard === 'partnerInvite' && !inviteHidden && (
+        <PromoCard
+          kind="partnerInvite"
+          to={`${ROUTES.profile}?tab=partner`}
+          placement="profile"
+          onDismiss={() => {
+            hidePartnerInvite()
+            setInviteHidden(true)
+          }}
+        />
+      )}
 
       <ProfileTabs active={tab} onChange={setTab} />
 

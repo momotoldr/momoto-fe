@@ -38,7 +38,7 @@ import styles from './SupportFab.module.scss'
  * button someone has to go looking for.
  */
 export function SupportFab() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const location = useLocation()
   const userEmail = useAuthStore((state) => state.user?.email)
   const inRoom = location.pathname.startsWith('/room/')
@@ -58,10 +58,10 @@ export function SupportFab() {
   } = methods
   const topic = watch('topic') as SupportTopic | ''
 
-  const openDialog = (preset?: SupportTopic) => {
+  const openDialog = (preset?: SupportTopic, message?: string) => {
     // Fresh form each open, with the reply-to prefilled from the account (if any) and
-    // the topic preset when the caller already knows it.
-    reset({ topic: preset ?? '', message: '', email: userEmail ?? '' })
+    // the topic (and a message to start from) when the caller already knows it.
+    reset({ topic: preset ?? '', message: message ?? '', email: userEmail ?? '' })
     setOpen(true)
   }
 
@@ -77,8 +77,10 @@ export function SupportFab() {
   const openRef = useRef(openDialog)
   openRef.current = openDialog
   useEffect(() => {
-    const onOpen = (event: Event) =>
-      openRef.current((event as CustomEvent<OpenSupportDetail>).detail?.topic)
+    const onOpen = (event: Event) => {
+      const detail = (event as CustomEvent<OpenSupportDetail>).detail
+      openRef.current(detail?.topic, detail?.message)
+    }
     window.addEventListener(OPEN_SUPPORT_EVENT, onOpen)
     return () => window.removeEventListener(OPEN_SUPPORT_EVENT, onOpen)
   }, [])
@@ -113,6 +115,8 @@ export function SupportFab() {
         message: values.message,
         email: values.email,
         context: location.pathname,
+        // Which language they wrote in, so the reply from the portal comes back in it.
+        lang: i18n.language.toLowerCase().startsWith('id') ? 'id' : 'en',
       })
       toast.success(t('support.success'))
       setOpen(false)

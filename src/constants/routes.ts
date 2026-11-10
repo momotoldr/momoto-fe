@@ -4,6 +4,9 @@ export const ROUTES = {
   photobooth: '/photobooth',
   cart: '/cart',
   gallery: '/gallery',
+  scrapbook: '/scrapbook',
+  scrapbookNew: '/scrapbook/new',
+  scrapbookEdit: '/scrapbook/:scrapbookId',
   help: '/help',
   terms: '/terms',
   privacy: '/privacy',
@@ -13,6 +16,7 @@ export const ROUTES = {
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
   verifyEmail: '/verify-email',
+  googleCallback: '/auth/google/callback',
   profile: '/profile',
   serverUnavailable: '/server-unavailable',
 } as const

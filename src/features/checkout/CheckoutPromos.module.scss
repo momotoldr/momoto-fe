@@ -1,0 +1,74 @@
+/* The checkout bar's promo cards (mockup "Momoto promo cards" › Checkout bar): slim rows
+ * that light up in their promo's colour once applied, and sit greyed out — art faded —
+ * while the selection doesn't qualify yet. Stacked on a phone, side by side from sm. The
+ * colours are fixed like the promo cards', so they read the same on either theme. */
+
+.promos {
+  @apply grid grid-cols-1 gap-2 sm:grid-cols-2;
+}
+
+.row {
+  @apply flex h-[3.375rem] items-center gap-2.5 overflow-hidden rounded-[0.875rem] border py-0 pl-1.5 pr-3 transition-colors;
+}
+
+.mint {
+  border-color: #a7f3d0;
+  background: #ecfdf5;
+  --promo-accent: #047857;
+  --promo-pill: #059669;
+}
+
+.rose {
+  border-color: #fecdd3;
+  background: #fff1f2;
+  --promo-accent: #be123c;
+  --promo-pill: #e11d48;
+}
+
+.waiting {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+  --promo-accent: #94a3b8;
+
+  .art {
+    opacity: 0.45;
+    filter: grayscale(1);
+  }
+
+  .line {
+    color: #64748b;
+  }
+}
+
+.art {
+  @apply h-[3.25rem] w-[3.25rem] shrink-0 transition-[opacity,filter];
+}
+
+.text {
+  @apply flex min-w-0 flex-1 flex-col gap-px;
+}
+
+.tag {
+  @apply font-mono text-[0.59375rem] uppercase tracking-[0.12em];
+  color: var(--promo-accent);
+}
+
+.line {
+  @apply truncate text-[0.8125rem] font-bold;
+  color: #0f172a;
+}
+
+.applied {
+  @apply inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[0.71875rem] font-bold text-white;
+  background: var(--promo-pill);
+
+  svg {
+    @apply h-3 w-3;
+    stroke-width: 3;
+  }
+}
+
+.hint {
+  @apply max-w-[7rem] shrink-0 text-right text-[0.71875rem] font-semibold leading-tight;
+  color: #64748b;
+}

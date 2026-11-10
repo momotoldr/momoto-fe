@@ -4,8 +4,10 @@ import ApiError from '@/api/apiError'
 import { setAuthHandlers } from '@/api/client/axiosClient'
 import { getMe, hasStoredToken } from '@/api/services/authService'
 import { pingServer } from '@/api/services/healthService'
+import { env } from '@/env'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useCartStore } from '@/store/useCartStore'
+import { useScrapbookStore } from '@/store/useScrapbookStore'
 import { useServerStore } from '@/store/useServerStore'
 
 /**
@@ -29,8 +31,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // (or next) user never sees someone else's strips. The guest cache is left intact on
   // sign-out — it's only ever written while signed out and cleared as it syncs.
   useEffect(() => {
-    if (authStatus === 'authenticated') void useCartStore.getState().syncGuestStrips()
-    else if (authStatus === 'unauthenticated') useCartStore.getState().reset()
+    if (authStatus === 'authenticated') {
+      void useCartStore.getState().syncGuestStrips()
+      // Finished scrapbooks wait in the cart, so the cart badge needs the shelf.
+      if (env.scrapbookEnabled) void useScrapbookStore.getState().loadShelf()
+    } else if (authStatus === 'unauthenticated') {
+      useCartStore.getState().reset()
+      // Scrapbooks go with the session too.
+      useScrapbookStore.getState().reset()
+    }
   }, [authStatus])
 
   useEffect(() => {

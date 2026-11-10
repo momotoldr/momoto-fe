@@ -124,7 +124,7 @@ export function RegisterPage() {
           <>
             <div className={styles.divider}>{t('auth.or')}</div>
             <div className={styles.google}>
-              <GoogleButton onSuccess={onAuthed} onError={() => notifyError()} />
+              <GoogleButton returnTo={redirectTarget} />
             </div>
           </>
         )}
